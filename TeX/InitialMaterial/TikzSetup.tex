@@ -1,0 +1,30 @@
+\usetikzlibrary{
+    overlay-beamer-styles,
+    calc,
+    positioning
+}
+
+\tikzset{
+    %Displaying keys
+    onslide/.code args={<#1>#2}{\only<#1>{\pgfkeysalso{#2}}}, % \pgfkeysalso doesn't change the path
+    scope on/.style={
+        every node/.append style={visible on=#1},
+        every path/.append style={visible on=#1}
+    },
+    %Path ending shapes
+    to/.style={->,>=stealth},
+    from/.style={<-,>=stealth},
+    fromto/.style={<->,>=stealth},
+    shorter/.style 2 args={shorten <= #1, shorten >= #2},
+    %Hexagons
+    hexagon/.style n args={3}{double arrow, double arrow head extend=0cm, inner sep=3pt, draw=#1, fill=#2, text=#3, thick},
+    hexagon/.default={black}{gray!20}{black},
+    hexagonOne/.style={hexagon={#1}{#1!30}{#1}},
+    hexagonTwo/.style 2 args={hexagon={#1}{#1!#2}{#1}},
+    hexagonThree/.style n args={3}{hexagon={#1}{#1!#2}{#3}},
+    hexagonShade/.style n args={3}{double arrow, double arrow head extend=0cm, inner sep=3pt, thick, draw=#1, left color=#2, right color=#3},
+    %General text element
+    Shape/.style n args={3}{draw=#1, fill=#2, text=#3},
+    genShape/.style 2 args={#1, inner sep=3pt, draw=#2, fill=#2!20, text=#2, thick},
+    halo/.style={preaction={draw, #1, line width=7, -}},
+}

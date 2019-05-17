@@ -1,0 +1,65 @@
+\usepackage{listings}
+\def\transpPerc{100}
+%listings set
+\lstdefinestyle{MyBash}{
+% backgroundcolor=\color{white},    % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+breakatwhitespace=false,            % sets if automatic breaks should only happen at whitespace
+breaklines=true,                    % sets automatic line breaking
+captionpos=b,                       % sets the caption-position to bottom
+deletekeywords={...},               % if you want to delete keywords from the given language
+escapeinside={@|}{|@},                % if you want to add LaTeX within your code
+extendedchars=true,                 % lets you use non-ASCII characters; for 8-bits encodings only,
+                                    % does not work with UTF-8
+frame=none  ,                       % adds a frame around the code
+numbers=none,                       % where to put the line-numbers; possible values are (none, left, right)
+numbersep=5pt,                      % how far the line-numbers are from the code
+numberstyle=\tiny\color{black},     % the style that is used for the line-numbers
+rulecolor=\color{black},            % if not set, the frame-color may be changed on line-breaks within not-black text
+                                    % (e.g. comments (green here))
+showspaces=false,                   % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+showstringspaces=false,             % underline spaces within strings only
+showtabs=false,                     % show tabs within strings adding particular underscores
+stepnumber=2,                       % the step between two line-numbers. If it's 1, each line will be numbered
+stringstyle=\color{OliveGreen},     % string literal style
+tabsize=2,                          % sets default tabsize to 2 spaces
+title=\lstname,                     % show the filename of files included with \lstinputlisting; also try caption instead of title
+%
+%Base style for this presentation 
+keepspaces=true,                    % keeps spaces in text, useful for keeping indentation of code
+                                    % (possibly needs columns=flexible)
+keywordstyle=\color{Cyan},          % keyword style
+language=C++,
+basicstyle=\ttfamily\scriptsize\color{black},
+keywordstyle=\color{OliveGreen},
+stringstyle=\color{Magenta},
+commentstyle=\color{red},
+moredelim=[is][\color{ForestGreen}]{|+}{+|},
+literate=% literate={<replace>}{<replacement text>}{<width>}
+  {\#define}{{{\color{CarnationPink}\#define}}}{6}
+  {\#include}{{{\color{CarnationPink}\#include}}}{7},
+morekeywords={},
+emph=[1]{},
+emphstyle=[1]{\color{NavyBlue}}, %Functions
+emph=[2]{},
+emphstyle=[2]{\color{Orange}}, %Variables
+emph=[3]{if, else, elif, fi, while, for, case, do, esac, done},
+emphstyle=[3]{\color{violet}}, %Loops, if, etc.
+emph=[4]{return, exit},
+emphstyle=[4]{\color{ProcessBlue}}, %Logical keywords
+emph=[6]{PATH, SHELL},
+emphstyle=[6]{\color{Gray}}, %Environment variables
+}
+
+\lstnewenvironment{Bash}[1][]
+    {\lstset{style=MyBash, belowskip=-7mm, aboveskip=0pt,#1}}
+    {}
+
+\def\bash{\lstinline[style=MyBash, basicstyle=\ttfamily\color{black}]}
+
+
+\makeatletter
+\newenvironment{CenteredBox}{% 
+\begin{Sbox}}{% Save the content in a box
+\end{Sbox}\centerline{\parbox{\wd\@Sbox}{\TheSbox}}}% And output it centered
+\makeatother
+
