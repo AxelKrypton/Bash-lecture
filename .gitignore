@@ -1,3 +1,8 @@
+#Project related files
+TeX/tmp
+
+#------------------------------------------
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
