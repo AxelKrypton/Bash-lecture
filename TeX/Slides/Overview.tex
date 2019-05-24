@@ -35,7 +35,7 @@
                   \item IT people will teach IT to physicists and work next to them
                   \item physicists will be able to focus on physics
               \end{itemize}
-        \item Not really a bash guru, but rather a self-thought bash enthusiast
+        \item \PP{Not really a bash guru, but rather a self-thought bash enthusiast}
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay]
         \node[anchor=south east, inner sep=0] at (current page.south east) {\includegraphics[height=4cm]{Superman}};
@@ -70,20 +70,133 @@
     }
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Why should I know Bash?}
-    
+\begin{frame}{Why should I know Bash?}%{Why not a more intuitive scripting language, e.g.\ Python?}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item It is probably the shell you use
+        \item Knowing Bash a bit more allows for better problem handling \\
+              $\to\;$ e.g. delegate to Bash tasks that maybe you currently do in C/C++
+        \item It is a scripting language very close to the (Unix) operative system
+        \item Opportunity to make your daily work-flow more comfortable
+    \end{itemize}
+    %\vspace{1mm}
+    \begin{varblock}{alerted}[0.64\textwidth]{}<2>
+        However, \URL[PT]{http://mywiki.wooledge.org/BashWeaknesses}{Bash weaknesses} are known:\hfill
+        \begin{itemize}
+            \item Floating point math
+            \item Lack of data structures
+            \item Try/catch and Exception handling: forget them!
+            \item Functions: a tricky world!
+            \item \ldots
+        \end{itemize}
+        Knowing another scripting language (e.g.\ Python) helps!
+    \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{The mind setup of this course}
+    I know, the amount of information given in this lecture is huge, but
+    \begin{varblock}{alerted}[0.4\textwidth]{Remember:}
+        \PQ{\large This is not the full story!}
+    \end{varblock}
+    \vspace{1mm}
+    \begin{enumerate}[<+(1)->]
+        \item You will often not receive all the details\\
+              $\;\to\;$ be active, ask, use manuals, go beyond this lecture!
+        \item Often it is hard (very hard) to enucleate all details of and exceptions to rules \\
+              $\;\to\;$ experience and practice will fill the gap
+        \item From rules/practical examples to abstract ideas/good practices
+        \item 100\% Bash, no focus on portability or differences among \\ various shell languages {\tiny \{~I am not at that level~\}}\\
+              $\;\to\;$ sh, ksh, csh, tcsh, bash, zsh, fish, \ldots
+        \item \PT{Interactive lecture: ask, ask, ask!}
+    \end{enumerate}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=south east] (fig) at (current page.south east) {\includegraphics[width=28mm]{Relax}};
+        \node[above = 1pt of fig.south] {\fontsize{3}{5}\selectfont Photo by Ashley Whitlatch on Unsplash};
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{What to expect from the lecture?}
+    \vspace{-3mm}
+    \begin{varblock}{quote}[1.02\textwidth]{My point of view as physicist}
+        The way you program today is better than it was yesterday and probably worse than it will be tomorrow!
+        Bash has some kind of subjective corners where you will have to choose your way.
+        Have a good reason to do things the way you do them.
+        It will happen that you will change mind and consequently your approach to the same problem.
+        Again and over again, it is normal.
+        Do not hesitate in doing so.
+        To change mind and approach means to evolve and to become a better programmer.
+    \end{varblock}
+    \begin{itemize}
+        \item This is especially important as physicist
+        \item Knowing all details and tweaks of Bash is probably not your goal \\
+              $\;\to\;$ nor is it probably needed in your daily work
+        \item \PT{Having an overview} is, instead, very important (e.g.\ to \PT{decide when to use Bash})
+        \item As soon as something smells odd, it is important \PT{to be able to deepen in}
+    \end{itemize}
+    \begin{varblock}{}[0.8\textwidth]{}%Can I switch this integral with this sum?}
+        %Usually a physicist assumes it is possible and goes back as soon as something starts looking odd\ldots
+        \PB{$\displaystyle\sum\int(\ldots)=\int\sum(\ldots)$ until something starts looking odd}
+    \end{varblock}
     
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Notation}
-    
+\begin{frame}{References for future use}
+    \PB{\underline{About Bash world}:}
+    \begin{itemize}
+        \item[] \URL{https://www.gnu.org/software/bash/manual/}{Bash official manual}
+        \item[] \URL{http://manpages.ubuntu.com/manpages/bionic/man7/bash-builtins.7.html}{List of Bash builtins with description}
+        \item[] \URL{https://devhints.io/bash}{A nice Bash cheatsheet}
+        \item[] \URL{https://bashmenot.mietek.io/reference/}{An incredible, sadly not maintained Bash library}\PB{\tiny\{~Clone from Github to use it~\}}
+    \end{itemize}
+    \vspace{3mm}
+    \PB{\underline{Didactical material}:}
+    \begin{itemize}
+        \item[] \URL{http://tldp.org/LDP/Bash-Beginners-Guide/html/}{Bash Beginners Guide}\PB{\tiny\{~A nice, from-zero tutorial~\}} \tikzmark{TutorialBegin}
+        \item[] \URL{https://www.shellscript.sh/}{Shell scripting tutorial}\PB{\tiny\{~Nice tutorial, but not only Bash~\}}
+        \item[] \URL{http://mywiki.wooledge.org/BashGuide}{Bash Guide}\PB{\tiny\{~Very precise guide, not completely from zero, though~\}} \tikzmark{TutorialEnd}
+        \item[] \URL{https://github.com/AxelKrypton/Bash_lecture_2019}{All material \tikzmark{MeOnGitHub}of this lecture}
+    \end{itemize}
+    \begin{tikzpicture}[remember picture, overlay]
+        \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (TutorialBegin -| TutorialEnd) ++(5mm,1mm) -- ($(TutorialEnd)+(5mm,-1mm)$) 
+              node[midway, right=3mm, text width=25mm, font=\small, align=center, text=PP] {Material used to prepare this lecture};
+        \path[to] (MeOnGitHub) ++(0,-2mm) edge[out=270, in=180] node[pos=1, anchor=west] {My GitHub page \hspace{1mm}\raisebox{-1.3mm}{\includegraphics[width=5mm]{AxelKrypton}}} ++(25mm, -8mm);
+    \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{What will we explore?}
-    
+    \colorlet{Monday}{PP}
+    \colorlet{Tuesday}{PT}
+    \colorlet{Wednesday}{PS}
+    \begin{multicols}{2}
+        \begin{enumerate}
+            \item \tc<2>{Monday}{Inception/Philosophy}
+            \item \tc<2>{Monday}{Hello world} %\texttt{echo} and \texttt{printf}
+            \item \tc<2>{Monday}{Variables and expansion}
+            \item \tc<2>{Monday}{Wildcards}
+            \item \tc<2>{Monday}{Escape characters}
+            \item \tc<2>{Monday}{Conditionals and tests}
+            \item \tc<2>{Monday}{Loops}
+            \item \tc<2>{Monday}{The case statement}
+            \item \tc<2>{Monday}{Colors and terminal commands}
+        \end{enumerate}
+        \columnbreak
+        \begin{enumerate}\addtocounter{enumi}{9}
+            \item \tc<2>{Tuesday}{File redirection}
+            \item \tc<2>{Tuesday}{Command line arguments}
+            \item \tc<2>{Tuesday}{Indirect references}
+            \item \tc<2>{Tuesday}{Arrays and associative arrays}
+            \item \tc<2>{Wednesday}{Built-in and external programs}
+            \item \tc<2>{Wednesday}{Asynchronous Commands}
+            \item \tc<2>{Wednesday}{Functions}
+            \item \tc<2>{Wednesday}{Awk and Sed}
+            \item \tc<2>{Wednesday}{Miscellaneous}
+        \end{enumerate}
+    \end{multicols}
+    \begin{varblock}{}[0.6\textwidth]{}<2>
+        \tc{Monday}{Monday}$\quad$---$\quad$
+        \tc{Tuesday}{Tuesday}$\quad$---$\quad$
+        \tc{Wednesday}{Wednesday}
+    \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Bonus track: Iceland}{The magic of an incredible island}
@@ -97,10 +210,26 @@
             \node[anchor=south, inner sep=0] at (0.71,0.29) {\includegraphics[width=3mm]{Pin}};
             \node[anchor=south, inner sep=0] at (0.47,0.14) {\includegraphics[width=3mm]{Pin}};
         \end{scope}
+        \node[below = 2mm of plan.south east, anchor=east, font=\tiny] {{\raisebox{-2mm}{\Large\textcopyright}} Photos throughout the lecture: All rights are reserved};
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{A short but intense journey}
-    
+\begin{frame}{A short but intense journey}{Few more recommendations}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item I am aware that you will receive a lot (really a lot) of information
+        \item Do not hesitate to ask!
+        \item Put effort into the exercises
+        \item The more active you are the more will stay in your memory for your daily work
+    \end{itemize}
+    \vspace{5mm}
+    {\large\PP{What do I expect?}}
+    \begin{itemize}[<2->]
+        \item You will also learn general coding principles, which are independent of the language \\
+              {\small$\;\to\;$ \URL[PP]{https://crc-tr211.org/\#Seminars}{Clean code talk given on 03.06.2019}}
+        \item You enjoy the journey! {\tiny\{~\ldots{}at least discovering Iceland\ldots~\}}
+        \item \PS{You give me a feedback at the end of the lecture!}
+    \end{itemize}
+    \vfill\hfill\uncover<3>{\LARGE\PT{Are you ready?}\hspace{3mm}}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
