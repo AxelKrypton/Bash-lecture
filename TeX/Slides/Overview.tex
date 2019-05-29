@@ -141,10 +141,12 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{References for future use}
+    \vspace{-3mm}
     \PB{\underline{About Bash world}:}
     \begin{itemize}
         \item[] \URL{https://www.gnu.org/software/bash/manual/}{Bash official manual}
         \item[] \URL{http://manpages.ubuntu.com/manpages/bionic/man7/bash-builtins.7.html}{List of Bash builtins with description}
+        \item[] \URL{http://mywiki.wooledge.org/BashFAQ/061}{Notable changes in released bash versions}\PB{\tiny\{~More extensive list \URL[PB]{http://wiki.bash-hackers.org/scripting/bashchanges}{also available}~\}}
         \item[] \URL{https://devhints.io/bash}{A nice Bash cheatsheet}
         \item[] \URL{https://bashmenot.mietek.io/reference/}{An incredible, sadly not maintained Bash library}\PB{\tiny\{~Clone from Github to use it~\}}
     \end{itemize}
@@ -167,31 +169,37 @@
     \colorlet{Monday}{PP}
     \colorlet{Tuesday}{PT}
     \colorlet{Wednesday}{PS}
+    \vspace{-5mm}
     \begin{multicols}{2}
         \begin{enumerate}
             \item \tc<2>{Monday}{Inception/Philosophy}
-            \item \tc<2>{Monday}{Hello world} %\texttt{echo} and \texttt{printf}
-            \item \tc<2>{Monday}{Variables and expansion}
-            \item \tc<2>{Monday}{Wildcards}
-            \item \tc<2>{Monday}{Escape characters}
+            \item \tc<2>{Monday}{Commands and arguments}
+            \item \tc<2>{Monday}{Strings and Word splitting}
+            \item \tc<2>{Monday}{Type of commands}
+            \item \tc<2>{Monday}{Special characters} %Escape characters
+            \item \tc<2>{Monday}{Variables and parameter expansion}
+            \item \tc<2>{Monday}{Command line arguments}
+            \item \tc<2>{Monday}{Patterns}
             \item \tc<2>{Monday}{Conditionals and tests}
-            \item \tc<2>{Monday}{Loops}
-            \item \tc<2>{Monday}{The case statement}
-            \item \tc<2>{Monday}{Colors and terminal commands}
+            \item \tc<2>{Tuesday}{Loops}
+            \item \tc<2>{Tuesday}{The case statement}
         \end{enumerate}
         \columnbreak
-        \begin{enumerate}\addtocounter{enumi}{9}
-            \item \tc<2>{Tuesday}{File redirection}
-            \item \tc<2>{Tuesday}{Command line arguments}
+        \begin{enumerate}\addtocounter{enumi}{11}
+            \item \tc<2>{Tuesday}{Colors and terminal commands}
             \item \tc<2>{Tuesday}{Indirect references}
             \item \tc<2>{Tuesday}{Arrays and associative arrays}
-            \item \tc<2>{Wednesday}{Built-in and external programs}
+            \item \tc<2>{Tuesday}{File descriptors and redirection}
+            \item \tc<2>{Wednesday}{Compound commands}
+            \item \tc<2>{Wednesday}{Built-in VS external programs}
             \item \tc<2>{Wednesday}{Asynchronous Commands}
             \item \tc<2>{Wednesday}{Functions}
             \item \tc<2>{Wednesday}{Awk and Sed}
             \item \tc<2>{Wednesday}{Miscellaneous}
+            \item \tc<2>{Wednesday}{Some good practices}
         \end{enumerate}
     \end{multicols}
+    \vspace{-2mm}
     \begin{varblock}{}[0.6\textwidth]{}<2>
         \tc{Monday}{Monday}$\quad$---$\quad$
         \tc{Tuesday}{Tuesday}$\quad$---$\quad$
@@ -220,7 +228,7 @@
         \item I am aware that you will receive a lot (really a lot) of information
         \item Do not hesitate to ask!
         \item Put effort into the exercises
-        \item The more active you are the more will stay in your memory for your daily work
+        \item The more active you are the more information will stay in your memory for your daily work
     \end{itemize}
     \vspace{5mm}
     {\large\PP{What do I expect?}}
