@@ -5,7 +5,7 @@ Material relative to a 3-days crash lecture about `Bash` scripting language to b
 ### Material in preparation
 
 - [ ] Lecture slides
-  - [ ] Overview
+  - [x] Overview (to be reviewed, add pins to Iceland)
   - [ ] Day 1
   - [ ] Day 2
   - [ ] Day 3
