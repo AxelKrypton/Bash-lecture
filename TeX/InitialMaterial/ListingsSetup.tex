@@ -2,24 +2,29 @@
 \def\transpPerc{100}
 %listings set
 \lstdefinestyle{MyBash}{
-% backgroundcolor=\color{white},    % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+backgroundcolor=\color{gray!20},    % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
 breakatwhitespace=false,            % sets if automatic breaks should only happen at whitespace
 breaklines=true,                    % sets automatic line breaking
 captionpos=b,                       % sets the caption-position to bottom
 deletekeywords={...},               % if you want to delete keywords from the given language
-escapeinside={@|}{|@},                % if you want to add LaTeX within your code
+escapeinside={@|}{|@},              % if you want to add LaTeX within your code
 extendedchars=true,                 % lets you use non-ASCII characters; for 8-bits encodings only,
                                     % does not work with UTF-8
-frame=none  ,                       % adds a frame around the code
-numbers=none,                       % where to put the line-numbers; possible values are (none, left, right)
-numbersep=5pt,                      % how far the line-numbers are from the code
+frame=single,                       % adds a frame around the code
+framerule=0pt,                      % Width of the frame rule
+framesep=3pt,                       % separation around text
+linewidth=\textwidth,               % defines the base line width for listings
+xleftmargin=6mm,                    % Margin left
+xrightmargin=6mm,                   % Margin right
+numbers=left,                       % where to put the line-numbers; possible values are (none, left, right)
+numbersep=8pt,                      % how far the line-numbers are from the code
 numberstyle=\tiny\color{black},     % the style that is used for the line-numbers
 rulecolor=\color{black},            % if not set, the frame-color may be changed on line-breaks within not-black text
                                     % (e.g. comments (green here))
 showspaces=false,                   % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
 showstringspaces=false,             % underline spaces within strings only
 showtabs=false,                     % show tabs within strings adding particular underscores
-stepnumber=2,                       % the step between two line-numbers. If it's 1, each line will be numbered
+stepnumber=1,                       % the step between two line-numbers. If it's 1, each line will be numbered
 stringstyle=\color{OliveGreen},     % string literal style
 tabsize=2,                          % sets default tabsize to 2 spaces
 title=\lstname,                     % show the filename of files included with \lstinputlisting; also try caption instead of title
@@ -28,11 +33,11 @@ title=\lstname,                     % show the filename of files included with \
 keepspaces=true,                    % keeps spaces in text, useful for keeping indentation of code
                                     % (possibly needs columns=flexible)
 keywordstyle=\color{Cyan},          % keyword style
-language=C++,
+language=bash,
 basicstyle=\ttfamily\scriptsize\color{black},
 keywordstyle=\color{OliveGreen},
 stringstyle=\color{Magenta},
-commentstyle=\color{red},
+commentstyle=\color{red!95!black},
 moredelim=[is][\color{ForestGreen}]{|+}{+|},
 literate=% literate={<replace>}{<replacement text>}{<width>}
   {\#define}{{{\color{CarnationPink}\#define}}}{6}
@@ -43,15 +48,22 @@ emphstyle=[1]{\color{NavyBlue}}, %Functions
 emph=[2]{},
 emphstyle=[2]{\color{Orange}}, %Variables
 emph=[3]{if, else, elif, fi, while, for, case, do, esac, done},
-emphstyle=[3]{\color{violet}}, %Loops, if, etc.
+emphstyle=[3]{\color{Goldenrod}}, %Loops, if, etc.
 emph=[4]{return, exit},
-emphstyle=[4]{\color{ProcessBlue}}, %Logical keywords
+emphstyle=[4]{\color{DodgerBlue}}, %Logical keywords
 emph=[6]{PATH, SHELL},
 emphstyle=[6]{\color{Gray}}, %Environment variables
+emph=[7]{alias, bg, bind, break, builtin, case, cd, command, compgen, complete, continue, declare, dirs, disown, echo, enable, eval,
+         exec,  exit,  export,  fc,  fg,  getopts, hash, help, history, if, jobs, kill, let, local, logout, popd, printf, pushd, pwd,
+         read,  readonly,  return,  set,  shift,  shopt,  source, suspend,  test,  times,  trap,  type, typeset, ulimit, umask,
+         unalias, unset, until, wait, while},
+emphstyle=[7]{\color{DarkSlateBlue}}, %Shell built-in
+emph=[8]{man, apropos},
+emphstyle=[8]{\color{violet}}, %(External) commands
 }
 
 \lstnewenvironment{Bash}[1][]
-    {\lstset{style=MyBash, belowskip=-7mm, aboveskip=0pt,#1}}
+    {\lstset{style=MyBash, belowskip=-7mm, aboveskip=3pt, gobble=8, #1}}
     {}
 
 \def\bash{\lstinline[style=MyBash, basicstyle=\ttfamily\color{black}]}
