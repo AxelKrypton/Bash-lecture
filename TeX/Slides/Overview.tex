@@ -73,7 +73,7 @@
 \begin{frame}{Why should I know Bash?}%{Why not a more intuitive scripting language, e.g.\ Python?}
     \vspace{-3mm}
     \begin{itemize}
-        \item It is probably the shell you use
+        \item It is probably the shell you use (Bash is everywhere)
         \item Knowing Bash a bit more allows for better problem handling \\
               $\to\;$ e.g. delegate to Bash tasks that maybe you currently do in C/C++
         \item It is a scripting language very close to the (Unix) operative system
@@ -148,7 +148,7 @@
         \item[] \URL{http://manpages.ubuntu.com/manpages/bionic/man7/bash-builtins.7.html}{List of Bash builtins with description}
         \item[] \URL{http://mywiki.wooledge.org/BashFAQ/061}{Notable changes in released bash versions}\PB{\tiny\{~More extensive list \URL[PB]{http://wiki.bash-hackers.org/scripting/bashchanges}{also available}~\}}
         \item[] \URL{https://devhints.io/bash}{A nice Bash cheatsheet}
-        \item[] \URL{https://bashmenot.mietek.io/reference/}{An incredible, sadly not maintained Bash library}\PB{\tiny\{~Clone from Github to use it~\}}
+        \item[] \URL{https://bashmenot.mietek.io/reference/}{An incredible (sadly not maintained) Bash library}\PB{\tiny\{~Clone from Github to use it~\}}
     \end{itemize}
     \vspace{3mm}
     \PB{\underline{Didactical material}:}
@@ -162,6 +162,8 @@
         \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (TutorialBegin -| TutorialEnd) ++(5mm,1mm) -- ($(TutorialEnd)+(5mm,-1mm)$) 
               node[midway, right=3mm, text width=25mm, font=\small, align=center, text=PP] {Material used to prepare this lecture};
         \path[to] (MeOnGitHub) ++(0,-2mm) edge[out=270, in=180] node[pos=1, anchor=west] {My GitHub page \hspace{1mm}\raisebox{-1.3mm}{\includegraphics[width=5mm]{AxelKrypton}}} ++(25mm, -8mm);
+        \node[anchor=north, inner ysep=3mm] (book) at ($(current page.north)!0.5!(current page.north east)$) {\includegraphics[width=16mm]{Cookbook}};
+        \node[right = 1mm of book, inner ysep=3mm] {\includegraphics[width=16mm]{LearningBash}};
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
