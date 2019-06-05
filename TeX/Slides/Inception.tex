@@ -1,0 +1,74 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 5 Jun 2019           %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{An often mistreated language}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item Everybody uses Bash
+        \item It is easy to know a bit of many commands\tikzmark{arrowfrom}
+        \item Not so many Bash users (have time to) deepen into the details
+    \end{itemize}
+    \begin{varblock}{alerted}[0.8\textwidth]{The nature of Bash}
+        \PQ{As many tools, it is common to just get stuff working, no matter how}
+    \end{varblock}
+    %\vspace{2mm}
+    \begin{overlayarea}{\textwidth}{0.6\textheight}
+        \begin{varblock*}{example}[0.8\textwidth]{Important aspects to \textbf{always} keep in mind}<only@2>
+            $\circ\;$Use a clear, readable layout\\
+            $\circ\;$Avoid unnecessary commands\\
+            $\circ\;$A small, trivial script today might become large and complex tomorrow
+        \end{varblock*}
+        \begin{tikzpicture}[remember picture, overlay]
+            \path[to, PT] (arrowfrom) ++(5mm,0) edge[out=20, in=60, looseness=3]  ++(22mm, -11mm) coordinate (arrival);
+            \path[to, visible on=<2>, PS] (arrival)   ++(-53mm,-18mm) edge[out=200, in=150, looseness=2] ++(0mm, -13mm);
+        \end{tikzpicture}
+        \begin{varblock}{quote}[0.9\textwidth]{Before you get too excited}<only@3>
+            It is key that you remember, bash is a tool, a single tool in a huge toolbox of programs. 
+            Bash alone will only let you do basic things with files and other programs.
+            You will need to understand all the other tools in the toolbox of your system.
+            This knowledge is vast and will come slowly, it is important that you take the time to learn them well rather than try to get the basic idea of most and break a leg tomorrow (or more likely, your music archive or collection of family pictures).
+        \end{varblock}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Using Bash}
+    \vspace{-3mm}
+    \begin{description}
+        \item[Bash in interactive mode:] A prompt and a command line
+        \item[Bash in non-interactive mode:] Executing scripts
+    \end{description}
+    \begin{varblock*}{}[0.7\textwidth]{The prompt}
+        \texttt{\PQ{cool-prompt}\PT{\$}} $\;\leftarrow\;$ shell compatible with the Bourne shell\\
+        \texttt{\PQ{cool-prompt}\PT{\%}} $\;\leftarrow\;$ C-shell (which is not covered here)\\
+        \texttt{\PQ{cool-prompt}\PT{\#}} $\;\leftarrow\;$ shell run as superuser (root)
+    \end{varblock*}
+    \begin{onlyenv}<2>
+        \begin{Bash}[gobble=12, aboveskip=5mm]
+            $ man man      # Learn how to use and read the manual
+            $ man apropos
+            $ help         # Get help for built-in commands
+            $ help echo
+        \end{Bash}
+    \end{onlyenv}
+    \begin{varblock*}{example}[0.7\textwidth]{Manual \textbf{SYNOPSIS}}<only@3>
+        \footnotesize
+        \begin{tabular}{@{\qquad}ll}
+            \textbf{bold text}                       &    type exactly as shown.\\
+            \underline{italic} \underline{text}      & replace with appropriate argument.\\
+            {}[-abc]                                 & any or all arguments within [ ] are optional.\\
+            -a|-b                                    & options delimited by | cannot be used together.\\
+            \underline{\smash{argument}} ...         & argument is repeatable.\\
+            {}[~\underline{\smash{expression}}~] ... & entire expression within [ ] is repeatable.\\
+        \end{tabular}
+
+    \end{varblock*}
+%         \scriptsize
+%         \begin{verbatim}
+%         bold text          type exactly as shown.
+
+%        \end{verbatim}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
