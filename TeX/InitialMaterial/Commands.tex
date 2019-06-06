@@ -19,3 +19,46 @@
     \setbeamertemplate{section page}[Iceland][#2]{#3}{#4}
     \section{#1}
 }
+
+\makeatletter
+\newcommand*\keystroke[1]
+{%
+    \begin{tikzpicture}[baseline=($(key.base)!0.8!(key.south)$), very thin]%
+        \pgfmathsetlengthmacro{\textHeight}{0.9*\f@size}
+        \pgfmathsetlengthmacro{\textHeightPlus}{1.25*\textHeight}
+        \pgfmathsetlengthmacro{\roundedSmall}{0.2}
+        \pgfmathsetlengthmacro{\roundedLarge}{0.4}
+        \pgfmathsetlengthmacro{\dl}{0.5\pgflinewidth}
+        \node[font=\sffamily, inner xsep=2pt, inner ysep=1pt] (text) {\scalebox{1.2}[0.75]{\textsmaller[2]{#1\strut}}};
+        \node[rounded corners=\roundedLarge, minimum size=\textHeight, anchor=north west] (key) at (text.north west){};
+        \node[rounded corners=\roundedSmall, minimum size=\textHeightPlus] (frame) at ($(key.center)!0.05!(key.south)$){};
+        \path coordinate (keyNW) at ($(key.north west)+(\roundedLarge,-\dl)$)
+              coordinate (keyNE) at ($(key.north east)-(\roundedLarge,+\dl)$)
+              coordinate (keyEN) at ($(key.north east)-(-\dl,\roundedLarge)$)
+              coordinate (keyES) at ($(key.south east)+(+\dl,\roundedLarge)$)
+              coordinate (keySE) at ($(key.south east)-(\roundedLarge,+\dl)$)
+              coordinate (keySW) at ($(key.south west)+(\roundedLarge,-\dl)$)
+              coordinate (keyWS) at ($(key.south west)+(+\dl,\roundedLarge)$)
+              coordinate (keyWN) at ($(key.north west)-(-\dl,\roundedLarge)$)
+              coordinate (frameNW) at ($(frame.north west)+(\roundedSmall,-\dl)$)
+              coordinate (frameNE) at ($(frame.north east)-(\roundedSmall,+\dl)$)
+              coordinate (frameEN) at ($(frame.north east)-(+\dl,\roundedSmall)$)
+              coordinate (frameES) at ($(frame.south east)+(-\dl,\roundedSmall)$)
+              coordinate (frameSE) at ($(frame.south east)-(\roundedSmall,-\dl)$)
+              coordinate (frameSW) at ($(frame.south west)+(\roundedSmall,+\dl)$)
+              coordinate (frameWS) at ($(frame.south west)+(+\dl,\roundedSmall)$)
+              coordinate (frameWN) at ($(frame.north west)-(-\dl,\roundedSmall)$);
+        \foreach \n in {NW,NE,EN,ES,SE,SW,WS,WN}{
+            \draw[line cap=round, ultra thin] (key\n) -- (frame\n);
+        }
+        \begin{scope}[on background layer]
+            \node[draw, rounded corners=\roundedSmall, minimum size=\textHeightPlus, fill=fg] at ($(key.center)!0.05!(key.south)$){};
+            \node[draw, rounded corners=\roundedLarge, lower right=gray!20, lower left=gray!50, upper right=gray!50, upper left=gray!80, minimum size=\textHeight, anchor=north west] at (text.north west){};
+            \fill [gray!70!bg] (keyNW) -- (keyNE) -- (frameNE) -- (frameNW) -- cycle;
+            \fill [gray!50!bg] (keyWS) -- (keyWN) -- (frameWN) -- (frameWS) -- cycle;
+            \fill [gray!30!bg] (keyES) -- (keyEN) -- (frameEN) -- (frameES) -- cycle;
+            \fill [gray!10!bg]  (keySW) -- (keySE) -- (frameSE) -- (frameSW) -- cycle;
+        \end{scope}
+  \end{tikzpicture}%
+}
+\makeatother
