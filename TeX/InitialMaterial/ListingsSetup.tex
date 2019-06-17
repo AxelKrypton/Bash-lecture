@@ -35,35 +35,38 @@ keepspaces=true,                    % keeps spaces in text, useful for keeping i
 keywordstyle=\color{Cyan},          % keyword style
 language=bash,
 basicstyle=\ttfamily\scriptsize\color{black},
-keywordstyle=\color{OliveGreen},
-stringstyle=\color{Magenta},
+keywordstyle=\color{Goldenrod},
+stringstyle=\color{ForestGreen},
 commentstyle=\color{red!95!black},
 moredelim=[is][\color{ForestGreen}]{|+}{+|},
 literate=% literate={<replace>}{<replacement text>}{<width>}
   {\#define}{{{\color{CarnationPink}\#define}}}{6}
   {\#include}{{{\color{CarnationPink}\#include}}}{7},
-morekeywords={},
+alsoletter=![]\{\}, % This to mark the symbols in keyword to be highlighted (otherkeywords does not work i.e. it highlights also in comments!) -> manual at page 45
+morekeywords={if, then, else, elif, fi, case, esac, for, select, while, until, do, done, in, function, time, [[, ]], \{, \}, !, coproc}, %https://askubuntu.com/a/513712
 emph=[1]{},
 emphstyle=[1]{\color{NavyBlue}}, %Functions
 emph=[2]{},
 emphstyle=[2]{\color{Orange}}, %Variables
-emph=[3]{if, else, elif, fi, while, for, case, do, esac, done},
-emphstyle=[3]{\color{Goldenrod}}, %Loops, if, etc.
-emph=[4]{return, exit},
-emphstyle=[4]{\color{DodgerBlue}}, %Logical keywords
-emph=[6]{PATH, SHELL},
-emphstyle=[6]{\color{Gray}}, %Environment variables
-emph=[7]{alias, bg, bind, break, builtin, case, cd, command, compgen, complete, continue, declare, dirs, disown, echo, enable, eval,
-         exec,  exit,  export,  fc,  fg,  getopts, hash, help, history, if, jobs, kill, let, local, logout, popd, printf, pushd, pwd,
+emph=[4]{PATH, SHELL, IFS},
+emphstyle=[4]{\color{Gray}}, %Environment variables
+emph=[5]{alias, bg, bind, break, builtin, cd, command, compgen, complete, continue, declare, dirs, disown, echo, enable, eval,
+         exec,  exit,  export,  fc,  fg,  getopts, hash, help, history, jobs, kill, let, local, logout, popd, printf, pushd, pwd,
          read,  readonly,  return,  set,  shift,  shopt,  source, suspend,  test,  times,  trap,  type, typeset, ulimit, umask,
-         unalias, unset, until, wait, while},
-emphstyle=[7]{\color{DarkSlateBlue}}, %Shell built-in
-emph=[8]{man, apropos},
-emphstyle=[8]{\color{violet}}, %(External) commands
+         % case, if, until, while  % <--- these built-in are keywords and I leave them highlighted as such
+         unalias, unset, wait},
+emphstyle=[5]{\color{MediumBlue!90!black}}, %Shell built-in
+emph=[6]{man, apropos, ls, rm},
+emphstyle=[6]{\color{SteelBlue}}, %(External) commands
+%
+%Additional customizations
+belowskip=-7mm,
+aboveskip=3pt,
+autogobble=true, % lstautogobble needed!
 }
 
-\lstnewenvironment{Bash}[1][]
-    {\lstset{style=MyBash, belowskip=-7mm, aboveskip=3pt, gobble=8, #1}}
+\lstnewenvironment{Bash}[1][] %I will rarely use this because putting a $ in it as prompt breaks down TeXclipse highlight syntax!
+    {\lstset{style=MyBash, #1}}
     {}
 
 \def\bash{\lstinline[style=MyBash, basicstyle=\ttfamily\color{black}]}
