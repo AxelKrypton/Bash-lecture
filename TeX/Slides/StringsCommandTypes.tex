@@ -1,0 +1,67 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 17 Jun 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[noframenumbering, plain]{After all it is simple...}
+    \centering
+    \includegraphics[width=0.9\textwidth]{ToyStory}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Strings, strings everywhere}
+    \vspace{-3mm}
+    The term string refers to a sequence of characters which is treated as a single unit:
+    \begin{itemize}
+        \item The command's name is a string
+        \item Each argument of a command is a string
+        \item Variable names are strings
+        \item The contents of variables are strings as well
+        \item A filename is a string
+        \item Most files contain strings
+    \end{itemize}
+    \begin{varblock}{alerted}[0.7\textwidth]{Strings do not have any intrinsic meaning}
+        Their meaning is defined by how and where they are used. 
+    \end{varblock}
+    \begin{varblock}{}[0.85\textwidth]{We have \textbf{all} the responsibility}
+        We need to be sure everything that needs to be separated is separated properly, and everything that needs to stay together stays together properly!
+    \end{varblock}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=south, font=\tiny] at (current page.south) {I will loosely use the term \textbf{string} throughout the lecture, mostly referring to a portion of text contained in a variable};
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Types of commands}{There are basically 5 different classes of commands}
+    \vspace{-3mm}
+    \setlength{\columnsep}{-5mm}
+    \begin{multicols}{5}
+        \begin{enumerate}
+            \item \tc<2>{PP}{Aliases}
+            \item \tc<3>{PP}{Functions}
+            \item \tc<4>{PP}{Builtins}
+            \item \tc<5>{PP}{Keywords}
+            \item \tc<6>{PP}{Executables}
+        \end{enumerate}
+    \end{multicols}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash]
+                for, while, do done man apropos "hellp" { [[ ]] } !hi ! 
+                # if else ! [[
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            
+        \end{onlyenv}
+        \begin{onlyenv}<4>
+            
+        \end{onlyenv}
+        \begin{onlyenv}<5>
+            
+        \end{onlyenv}
+        \begin{onlyenv}<6>
+            
+        \end{onlyenv}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

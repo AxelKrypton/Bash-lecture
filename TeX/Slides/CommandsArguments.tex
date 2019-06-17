@@ -1,0 +1,62 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 17 Jun 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{How does Bash interpret a line of code?}
+    \begin{itemize}
+        \item Bash divides each line into words that are demarcated by a \textbf{whitespace character}$^\star$.\tikzmark{whitespace}
+        \item \alert{The first word} of the line is the name of \alert{the command} to be executed.
+        \item \PP{All the remaining words} become \PP{arguments} to that command (options, filenames, etc.).
+    \end{itemize}
+    \vfill
+    \begin{lstlisting}[style=MyBash, showspaces=true]
+         $@|~|@command arg1 arg2   arg3       arg4
+         $@|~|@command arg1 arg2 arg3 arg4
+    \end{lstlisting}
+    \vfill
+    \begin{varblock}{alerted}[0.75\textwidth]{}
+        \PQ{The amount of whitespace between arguments does not matter!}
+    \end{varblock}
+    \begin{lstlisting}[style=MyBash]
+        $ echo I am Clark Kent
+        I am Clark Kent                        # <- Same output
+        $ echo I    am  Clark         Kent
+        I am Clark Kent                        # <- as here!
+    \end{lstlisting}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[font=\tiny, anchor=south] at (current page.south) {$^\star$There are a few advanced cases, such as commands that span multiple lines, that have slightly different rules.};
+        \node[above= 8mm of whitespace, anchor=east, font=\scriptsize, xshift=4pt] (label) {Spaces and Tabs};
+        \path[to] (label) edge[out=0, in=0, looseness=1.8] (whitespace);
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The first hurdle: spaces}{How can a so innocent, invisible character hurt me? ...well...}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item To a shell, whitespace is incredibly important.
+        \item Don't be fooled into thinking a space or tab more or less won't make much of a difference.
+        \item  Whitespace is \textbf{vital} to allowing your shell to understand you. 
+    \end{itemize}
+    \begin{lstlisting}[style=MyBash, aboveskip=4mm]
+        $ ls
+        The secret voice.mp3  secret
+        $ rm The secret voice.mp3  # rm gets 3 arguments, not 1!
+        rm: cannot remove `The': No such file or directory
+        rm: cannot remove `voice.mp3': No such file or directory
+        $ ls
+        The secret voice.mp3       # Where's your file 'secret'!?
+    \end{lstlisting}
+    \centerline{\ssmall \bash|ls| and \bash|rm| are commands to list the present working directory content and to remove files, respectively.}
+    \vspace{-2mm}
+    \begin{overlayarea}{\textwidth}{0.3\textheight}
+        \begin{varblock}{example}[0.5\textwidth]{}<only@1>
+            We will deepen into \PS{Word splitting} later!
+        \end{varblock}
+        \begin{varblock}{}[0.9\textwidth]{Side remark}<only@2>
+            \PB{Whitespaces in filenames} should be avoided and \PB{replaced by underscores}. Everything would be much easier. But they are allowed... so deal with it!
+        \end{varblock}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
