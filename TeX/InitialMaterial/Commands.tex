@@ -62,3 +62,10 @@
   \end{tikzpicture}%
 }
 \makeatother
+
+\NewDocumentCommand{\FrameRemark}{ m }%
+{%
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[font=\tiny, anchor=south] at (current page.south) {#1};
+    \end{tikzpicture}
+}
