@@ -25,8 +25,8 @@
         $ echo I    am  Clark         Kent
         I am Clark Kent                        # <- as here!
     \end{lstlisting}
+    \FrameRemark{$^\star$There are a few advanced cases, such as commands that span multiple lines, that have slightly different rules.}
     \begin{tikzpicture}[remember picture, overlay]
-        \node[font=\tiny, anchor=south] at (current page.south) {$^\star$There are a few advanced cases, such as commands that span multiple lines, that have slightly different rules.};
         \node[above= 8mm of whitespace, anchor=east, font=\scriptsize, xshift=4pt] (label) {Spaces and Tabs};
         \path[to] (label) edge[out=0, in=0, looseness=1.8] (whitespace);
     \end{tikzpicture}
@@ -41,12 +41,12 @@
     \end{itemize}
     \begin{lstlisting}[style=MyBash, aboveskip=4mm]
         $ ls
-        The secret voice.mp3  secret
+        |+The secret voice.mp3  secret+|
         $ rm The secret voice.mp3  # rm gets 3 arguments, not 1!
-        rm: cannot remove `The': No such file or directory
-        rm: cannot remove `voice.mp3': No such file or directory
+        |+rm: cannot remove 'The': No such file or directory+|
+        |+rm: cannot remove 'voice.mp3': No such file or directory+|
         $ ls
-        The secret voice.mp3       # Where's your file 'secret'!?
+        |+The secret voice.mp3+|       # Where's your file 'secret'!?
     \end{lstlisting}
     \centerline{\ssmall \bash|ls| and \bash|rm| are commands to list the present working directory content and to remove files, respectively.}
     \vspace{-2mm}

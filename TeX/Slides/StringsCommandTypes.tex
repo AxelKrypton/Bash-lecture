@@ -26,42 +26,184 @@
     \begin{varblock}{}[0.85\textwidth]{We have \textbf{all} the responsibility}
         We need to be sure everything that needs to be separated is separated properly, and everything that needs to stay together stays together properly!
     \end{varblock}
-    \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=south, font=\tiny] at (current page.south) {I will loosely use the term \textbf{string} throughout the lecture, mostly referring to a portion of text contained in a variable};
-    \end{tikzpicture}
+    \FrameRemark{I will loosely use the term \textbf{string} throughout the lecture, mostly referring to a portion of text contained in a variable}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Types of commands}{There are basically 5 different classes of commands}
-    \vspace{-3mm}
-    \setlength{\columnsep}{-5mm}
-    \begin{multicols}{5}
-        \begin{enumerate}
-            \item \tc<2>{PP}{Aliases}
-            \item \tc<3>{PP}{Functions}
-            \item \tc<4>{PP}{Builtins}
-            \item \tc<5>{PP}{Keywords}
-            \item \tc<6>{PP}{Executables}
-        \end{enumerate}
-    \end{multicols}
+\begin{frame}<1>[fragile, label=CommandsTypes]{Types of commands}
+    \only<1>{\framesubtitle{There are basically 5 different classes of commands}}
+    \only<2->{\framesubtitle{}}
+    \begin{onlyenv}<1>
+        \begin{center}
+            \begin{tikzpicture}
+                \node[minimum size=5cm, circle, draw, thin] (O) at (0,0) {};
+                \foreach \l [count=\li, evaluate=\li as \angle using int(\li*72)] in {Aliases, Functions, Builtins, Keywords, Executables}{
+                    \node[cloud, draw, text=PB, fill=PP!20, aspect=2] at (O.\angle) {\l};
+                }
+            \end{tikzpicture}
+        \end{center}
+    \end{onlyenv}
+    \vspace{-8mm}
+    \begin{onlyenv}<2->
+        \setlength{\columnsep}{-5mm}
+        \begin{multicols}{5}
+            \begin{enumerate}
+                \item \tc<2>{PP}{Aliases}
+                \item \tc<3>{PP}{Functions}
+                \item \tc<4-6>{PP}{Builtins}
+                \item \tc<7>{PP}{Keywords}
+                \item \tc<8>{PP}{Executables}
+            \end{enumerate}
+        \end{multicols}
+    \end{onlyenv}
+    \vspace{-5mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{onlyenv}<2>
+            \begin{itemize}
+                \item An alias is a rudimentary way of shortening a command
+                \item \PP{It is a word that is mapped to a certain string}
+                \item They are only used in \textbf{interactive} shells and \textbf{not} in scripts
+                \item They are limited in power; the replacement only happens in the first word
+                \item An alias should effectively not do more than change the default options of a command
+                \item For more complex tasks and more flexibility, use a function
+            \end{itemize}
             \begin{lstlisting}[style=MyBash]
-                for, while, do done man apropos "hellp" { [[ ]] } !hi ! 
-                # if else ! [[
+                $ help alias
+                |+alias: alias [-p] [name[=value] ... ]+|
+                |+    Define or display aliases.       +|
+
+                # [More information]
+
+                $ alias ls='ls --color=auto'
+                $ ls  # The command executed is, instead:  ls --color=auto
             \end{lstlisting}
+            \FrameRemark{Bash stores the values of aliases in an array called \bash|BASH_ALIASES|}
         \end{onlyenv}
         \begin{onlyenv}<3>
-            
+            {\Large
+            \begin{varblock}{alerted}[0.7\textwidth]{Functions are tricky!}
+                They will be covered in depth later in the course
+            \end{varblock}}
+            \bigskip
+            For the moment, few hints:
+            \begin{itemize}
+                \item Functions in Bash are more powerful than aliases and the are often the way to go
+                \item Unlike aliases, they can be used in scripts, i.e. in non-interactive mode
+                \item A function contains shell commands, and acts very much like a small script
+                \item They can even take arguments and create local variables
+                \item When a function is called, the commands in it are executed
+            \end{itemize}
         \end{onlyenv}
-        \begin{onlyenv}<4>
-            
+        \begin{onlyenv}<4-6>
+            \begin{itemize}
+                \item Builtins are basic commands that Bash has built into it
+                \item They can be thought as functions that are already provided
+                \item We will learn \tc<5>{PP}{most of them}.
+                \item Keywords which are provided as builtins are nevertheless highlighted as \tc<6>{keywords-color}{keywords}
+            \end{itemize}
+            \begin{onlyenv}<4>
+                \begin{lstlisting}[style=MyBash, numbers=none, keywordstyle=\color{builtins-color},]
+                   :         complete   export    local      shopt     unset
+                   .         compgen    fc        logout     source    until
+                   [         continue   fg        popd       suspend   wait
+                   alias     declare    getopts   printf     test      while
+                   bg        dirs       hash      pushd      times
+                   bind      disown     help      pwd        trap
+                   break     echo       history   read       type
+                   builtin   enable     if        readonly   typeset
+                   case      eval       jobs      return     ulimit
+                   cd        exec       kill      set        umask
+                   command   exit       let       shift      unalias
+                \end{lstlisting}
+            \end{onlyenv}
+            \begin{onlyenv}<5>
+                \begin{lstlisting}[style=MyBash, numbers=none, deleteemph={[5]:,.,[,alias, bg, break, case, cd, continue, declare, echo, eval, exec, exit, export,fg, help, if, jobs, kill, let, local,printf, pwd, read, readonly, return, set, shift, source, test, unalias, unset, until, wait, while}, emph={[7]:,.,[,alias, bg, break, case, cd, continue, declare, echo, eval, exec, exit, export,fg, help, if, jobs, kill, let, local,printf, pwd, read, readonly, return, set, shift, source, test, unalias, unset, until, wait, while}, emphstyle={[7]\color{PP}}]
+                   :         complete   export    local      shopt     unset
+                   .         compgen    fc        logout     source    until
+                   [         continue   fg        popd       suspend   wait
+                   alias     declare    getopts   printf     test      while
+                   bg        dirs       hash      pushd      times
+                   bind      disown     help      pwd        trap
+                   break     echo       history   read       type
+                   builtin   enable     if        readonly   typeset
+                   case      eval       jobs      return     ulimit
+                   cd        exec       kill      set        umask
+                   command   exit       let       shift      unalias
+                \end{lstlisting}
+            \end{onlyenv}
+            \begin{onlyenv}<6>
+                \begin{lstlisting}[style=MyBash, numbers=none]
+                   :         complete   export    local      shopt     unset
+                   .         compgen    fc        logout     source    until
+                   [         continue   fg        popd       suspend   wait
+                   alias     declare    getopts   printf     test      while
+                   bg        dirs       hash      pushd      times
+                   bind      disown     help      pwd        trap
+                   break     echo       history   read       type
+                   builtin   enable     if        readonly   typeset
+                   case      eval       jobs      return     ulimit
+                   cd        exec       kill      set        umask
+                   command   exit       let       shift      unalias
+                \end{lstlisting}
+            \end{onlyenv}
         \end{onlyenv}
-        \begin{onlyenv}<5>
-            
+        \begin{onlyenv}<7>
+            \begin{varblock}{alerted}[0.75\textwidth]{}
+                Keywords are like builtins, but \alert{special parsing rules apply to them}
+            \end{varblock}
+            \begin{itemize}
+                \item Flow control constructs is achieved thanks to keywords
+                \item We will explore all of them in detail (except \bash|coproc|)
+            \end{itemize}
+            \begin{lstlisting}[style=MyBash, numbers=none]
+                if     elif   esac     while   done      time   !    coproc
+                then   fi     for      until   in        {      [[
+                else   case   select   do      function  }      ]]
+            \end{lstlisting}
+            \bigskip
+            For example:
+            \medskip
+            \begin{lstlisting}[style=MyBash]
+                $ [ a < b ]   # Ooops, < means here input redirection!
+                |+-bash: b: No such file or directory+|
+                $ [[ a < b ]] # The meaning of < changes within [[ ]]
+            \end{lstlisting}
         \end{onlyenv}
-        \begin{onlyenv}<6>
-            
+        \begin{onlyenv}<8>
+            \begin{itemize}
+                \item Executable are the last type of command that Bash can execute
+                \item They are also known as external commands or applications
+                \item They are typically invoked by their name, on constraint that Bash is able to find them
+                \item When a command is specified without a file path and it is \alert{not an alias, a function, a builtin or a keyword}, Bash searches through the directories contained in the variable \bash|PATH|
+                \item The search is done from left to right and the first executable found is run
+            \end{itemize}
+            \begin{lstlisting}[style=MyBash]
+                $ ls /home/sciarra/.local
+                |+...   g++   ...+| # Version 8.3.0
+                $ ls /usr/bin
+                |+...   g++   ...+| # Version 5.4.0
+                # Display content of PATH@|$\,^\star$|@
+                |+/home/sciarra/.local/bin:/usr/bin:/bin+|
+                $ g++ -dumpversion
+                |+8.3.0+|
+            \end{lstlisting}
+            \centerline{\ssmall $^\star$After having discussed variables it will be clear how to complete the snippet above with commands}
         \end{onlyenv}
     \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\againframe<2>{CommandsTypes}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\againframe<3>{CommandsTypes}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\againframe<4-6>{CommandsTypes}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\againframe<7>{CommandsTypes}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\againframe<8>{CommandsTypes}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Bash scripts}
+    
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+
+
