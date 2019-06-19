@@ -1,0 +1,173 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 19 Jun 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[label={Quotes}]{Types of quoting}
+    \vspace{-4mm}
+    \begin{description}
+        \item[Single quotes] Everything inside single quotes becomes a literal string\\[-0.3em]
+                             {~\tiny\{The only character that you can't safely enclose in single quotes is a single quote.\}}
+        \item[Double quotes] Performed actions:
+                             \begin{itemize}
+                                 \item Every substitution that begins with a dollar sign \texttt{\$}
+                                 \item Backslash escaping
+                                 \item \tc{Gray!30}{The legacy \texttt{\textasciigrave\ldots\textasciigrave} (backticks) command substitution}
+                             \end{itemize}
+                             \alert{No word splitting or filename expansion is performed!}
+        \item[Backticks] \tc{Gray!30}{\texttt{\textasciigrave\ldots\textasciigrave} is the legacy command substitution syntax}\\
+                         \alert{Deprecated in favor of \texttt{\$(\ldots)}}
+        \item[Backslash] Putting \texttt{\textbackslash} in front of a metacharacter removes its special meaning\\[-0.3em]
+                         {~\tiny\{This works inside double quotes, or in the absence of quotes. It does not work inside single quotes.\}} 
+        \item[\texttt{\$'\ldots'}] A Bash extension that prevents everything except backslash escaping\\
+                                   It also allows special backslash escape sequences like \texttt{\textbackslash{}n} for newline%, \t for tab, and \xnn for bytes specified in hexadecimal. 
+        \item[\texttt{\$"\ldots"}] Bash extension used for \URL[PP]{http://mywiki.wooledge.org/BashFAQ/098}{localisation support}, not covered here
+    \end{description}
+    \FrameRemark{This is the short story. The verbose version is available at the end of \URL[PB]{http://mywiki.wooledge.org/Quotes}{this page}.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Examples about quoting}
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers]
+            $ echo I    am  Clark       Kent
+            |+I am Clark Kent+|
+            $ echo I"    "am"  "Clark"       "Kent        # Not nice
+            |+I    am  Clark         Kent+|
+            $ echo I\ \ \ \ am\ \ Clark\ \ \ \ \ \ \ Kent # Really!?
+            |+I    am  Clark         Kent+|
+            $ echo 'I    am  Clark       Kent'
+            |+I    am  Clark       Kent+|
+            $ echo "I    am  Clark       Kent"
+            |+I    am  Clark         Kent+|
+        \end{lstlisting}
+        \centerline{\tiny }
+        \medskip
+        \begin{lstlisting}[style=MyBash, style=oddnumbers]
+            $ echo 'PATH contains ${PATH}'
+            |+PATH contains ${PATH}+|
+            $ echo "PATH contains ${PATH}"
+            |+PATH contains /home/sciarra/.local/bin:/usr/bin:/bin+|
+            $ echo "PATH contains \${PATH}"
+            |+PATH contains ${PATH}+|
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \renewcommand\thelstnumber{\ifnum\value{lstnumber}=11\relax\else\arabic{lstnumber}\fi}
+        \begin{lstlisting}[style=MyBash, style=oddnumbers]
+            $ ls *.tex
+            |+Day_1.tex   Day_2.tex   Day_3.tex+|
+            $ ls '*.tex'
+            |+ls: cannot access '*.tex': No such file or directory+|
+            $ ls "*.tex"
+            |+ls: cannot access '*.tex': No such file or directory+|
+            $ echo "Hello\nWorld"
+            Hello\nWorld
+            $ echo $'Hello\nWorld'
+            Hello
+            @|\renewcommand\thelstnumber{}|@World
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{varblock}{alerted}[0.9\textwidth]{I'm Too Lazy to Read, Just Tell Me What to Do}<2>
+        \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-6mm,aboveskip=2mm]
+            $ cp $file $destination         # WRONG
+            $ cp -- "$file" "$destination"  # Right
+        \end{lstlisting}
+        When in doubt, \textbf{double-quote every expansion} in your shell commands.\\
+        Generally use \textbf{double quotes} unless it makes more sense to use single quotes.
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Special characters}{Just a brief overview}
+    \vspace{-6mm}
+    \begin{columns}
+        \begin{column}{\dimexpr\paperwidth-10mm}
+            \begin{description}[\texttt{>  >>  <}]
+                \setlength{\itemsep}{1mm}
+                \item<only@1>[\texttt{\textvisiblespace}]
+                    A \alert{white}\tikzmark{whitespace}\alert{space} is used by Bash to determine where words begin and end \\
+                    The first word is the command name and additional words become arguments
+                \item<only@1>[\texttt{\$}]
+                    It introduces various types of \alert{expansion}:
+                    \begin{tabular}{ll}
+                        \PB{$\bullet\;$} parameter expansion   & \texttt{\$\{var\}}          \\
+                        \PB{$\bullet\;$} command substitution  & \texttt{\$(command)}      \\
+                        \PB{$\bullet\;$} arithmetic expansion  & \texttt{\$((expression))} \\
+                    \end{tabular}
+                \item<only@1>[\texttt{' '}] \alert{Single quotes}\tikzmark{curlyStart}
+                \item<only@1>[\texttt{" "}] \alert{Double quotes}
+                \item<only@1>[\texttt{\textbackslash}] \alert{Escape symbol}\tikzmark{curlyEnd}
+                \item<only@1>[\texttt{\#}]
+                    It introduced a \alert{comment} that extends to the end of the line. \\
+                    Text after it is ignored by the shell. {~\tiny\{In single and double quotes, \texttt{\#} is just a \texttt{\#}.\}}
+                \item<only@2>[\texttt{=}]
+                    The \alert{assignment} symbol is used to assign a value to a variable \\
+                    Whitespace is not allowed on either side of the \texttt{=} character
+                \item<only@2>[\texttt{[[ ]]}]
+                    This \alert{testing keyword} allows to evaluate a conditional expression \\
+                    to determine whether it is "true" or "false"
+                \item<only@2>[\texttt{!}]
+                    The \alert{negate keyword} reverses a test or an exit status
+                \item<only@2>[\texttt{>  >>  <}]
+                    \alert{Redirection} of a command's output or input to a file
+                \item<only@2>[\texttt{|}]
+                    The \alert{pipeline} sends the output from one command to the input of another command
+                \item<only@2>[\texttt{;}]
+                    \alert{Command separator} of multiple commands that are on the same line 
+                \item<only@2>[\texttt{\{ \}}]
+                    An \alert{inline group} allows to treat multiple commands as if they were one command
+                    Convenient to be uses when Bash syntax requires only one command
+                \item<only@2>[\texttt{( )}]
+                    Another way to group commands, but in a \alert{subshell group} \\
+                    However, commands in \texttt{( )} are executed in a subshell (a new process) \\
+                    and this is often the way to avoid side effects on the current shell
+                \item<only@3-4>[\texttt{(( ))}]
+                     Within an \alert{arithmetic expression}, mathematical oper\tikzmark{operators}ators are used for calculations \\
+                     They can be used for\\
+                     \begin{tabular}{ll}
+                        \PB{$\bullet\;$} variable assignments   & \texttt{(( a = 1 + 4 ))}  \\
+                        \PB{$\bullet\;$} tests evaluation       & \texttt{(( a < b ))}      \\
+                    \end{tabular}
+                \item<only@3-4>[\texttt{\$(( ))}]
+                    Comparable to \texttt{(( ))}, but the expression is replaced with the result of its evaluation
+                \item<only@3-4>[\texttt{*  ?}]
+                    \alert{Globbing} characters are wildcards which match parts of filenames
+                \item<only@3-4>[\texttt{\~}]
+                    The tilde is a representation of a \alert{home directory}\\
+                    When alone or followed by a \texttt{/}, it means the current user's home directory \\
+                    Otherwise, a username must be specified: \bash|ls ~john/|
+                \item<only@3-4>[\texttt{\&}]
+                    When used at the end of a command, run the command in the \alert{background} \\
+                    The shell does not wait for it to complete
+            \end{description}
+        \end{column}
+    \end{columns}
+    \begin{varblock}{}[0.9\textwidth]{More details later}<only@4>
+        \PB{We will come back to these special instructions with details and examples} 
+    \end{varblock}
+    \begin{tikzpicture}[remember picture, overlay]
+        \begin{scope}[scope on=<1>]
+            \node[font=\ssmall, above = 4mm of whitespace, anchor=west, xshift=1cm] (ws) {\{a space, tab, newline, carriage return, vertical tab or form feed\}};
+            \path[to] (ws.west) edge[out=180, in=90] ([yshift=2mm]whitespace);
+            \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (curlyStart -| curlyEnd) ++(5mm,1mm) -- ($(curlyEnd)+(5mm,-1mm)$) 
+                  node[midway, right=3mm, text width=25mm, align=center] {Already discussed on slide~\ref{Quotes}};
+        \end{scope}
+        \begin{scope}[scope on=<3-4>]
+            \node[font=\ssmall, above = 4mm of operators, anchor=west, xshift=1cm] (ops) {the 4 characters\,\,\fbox{\texttt{+~~~-~~~*~~~/}}};
+            \path[to] (ops.west) edge[out=180, in=90] ([yshift=2mm]operators);
+        \end{scope}
+    \end{tikzpicture}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+

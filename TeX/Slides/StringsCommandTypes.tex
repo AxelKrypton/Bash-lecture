@@ -181,12 +181,11 @@
                 |+...   g++   ...+| # Version 8.3.0
                 $ ls /usr/bin
                 |+...   g++   ...+| # Version 5.4.0
-                # Display content of PATH@|$\,^\star$|@
+                $ echo ${PATH}
                 |+/home/sciarra/.local/bin:/usr/bin:/bin+|
                 $ g++ -dumpversion
                 |+8.3.0+|
             \end{lstlisting}
-            \centerline{\ssmall $^\star$After having discussed variables it will be clear how to complete the snippet above with commands}
         \end{onlyenv}
     \end{overlayarea}
 \end{frame}
@@ -201,8 +200,41 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \againframe<8>{CommandsTypes}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Bash scripts}
-    
+\begin{frame}[fragile]{Bash scripts}
+    \vspace{-6mm}
+    \begin{itemize}
+        \item A script is a sequence of Bash commands in a file
+        \item The commands are read and processed \PP{in order}
+        \item A new command is processed after the previous has \PP{ended} {\tiny~\{unless differently required\}}
+        %\item Use your favourite text editor to compose your script
+        \item The first line of a script should be reserved for an \textbf{interpret directive} also called \alert{hashbang} or \alert{shebang}.
+              This is used when the kernel executes a non-binary file.
+              Use one of the two following alternatives: \\
+              \begin{center}
+                  \begin{tikzpicture}
+                      \node[fill=background-color, inner sep=1mm, font=\scriptsize] (shebangA) {\bash|#!/bin/bash|};
+                      \node[fill=background-color, inner sep=1mm, font=\scriptsize, right = 3cm of shebangA] (shebangB) {\bash|#!/usr/bin/env bash|};
+                      \draw[to, shorter={2mm}{2mm}] (shebangA) -- node[midway, above=-1pt, font=\tiny] {or, preferably,} (shebangB);
+                  \end{tikzpicture}
+                  \par{\ssmall The right directive has the benefit of looking for whatever the default version of the program is in your current \textbf{env}ironment (i.e. in \bash|PATH|).}
+              \end{center}
+        \item<only@1> Please, \alert{do not use} \,\raisebox{0.1em}{\fbox{\ssmall\bash|#!/bin/sh|}}\, as shebang, even if you might see it around on the web!
+        \item<only@1> Avoid giving your scripts a \textbf{.sh} extension. Do not use one or use \alert{\textbf{.bash}}!
+        \item<only@2> Execute the script in either of the following ways:
+    \end{itemize}
+    \begin{varblock}{alerted}[0.9\textwidth]{\textbf{Sh is NOT Bash!}}<only@1>
+        \textbf{Bash} itself is a \textbf{sh-compatible} shell however, the opposite is not true!
+    \end{varblock}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash]
+            $ bash myscript   #The shebang is treated as a comment!
+        \end{lstlisting}
+        \centerline{or}
+        \begin{lstlisting}[style=MyBash]
+            $ chmod +x myscript  # Make the file executable
+            $ ./myscript         # Execute it, the shebang is used!
+        \end{lstlisting}
+    \end{onlyenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
