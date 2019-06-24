@@ -158,16 +158,34 @@
         \end{scope}
     \end{tikzpicture}
 \end{frame}
-
-
-
-
-
-
-
-
-
-
-
-
-
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Deprecated special character}
+    \begin{columns}
+        \begin{column}{\dimexpr\paperwidth-10mm}
+            \begin{description}[\texttt{>  >>  <}]
+                \setlength{\itemsep}{1mm}
+                \color{Gray!30}
+                \item[\texttt{\textasciigrave\ \textasciigrave}]
+                    Command substitution - \alert{use \texttt{\$( )} instead}\tikzmark{backticks}
+                \item[\texttt{[ ]}]
+                    An alias for the old test command\\
+                    Commonly used in POSIX shell scripts\\
+                    \alert{Lacks many features of \texttt{[[ ]]}}\tikzmark{test}
+                \item[\texttt{\$[ ]}]
+                    Arithmetic expression - \alert{use \texttt{\$(( ))} instead} \\
+                    Simply do not use it, it dates back to 1990s!!!
+            \end{description}
+        \end{column}
+    \end{columns}
+    \bigskip
+    \begin{varblock}{}[0.9\textwidth]{Legacy code and portability}
+        Unless you have very special requirement, try to stick to modern Bash features!
+    \end{varblock}
+    \begin{tikzpicture}[remember picture, overlay, every node/.style={anchor=east, xshift=-1cm, font=\ssmall}]
+        \node at (current page.east |- backticks) (A) {\URL[PB]{http://mywiki.wooledge.org/BashFAQ/082}{Advance reading}};
+        \node at (current page.east |- test) (B) {\URL[PB]{http://mywiki.wooledge.org/BashFAQ/031}{Advanced reading}};
+        \path[from, shorter={5mm}{5mm}, thin, Gray!30] (backticks) edge (A) (test) edge (B);
+    \end{tikzpicture}
+    \FrameRemark{At the end of the lecture, you might come back to \URL[PP]{https://wiki.bash-hackers.org/scripting/obsolete}{this page} and read about obsolete features!}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

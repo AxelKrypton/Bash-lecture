@@ -1,0 +1,154 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 24 Jun 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The first building block}
+    Two flavours:
+    \begin{itemize}
+        \item Parameters/Variables\\
+              {\scriptsize $\to$ Created and updated by the user}
+        \item Special parameters\tikzmark{origin}\\
+              {\scriptsize $\to$ Read-only and pre-set by Bash}
+    \end{itemize}
+    \begin{tikzpicture}[remember picture, overlay, line join=round]
+        \pgfmathsetmacro{\cubex}{1}
+        \pgfmathsetmacro{\cubey}{1}
+        \pgfmathsetmacro{\cubez}{1}
+        \coordinate (O) at ([xshift=30mm]origin);
+        \draw[PS, fill=PS!40] (O) ++(\cubex,\cubey,0) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+        \draw[PS, fill=PS!10] (O) ++(\cubex,\cubey,0) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+        \draw[PS] (O) ++(0,\cubey,-\cubez) -- ++(0,-\cubey,0);
+        \draw[PS, fill=PS!30] (O)                     -- ++(\cubex,0,0) -- ++(0,\cubey,0) -- ++(-\cubex,0,0) -- cycle;
+        \node at ($(O)+(\cubex/2,\cubey/2,0)$) {Name};
+        \path[from] ($(O)+(\cubex/2,\cubey,-\cubez/2)$) edge[out=90, in=180] node[pos=1, anchor=west] (content) {\underline{Content}:} ++(1.5,0.5,0);
+        \node[font=\scriptsize, text=PS, below = 1mm of content.210, anchor=north west, inner sep=0] {
+            \begin{tabular}{>{$\star\,$}l}
+                strings \\
+                integers \\
+                indexed arrays \\
+                associative arrays \\
+            \end{tabular}
+        };
+    \end{tikzpicture}
+    \begin{overlayarea}{\textwidth}{0.3\textheight}
+        \vspace{-6mm}
+        \begin{varblock*}{}[0.6\textwidth]{The variable name (also referred to as an \textbf{identifier})}<only@1>
+            A word consisting only of
+            \begin{itemize}
+                \item \PB{letters}, \PB{digits} and \PB{underscores}
+                \item and \PB{beginning with a letter} or \PB{an underscore}
+            \end{itemize}
+        \end{varblock*}
+        \begin{varblock*}{}[0.98\textwidth]{\textbf{Assignment}}<only@2>
+            \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=26mm, xleftmargin=26mm]
+                $ variableName=variableContent
+            \end{lstlisting}
+            \begin{itemize}
+                \item If not existing, the \alert{global} variable \bash|variableName| is created, and the content \bash|variableContent| is put into it
+                \item If existing, the content of \bash|variableName| is set to \bash|variableContent|
+                \item If \bash|variableName| exists and it is read-only, an error occurs
+            \end{itemize}
+        \end{varblock*}
+        \begin{varblock}{}[0.96\textwidth]{Accessing the content: the \textbf{parameter expansion}}<only@3>
+            Use the \texttt{\$} special character to tell Bash that you want to use the content of a variable
+            \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm]
+                $ prefix='Day_'
+                $ day='Monday'
+                $ echo "${prefix}0.pdf are the slides for ${day}"
+                |+Day_0.pdf are the slides for Monday+|
+            \end{lstlisting}
+            \alert{Always} using curly braces \alert{\texttt{\$\{...\}}} can be considered \alert{good programming practice}!
+        \end{varblock}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Crucial to know (I)}{\ldots{}and not to forget!}
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        #This is WRONG
+        $ variableName@|\textvisiblespace|@=@|\textvisiblespace|@variableContent   # spaces around = sign!
+        |+bash: variableName: command not found+|
+    \end{lstlisting}
+    \bigskip
+    \begin{enumerate}
+        \item Bash will not know that you are attempting to assign something
+        \item The parser will see \bash|variableName| with no \bash{=} and treat it as a command name
+        \item \bash{=} and \bash|variableContent| are then passed to it as arguments
+    \end{enumerate}
+    \bigskip
+    \begin{varblock}{}[0.72\textwidth]{}
+        \Large\PB{If you think about it for a moment, it makes sense!}
+    \end{varblock}
+    
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Crucial to know (II)}{\ldots{}and not to forget!}
+    \begin{overlayarea}{\textwidth}{0.5\textheight}
+        \vspace{-9mm}
+        \begin{varblock}{alerted}[0.98\textwidth]{\textbf{Attention!}}
+            \PQ{After parameter expansion, Bash may still perform additional manipulations on the result!}
+        \end{varblock}
+        \begin{onlyenv}<1-2>
+            \begin{lstlisting}[style=MyBash, belowskip=-4mm]
+                $ today=Monday
+                $ echo "Today is ${today}"
+                |+Today is Monday+|
+                # Bash takes the content of the variable today
+                # and replaces ${today} by Monday. Equivalent to:
+                $ echo "Today is Monday"
+                |+Today is Monday+|
+            \end{lstlisting}
+            \centerline{Everything seems to work as expected\ldots\ but:}
+        \end{onlyenv}
+        \begin{onlyenv}<3-4>
+            Why did it not work?
+        \end{onlyenv}
+        \begin{onlyenv}<4>
+            \begin{enumerate}
+                \item Bash replaced \texttt{\$}\bash|{song}| by its content
+                \item Word splitting occurred before the command was executed!
+                \item \bash|rm| was run with 2 arguments (there is white space between them and it is not quoted!)
+            \end{enumerate}
+            \begin{lstlisting}[style=MyBash, numbers=none]
+                $ rm My song.mp3
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<5->
+            \begin{lstlisting}[style=MyBash]
+                # Please, do not try to put quotes in variables!
+                $ song="\"My song.mp3\""
+                $ rm ${song}
+                |+rm: "My: No such file or directory+|
+                |+rm: song.mp3": No such file or directory+|
+                # Here the quotes contained in the variable song
+                # are literal characters and they are not interpreted
+                # as quotes when the rm command is run!!
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<6->
+            \begin{lstlisting}[style=MyBash, firstnumber=9]
+                # CORRECT WAY TO DO IT:
+                $ rm "${song}"
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+    \begin{onlyenv}<2-4>
+        \begin{lstlisting}[style=MyBash]
+            #This is probably not what you would like to do
+            $ song="My song.mp3"
+            $ rm ${song}
+            |+rm: My: No such file or directory+|
+            |+rm: song.mp3: No such file or directory+|
+        \end{lstlisting}
+    \end{onlyenv}
+    \medskip
+    \begin{varblock}{alerted}[0.75\textwidth]{How do we fix this?}<only@5->
+        \uncover<6>{\PQ{Remember to put double quotes around every parameter expansion!}}
+    \end{varblock}
+    
+\end{frame}
+
+
+
+
