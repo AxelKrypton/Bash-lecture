@@ -5,12 +5,12 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The first building block}
-    Two flavours:
+    Parameters come in two flavours:
     \begin{itemize}
-        \item Parameters/Variables\\
-              {\scriptsize $\to$ Created and updated by the user}
-        \item Special parameters\tikzmark{origin}\\
-              {\scriptsize $\to$ Read-only and pre-set by Bash}
+        \item Variables (i.e. parameters with a name)\\[0.1em]
+              {\scriptsize $\to$ Created and updated by the user \\[-0.5em] $\to$ Available in the environment}
+        \item {\color{Gray!50}Special parameters (later)\tikzmark{origin}\\
+              {\scriptsize $\to$ Read-only and pre-set by Bash}}
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay, line join=round]
         \pgfmathsetmacro{\cubex}{1}
@@ -64,6 +64,62 @@
     \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Variables Types}
+    \begin{onlyenv}<1>
+        \vspace{-5mm}
+        \begin{varblock}{example}[0.75\textwidth]{Bash is not a typed language}
+            It does have a few different types of variables, though! \\
+            It is more about activate particular rules when acting on variables.
+        \end{varblock}
+        \vspace{-5mm}
+        \begin{columns}
+            \begin{column}{\dimexpr\paperwidth-10mm}
+                \begin{description}[\textbf{Associative arrays:}]
+                    \setlength{\itemsep}{1mm}
+                    \item[\textbf{Array:}]
+                        \bash|declare -a variableName|\\
+                        The variable is an array of strings
+                    \item[\textbf{Associative array:}]
+                        \bash|declare -A variableName|\\
+                        The variable is an associative array of strings (v4.0 or higher)
+                    \item[\textbf{Integer:}]
+                        \bash|declare -i variableName|\\
+                        The variable holds an integer\\
+                        Assigning values to this variable automatically triggers Arithmetic Evaluation
+                    \item[\textbf{Read only:}]
+                        \bash|declare -r variableName|\\
+                        The variable can no longer be modified or unset
+                    \item[\textbf{Export:}]
+                        \bash|declare -x variableName|\\
+                        The variable is marked for export, i.e. it will be inherited by any child process
+                \end{description}
+            \end{column}
+        \end{columns}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, belowskip=-5mm]
+            $ aVar=5; aVar+=2; echo "$aVar"; unset aVar
+            52
+            $ aVar=5; let aVar+=2; echo "$aVar"; unset aVar
+            7
+            $ declare -i aVar=5; aVar+=2; echo "$aVar"; unset aVar
+            7
+            $ aVar=5+2; echo "$aVar"; unset aVar
+            5+2
+            $ declare -i aVar=5+2; echo "$aVar"; unset aVar
+            7
+            $ declare -i aVar=5; aVar+=aVar; echo "$aVar"; unset aVar
+            10
+            $ declare -i aVar=5; aVar+="foo"; echo "$aVar"; unset aVar
+            10
+            # "foo" refers to the variable foo in arithmetic evaluation
+        \end{lstlisting}
+        \begin{varblock}{alerted}[0.9\textwidth]{The use of integer variables is exceedingly rare!}
+            Most experienced shell programmers prefer to use explicit arithmetic commands (with \texttt{((\ldots))} or \bash|let|) when they want to perform arithmetic!
+        \end{varblock}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Crucial to know (I)}{\ldots{}and not to forget!}
     \begin{lstlisting}[style=MyBash, numbers=none]
         #This is WRONG
@@ -96,7 +152,7 @@
                 |+Today is Monday+|
                 # Bash takes the content of the variable today
                 # and replaces ${today} by Monday. Equivalent to:
-                $ echo "Today is Monday"
+                $ echo Today is Monday
                 |+Today is Monday+|
             \end{lstlisting}
             \centerline{Everything seems to work as expected\ldots\ but:}
@@ -146,9 +202,70 @@
     \begin{varblock}{alerted}[0.75\textwidth]{How do we fix this?}<only@5->
         \uncover<6>{\PQ{Remember to put double quotes around every parameter expansion!}}
     \end{varblock}
-    
 \end{frame}
-
-
-
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Available Variables}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 pages 73-84}}
+    \vspace{-5mm}
+    \begin{center}
+        \begin{lstlisting}[style=MyBash, numbers=none, basicstyle={\ttfamily\tiny\color{basic-color}}]
+            # Bourne Shell Variables (For some, Bash sets a default)
+            CDPATH  HOME  IFS  MAIL  MAILPATH  OPTARG  OPTIND  PATH  PS1  PS2
+            # Bash Variables (i.e. variables that are set or used by Bash)
+            BASH                    COMP_POINT        HISTFILESIZE     OSTYPE
+            BASHOPTS                COMP_TYPE         HISTIGNORE       PIPESTATUS
+            BASHPID                 COMP_KEY          HISTSIZE         POSIXLY_CORRECT
+            BASH_ALIASES            COMP_WORDBREAKS   HISTTIMEFORMAT   PPID
+            BASH_ARGC               COMP_WORDS        HOSTFILE         PROMPT_COMMAND
+            BASH_ARGV               COMPREPLY         HOSTNAME         PROMPT_DIRTRIM
+            BASH_ARGV0              COPROC            HOSTTYPE         PS0
+            BASH_CMDS               DIRSTACK          IGNOREEOF        PS3
+            BASH_COMMAND            EMACS             INPUTRC          PS4
+            BASH_COMPAT             ENV               INSIDE_EMACS     PWD
+            BASH_ENV                EPOCHREALTIME     LANG             RANDOM
+            BASH_EXECUTION_STRING   EPOCHSECONDS      LC_ALL           READLINE_LINE
+            BASH_LINENO             EUID              LC_COLLATE       READLINE_POINT
+            BASH_LOADABLES_PATH     EXECIGNORE        LC_CTYPE         REPLY
+            BASH_REMATCH            FCEDIT            LC_MESSAGES      SECONDS
+            BASH_SOURCE             FIGNORE           LC_NUMERIC       SHELL
+            BASH_SUBSHELL           FUNCNAME          LC_TIME          SHELLOPTS
+            BASH_VERSINFO           FUNCNEST          LINENO           SHLVL
+            BASH_VERSION            GLOBIGNORE        LINES            TIMEFORMAT
+            BASH_XTRACEFD           GROUPS            MACH_TYPE        TMOUT
+            CHILD_MAX               histchars         MAILCHECK        TMPDIR
+            COLUMNS                 HISTCMD           MAPFILE          UID
+            COMP_CWORD              HISTCONTROL       OLDPWD           # And few more
+            COMP_LINE               HISTFILE          OPTERR
+        \end{lstlisting}
+    \end{center}
+    \FrameRemark{Use \,\,\bash|compgen -v|\,\, to get a complete list of all variables available in your session.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The Internal Field Separator}{A very important Bash special variable {\tiny~\{More on it later when we discuss word splitting in detail\}}}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item By default, \bash|IFS| is unset and acts as if it were set to \bash|<space><tab><newline>|
+        \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=15mm, belowskip=-6mm]
+            #The following two lines have the same effect
+            $ IFS=$' \t\n'
+            $ unset IFS
+        \end{lstlisting}
+        \item It is used to determine what characters to use as word splitting delimiters
+        \item Therefore, you can use any of these forms of white space to delimit words
+        \item The \bash|IFS| variable comes into play also in special parameter \texttt{\$*} expansion!
+    \end{itemize}
+    \vspace{-4mm}
+    \begin{overlayarea}{\textwidth}{0.35\textheight}
+        \begin{varblock}{alerted}[0.8\textwidth]{\Large \textbf{Attention}}<only@1>
+            \PQ{\large It is crucial to understand the role of the \bash|IFS| variable!}
+        \end{varblock}
+        \begin{varblock}{quote}[0.9\textwidth]{\URL[PB]{http://mywiki.wooledge.org/Arguments}{When and why not to use a custom IFS}}[Greg's wiki]<only@2>
+            It is important that you understand the danger of changing the way the shell behaves.
+            If you modify \bash|IFS|, word splitting will happen in a non-default manner henceforth.
+            Some will recommend you save \bash|IFS| and reset it to the default later on.
+            Others will recommend to unset \bash|IFS| after you're done with your custom word splitting.\\
+            Personally, I prefer to recommend you \textbf{to NOT modify} \bash|IFS| on the script level. \alert{\textbf{Ever!}}\\[-0.7em] ~
+        \end{varblock}
+    \end{overlayarea}
+%     }
+\end{frame}
 

@@ -1,0 +1,45 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 25 Jun 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{The Special Parameters}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.4.2}}
+    \vspace{-8mm}
+    \begin{columns}
+        \begin{column}{\dimexpr\paperwidth-10mm}
+            \begin{description}[\texttt{1 2 \ldots}]
+                \setlength{\itemsep}{1mm}
+                \item[\texttt{0}]
+                    Contains the name, or the path, of the script
+                    Do not rely on it or read the manual carefully!
+                \item[\texttt{1 2 \ldots}]
+                    \alert{Positional Parameters} contain the arguments passed\tikzmark{curlyStart}\\
+                    to the current script or function
+                \item[\texttt{*}]
+                    Expands to all the words of all the positional parameters\\
+                    Double quoted, it expands to a single string containing them all,\\ separated by the first character of the \bash|IFS| variable
+                \item[\texttt{@}]
+                    Expands to all the words of all the positional parameters\\
+                    Double quoted, it expands to a list of them all as individual words
+                \item[\texttt{\#}]
+                    Expands to the number of positional parameters that are currently set\tikzmark{curlyEnd}
+                \item[\texttt{?}]
+                    Expands to the exit code of the most recently completed foreground command
+                \item[\texttt{\$}]
+                    Expands to the PID (process ID number) of the current shell
+                \item[\texttt{!}]
+                    Expands to the PID of the command most recently executed in the background
+                \item[\texttt{\_}]
+                    Expands to the last argument of the last command that was executed
+            \end{description}
+        \end{column}
+    \end{columns}
+    \begin{tikzpicture}[remember picture, overlay]
+        \begin{scope}[scope on=<2>, PP]
+            \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (curlyStart -| curlyEnd) ++(5mm,1mm) -- ($(curlyEnd)+(5mm,-1mm)$) 
+                  node[midway, right=3mm, text width=10mm, align=center] {Exercise Sheet 1};
+        \end{scope}
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

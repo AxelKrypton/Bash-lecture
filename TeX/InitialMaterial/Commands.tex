@@ -63,9 +63,23 @@
 }
 \makeatother
 
-\NewDocumentCommand{\FrameRemark}{ m }%
+\newcommand{\FrameRemark}[1]%
 {%
     \begin{tikzpicture}[remember picture, overlay]
         \node[font=\tiny, anchor=south] at (current page.south) {#1};
     \end{tikzpicture}
+}
+
+\newcommand{\MakeEnumerateBox}[1]%
+{%
+    \hbox{%
+      \usebeamerfont*{item projected}%
+      \usebeamercolor[bg]{item projected}%
+      \vrule width2.25ex height1.85ex depth.4ex%
+      \hskip-2.25ex%
+      \hbox to2.25ex{%
+        \hfil%
+        \color{fg}#1%
+        \hfil}%
+    }%
 }
