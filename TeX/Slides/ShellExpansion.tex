@@ -1,0 +1,141 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 25 Jun 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Several kind of expansions}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5}}
+    Expansion is performed on the command line after it has been split into tokens:
+    \begin{itemize}
+        \item Brace expansion\tikzmark{ExpA}
+        \item Tilde expansion\tikzmark{ExpB}
+        \item Parameter and variable expansion
+        \item Arithmetic expansion
+        \item Process substitution \tc{Gray!80}{{\tiny~\{Not available if \URL[Gray]{https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html}{Bash in POSIX Mode (item 30)}\}}}
+        \item Command substitution\tikzmark{ExpC}
+        \item Word splitting\tikzmark{ExpD}
+        \item Filename expansion\tikzmark{ExpE}
+    \end{itemize}
+    \begin{varblock}{alerted}[0.85\textwidth]{Quote Removal}
+        After the preceding expansions, all unquoted occurrences of the characters\\
+        \alert{\texttt{\textbackslash}}, \alert{\texttt{'}}, and \alert{\texttt{"}}
+        that did not result from one of the above expansions are removed.
+    \end{varblock}
+    \begin{tikzpicture}[remember picture, overlay]
+        \coordinate (xPos) at ($(current page.north)!0.3!(current page.north east)$);
+        \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (ExpB -| xPos) ++(-8mm,1mm) -- ($(ExpC -| xPos)+(-8mm,-1mm)$)
+              coordinate[midway] (second);
+        \node[anchor=west] at (second -| xPos) {\MakeEnumerateBox{2}$\quad$\alert{At the same time!}};
+        \draw[from, shorter={0mm}{3mm}] (ExpA) -- (xPos |- ExpA) node[anchor=west] {\MakeEnumerateBox{1}};
+        \draw[from, shorter={0mm}{3mm}] (ExpD) -- (xPos |- ExpD) node[anchor=west] {\MakeEnumerateBox{3}};
+        \draw[from, shorter={0mm}{3mm}] (ExpE) -- (xPos |- ExpE) node[anchor=west] {\MakeEnumerateBox{4}};
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Brace expansion}
+    \vspace{-5mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{itemize}
+            \item It comes in two forms:
+                \begin{enumerate}
+                    \item \bash|[preamble]{comma separated list}[postscript]|
+                    \item \bash|[preamble]{X..Y[..increment]}[postscript]|
+                \end{enumerate}
+            \item<only@1> \bash|[preamble]| and \bash|[postscript]| are optional 
+            \item<only@1> \bash|[preamble]| and \bash|[postscript]| might contain other brace expansions
+            \item<only@1> Brace expansions can be nested and, if so, they work from the outside in
+            \item<only@1> \bash|X| and \bash|Y| are either characters or numbers
+            \item<only@1> \bash|increment| is an optional integer (if omitted, it is +1 or -1 as appropriate)
+            \item<only@1> If \bash|X| and \bash|Y| are numbers, leading 0 are respected to force each term to have the same width
+            \item<only@1> If the brace expansion syntax is not respected, then brace expansion is not performed!
+        \end{itemize}
+        \vspace{-3mm}
+        \begin{varblock}{}[\textwidth]{Result of the expansion}<only@1>
+            A space separated list of all combinations of \bash|[preamble]| and \bash|[postscript]| with the elements in the brace.
+            In \MakeEnumerateBox{2}, the sequence in braces is at first completed going back to \MakeEnumerateBox{1}.
+            Order is respected left to right. Multiple non-nested braces expand to all combinations.
+        \end{varblock}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm]
+                $ echo {a,b,c}
+                |+a b c+|
+                $ echo {a,b,c}.tex
+                |+a.tex b.tex c.tex+|
+                $ echo image.{jpg,png,pdf}
+                |+image.jpg image.png image.pdf+|
+                $ echo {1..8}
+                |+1 2 3 4 5 6 7 8+|
+                $ echo {8..1}
+                |+8 7 6 5 4 3 2 1+|
+                $ echo {1..8..3}
+                |+1 4 7+|
+                $ echo {a..e}
+                |+a b c d e+|
+                $ echo {e..a..2}
+                |+e c a+|
+                $ echo file_{01..3}.pdf
+                |+file_01.pdf file_02.pdf file_03.pdf+| #Note leading zeros!
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm, firstnumber=18]
+                $ echo {A..C}{0..2}
+                |+A0 A1 A2 B0 B1 B2 C0 C1 C2+|
+                $ echo {A..C}@|\textvisiblespace|@{0..2} # Here two independent expansions!
+                |+A B C 0 1 2+|
+                $ echo {in,out}{go,com}ing
+                |+ingoing incoming outgoing outcoming+|
+                $ echo {{A,E,I,O,U},{0..9}}
+                |+A E I O U 0 1 2 3 4 5 6 7 8 9+|
+                $ echo {a..z..x}
+                |+{a..z..x}+|  # No brace expansion!
+                $ aVar=1; echo {$aVar..5}; unset aVar
+                |+{1..5}+|     # No brace expansion!
+                $ echo {b,1..5}
+                |+b 1..5+|     # Not surprising, right?
+                $ echo {b,{1..5}}
+                |+b 1 2 3 4 5+|
+                $ echo {b,{1..5}}} # Which of the last braces is kept?
+                |+b} 1} 2} 3} 4} 5}+|
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Parameter expansion}
+    
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Arithmetic expansion}
+    
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Word splitting}
+    
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Other expansions}
+\vspace{-3mm}
+    \begin{columns}
+        \begin{column}{\dimexpr\paperwidth-10mm}
+            \begin{description}[Command substitution:]
+                \setlength{\itemsep}{3mm}
+                \item[Tilde expansion:]
+                    Easy to understand $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5.2}
+                \item[Process substitution:]
+                    Useful, but not discussed here $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5.6}\\
+                    It takes the form \alert{\texttt{<(\ldots)}} or \alert{\texttt{>(\ldots)}}
+                \item[Command substitution:]
+                    It occurs when a command is enclosed as \alert{\texttt{\$(\ldots)}}\\
+                    Do not use the deprecated syntax \tc{Gray!30}{\texttt{\textasciigrave\ldots\textasciigrave}}
+                \item[Filename expansion:] Discussed in a separate section about globbing
+            \end{description}
+        \end{column}
+    \end{columns}
+    \vspace{3mm}
+    \begin{varblock}{example}[0.8\textwidth]{Try to read about them alone}
+        The Bash manual is a very good source, you can start reading there!\\
+        \URL[PS]{http://mywiki.wooledge.org/BashGuide/InputAndOutput\#Process\_Substitution}{More on process substitution}
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
