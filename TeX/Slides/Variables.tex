@@ -61,6 +61,17 @@
             \end{lstlisting}
             \alert{Always} using curly braces \alert{\texttt{\$\{...\}}} can be considered \alert{good programming practice}!
         \end{varblock}
+        \begin{varblock}{alerted}[0.9\textwidth]{Expanding undeclared variable}<only@4>
+            Variables in Bash do not have to be declared, as they do in languages like C!\\
+            If you try to read an undeclared variable, the result is the empty string.\\
+            \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm, xleftmargin=20mm, xrightmargin=20mm]
+                $ invisibleVariable='Hello'
+                $ echo _${invisibelVariable}_
+                |+__+| # Is this magic?! Well, no...
+            \end{lstlisting}
+            \alert{By default, you get no warnings or errors!}
+        \end{varblock}
+        \FrameRemark[4]{There is a way to activate a different behaviour of Bash when performing parameter expansion on unset variables: $\;$\URL[PB]{https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html}{\texttt{set -u}}}
     \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

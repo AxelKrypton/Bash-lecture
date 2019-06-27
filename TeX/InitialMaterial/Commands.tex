@@ -63,10 +63,10 @@
 }
 \makeatother
 
-\newcommand{\FrameRemark}[1]%
+\newcommand{\FrameRemark}[2][1-]%
 {%
     \begin{tikzpicture}[remember picture, overlay]
-        \node[font=\tiny, anchor=south] at (current page.south) {#1};
+        \node[font=\tiny, anchor=south, visible on=<#1>] at (current page.south) {#2};
     \end{tikzpicture}
 }
 

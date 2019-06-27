@@ -254,9 +254,9 @@
         \end{lstlisting}
     \end{uncoverenv}
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
-    \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=north] at ($(current page.north)!0.8!(current page.north east)$) {\includegraphics[width=2cm, clip, trim=0 5mm 0 0]{GotPower}};
-    \end{tikzpicture}
+%     \begin{tikzpicture}[remember picture, overlay]
+%         \node[anchor=north] at ($(current page.north)!0.8!(current page.north east)$) {\includegraphics[width=2cm, clip, trim=0 5mm 0 0]{GotPower}};
+%     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Parameter expansion: String manipulation (II)}
@@ -296,9 +296,9 @@
         \end{lstlisting}
     \end{uncoverenv}
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
-    \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=north] at ($(current page.north)!0.8!(current page.north east)$) {\includegraphics[width=2cm, clip, trim=0 5mm 0 0]{GotPower}};
-    \end{tikzpicture}
+%     \begin{tikzpicture}[remember picture, overlay]
+%         \node[anchor=north] at ($(current page.north)!0.8!(current page.north east)$) {\includegraphics[width=2cm, clip, trim=0 5mm 0 0]{GotPower}};
+%     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Parameter expansion: String manipulation (III)}
@@ -338,9 +338,9 @@
         \end{lstlisting}
     \end{uncoverenv}
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
-    \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=north] at ($(current page.north)!0.8!(current page.north east)$) {\includegraphics[width=2cm, clip, trim=0 5mm 0 0]{GotPower}};
-    \end{tikzpicture}
+%     \begin{tikzpicture}[remember picture, overlay]
+%         \node[anchor=north] at ($(current page.north)!0.8!(current page.north east)$) {\includegraphics[width=2cm, clip, trim=0 5mm 0 0]{GotPower}};
+%     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Parameter expansion: String manipulation summary}
@@ -368,7 +368,7 @@
                   \item[$\circ$] \alert{\texttt{0}} when referenced by name \alert{\textbf{without using}} the parameter expansion syntax
                   \item[$\circ$] \PP{\texttt{''}} when referenced by name \PP{\textbf{using}} the parameter expansion syntax
               \end{itemize}
-        \item Overflow is not check; division by 0 gives an error
+        \item Overflow is not checked but division by 0 gives an error
         \item Operators and their precedence are the same as in the \texttt{C} language\\ $\to\,$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 6.5}
     \end{itemize}
     \begin{onlyenv}<2>
@@ -399,8 +399,96 @@
     \end{onlyenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Word splitting}
-    
+\begin{frame}[fragile]{Word splitting}{\ldots{}the evil of Bash!}
+    \vspace{-6mm}
+    \begin{onlyenv}<1>
+        \begin{varblock}{}[0.9\textwidth]{When does it occur?}
+            The shell scans the results of parameter expansion, command substitution, and arithmetic expansion that did not occur within double quotes for word splitting!
+        \end{varblock}
+        \begin{itemize}
+            \item The shell treats each character of \bash|IFS| as a delimiter, and splits the results of the other expansions into words using these characters \textbf{as field terminators} (these are all dropped)
+            \item Whitespace characters $\;$\PP{\texttt{\textvisiblespace\textbackslash{}t\textbackslash{}n}}$\;$ contained in \bash|IFS| are called \PP{IFS whitespaces}
+            \item \alert{IFS whitespaces at the beginning/end} of the results of previous expansions \alert{are ignored}
+            \item \alert{Adjacent IFS whitespaces} are considered all together as \alert{single field terminator}
+            \item \alert{Any other character} in \bash|IFS| that is not an IFS whitespace \alert{\textbf{always} delimits a field}
+            \item If the value of \bash|IFS| is null, no word splitting occurs
+            \item Implicit null arguments, resulting from the expansion of empty parameters, are removed
+            \item \PQ{Note that if no expansion occurs, no splitting is performed}
+        \end{itemize}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm]
+            # The args command puts the arguments it gets in <...>
+            # NOT standard, I implemented it!
+            $ args Hello world "I am Alessandro"
+            |+3 args: <Hello> <world> <I am Alessandro>+|
+            $ aVar="This is a variable"; args ${aVar}
+            |+4 args: <This> <is> <a> <variable>+|
+            $ args "${aVar}"
+            1 args: <This is a variable>
+            $ ls
+            Day1.tex   Day2.tex   Day3.tex
+            $ args $(ls)
+            |+3 args: <Day1.tex> <Day2.tex> <Day3.tex>+|
+            $ aVar="     This is a variable   "; args ${aVar}
+            |+4 args: <This> <is> <a> <variable>+|
+            $ aVar="     This   is  a    variable   "; args ${aVar}
+            |+4 args: <This> <is> <a> <variable>+|
+            $ aVar="/home/sciarra/Documents/Seminars"; args ${aVar}
+            |+1 args: </home/sciarra/Documents/Seminars/>+|
+            $ IFS='/'; args ${aVar}; unset IFS
+            |+5 args: <> <home> <sciarra> <Documents> <Seminars>+|
+            # Why is there an empty argument at the beginning?
+            # Why isn't there one at the end?
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm]
+            # Let us have a look to more complex situations
+            $ aVar="   /home/sciarra/Documents/Seminars   "
+            $ IFS='/'; args ${aVar}; unset IFS
+            |+5 args: <   > <home> <sciarra> <Documents> <Seminars   >+|
+            $ IFS='@|\textvisiblespace|@/'; args ${aVar}; unset IFS # Note the pace in IFS
+            |+5 args: <> <home> <sciarra> <Documents> <Seminars>+|
+            # Remember $'' special quoting to allow backslash
+            $ aVar=$'\n   \n  xxx \t   \t  xx  \t'
+            $ args ${aVar}
+            |+2 args: <xxx> <xx>+|
+            $ IFS=''; args ${aVar}; unset IFS
+            |+1 args: <+|
+            |+   +|
+            |+  xxx         xx    >+|
+            $ IFS=$'\n'; args ${aVar}; unset IFS
+            |+2 args: <   > <  xxx        xx    >+|
+            $ IFS=$'\n\t'; args ${aVar}; unset IFS
+            |+4 args: <   > <  xxx > <   > <  xx  >+|
+            $ IFS=$'\n\t x'; args ${aVar}; unset IFS
+            |+5 args: <> <> <> <> <>+|
+            $ IFS=':'; args aaa:bbb; unset IFS aVar
+            |+1 args: <aaa:bbb>+| # It makes sense, right?
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Word splitting}{\ldots{}finally!}
+    \vspace{-4  mm}
+        \begin{varblock*}{}[0.9\textwidth]{When does NOT it occur?}
+        Word splitting is not performed
+        \begin{itemize}
+            \item on expansions inside Bash keywords such as \bash|[[| \texttt{\ldots} \bash|]]| and \bash|case|;
+            \item on expansions in assignments. \\[0.3em] Thus, one does not need to quote anything in a command like these:
+                  \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=45mm, belowskip=-5mm, aboveskip=2mm]
+                      aVar=${bVar}; aVar=$(date)
+                      PATH=/usr/local/bin:${PATH} 
+                  \end{lstlisting}
+                  Quoting anyway will not break anything, so \PP{if in doubt, quote!}
+        \end{itemize}
+    \end{varblock*}
+    \begin{varblock}{alerted}[0.98\textwidth]{Remember:}
+        \alert{Word Splitting is performed \textbf{after} Parameter Expansion has been performed!} \\
+        That means that it is absolutely vital that we quote our Parameter Expansions, in case they may expand values that contain syntactical whitespace which will then be word-split.
+    \end{varblock}
+    \FrameRemark{It is almost never desirable to put syntactical whitespace in parameters.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Other expansions}
