@@ -9,9 +9,9 @@
     \begin{columns}
         \begin{column}{\dimexpr\paperwidth-10mm}
             \begin{description}[\texttt{1 2 \ldots}]
-                \setlength{\itemsep}{1mm}
+                \setlength{\itemsep}{2pt}
                 \item[\texttt{0}]
-                    Contains the name, or the path, of the script
+                    Contains the name, or the path, of the script.
                     Do not rely on it or read the manual carefully!
                 \item[\texttt{1 2 \ldots}]
                     \alert{Positional Parameters} contain the arguments passed\tikzmark{curlyStart}\\
@@ -24,6 +24,8 @@
                     Double quoted, it expands to a list of them all as individual words
                 \item[\texttt{\#}]
                     Expands to the number of positional parameters that are currently set\tikzmark{curlyEnd}
+                \item[\texttt{-}]
+                    Expands to the current shell option flags
                 \item[\texttt{?}]
                     Expands to the exit code of the most recently completed foreground command
                 \item[\texttt{\$}]

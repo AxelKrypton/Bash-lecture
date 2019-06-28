@@ -5,7 +5,7 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Several kind of expansions}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5}}
-    Expansion is performed on the command line after it has been split into tokens:
+    Expansion is performed on the command line after it has been split into tok\tikzmark{tokens}ens:\\[0.5em]
     \begin{itemize}
         \item Brace expansion\tikzmark{ExpA}
         \item Tilde expansion\tikzmark{ExpB}
@@ -29,6 +29,13 @@
         \draw[from, shorter={0mm}{3mm}] (ExpA) -- (xPos |- ExpA) node[anchor=west] {\MakeEnumerateBox{1}};
         \draw[from, shorter={0mm}{3mm}] (ExpD) -- (xPos |- ExpD) node[anchor=west] {\MakeEnumerateBox{3}};
         \draw[from, shorter={0mm}{3mm}] (ExpE) -- (xPos |- ExpE) node[anchor=west] {\MakeEnumerateBox{4}};
+        \node[anchor=north east, font=\scriptsize, above = of tokens] (metacharacters){
+            \begin{tabular}{c}
+                A line is split into tokens using unquoted metacharacters:\\[0.2em]
+                \PP{\texttt{\textvisiblespace\ \textbackslash t \textbackslash n | \& ; ( ) < >}}
+            \end{tabular}
+        };
+        \path[from, shorter={2mm}{0mm}] (tokens) edge[out=90, in=270] (metacharacters);
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -254,9 +261,6 @@
         \end{lstlisting}
     \end{uncoverenv}
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
-%     \begin{tikzpicture}[remember picture, overlay]
-%         \node[anchor=north] at ($(current page.north)!0.8!(current page.north east)$) {\includegraphics[width=2cm, clip, trim=0 5mm 0 0]{GotPower}};
-%     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Parameter expansion: String manipulation (II)}
@@ -296,9 +300,6 @@
         \end{lstlisting}
     \end{uncoverenv}
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
-%     \begin{tikzpicture}[remember picture, overlay]
-%         \node[anchor=north] at ($(current page.north)!0.8!(current page.north east)$) {\includegraphics[width=2cm, clip, trim=0 5mm 0 0]{GotPower}};
-%     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Parameter expansion: String manipulation (III)}
@@ -338,9 +339,6 @@
         \end{lstlisting}
     \end{uncoverenv}
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
-%     \begin{tikzpicture}[remember picture, overlay]
-%         \node[anchor=north] at ($(current page.north)!0.8!(current page.north east)$) {\includegraphics[width=2cm, clip, trim=0 5mm 0 0]{GotPower}};
-%     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Parameter expansion: String manipulation summary}
@@ -443,12 +441,12 @@
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<3>
-        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm]
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm, firstnumber=22]
             # Let us have a look to more complex situations
             $ aVar="   /home/sciarra/Documents/Seminars   "
             $ IFS='/'; args ${aVar}; unset IFS
             |+5 args: <   > <home> <sciarra> <Documents> <Seminars   >+|
-            $ IFS='@|\textvisiblespace|@/'; args ${aVar}; unset IFS # Note the pace in IFS
+            $ IFS='@|\textvisiblespace|@/'; args ${aVar}; unset IFS # Note the space in IFS
             |+5 args: <> <home> <sciarra> <Documents> <Seminars>+|
             # Remember $'' special quoting to allow backslash
             $ aVar=$'\n   \n  xxx \t   \t  xx  \t'
@@ -470,7 +468,7 @@
     \end{onlyenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Word splitting}{\ldots{}finally!}
+\begin{frame}[fragile]{Word splitting: conclusion}
     \vspace{-4  mm}
         \begin{varblock*}{}[0.9\textwidth]{When does NOT it occur?}
         Word splitting is not performed
@@ -492,9 +490,12 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Other expansions}
-    \vspace{-3mm}
+    \vspace{-12mm}
     \begin{columns}
         \begin{column}{\dimexpr\paperwidth-10mm}
+            \begin{center}
+                \large\fbox{\alert{\textbf{Before}} Word Splitting:}
+            \end{center}
             \begin{description}[Command substitution:]
                 \setlength{\itemsep}{3mm}
                 \item[Tilde expansion:]
@@ -505,15 +506,20 @@
                 \item[Command substitution:]
                     It occurs when a command is enclosed as \alert{\texttt{\$(\ldots)}}\\
                     Do not use the deprecated syntax \tc{Gray!30}{\texttt{\textasciigrave\ldots\textasciigrave}}
+            \end{description}
+            \vspace{-2mm}
+            \begin{varblock}{example}[0.8\textwidth]{Try to read about them alone}
+                The Bash manual is a very good source, you can start reading there!\\
+                \URL[PS]{http://mywiki.wooledge.org/BashGuide/InputAndOutput\#Process\_Substitution}{More on process substitution}
+            \end{varblock}
+            \begin{center}
+                \large\fbox{\PP{\textbf{After}} Word Splitting:}
+            \end{center}
+            \begin{description}[\hspace{0.4\textwidth}]
                 \item[Filename expansion:]
                     Discussed in a separate section about globbing
             \end{description}
         \end{column}
     \end{columns}
-    \vspace{3mm}
-    \begin{varblock}{example}[0.8\textwidth]{Try to read about them alone}
-        The Bash manual is a very good source, you can start reading there!\\
-        \URL[PS]{http://mywiki.wooledge.org/BashGuide/InputAndOutput\#Process\_Substitution}{More on process substitution}
-    \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

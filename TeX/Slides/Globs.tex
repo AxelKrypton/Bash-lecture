@@ -1,0 +1,162 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 28 Jun 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Patterns in Bash}
+    \begin{varblock}{}[0.7\textwidth]{Definition}
+        A pattern is a string with a special format designed to match filenames, or to check, classify or validate data strings.
+    \end{varblock}
+    \medskip
+    Bash offers three different kinds of \PP{pattern matching}:\\[0.5em]
+    \begin{enumerate}
+        \item Globs {\tiny\{~Used also in patterns of Parameter Expansion~\}}\tikzmark{curlyStart}
+        \item Extended Globs\tikzmark{curlyEnd}
+        \item Regular\tikzmark{REleft} expression {\tiny\{~Since Bash v3.0~\}}\tikzmark{RE}
+    \end{enumerate}
+    \begin{tikzpicture}[remember picture, overlay]
+        \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (curlyStart) ++(8mm,1mm) -- ($(curlyEnd -| curlyStart)+(8mm,-1mm)$) 
+              node[midway, right=3mm, text width=45mm, align=center, text=PB] (FE) {Pattern matching done in Filename expansion};
+        \node (RElabel) at (RE -| FE) {{\color{PT}\scriptsize\{~Cannot be used in to select filenames!~\}}};
+        \draw[from, shorter={1mm}{1mm}] (RE) -- (RElabel.west);
+        \begin{scope}[scope on=<2>]
+            \path[from, shorter={1mm}{1mm}] (REleft) edge[out=270, in=180] node[pos=1, anchor=west] {We will discuss this later with conditional blocks} ++(1cm, -15mm);
+        \end{scope}
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Filename Expansion}{Glob patterns}
+    \vspace{-3mm}
+    \begin{varblock}{}[0.9\textwidth]{How does it work?}
+        If a character among \PB{\texttt{*}}, \PB{\texttt{?}}, \PB{\texttt{[}} appears, then the word is regarded as a pattern, and replaced with an alphabetically sorted list of filenames matching the pattern
+    \end{varblock}
+    \begin{itemize}
+        \item Metacharacters which might be used in glob patterns and undergo Filename Expansion:
+              \begin{description}
+                  \item[\texttt{*}]
+                      Matches any string, including the null string
+                  \item[\texttt{?}]
+                      Matches any single character
+                  \item[\texttt{[\ldots]}]
+                      Matches any one of the enclosed characters
+              \end{description}
+        \item Globs are implicitly \textbf{anchored at both ends}, i.e.\ \alert{a glob must match \textbf{a whole string}}
+        \item \PP{When matching filenames, the \texttt{*} and \texttt{?} characters cannot match a slash (\texttt{/})}
+        \item When matching patterns, the \texttt{/} restriction is removed
+    \end{itemize}
+    \FrameRemark{Filename expansion can be deactivated: $\;$\URL[PB]{https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html}{\texttt{set -f}}}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The \texttt{[\ldots]} pattern}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item There are some special rules which it might be interesting to know
+        \item A pair of characters separated by a hyphen denotes a range expression\\
+              $\to\;$ any character that falls between those two characters, inclusive, is matched
+        \item If the first character following the \PB{\texttt{[}} is a \PP{\texttt{!}} or a \PP{\texttt{\^{}}} then any character not enclosed is matched
+        \item A \PP{\texttt{-}} may be matched by including it as the first or last character in the set.
+        \item A \PP{\texttt{]}} may be matched by including it as the first character in the set
+        \item Within \PB{\texttt{[\ldots]}}, character classes can be specified using the syntax \PB{\texttt{[:class:]}},\\
+              where \texttt{class} is one of the \URL[PB]{http://tldp.org/LDP/GNU-Linux-Tools-Summary/html/x11655.htm}{character classes} defined in the POSIX standard:
+              \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=2mm, xrightmargin=15mm, aboveskip=3mm]
+                  |+alnum   ascii   cntrl   graph   print   space   word+|
+                  |+alpha   blank   digit   lower   punct   upper   xdigit+|
+              \end{lstlisting}
+    \end{itemize}
+    \FrameRemark{The sorting order of characters in range expressions is determined by the current locale and the values of the \bash|LC_COLLATE| and \bash|LC_ALL| shell variables, if set.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Globs examples}
+    \vspace{-5mm}
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, xrightmargin=1mm]
+            $ ls
+            |+Bash.pdf   Day_1.tex   Day_2.tex   Day_3.tex   Day_extra.tex+|
+            $ echo *
+            |+Bash.pdf Day_1.tex Day_2.tex Day_3.tex Day_extra.tex+|
+            $ echo Day*; echo *.pdf
+            |+Day_1.tex Day_2.tex Day_3.tex Day_extra.tex+|
+            |+Bash.pdf+|
+            $ echo *_?.tex; echo *_[12]*; echo *_[0-9]*; echo *_[:digit:]*
+            |+Day_1.tex Day_2.tex Day_3.tex+|
+            |+Day_1.tex Day_2.tex+|
+            |+Day_1.tex Day_2.tex Day_3.tex+|
+            |+Day_1.tex Day_2.tex Day_3.tex+|
+            $ aVar='Day3_Day2_Day1'; echo "${aVar#*[12]}"; unset aVar
+            |+_Day1+|
+            $ aVar='Day3_Day2_Day1'; echo "${aVar%%[123]*}"; unset aVar
+            |+Day+|
+            $ echo /*/bin
+            |+/usr/bin+|   # For filenames, * does not match /
+            $ echo /*/*/bin
+            |+/usr/local/bin+|
+            $ aVar='/home/sciarra/Documents'; echo "${aVar##*/}"
+            |+Documents+|  # For strings it does!
+            $ echo "${aVar%/*}"; unset aVar
+            |+/home/sciarra+|
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, xrightmargin=2mm, firstnumber=24]
+            # Bash performs Filename Expansions AFTER Word Splitting
+            #  => filenames generated by a glob will not be split!
+            $ touch "a b.txt"; ls
+            |+a b.txt+|
+            $ rm *; ls # Here * is expanded into "a b.txt"
+                       #  => rm run correctly with one argument only!
+            $ touch "a b.txt"; rm $(ls) # WRONG!
+            |+rm: cannot remove 'a': No such file or directory+|
+            |+rm: cannot remove 'b.txt': No such file or directory+|
+            # Please, do not be tempted by using quotes here...
+            $ rm "$(ls)" # AAAARGHH! It works, but try this:
+            $ touch "a b.txt" c.txt; rm "$(ls)"
+            |+rm: cannot remove 'a b.txt'$'\n''c.txt': No such file or dir+|
+        \end{lstlisting}
+        \begin{varblock}{quote}[0.9\textwidth]{Good practice:}[Greg's Wiki]
+            You should always use globs instead of ls (or similar) to enumerate files.
+            Globs will always expand safely and minimise the risk for bugs.
+            You can sometimes end up with some very weird filenames.
+            Most scripts aren't tested against all the odd cases that they may end up being used with.
+            Don't let your script be one of those!\\[-0.7em] ~
+        \end{varblock}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Extended Globs}
+    \vspace{-5mm}
+    \begin{varblock}{}[0.92\textwidth]{This feature is turned off by default}
+        You can turn it on with the \bash|shopt| command, which is used to toggle \textbf{sh}ell \textbf{op}tions:
+        \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm, aboveskip=2mm]
+            $ shopt -s extglob
+        \end{lstlisting}
+    \end{varblock}
+    \medskip
+    In the following description, a pattern-list is a list of one or more patterns separated by a \texttt{|}:
+    \begin{description}[\texttt{?(pattern-list)}xx]
+        \item[\texttt{?(pattern-list)}] Matches zero or one occurrence of the given patterns
+        \item[\texttt{*(pattern-list)}] Matches zero or more occurrences of the given patterns
+        \item[\texttt{+(pattern-list)}] Matches one or more occurrences of the given patterns
+        \item[\texttt{@(pattern-list)}] Matches one of the given patterns
+        \item[\texttt{!(pattern-list)}] Matches anything except one of the given patterns
+    \end{description}
+    \medskip
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers]
+            $ ls
+            |+names.txt   tokyo.jpg   california.bmp+|
+            $ echo "!(*jpg|*bmp)"
+            |+names.txt+|
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
