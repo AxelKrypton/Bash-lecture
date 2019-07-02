@@ -1,0 +1,280 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 2 Jul 2019           %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Exit code}
+    \vspace{-3mm}
+    Every command in Bash terminates with an exit code:
+    \begin{description}
+        \item[\texttt{\$?}]
+            Shows the exit code of the last foreground process that terminated\\
+            It is a 8-bit integer $\;$\texttt{\$?}${}\in{}$\texttt{\{0,\dots,255\}} \hfill{\tiny\{~Indeed, only the least significant 8 bits count~\}}
+        \item[\texttt{0}] Denotes success
+        \item[$\neq$\texttt{0}] Denotes failure, in general the meaning is up to the command
+        \item[\texttt{1}] Miscellaneous errors
+        \item[\texttt{2}] Misuse of shell builtins
+        \item[\texttt{126}] Command invoked cannot execute
+        \item[\texttt{127}] \PP{\texttt{"}command not found\texttt{"}} error
+        \item[\texttt{128}] Invalid argument to exit
+        \item[\texttt{128 + n}] Fatal error signal \texttt{"n"} {\tiny\{~For example, \PB{\texttt{130}} means that the script terminated by Control-C~\}}
+    \end{description}
+    \begin{varblock}{alerted}[0.45\textwidth]{Which exit code should I use?}
+        \PQ{Avoid reserved one, be consistent!}
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The \bash|if| keyword}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item Since it is a keyword, it requires a precise syntax (not a surprise)
+        \item It executes a command (or a set of commands) and checks that command's exit code to see whether it was successful
+        \item Different layouts possible, choose a readable one!
+    \end{itemize}
+    
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        if@|\textvisiblespace|@COMMAND
+        then
+            # COMMAND's exit code was 0
+        else
+            # COMMAND's exit code was different from 0
+        fi
+        
+        if@|\textvisiblespace|@COMMAND; then
+            # COMMAND's exit code was 0
+        elif@|\textvisiblespace|@ANOTHER_COMMAND
+            # ANOTHER_COMMAND's exit code was 0
+        else
+            # ANOTHER_COMMAND's exit code was different from 0
+        fi
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The command in a conditional block}
+    \vspace{-3mm}
+    \begin{itemize}
+        \setlength{\itemsep}{2mm}
+        \item In principle it can be any command
+        \item There are specifically designed commands to test things:\\[0.5em]
+                \begin{tabular}{>{\ttfamily\color{PB}}rl}
+                    \makecell[rt]{test \\ \tc{fg}{\sffamily or} [} &
+                    \makecell[lt]{A normal command that reads its arguments and does \\
+                                  some checks with them. The \texttt{[} variant requires a \texttt{]} as last argument.}\\[2em]
+                    \makecell[rt]{\tc{keywords-color}{[[}} & 
+                    \makecell[lt]{A special shell keyword that offers more versatility\\
+                                  like \PP{pattern matching} and \PP{regex support}} \\
+                \end{tabular}
+        \item Multiple commands can be concatenated using control operators \texttt{\&\&} and \texttt{||}
+    \end{itemize}
+    \begin{varblock}{}[0.9\textwidth]{Which syntax should I prefer?}
+        Whenever you are making a \textbf{Bash} script, you should always use \texttt{\tc{keywords-color}{[[}} rather than \bash{[}.\\
+        If portability is an issue, e.g.\ you are writing a \textbf{sh}ell script, \\ you should use \bash{[}, because it is far more portable.
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The \bash|test| command and its friend \bash{[}}{Many tests are supported $\to$ for a complete list refer to the manual}
+    \vspace{-6mm}
+    \begin{center}
+        \begin{minipage}{0.8\textwidth}
+            \begin{description}[<only@1>][\texttt{-n STRING}]
+                \item[\texttt{-e FILE}] True if file exists
+                \item[\texttt{-f FILE}] True if file is a regular file (not a directory or device file)
+                \item[\texttt{-d FILE}] True if file is a directory
+                \item[\texttt{-s FILE}] True if file exists and is not empty
+                \item[\texttt{-z STRING}] True if the string is empty (it's length is zero)
+                \item[\texttt{-n STRING}] True if the string is not empty (it's length is not zero)
+            \end{description}
+        \end{minipage}
+        \begin{minipage}{0.9\textwidth}
+            \begin{description}[<only@2>][\texttt{STRING != STRING}]
+                \item[\texttt{STRING  = STRING}] True if the first string is identical to the second
+                \item[\texttt{STRING != STRING}] True if the first string is not identical to the second
+                \item[\texttt{STRING \textbackslash< STRING}] True if the first string sorts before the second
+                \item[\texttt{STRING \textbackslash> STRING}] True if the first string sorts after the second
+                \item[\texttt{! EXPR}] Inverts the result of the expression (logical NOT)
+            \end{description}
+        \end{minipage}
+        \begin{minipage}{0.9\textwidth}
+            \begin{description}[<only@3>][\texttt{INT -eq INT}]
+                \item[\texttt{INT -eq INT}] True if both integers are identical.
+                \item[\texttt{INT -ne INT}] True if the integers are not identical.
+                \item[\texttt{INT -lt INT}] True if the first integer is less than the second.
+                \item[\texttt{INT -gt INT}] True if the first integer is greater than the second.
+                \item[\texttt{INT -le INT}] True if the first integer is less than or equal to the second.
+                \item[\texttt{INT -ge INT}] True if the first integer is greater than or equal to the second.
+            \end{description}
+        \end{minipage}
+    \end{center}
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, xleftmargin=10mm, xrightmargin=10mm, aboveskip=2mm]
+            $ ls -d */
+            |+TeX+|
+            $ if [ -d 'TeX' ]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+|
+            $ if [ -e 'TeX' ]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+|
+            $ if [ -s 'TeX' ]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+|
+            $ if [ -f 'TeX' ]; then echo 'YES'; else echo 'NO'; fi
+            |+NO+|
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, xleftmargin=2mm, xrightmargin=2mm, aboveskip=2mm]
+            $ aVar="Kal El"
+            $ bVar="Clark Kent"
+            $ [ ${aVar} = ${aVar} ]
+            bash: [: too many arguments
+            $ if [ "${aVar}" = "${aVar}" ]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+|
+            $ if [ "${aVar}" \> "$bVar" ]; then echo 'YES'; else echo 'NO'; fi
+            |+NO+|
+            $ if [ 319 \< 7 ]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+| # 319 is < than 7 but it is not less than 7...
+            $ unset aVar bVar
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, xleftmargin=8mm, xrightmargin=8mm, aboveskip=2mm]
+            $ if [ 319 -lt 7 ]; then echo 'YES'; else echo 'NO'; fi
+            |+NO+|
+            $ if [ 7 -ne 7 ]; then echo 'YES'; else echo 'NO'; fi
+            |+NO+|
+            $ if [ 7 -eq 7 ]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+|
+            $ if [ 7 -gt 7 ]; then echo 'YES'; else echo 'NO'; fi
+            |+NO+|
+            $ if [ 7 -ge 7 ]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+|
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The \bash{[[} keyword}
+    \vspace{-3mm}
+    \begin{itemize}[<only@1>]
+        \item It supports the tests supported by the \bash{test} and \bash{[} commands$^{\star}$
+        \item String equality (\texttt{=}) and inequality (\texttt{!=}) comparison is changed to \alert{pattern matching} by default; use quotes to perform a string comparison
+        \item \alert{It does not allow word-splitting} of its arguments!
+        \item However, be aware that simple strings still have to be quoted properly
+        \item Few more additional tests supported:
+              \begin{description}[\texttt{STRING =\textasciitilde\ REGEX}]
+                \item[\texttt{STRING =\textasciitilde\ REGEX}] True if the string matches the regex pattern
+                \item[\texttt{( EXPR )}] Parentheses can be used to change the evaluation precedence
+                \item[\texttt{EXPR \&\& EXPR}] True if both expressions are true (logical AND)\\[-0.5em] {\tiny\{~it does not evaluate the second expression if the first already turns out to be false~\}}
+                \item[\texttt{EXPR || EXPR}] True if either expression is true (logical OR) \\[-0.5em] {\tiny\{~it does not evaluate the second expression if the first already turns out to be true~\}} 
+              \end{description}
+        \item The alphabetically sorted test operators (\texttt{<} and \texttt{>}) do not need to be escaped
+    \end{itemize}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, style=smaller, xleftmargin=1mm, xrightmargin=1mm]
+            $ aVar="Day_1.tex"; bVar='Hello world'
+            # Significative examples
+            $ if [[ ${aVar} = *.tex ]]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+|
+            $ if [[ ${aVar} = "*.tex" ]]; then echo 'YES'; else echo 'NO'; fi
+            |+NO+|
+            $ if [[ ${aVar} = *.tex && ${aVar} = Day_?.tex ]]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+|
+            # Simple strings still have to be quoted properly!
+            $ if [[ ${bVar} = Hello world ]]; then echo 'YES'; else echo 'NO'; fi
+            |+bash: syntax error in conditional expression
+            bash: syntax error near `world'+|
+            $ if [[ ${bVar} = 'Hello world' ]]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+| # No word splitting occurred!
+            $ if [[ ${emptyVar} = '' ]]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+|
+            $ if [ ${emptyVar} = '' ]; then echo 'YES'; else echo 'NO'; fi
+            |+bash: [: =: unary operator expected+|
+            |+NO+|
+            # Quotes necessary to use test [ command to check for empty variables
+            $ if [ "${emptyVar}" = '' ]; then echo 'YES'; else echo 'NO'; fi
+            |+YES+|
+            $ unset aVar bVar
+        \end{lstlisting}
+    \end{onlyenv}
+    \FrameRemark{$^{\star}$ Except \PB{\texttt{~EXPR -a EXPR~}} and \PB{\texttt{~EXPR -o EXPR~}} which should in any case not be used!}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Control Operators}
+    \vspace{-5mm}
+    \begin{description}[\texttt{\&\&}]
+        \item[\texttt{\&\&}]
+             Used to build AND lists: Run one command only if another exited successfully
+             \begin{lstlisting}[style=MyBash, numbers=none]
+                 COMMAND_1 && COMMAND_2   # Equivalent to
+                 if COMMAND_1; then COMMAND_2; fi
+             \end{lstlisting}
+        \item[\texttt{||}]
+             Used to build OR lists: Run one command only if another exited unsuccessfully
+             \begin{lstlisting}[style=MyBash, numbers=none]
+                 COMMAND_1 || COMMAND_2   # Equivalent to
+                 if ! COMMAND_1; then COMMAND_2; fi
+             \end{lstlisting}
+    \end{description}
+    \begin{varblock}{alerted}[0.8\textwidth]{Do not get overzealous with conditional operators}
+        They can make your script hard to understand and sometimes you need fancy grouping to get your logic right!
+    \end{varblock}
+    \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm]
+        $ grep -q goodword "$file" && ! grep -q badword "$file" && rm "$file" || echo "Couldn't delete: $file"
+    \end{lstlisting}
+    \centerline{\small\PQ{What happens if the first \bash{grep} fails (sets the exit status to 1)?}}
+    \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm]
+        $ grep -q goodword "$file" && ! grep -q badword "$file" && { rm "$file" || echo "Couldn't delete: $file"; }
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Regular expressions in Bash}
+    \vspace{-3mm}
+    \begin{itemize}[<only@1>]
+        \item Regular expressions are similar to Glob Patterns, but not for filename matching
+        \item Since v3.0, Bash supports the \texttt{=\textasciitilde} operator to the \bash{[[} keyword
+        \item This operator matches the string that comes before it against the regular expression pattern that follows it and it returns
+              \begin{description}
+                  \item[0] when the string matches the pattern
+                  \item[1] If the string does not match the pattern
+                  \item[2] In case the pattern's syntax is invalid
+              \end{description}
+        \item Bash uses the Extended Regular Expression dialect
+              \begin{itemize}
+                  \item[$\circ$] \URL[PS]{http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap09.html}{POSIX standard}
+                  \item[$\circ$] \URL[PQ]{https://www.regular-expressions.info/posix.html}{The Premier website about Regular Expressions}
+              \end{itemize}
+        \item Regular Expression patterns that use capturing groups (parentheses) will have their captured strings assigned to the \bash|BASH_REMATCH| variable (array) for later retrieval
+    \end{itemize}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, style=smaller]
+            $ echo "${LANG}"
+            |+en_GB.utf8+|
+            $ langRegex='(..)_(..)'
+            $ if [[ ${LANG} =~ ${langRegex} ]]
+            > then
+            >     echo "Your country code (ISO 3166-1-alpha-2) is ${BASH_REMATCH[2]}."
+            >     echo "Your language code (ISO 639-1) is ${BASH_REMATCH[1]}."
+            > else
+            >     echo "Your locale was not recognised"
+            > fi
+            |+Your country code (ISO 3166-1-alpha-2) is GB.+|
+            |+Your language code (ISO 639-1) is en.+|
+        \end{lstlisting}
+        \begin{varblock*}{}[0.9\textwidth]{General remarks}
+            \begin{itemize}
+                \item The best way to always be compatible is to put your regex in a variable and expand that variable in \bash{[[} without quotes, as we showed above.
+                \item The pattern matching achieved by the \texttt{=} and \texttt{!=} operators can be achieved using regex: \alert{Find your way!}
+            \end{itemize}
+        \end{varblock*}
+    \end{onlyenv}
+    \FrameRemark[2]{The syntax \bash{"\$\{BASH\_REMATCH[1]\}"}, e.g.\ how to use an array variable, will be discussed in detail at a later point.}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
