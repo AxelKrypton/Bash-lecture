@@ -1,0 +1,59 @@
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture, baseline=-0.ex] \node at (0,0) (#1) {};}
+
+\newcommand{\URLsymbol}[2][white]{%
+    \begin{tikzpicture}[every path/.style={line width=3, rounded corners, #2}]
+        \pgfmathsetmacro{\longSide}{0.9}
+        \pgfmathsetmacro{\shortSide}{0.3}
+        \draw[rotate=45, xshift=0.5*\longSide cm]       (0,0) rectangle (\longSide, \shortSide);
+        \draw[rotate=45, halo=#1, #2!50]                   (0,0) rectangle (\longSide, \shortSide);
+        \draw[rotate=45, halo=#1, xshift=0.5*\longSide cm] (0, 0.5*\shortSide) -- (0,0) -- (\longSide, 0) -- (\longSide, 0.5*\shortSide);
+    \end{tikzpicture}
+}
+\NewDocumentCommand{\URL}{ O{black} m m O{white} }%
+{%
+    \raisebox{-0.4ex}{\resizebox{!}{2ex}{\URLsymbol[#4]{#1}}}{\href{#2}{\textcolor{#1}{#3}}}
+}
+
+\newcommand\fancybox[3]{%
+\tcbset{
+    mybox/.style={
+        enhanced,
+        boxsep=0mm,
+        opacityfill=0,
+        overlay={
+            \coordinate (X) at ([xshift=-1mm, yshift=-1.5mm]frame.north west);
+            \node[align=right, text=#1, text width=4cm, anchor=north east] at (X) {#2};
+            \draw[line width=0.8mm, color=#1] (frame.north west) -- (frame.south west);
+            }
+        }
+    }
+\begin{tcolorbox}[mybox]
+    #3
+\end{tcolorbox}
+}
+
+% Now that we have the exercise style, create counter and exercise delimiters
+% NOTE: It is not possible to put a listing in a custom environment with other latex code
+\newcounter{Exercise}
+\makeatletter
+\newcommand{\BeginExercise}[1][]
+{%
+    \refstepcounter{Exercise}
+    \noindent\tikzmark{boxStart}\ifstrempty{#1}{}{%
+        \textbf{#1}\\[0.3em]
+    }
+}
+
+\newcommand{\EndExercise}[1][Navy]
+{%
+    \tikzmark{boxEnd}
+    \begin{tikzpicture}[remember picture, overlay]
+        %Adjust start-end coordinates
+        \path coordinate (lineStart) at ($(boxStart)+(-1em,1.5*\f@size pt)$)
+              coordinate (lineEnd)   at ($(lineStart |- boxEnd)+(0,-0.8*\f@size pt)$);
+        \node[align=right, font=\large, text=#1, text width=3cm, base left = 1em of boxStart] {Exercise~\theExercise};
+        \draw[line width=0.8mm, color=#1] (lineStart) -- (lineEnd);
+    \end{tikzpicture}
+    \par\vspace{8mm}
+}
+\makeatother
