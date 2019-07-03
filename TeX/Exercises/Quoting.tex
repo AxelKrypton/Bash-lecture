@@ -1,1 +1,18 @@
-% Ask to predict and try out the expression of this table: https://stackoverflow.com/a/42082956
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 3 Jul 2019           %
+%-------------------------------%
+
+\BeginExercise[Understanding quotes]
+    Define a variable \bash|a='apple'| in your terminal and try to figure out what happens (and why) when you pass the following expressions as argument to \bash|echo|.
+    \begin{lstlisting}[style=MyBash, moredelim={[is][\color{strings-color}]{|+}{+|}}]
+        |+"$a"          '\''                  "\'"            "$(echo hi)"
+        '$a'            "red$arocks"          "\""            '$(echo hi)'
+        "'$a'"          "redapple$"           "*"             $'$a\''
+        '"$a"'          '\"'                  "\t\n"          "$'\t'"+|
+    \end{lstlisting}
+    At the end unset the variable \bash|a|.
+\EndExercise[DodgerBlue]
+
+
+
