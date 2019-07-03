@@ -198,31 +198,45 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Control Operators}
-    \vspace{-5mm}
-    \begin{description}[\texttt{\&\&}]
-        \item[\texttt{\&\&}]
-             Used to build AND lists: Run one command only if another exited successfully
-             \begin{lstlisting}[style=MyBash, numbers=none]
-                 COMMAND_1 && COMMAND_2   # Equivalent to
-                 if COMMAND_1; then COMMAND_2; fi
-             \end{lstlisting}
-        \item[\texttt{||}]
-             Used to build OR lists: Run one command only if another exited unsuccessfully
-             \begin{lstlisting}[style=MyBash, numbers=none]
-                 COMMAND_1 || COMMAND_2   # Equivalent to
-                 if ! COMMAND_1; then COMMAND_2; fi
-             \end{lstlisting}
-    \end{description}
+    \vspace{-3mm}
+    \begin{overlayarea}{\textwidth}{0.6\textheight}
+        \begin{description}[<only@1>][\texttt{\&\&}]
+            \setlength{\itemsep}{5mm}
+            \item[\texttt{\&\&}]
+                 Used to build AND lists: Run one command only if another exited successfully
+                 \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm]
+                     COMMAND_1 && COMMAND_2
+                     # Equivalent to
+                     if COMMAND_1; then COMMAND_2; fi
+                 \end{lstlisting}
+            \item[\texttt{||}]
+                 Used to build OR lists: Run one command only if another exited unsuccessfully
+                 \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm]
+                     COMMAND_1 || COMMAND_2
+                     # Equivalent to
+                     if ! COMMAND_1; then COMMAND_2; fi
+                 \end{lstlisting}
+        \end{description}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm]
+                # The use of control operators is handy in simple cases
+                [[ $PATH ]] && echo 'PATH variable set and non empty!'
+                # Mostly they are used in script
+                rm file || echo 'Could not delete file!'
+                mkdir TeX && cd TeX
+                source AuxiliaryOps.bash || exit 1
+                # Avoid complicate one-liners which might easily be wrong!
+                grep -q goodword "$file" && ! grep -q badword "$file" && rm "$file" || echo "Couldn't delete: $file"
+            \end{lstlisting}
+            \centerline{\small\PQ{What happens if the first \bash{grep} fails (sets the exit status to 1)?}}
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
+                grep -q goodword "$file" && ! grep -q badword "$file" && { rm "$file" || echo "Couldn't delete: $file"; }
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
     \begin{varblock}{alerted}[0.8\textwidth]{Do not get overzealous with conditional operators}
         They can make your script hard to understand and sometimes you need fancy grouping to get your logic right!
     \end{varblock}
-    \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm]
-        $ grep -q goodword "$file" && ! grep -q badword "$file" && rm "$file" || echo "Couldn't delete: $file"
-    \end{lstlisting}
-    \centerline{\small\PQ{What happens if the first \bash{grep} fails (sets the exit status to 1)?}}
-    \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm]
-        $ grep -q goodword "$file" && ! grep -q badword "$file" && { rm "$file" || echo "Couldn't delete: $file"; }
-    \end{lstlisting}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Regular expressions in Bash}

@@ -72,6 +72,7 @@
     \begin{itemize}
         \item \alert<2>{Arguments}\tikzmark{ptA}
         \item \alert<2>{Quotes}\tikzmark{ptB}
+        \item Shell parameters
         \item Special variables (e.g. \bash{IFS})
         \item Shell expansion
               \begin{itemize}
@@ -79,11 +80,10 @@
                   \item \alert<2>{Word splitting}\tikzmark{ptC}
                   \item \ldots
               \end{itemize}
-        \item Command line arguments
         \item Globbing
         \item Regular expressions
         \item Brace expressions
-        \item \bash|if| and \bash|test|
+        \item \bash|if|, \bash|test| and \bash{[[}
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
         \coordinate (remark) at ($(ptA)!0.5!(ptC)+(3cm,0)$);
