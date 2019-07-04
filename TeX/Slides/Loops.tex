@@ -1,0 +1,177 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 4 Jul 2019           %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Conditial loops}{Often we need to repeat things: Copy and paste is not the solution!}
+    \vspace{-3mm}
+    \begin{description}[\texttt{while}xxx]
+        \item[\texttt{while}] Repeat as long as a command is executed successfully (exit code is 0)
+        \item[\texttt{until}] Repeat as long as a command is executed unsuccessfully (exit code is not 0)
+        \item[\texttt{for}] It comes into two versions
+                            \begin{itemize}
+                                \item to iterate over a list
+                                \item to iterate over an integer index as in \texttt{C}
+                            \end{itemize}
+    \end{description}
+    \begin{varblock}{quote}[0.9\textwidth]{Which one should be used?}
+        There will nearly always be multiple approaches to solving a problem.
+        The test of your skill soon won't be about solving a problem as much as about how best to solve it.
+    \end{varblock}
+    \begin{varblock}{}[0.6\textwidth]{While instead of until}
+        The \,\bash|until|\, loop is barely ever used, if only because it is pretty much exactly the same as \,\bash|while !|
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The \,\bash|while|\, and \,\bash|until|\, keywords}
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[style=MyBash, numbers=none]
+            while COMMAND; do
+                # Body of the loop: entered if COMMAND's exit code = 0
+            done
+            
+            until COMMAND; do
+                # Body of the loop: entered if COMMAND's exit code @|\color{comment-color}$\neq$|@0
+            done
+        \end{lstlisting}
+        \bigskip
+        \begin{itemize}
+            \item Testing command like \bash{[} or preferably \bash{[[} are often used
+            \item Infinite loops can be achieved using the builtins \,\bash|true|, \bash|false|\, and \,\bash|:|
+            \item Use the \,\bash|continue|\, builtin to skip ahead to the next iteration of a loop without executing the rest of the body
+            \item use the \,\bash|break|\, builtin to jump out of the loop and continue with the script after it
+            \item Both \,\bash|continue|\, and \,\bash|break|\, accept an optional integer to act on nested loops
+        \end{itemize}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash]
+            $ while true; do   # while :; do
+            >   echo "Infinite loop"
+            >   sleep 3
+            > done
+            |+Infinite loop+|
+            |+Infinite loop+|
+            |+^C+|    # Press CTRL-C
+        \end{lstlisting}
+        \medskip
+        \begin{lstlisting}[style=MyBash]
+            # An example of countdown...
+            $ deadline=$(date -d "8 seconds" +'%s'); \
+            > now=$(date +'%s'); \
+            > while (( deadline - now > 0 )); do
+            >   echo "$((deadline - now)) seconds to BOOM!"
+            >   sleep 3
+            >   now=$(date +'%s')
+            > done; echo 'BOOOOOM!!'
+            |+8 seconds to BOOM!
+            5 seconds to BOOM!
+            2 seconds to BOOM!
+            BOOOOOM!!+|
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The \,\bash|for|\, keywords}
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[style=MyBash, numbers=none]
+            for VARIABLE in WORDS; do
+                # Body of the loop: VARIABLE set to WORD
+            done
+            
+            for (( EXPR1; EXPR2; EXPR3 )) # Expressions can be empty
+                # Body of the loop
+            done
+        \end{lstlisting}
+        \bigskip
+        \begin{itemize}
+            \item In the second form,
+                  \begin{enumerate}
+                      \item it starts by evaluating the first arithmetic expression;
+                      \item it repeats as long as the second arithmetic expression is successful;
+                      \item at the end of each loop evaluates the third arithmetic expression.
+                  \end{enumerate}
+            \item Bash takes the characters between \bash|in| and the end of the line and 
+                  \begin{itemize}
+                      \item[$\circ$] it splits them up into words;
+                      \item[$\circ$] this splitting is done on spaces and tabs, just like argument splitting;
+                      \item[$\circ$] if there are any unquoted substitutions, \alert{they will be word-split as well} (using \bash|IFS|).
+                  \end{itemize}
+        \end{itemize}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, xrightmargin=4mm]
+            $ for (( ; 1; )); do echo "Infinite loop"; sleep 1; done
+            |+Infinite loop+|
+            |+Infinite loop+|
+            |+^C+|    # Press CTRL-C
+        \end{lstlisting}
+        \medskip
+        \begin{lstlisting}[style=MyBash, xrightmargin=4mm]
+            $ for index in {0,1}{0,1}; do
+            >   echo "${index} in base 2 is $(( 2#${index})) in base 10"
+            > done; unset index
+            |+00 in base 2 is 0 in base 10
+            01 in base 2 is 1 in base 10
+            10 in base 2 is 2 in base 10
+            11 in base 2 is 3 in base 10+|
+        \end{lstlisting}
+        \medskip
+        \begin{lstlisting}[style=MyBash, xrightmargin=4mm]
+            # BAD code!
+            
+            $ for file in $(ls *.mp3); do   # AAAARGH!
+            >   rm "$file"
+            > done; unset file
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \begin{lstlisting}[style=MyBash, xrightmargin=4mm]
+            $ ls
+            Happy birthday.mp3
+            $ for file in $(ls *.mp3); do   # AAAARGH!
+            >   rm "$file"
+            > done; unset file
+            |+rm: cannot remove `Happy': No such file or directory+|
+            |+rm: cannot remove `birthday.mp3': No such file or directory+|
+        \end{lstlisting}
+        \medskip
+        You want to quote it, you say?
+        \medskip
+        \begin{lstlisting}[style=MyBash, xrightmargin=4mm]
+            $ ls
+            Happy birthday.mp3   Hello.mp3
+            $ for file in "$(ls *.mp3)"; do   # AAAARGH!
+            >   rm "$file"
+            > done; unset file
+            |+rm: cannot remove `Happy birthday.mp3   Hello.mp3': No such file or directory+|
+        \end{lstlisting}
+        \medskip
+        So, what do we do?
+    \end{onlyenv}
+    \begin{onlyenv}<4>
+        \begin{varblock}{alerted}[0.9\textwidth]{\textbf{Use globs!}}
+            Bash \textbf{does} know that it is dealing with filenames, and it \textbf{does} know what the filenames are, and as such it can split them up nicely!
+        \end{varblock}
+        \medskip
+        \begin{lstlisting}[style=MyBash, xrightmargin=4mm]
+            $ ls
+            Happy birthday.mp3   Hello.mp3
+            $ for file in *.mp3; do   # GOOD code
+            >   rm "$file"
+            > done; unset file
+        \end{lstlisting}
+        \medskip
+        \begin{varblock}{}[0.9\textwidth]{Do not be tempted}
+            You might argue that, if there are no spaces in filenames, then you would have no troubles.
+            But would you throw in the air a sharp knife trying to catch it afterwards, just because if you do not touch the blade it would be safe?
+        \end{varblock}
+    \end{onlyenv}
+\end{frame}
+
+
+
+
+
+
+
