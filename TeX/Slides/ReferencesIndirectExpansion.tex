@@ -1,0 +1,85 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 12 Jul 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The \textbf{nameref} attribute}{Introduced in 2014, Bash v4.3.0}
+    \vspace{-2mm}
+    \begin{onlyenv}<1>
+        \begin{varblock}{}[0.63\textwidth]{}
+        \begin{description}[\textbf{Reference:}]
+            \item[\textbf{Reference:}]
+                \bash|declare -n reference|\\
+                The variable is a reference to another variable
+        \end{description}
+        \end{varblock}
+        \begin{itemize}
+            \item It allows variables to be manipulated indirectly
+            \item Whenever the \bash|reference| variable
+                  \begin{itemize}
+                      \item is referenced, assigned to, unset,
+                      \item or has its attributes modified (other than using or changing the \textbf{nameref} attribute itself),
+                  \end{itemize}
+                  the operation is performed on the variable specified by the \bash|reference|'s value!
+                  \begin{lstlisting}[style=MyBash, style=oddnumbers, xleftmargin=6mm, xrightmargin=15mm, aboveskip=3mm]
+                      $ aVar='Hello'; echo "${aVar}"
+                      |+Hello+|
+                      $ declare -n bVar='aVar'; echo "${bVar}"
+                      |+Hello+|
+                      $ bVar='Goodbye'; echo "${aVar}"
+                      |+Goodbye+|
+                      $ declare +n bVar; echo "${bVar}"
+                      |+aVar+|
+                      $ unset aVar bVar
+                  \end{lstlisting}
+        \end{itemize}
+    \end{onlyenv}
+    \begin{varblock}{quote}[0.84\textwidth]{Think before using indirection}[Greg's Wiki]<only@2>
+        Putting variable names or any other bash syntax inside parameters is frequently done incorrectly and in inappropriate situations to solve problems that have better solutions.
+        \textbf{It violates the separation between code and data}, and as such puts you on a slippery slope toward bugs and security issues.
+        Indirection can make \textbf{your code less transparent and harder to follow}.
+
+        \smallskip
+        Normally, in bash scripting, you won't need indirect references at all.
+        Generally, people look at this for a solution when they don't understand or know about Bash Arrays or haven't fully considered other Bash features such as functions.
+        \smallskip
+    \end{varblock}
+    \begin{varblock}{alerted}[0.9\textwidth]{Sometimes you might need it}<only@2>
+        A \textbf{nameref} is commonly used within shell functions to refer to a variable whose name is passed as an argument to the function.
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Indirect expansion}{An alternative to use the \textbf{nameref} attribute}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item It is about using the content of a variable as name of a different variable
+        \item It is a particular case of parameter expansion: \PB{\texttt{\$\{!parameter\}}}
+              \begin{itemize}
+                  \item Bash uses the value formed by expanding \PB{\texttt{parameter}} as the new parameter
+                  \item this is then expanded and that value is used in the rest of the expansion
+              \end{itemize}
+    \end{itemize}
+    \begin{lstlisting}[style=MyBash, xrightmargin=1mm, belowskip=-4mm]
+        $ aVar='Hello'; bVar='aVar'
+        $ echo "bVar contains \"${bVar}\" which contains \"${!bVar}\""
+        |+bVar contains "aVar" which contains "Hello"+|
+        $ unset aVar bVar
+    \end{lstlisting}
+    \begin{itemize}[<2>]
+        \item If a \PB{\texttt{*}} or a \PB{\texttt{@}} is put at the end of parameter, the behaviour changes!\\[0.3em]
+        \small\setlength{\itemsep}{0mm}
+        \item[] \PB{\texttt{~\$\{!prefix@\}}}\tikzmark{start}
+        \item[] \PS{\texttt{"\$\{!prefix@\}"}}
+        \item[] \PB{\texttt{~\$\{!prefix*\}}}\tikzmark{end}
+        \item[] \PS{\texttt{"\$\{!prefix*\}"}}\tikzmark{alone}
+    \end{itemize}
+    \begin{varblock}{alerted}[0.3\textwidth]{}<2>
+        \alert{You will hardly need this!}
+    \end{varblock}
+    \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
+        \draw[very thick, decorate, decoration={brace,amplitude=4pt}] (start) ++(5mm,1mm) -- ($(end)+(5mm,-1mm)$)
+              node[midway, right=3mm, text width=5cm, font=\footnotesize] (L) {Expands to the names of variables whose names begin with \PB{\texttt{prefix}} as single word};
+        \draw[to,] (alone) -- (L.west |- alone) node[pos=1, right, font=\footnotesize] {As above, but words are separated by the first character of the \bash|IFS|};
+    \end{tikzpicture}
+\end{frame}
