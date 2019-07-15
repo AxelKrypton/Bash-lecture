@@ -1,0 +1,185 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 15 Jul 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Motivation}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item \textbf{Strings} are without any doubt the most used parameter type
+        \item They are also the most \textbf{misused} parameter type, though!
+        \item Strings hold \alert{\textbf{just one}} element!
+        \item Capturing a list in a string is very often \PP{plain wrong}, even if it might work\ldots
+        \item A parameter contains just one string of characters, no matter the meaning of them
+        \item If you put multiple filenames in a string, maybe to iterate over them at a later point, which delimiter would you use?
+        \item Is there a delimiter that is not accepted to be part of a filename? Mmmh\ldots
+    \end{itemize}
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        # This does NOT work in the general case
+        $ files=$(ls ~/*.jpg); cp ${files} /backups/    # BAD code!
+    \end{lstlisting}
+    \begin{varblock}{}[0.75\textwidth]{Array}
+        An array is a numbered list of strings: It maps integers to strings. 
+    \end{varblock}
+    \FrameRemark{For filenames in Linux, there are usually almost no restrictions, apart from \texttt{/} and \texttt{\textbackslash{}0}, you are allowed to use anything.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Creating an array}
+    \vspace{-1mm}\centering
+    \PB{\texttt{array=(\ldots)}}\, The most used syntax: space separated list in parenthesis
+    \smallskip
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        array=(one two "three and four") # Equivalent to:
+        array=([0]=one [1]=two [2]="three and four")
+        # Sparse array perfectly legal!
+        array=([0]=First [11]=Middle [23]=Last)
+    \end{lstlisting}
+    \medskip
+    \PB{\texttt{array[n]=}}\, Setting single elements works for undeclared variable, too
+    \smallskip
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        array[0]=First
+        array[11]=Middle
+        array[23]=Last
+    \end{lstlisting}
+    \medskip
+    \PB{\texttt{declare -a array}}\, Rarely used but possible
+    \smallskip
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        declare -a array  # Because of declare,
+        array=One         # equivalent to array[0]=One, AVOID!
+        array[1]=Two 
+    \end{lstlisting}
+    \FrameRemark{The command \bash|read -a array| allows to store what has been read in an array.}
+    
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Storing filenames into an array}
+    \begin{varblock}{alerted}[0.95\textwidth]{Take home message}
+        If you want to fill an array with filenames, then you'll probably want to use \alert{\textbf{globs}} in there!
+    \end{varblock}
+    \medskip
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=30mm, xrightmargin=30mm]
+            $ files=(~/"My Photos"/*.jpg)
+        \end{lstlisting}
+        \medskip
+        \begin{itemize}
+            \item Here we quoted the \bash{"My Photos"} part because it contains a space
+            \item If we hadn't quoted it, Bash would have split it up into\\ \centerline{\small\bash{files=('~/My' 'Photos/'*.jpg)}} which is obviously not what we want!
+            \item We quoted \textbf{only} the part that contained the space: We cannot quote the \PB{\texttt{\textasciitilde}} or the \PB{\texttt{*}}
+            \item If we do, they'll become literal and Bash won't treat them as special characters anymore!
+        \end{itemize}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, numbers=none]
+            # Please, really, use globs instead of commands!
+            
+            $ files=$(ls)      # BAD, BAD, BAD!
+            $ files=($(ls))    # STILL BAD!
+            
+            # So, how should you do?
+            
+            $ files=(*)        # GOOD!
+        \end{lstlisting}
+        \medskip
+        \begin{varblock}{example}[0.95\textwidth]{Globs know about files}
+            Using glob patterns is possible to create an array with filenames in different entries!
+        \end{varblock}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Accessing array's content (I)}{Definition, single elements and length}
+    \vspace{-2mm}\centering
+    \PB{\texttt{declare -p array}}\, It prints the definition of the variable {\tiny\{~not so useful in scripts~\}}
+    \smallskip
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        $ declare -p array
+        |+declare -a array='([0]="one" [1]="two and four")'+|
+    \end{lstlisting}
+    \medskip
+    \PB{\texttt{\$\{array[n]\}}}\, It retrieves the n-th element {\tiny\{~no error if entry missing in array~\}}
+    \smallskip
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        $ echo "${array[1]}"; echo "_${array[3156]}_"
+        |+two and four+|
+        |+__+|
+    \end{lstlisting}
+    \medskip
+    \PB{\texttt{\$\{\#array[@]\}}}\, It retrieves the length of the array {\tiny\{~same as \PB{\texttt{\$\{\#array[*]\}}}~\}}
+    \smallskip
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        $ echo "${#array[@]}"; array[7]=Hello; echo "${#array[@]}";
+        |+2+|  # Quoting the expansion does not change anything!
+        |+3+|
+        $ echo "${#array[7]}"; echo "${#array[-1]}";
+        |+5+|
+        |+5+|  # What does this mean?
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Accessing array's content (II)}{All elements at once}
+    \vspace{-2mm}\centering
+    \tc{strings-color}{\texttt{"\$\{array[@]\}"}}\, Bash replaces this syntax with each element properly quoted
+    \smallskip
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        $ printf '%s\n' "${array[@]}"
+        |+one+|
+        |+two and four+|
+        |+Hello+|
+    \end{lstlisting}
+    \medskip
+    \tc{strings-color}{\texttt{"\$\{array[*]\}"}}\, expands to a \bash|IFS|-first-character-separated list of the array entries
+    \smallskip
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        $ IFS=':'; printf '%s\n' "${array[*]}"; unset IFS
+        |+one:two and four:Hello+|
+    \end{lstlisting}
+    \medskip
+    Unquoted \PB{\texttt{\$\{array[@]\}}} and \PB{\texttt{\$\{array[*]\}}} let \alert{word splitting} kick in!
+    \smallskip
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        $ printf '%s\n' ${array[@]} # The same with ${array[*]}
+        |+one+|
+        |+two+|
+        |+and+|
+        |+four+|
+        |+Hello+|
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Accessing array's content (III)}{All indices}
+    \vspace{-2mm}\centering
+    \tc{strings-color}{\texttt{"\$\{!array[@]\}"}}\, Bash replaces this syntax with the indices of the entries that are set
+    \smallskip
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        $ printf '%d\n' "${!array[@]}"
+        |+0+|
+        |+1+|
+        |+7+|
+    \end{lstlisting}
+    \medskip
+    \tc{strings-color}{\texttt{"\$\{!array[*]\}"}}\, expands to a \bash|IFS|-first-character-separated list of the array indices
+    \smallskip
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        $ IFS=':'; printf '%s\n' "${!array[*]}"; unset IFS
+        |+0:1:7+|
+    \end{lstlisting}
+    \medskip
+    \begin{varblock}{}[0.9\textwidth]{In any case, prefer quoted versions!}
+        Unquoted \PB{\texttt{\$\{!array[@]\}}} and \PB{\texttt{\$\{!array[*]\}}} let \alert{word splitting} kick in.
+        This, for normal arrays, is harmless, since indices are just integers.
+    \end{varblock}    
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Iterating over array elements}
+    
+\end{frame}
+
+
+
+
+
+
+
