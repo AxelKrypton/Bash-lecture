@@ -51,8 +51,9 @@
         array=One         # equivalent to array[0]=One, AVOID!
         array[1]=Two 
     \end{lstlisting}
+    \bigskip
+    \PB{\texttt{array+=(\ldots)}}\, Concatenate r.h.s. array to l.h.s. array\par
     \FrameRemark{The command \bash|read -a array| allows to store what has been read in an array.}
-    
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Storing filenames into an array}
@@ -105,6 +106,8 @@
         $ echo "${array[1]}"; echo "_${array[3156]}_"
         |+two and four+|
         |+__+|
+        $ echo "${array[0+1]}" # [...] is an arithmetic context
+        |+two and four+|
     \end{lstlisting}
     \medskip
     \PB{\texttt{\$\{\#array[@]\}}}\, It retrieves the length of the array {\tiny\{~same as \PB{\texttt{\$\{\#array[*]\}}}~\}}
@@ -117,6 +120,7 @@
         |+5+|
         |+5+|  # What does this mean?
     \end{lstlisting}
+    \FrameRemark{Curly braces in parameter expansions accessing arrays are mandatory.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Accessing array's content (II)}{All elements at once}
@@ -169,15 +173,179 @@
     \medskip
     \begin{varblock}{}[0.9\textwidth]{In any case, prefer quoted versions!}
         Unquoted \PB{\texttt{\$\{!array[@]\}}} and \PB{\texttt{\$\{!array[*]\}}} let \alert{word splitting} kick in.
-        This, for normal arrays, is harmless, since indices are just integers.
+        This, for \textbf{normal} arrays, is harmless, since indices are just integers.
     \end{varblock}    
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Iterating over array elements}
+\begin{frame}[fragile]{Iterating over array elements}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item Depending on the needs you can iterate over the elements or the indices in the array
+        \item When iterating over the \textbf{\PP{elements}}, 99\% of the times you will need \,\tc{strings-color}{\texttt{"\$\{array[@]\}"}}
+        \item When iterating over the \textbf{\PP{indices}}, 99\% of the times you will need \,\tc{strings-color}{\texttt{"\$\{!array[@]\}"}}
+        \item To implicitly iterate over arrays is possible using different commands (e.g.\ \bash{printf}, \bash{cp})
+    \end{itemize}
+    \begin{lstlisting}[style=MyBash]
+        $ array=(one "two and four")
+        $ for entry in "${array[@]}"; do
+        >     echo "${entry}"
+        > done
+        |+one+|
+        |+two and four+|
+        $ for index in "${!array[@]}"; do
+        >     echo "array[${index}]=${array[index]}"
+        > done
+        |+array[0]=one+|
+        |+array[1]=two and four+|
+        $ unset entry index
+        # Coming back to motivation: GOOD code!
+        $ files=(~/*.jpg); cp "${files[@]}" /backups/
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Deleting arrays or array elements}
+    \vspace{-3mm}
+    \begin{onlyenv}<1>
+        \begin{itemize}
+            \item To delete an element of an array, pass it to the \bash{unset} built-in
+        \end{itemize}
+        \begin{lstlisting}[style=MyBash, belowskip=-5mm]
+            $ array=({a..e}); unset 'array[2]' 'array[3]'
+            $ for index in "${!array[@]}"; do
+            >     echo "array[${index}]=${array[index]}"
+            > done; unset 'index'
+            |+array[0]=a
+            array[1]=b
+            array[4]=e+|
+        \end{lstlisting}
+        \begin{itemize}
+            \item If you pass the name of an array to \bash|unset|, the whole array will be unset!
+        \end{itemize}
+        \begin{lstlisting}[style=MyBash]
+            $ array=({a..c})
+            $ for index in "${!array[@]}"; do
+            >     echo "array[${index}]=${array[index]}"
+            > done; unset 'index'
+            |+array[0]=a
+            array[1]=b
+            array[2]=c+|
+            $ unset array
+            $ echo "_${array[@]}_ -> ${#array[@]} entries"
+            |+__ -> 0 entries+|
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{varblock}{alerted}[0.8\textwidth]{}
+            \large \PT{Do not forget to \textbf{quote your variable} to avoid file pattern matching!}
+        \end{varblock}
+        \begin{lstlisting}[style=MyBash, emph={[7]a, a0}]
+            $ a=(file{1..3})
+            $ ls
+            |+a0   Day_1.tex   Day_1.pdf+|
+            $ a0='Hello'
+            $ printf '%s\n' "${a[@]}"
+            |+file1
+            file2
+            file3+|
+            $ echo "${a0}"
+            |+Hello+|
+            $ unset a[0] # <--- BAD, BAD, BAD CODE!
+            $ printf '%s\n' "${a[@]}"
+            |+file1+|   # Wait! I unset the first element, didn't I?
+            |+file2
+            file3+|
+            $ echo "_${a0}_"
+            |+__+|                 # Is it clear what happened?
+        \end{lstlisting}
+    \end{onlyenv}
+    \FrameRemark[2]{In doubt, always quote the variable passed to \bash|unset|. Using either the \texttt{-v} or \texttt{-f} option is also encouraged!}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Sparse arrays}
+    \medskip
+    \begin{columns}[c]
+        \begin{column}{0.75\textwidth}
+            \begin{varblock}{alerted}[0.5\textwidth]{}
+                \Large \alert{Arrays might be sparse!}
+            \end{varblock}
+        \end{column}
+        \begin{column}{0.25\textwidth}
+        \end{column}
+    \end{columns}
+    \bigskip
+    \begin{itemize}
+        \item Don't assume that your indices are sequential
+        \item If the index values matter, always iterate over the indices {\tiny\{~instead of making assumptions about them\ldots~\}}
+        \item If you loop over the values instead, don't assume anything about indices
+        \item In particular, don't assume that just because you're currently in the first iteration of your loop, that you must be on index 0\ldots
+    \end{itemize}
+    \begin{varblock}{example}[0.63\textwidth]{\large If you need a non-sparse array, just make it such!}
+        \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm, xleftmargin=13mm, xrightmargin=13mm]
+            $ array=("${array[@]}")
+        \end{lstlisting}
+    \end{varblock}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=north east] at ($(current page.north east)-(5mm,5mm)$) {\includegraphics[width=3cm, clip, trim=0 17mm 0 0]{Assumptions}};
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Associative arrays}{Since Bash v4.0 (2009)}
+    \vspace{-5mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{itemize}
+            \item An associative array is \PP{a map of strings to strings}
+            \item It has to be \textbf{explicitly declared} as such via \,\bash|declare -A|
+            \item Since keys are strings, they might contain spaces!\\
+                  $\Rightarrow\,$ Iterating over keys requires quotes: \tc{strings-color}{\texttt{"\$\{!array[@]\}"}}
+        \end{itemize}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash, xrightmargin=1mm]
+                $ declare -A dict
+                $ dict[Apartment]="Die Wohnung"
+                $ declare -p dict
+                |+declare -A dict='([Apartment]="Die Wohnung" )'+|
+                $ dict[Water]="Das Wasser"
+                $ for key in "${!dict[@]}"; do
+                >     printf 'EN: %20s -> DE: %s\n' "${key}" "${dict[$key]}"
+                > done
+                |+EN:                Water -> DE: Das Wasser
+                EN:            Apartment -> DE: Die Wohnung+|
+                $ echo "${#dict[@]}"; unset dict
+                |+2+|
+                $ echo "${#dict[@]}"
+                |+0+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, firstnumber=15, xrightmargin=1mm]
+                $ declare -A dict
+                $ dict[Die Wohnung]="Apartment"
+                $ dict[Das Wasser]="Water"
+                $ for key in ${!dict[@]}; do   # AAAAAARGH!
+                >     printf 'DE: %20s -> EN: _%s_\n' "${key}" "${dict[$key]}"
+                > done
+                |+DE:                  Die -> EN: __
+                DE:              Wohnung -> EN: __
+                DE:                  Das -> EN: __
+                DE:               Wasser -> EN: __+|
+                $ echo "${#dict[@]}"; unset -v 'dict[Das Wasser]'
+                |+2+|
+                $ echo "${#dict[@]}"; unset -v 'dict'
+                |+1+|
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Associative arrays: Remarks}{Since Bash v4.0 (2009)}
+    \begin{itemize}
+        \item
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{The power of parameter expansion on arrays}
     
 \end{frame}
-
-
 
 
 
