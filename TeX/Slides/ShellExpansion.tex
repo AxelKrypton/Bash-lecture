@@ -341,6 +341,41 @@
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Parameter expansion: String manipulation (IV)}{Since Bash v4.0 (2009)}
+    \vspace{-3mm}
+    \setbeamerfont{description item}{series=\bfseries}
+    \setbeamercolor{description item}{fg=PP}
+    \begin{description}[Replace at start:]
+        \item[First uppercase:] \PB{\small\texttt{\$\{parameter\^{}\}}}\\
+            {\small
+                Results in the expanded value of \texttt{parameter} with the first character capitalised
+            }
+        \item[All uppercase:] \PB{\small\texttt{\$\{parameter\^{}\^{}\}}}\\
+            {\small
+                As the previous, but all characters are capitalised.
+            }
+        \item[First uppercase:] \PB{\small\texttt{\$\{parameter,\}}}\\
+            {\small
+                Results in the expanded value of \texttt{parameter} with the first character to lowercase
+            }
+        \item[All lowercase:] \PB{\small\texttt{\$\{parameter,,\}}}\\
+            {\small
+                As the previous, but all characters are transformed to lowercase.
+            }
+    \end{description}
+    \begin{uncoverenv}<2>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm]
+            $ aVar='hELLO, World!'
+            # Let us demonstrate a bit
+            $ echo "${aVar^}  -  ${aVar^^}"
+            |+HELLO, World!  -  HELLO, WORLD!+|
+            $ echo "${aVar,}  -  ${aVar,,}"
+            |+hELLO, World!  -  hello, world!+|
+        \end{lstlisting}
+    \end{uncoverenv}
+    \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Parameter expansion: String manipulation summary}
     \vspace{-3mm}
     \begin{varblock}{alerted}[0.88\textwidth]{\textbf{Good practice:}}
