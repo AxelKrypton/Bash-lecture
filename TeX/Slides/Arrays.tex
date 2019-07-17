@@ -337,14 +337,95 @@
     \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Associative arrays: Remarks}{Since Bash v4.0 (2009)}
-    \begin{itemize}
-        \item
-    \end{itemize}
+\begin{frame}[fragile]{Associative arrays: Remarks}{Since Bash v4.0 (2009)}
+    \vspace{-5mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{itemize}
+            \item \alert{The order of both keys and elements} of an associative array is \alert{unpredictable}\\
+                  $\Rightarrow\,$ They are \textbf{not} well suited to store lists that need to be processed in order
+            \item If you use a parameter as key of an associative array, \alert{you must use the \texttt{\$} sign}\\
+                  $\Rightarrow\,$ Indeed, it makes sense: The name of the parameter might simply be a valid key
+        \end{itemize}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash]
+                $ declare -A array
+                $ index=1; for entry in one two three four five six; do
+                >     array[${entry}]=$((index++))
+                > done
+                $ echo "${array[@]}"
+                |+4 1 5 6 2 3+|
+                $ echo "${!array[@]}"
+                |+four one five six two three+|
+                $ unset array entry index
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, firstnumber=10, emph={[7]associative, indexed}]
+                $ indexed=("one" "two")  index=0  key="foo"
+                $ declare -A associative=|+([foo]=bar [alpha]=omega)+|
+                $ echo "${indexed[$index]}"
+                |+one+|
+                $ echo "${indexed[index]}"
+                |+one+|
+                $ echo "${indexed[index + 1]}"
+                |+two+|
+                $ echo "${associative[$key]}"
+                bar
+                $ echo "_${associative[key]}_"
+                |+__+|
+                $ echo "_${associative[key + 1]}_"
+                |+__+|
+                $ unset indexed associative index key
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{The power of parameter expansion on arrays}
-    
+\begin{frame}[fragile]{The power of parameter expansion on arrays}
+    \vspace{-5mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+         \begin{itemize}
+             \item Arrays are very flexible, because they are well integrated with the other shell expansions
+             \item Any parameter expansion can be carried out on individual array elements
+             \item Parameter expansions can equally well apply to an entire array!
+             \item To use parameter-expansion manipulations on all array entries, use \PB{\texttt{[@]}} and \PB{\texttt{[*]}}
+             \item It is critical that these special expansions are properly quoted
+         \end{itemize}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash, xrightmargin=3mm]
+                $ array=(alpha beta gamma)
+                $ echo "${array[-1]:2:2}"   # Substring of last entry
+                |+mm+|
+                $ echo "${array[@]#a}"      # Chop 'a' from the beginning
+                |+lpha beta gamma+|
+                $ echo "${array[@]%a}"      # Chop 'a' from the end
+                |+alph bet gamm+|
+                $ echo "${array[@]//a/_}"   # Substitute all 'a' by '_'
+                |+_lph_ bet_ g_mm_+|
+                $ echo "${array[@]/#a/_}"   # Substitute 'a' by '_' at start
+                |+_lpha beta gamma+|
+                $ echo "${array[@]/%a/_}"   # Substitute 'a' by '_' at end
+                |+alph_ bet_ gamm_+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, xrightmargin=3mm, firstnumber=14]
+                $ echo "${array[@]/#/prefix_}"  # Add prefix to all entries
+                |+prefix_alpha prefix_beta prefix_gamma+|
+                $ echo "${array[@]/%/_suffix}"  # Add suffix to all entries
+                |+alpha_suffix beta_suffix gamma_suffix+|
+                $ echo "${array[@]^^}"          # Capitalise all characters
+                |+ALPHA BETA GAMMA+|
+                $ echo "${array[3]?Third entry is unset}"
+                |+bash: array[3]: Third entry is unset+|
+                $ echo "${array[3]=delta}"
+                |+delta+|
+                $ echo "${array[@]^}"
+                |+Alpha Beta Gamma Delta+|
+                $ unset array
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
 \end{frame}
 
 
