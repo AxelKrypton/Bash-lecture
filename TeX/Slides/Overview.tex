@@ -10,7 +10,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[c]{Lecture format}
     \begin{center}
-        \begin{tikzpicture}
+        \begin{tikzpicture}[every node/.style={inner xsep=0}]
             \foreach \f [count=\n from 0] in {Calendar, Time, Placeholder, Person, Newsletter}{
                 \begin{scope}
                     \clip (0,-1.5*\n) circle[radius=5mm];
@@ -19,7 +19,12 @@
             }
             \node[right = of A0] {\{07,08,09\}.10.2019};
             \node[right = of A1] {Morning: 09:15 to 12:00$\quad$ Afternoon: 14:15 to 17:00};
-            \node[right = of A2] {Always at ITP, room 02.116};
+            \node[right = of A2] {
+                \begin{tabular}{@{}r@{\;}l}
+                    Morning:   & FIAS H100 (Mon), GSC 0|07-0|08 (Tue, Wed) \\
+                    Afternoon: & ITP, room 01.120 {\tiny\{~only registered people~\}}
+                \end{tabular}
+            };
             \node[right = of A3] {Dr. Alessandro Sciarra};
             \node[right = of A4] {sciarra@th.physik.uni-frankfurt.de};
         \end{tikzpicture}
