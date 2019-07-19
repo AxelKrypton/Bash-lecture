@@ -1,0 +1,158 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 18 Jul 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{The Bash script flow}
+    \begin{tikzpicture}[overlay, remember picture]
+        \pgfmathsetmacro{\cubex}{1}
+        \pgfmathsetmacro{\cubey}{1}
+        \pgfmathsetmacro{\cubez}{1}
+        \coordinate (O) at ($(current page.center)-(0.5,0.3)$);
+        \draw[PP, fill=PP!40] (O) ++(\cubex,\cubey,0) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+        \draw[PP, fill=PP!10] (O) ++(\cubex,\cubey,0) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+        \draw[PP] (O) ++(0,\cubey,-\cubez) -- ++(0,-\cubey,0);
+        \draw[PP, fill=PP!30] (O)                     -- ++(\cubex,0,0) -- ++(0,\cubey,0) -- ++(-\cubex,0,0) -- cycle;
+        \draw[PP, fill=PP!10] (O) ++(\cubex,\cubey/6,-\cubez/4) -- ++(0,0,-\cubez/2) -- ++(0,\cubey/4,0) -- ++(0,0,\cubez/2) -- cycle;
+        %\draw[PP, fill=PP!10] (O) ++(\cubex/4,0,-\cubez/4) -- ++(\cubex/2,0,0) -- ++(0,0,-\cubez/2) -- ++(-\cubex/2,0,0) -- cycle;
+        \node[PB] at ($(O)+(\cubex/2,\cubey/2,0)$) {Script};
+        \path[from] ($(O)+(\cubex/2,\cubey,-\cubez/2)$) edge[out=90, in=0]   node[pos=1, anchor=east] {Command-line arguments} ++(-1.5,0.5,0)
+                                                        edge[out=90, in=270] node[pos=1, anchor=345] {Environment variables} ++(-1.0,1.3,-0.2)
+                                                        edge[out=90, in=270] node[pos=1, anchor= south, inner sep=1pt]  {File(s)} ++(0.1,1.5,-1.5)
+                                                        edge[out=90, in=180] node[pos=1, anchor=west] {File descriptors} ++(1.8,1.0,-0.3);
+        \path[to] ($(O)+(\cubex,\cubey/24*7,-\cubez/2)$) edge[out=0, in=180] node[pos=1, anchor=west] {File(s)} ++(3.0,-0.5,0)
+                                                         edge[out=0, in=180] node[pos=1, anchor=west] {File descriptors} ++(2.2,-1.5,0)
+                                                         edge[out=0, in=180] node[pos=1, anchor=west] {Environment variables} ++(1.4,-2.5,0);
+    \end{tikzpicture}
+    \vspace{35mm}
+    \begin{columns}[c]
+        \begin{column}{0.08\textwidth}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{varblock}{example}[\textwidth]{Think before doing!}
+                It is part of the design-phase to keep in mind all these possibilities and take advantage of them
+            \end{varblock}
+        \end{column}
+        \begin{column}{0.52\textwidth}
+        \end{column}
+    \end{columns}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Command-line parameters}
+    \vspace{-5mm}
+    \begin{overlayarea}{\textwidth}{0.8\textheight}
+        \begin{itemize}
+            \item They are accessible via \PB{\texttt{\$1}}, \PB{\texttt{\$2}}, etc.
+            \item After the 9th one, you need curly braces: \PB{\texttt{\$\{10\}}}, \PB{\texttt{\$\{11\}}}, etc.
+            \item It is possible to refer to all of them via \PB{\texttt{\$@}} and \PB{\texttt{\$*}}
+            \item When you refer to all of them, especially to pass them over, use \PS{\texttt{"\$@"}}\\
+                  $\to\,$ the double quotes are \alert{crucial} to preserve the parameters without splitting them!
+            \item The \bash|shift| bulit-in is remarkably handy when parsing command-line parameters\\
+                  $\to\,$ it destroys \PB{\texttt{\$1}} and it maps \PB{\texttt{\$2}} into \PB{\texttt{\$1}}, \PB{\texttt{\$3}} into \PB{\texttt{\$2}} and so on
+        \end{itemize}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash]
+                $ set -- Hello my "nice world"
+                $ printf '%s\n' "$@"
+                |+Hello
+                my
+                nice world+|
+                $ printf '%s\n' $@   # <-- Probably, AAAAARGH!
+                |+Hello
+                my
+                nice
+                world+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, firstnumber=11]
+                $ echo "$1"; shift
+                |+Hello+|
+                $ echo "$1"; shift
+                |+my+|
+                $ echo "$1"; shift
+                |+nice world+|
+                $ echo _"$1"_
+                |+__+|
+                $ set -- Hello my "nice world"; shift 2@|\tikzmark{two}|@; echo "$1"
+                |+nice world+|
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+    \begin{tikzpicture}[remember picture, overlay]
+        \draw[from, visible on=<2>, red] (two) ++(-0.09,0.2) -- ++(0,1) node[pos=1, anchor=south] {Cool!};
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Environment variables (I)}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item Every program inherits certain information from its parent process {\tiny\{~resources, privileges and restrictions~\}}
+        \item One of those resources is a set of variables called \PP{Environment Variables}
+        \item Traditionally, environment variables have names that are all capital letters, such as \bash|PATH|
+        \item When you run a command in Bash, you have the option of specifying a temporary environment change which only takes effect for the duration of that command
+        \item This is done by putting \PB{\texttt{VAR=value}} in front of the command
+    \end{itemize}
+    \begin{lstlisting}[style=MyBash]
+        $ ls /tpm
+        |+ls: cannot access '/tpm': No such file or directory+|
+        $ LANGUAGE=de_DE.utf-8 ls /tpm  # @|\URL[red]{https://askubuntu.com/a/544728}{Read more about LANGUAGE}[background-color]|@
+        |+ls: Zugriff auf '/tpm' nicht möglich: Datei oder Verzeichnis nicht gefunden+|
+        $ VERBOSE=1 make
+    \end{lstlisting}
+    \begin{varblock}{example}[0.9\textwidth]{Good parctice}
+        Don't use all-capital variable names in your scripts, unless they are environment variables.
+        Use lower-case or mixed-case variable names, to avoid accidents.
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Environment variables (II)}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item In a script, you can use environment variables just like any other variable
+              \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-4mm, xrightmargin=30mm]
+                  if [[ ${EDITOR} ]]; then
+                      ${EDITOR}
+                  else
+                      emacs
+                  fi
+              \end{lstlisting}
+        \item To change the environment \alert{for your child processes} to inherit, use the \bash|export| built-in
+              \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=30mm]
+                  export PATH=${HOME}/.local/bin:${PATH}
+              \end{lstlisting}
+    \end{itemize}
+    \begin{varblock}{alerted}[0.9\textwidth]{Remember!}
+        The tricky part here is that your environment changes are \alert{\textbf{only inherited by your descendants}}.
+        You can't change the environment of a program that is already running, or of a program that you don't run. 
+    \end{varblock}
+    \PP{\centerline{\ldots{}mmmh, and if I needed it?}}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Environment variables (III)}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item Sourcing a script, will execute it in the current environment/shell
+              \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-6mm, xrightmargin=20mm]
+                  $ cat script.bash
+                  |+#!/bin/sh
+                  cd /tmp+|
+                  $ pwd; ./script.bash; pwd
+                  |+/home/sciarra/Documents+|
+                  |+/home/sciarra/Documents+|
+                  $ pwd; source script.bash; pwd # 'source' as '.'
+                  |+/home/sciarra/Documents+|
+                  |+/tmp+|
+              \end{lstlisting}
+              Indeed, this is what you do e.g.\ when you add code in the \PB{\texttt{\$\{HOME\}/.bashrc}} file
+    \end{itemize}
+    \begin{varblock}{}[0.9\textwidth]{Splitting a large script in several files}
+        Although a script should not be huge, it is important sometimes to split it into pieces for a handier development.
+        This can be done using the \bash|source| built-in, delegating to the main (executable) script to source all secondary files.
+        We will come back to this point when we introduce functions.
+    \end{varblock}
+\end{frame}
+
+
+

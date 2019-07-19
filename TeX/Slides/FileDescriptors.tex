@@ -1,0 +1,564 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 19 Jul 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{File descriptors: a graphical overview} % https://tex.stackexchange.com/a/119310
+    \vspace{-5mm}
+    \begin{varblock}{example}[0.66\textwidth]{By default}
+        Every new process starts with \textbf{three} open file descriptors 
+    \end{varblock}
+    \vfill
+    \begin{center}
+        \begin{tikzpicture}
+            \tikzset{fd/.style={minimum size=1cm, draw=#1, thick, font=\ttfamily}}
+            \node[minimum size=16mm, text width=14mm, draw=PS, thick, align=center] (script) {Script Command};
+            \node[fill=PB, text=bg, thick, circle, inner sep=1pt, font=\footnotesize] at (script.north) {1};
+            \node[fd=fg,  left = 20mm of script] (fd0) {FD0};
+            \node[fd=PP, right = 22mm of script, anchor=south west, yshift=+1pt] (fd1) {FD1};
+            \node[fd=PT, right = 22mm of script, anchor=north west, yshift=-1pt] (fd2) {FD2};
+            \draw[to] (fd0.east) -- (script.180) node[midway, fill=bg, font=\scriptsize] {Std Input};
+            \draw[to] (script.0) -- (fd1.180) node[fill=bg, midway, inner ysep=0mm, font=\scriptsize, text=PP, sloped] {Std Output};
+            \draw[to] (script.0) -- (fd2.180) node[fill=bg, midway, inner ysep=0mm, font=\scriptsize, text=PT, sloped] {Std Error};
+            \begin{scope}[scope on=<2->]
+                \node[minimum size=16mm, text width=14mm, draw=PS, thick, align=center, below = 15mm of script] (scriptNew) {Script Command};
+                \node[fill=PB, text=bg, thick, circle, inner sep=1pt, font=\footnotesize] at (scriptNew.north) {2};
+                \node[fd=fg,  left = 20mm of scriptNew] (fd0new) {FD0};
+                \node[fd=PP, right = 22mm of scriptNew, anchor=south west, yshift=+1pt] (fd1new) {FD1};
+                \node[fd=PT, right = 22mm of scriptNew, anchor=north west, yshift=-1pt] (fd2new) {FD2};
+                \draw[to] (fd0new.east) -- (scriptNew.180) node[midway, fill=bg, font=\scriptsize] {Std Input};
+                \draw[to] (scriptNew.0) -- (fd1new.180) node[fill=bg, midway, inner ysep=0mm, font=\scriptsize, text=PP, sloped] {Std Output};
+                \draw[to] (scriptNew.0) -- (fd2new.180) node[fill=bg, midway, inner ysep=0mm, font=\scriptsize, text=PT, sloped] {Std Error};
+            \end{scope}
+            \begin{scope}[scope on=<3>]
+                \draw[to] (fd1.0) -- ++(5mm,0) |- ($(script)!0.5!(scriptNew)$) -| ($(fd0new.180)-(5mm,0)$) -- (fd0new.180);
+                \node[text=PQ, fill=bg] at ($(script)!0.5!(scriptNew)$) {Pipeline};
+            \end{scope}
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{File descriptors}
+    \vspace{-3mm}
+    In an interactive shell, or in a script running in a terminal,
+    \begin{enumerate}\addtocounter{enumi}{-1}
+        \item the \textbf{Standard Input} is how Bash sees the characters you type on your keyboard;
+        \item the \PP{\textbf{Standard Output}} is where the program sends most of its normal information;
+        \item the \alert{\textbf{Standard Error}} is where the program sends its error messages.
+    \end{enumerate}
+    \begin{varblock}{example}[0.9\textwidth]{Good practice}
+        Remember that when you create scripts, you should send your custom error messages to the standard error FD.
+        This is a convention and it is very convenient when applications follow the convention. \textbf{As such, so should you!}
+    \end{varblock}
+    \medskip
+    In the following we will learn how to
+    \begin{itemize}
+        \item redirect standard \{input, error, output\} of \{single,multiple\} commands;
+        \item open and close new file descriptors;
+        \item use and not abuse the pipeline.
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Input/Output Redirection: Some examples}
+    \vspace{-8mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{varblock}{quote}[\textwidth]{Redirection}
+            \normalsize\textnormal{The practice of changing a FD to read its input from, or send its output to, a different location}
+        \end{varblock}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash, aboveskip=2mm]
+                # Standard OUTPUT redirection
+                $ ls; echo 'Pi*10^7s approximates at 0.38% a year'
+                |+Pi*10^7s approximates at 0.38% a year+|
+                $ echo 'Pi*10^7s approximates at 0.38% a year' > Quote.txt
+                $ ls; cat Quote.txt
+                |+Quote.txt+|
+                |+Pi*10^7s approximates at 0.38% a year+|
+                $ echo '82000 is a super cool number!' > Quote.txt
+                $ cat Quote.txt
+                |+82000 is a super cool number!+| # We lost the file content!
+                $ echo 'Pi*10^7s approximates at 0.38% a year' >  Quote.txt
+                $ echo '82000 is a super cool number!'         >> Quote.txt
+                $ cat Quote.txt
+                |+Pi*10^7s approximates at 0.38% a year+|
+                |+82000 is a super cool number!+|
+                $ wc -l Quote.txt
+                |+2 Quote.txt+|
+                $ man wc # What happens if you do not provide a file to wc?
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, aboveskip=2mm, firstnumber=19]
+                # Standard INPUT redirection
+                $ wc -l < Quote.txt
+                |+2+|
+                # Standard ERROR redirection
+                $ rm Quote.ttx
+                |+rm: cannot remove 'Quote.ttx': No such file or directory+|
+                $ rm Quote.ttx > Error.log
+                |+rm: cannot remove 'Quote.ttx': No such file or directory+|
+                $ ls; wc -l Error.log
+                |+Error.log   Quote.txt+|
+                |+0 Error.log+|
+                $ rm Quote.ttx 2> Error.log
+                $ wc -l Error.log
+                |+1 Error.log+|
+                $ rm Quote.ttx 2>> Error.log
+                $ cat Error.log
+                |+rm: cannot remove 'Quote.ttx': No such file or directory+|
+                |+rm: cannot remove 'Quote.ttx': No such file or directory+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=MyBash, aboveskip=2mm, firstnumber=37]
+                # Use of the pipeline
+                $ cat Error.log Quote.txt | sort
+                |+82000 is a super cool number!+|
+                |+Pi*10^7s approximates at 0.38% a year+|
+                |+rm: cannot remove 'Quote.ttx': No such file or directory+|
+                |+rm: cannot remove 'Quote.ttx': No such file or directory+|
+                $ cat Error.log Quote.txt | sort | uniq
+                |+82000 is a super cool number!+|
+                |+Pi*10^7s approximates at 0.38% a year+|
+                |+rm: cannot remove 'Quote.ttx': No such file or directory+|
+                # BAD CODE (Abuse of the pipeline)
+                $ cat Quote.txt | grep 'cool'
+                |+82000 is a super cool number!+|
+                # GOOD CODE: grep 'cool' Quote.txt
+                # BAD Bash CODE (Abuse of the pipeline)
+                $ echo "2*5.3" | bc -l
+                |+10.6+|
+                # You should use the Herestrings syntax we'll discuss later
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Input/Output Redirection: The theory}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item I/O redirection is done \alert{\textbf{before}} the command is executed!
+        \item Redirections are processed in the order they appear, \textbf{from left to right}
+        \item In the following slides \PB{\texttt{[n]}} refers to an optional integer, whose default is
+              \begin{itemize}
+                  \item[0] if the redirection operator is \PB{\texttt{<}} or \PB{\texttt{<>}}
+                  \item[1] if the redirection operator is \PB{\texttt{>}} or \PB{\texttt{>>}}
+              \end{itemize}
+        \item The \texttt{word} following the redirection operator in the following slides is subjected to$^\star$
+              \begin{itemize}
+                  \item brace expansion
+                  \item tilde expansion
+                  \item parameter expansion
+                  \item command substitution
+                  \item arithmetic expansion
+                  \item quote removal
+                  \item filename expansion
+                  \item word splitting
+              \end{itemize}
+              If it expands to more than one word, Bash reports an error.
+    \end{itemize}
+    \FrameRemark{$^\star$ For \PB{heredocs} and \PB{herestrings} a different rule applies: Refer to the Bash manual for more details.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{I/O Redirection: The syntax}
+    \vspace{-3mm}
+    \setbeamerfont{description item}{series=\bfseries}
+    \setbeamercolor{description item}{fg=PP}
+    \begin{description}[Redirecting Output:]
+        \item[Redirecting Input:] \PB{\small\texttt{[n]<word}}\\
+            {\small
+                The file resulting from the expansion of \texttt{word} is opened for \PS{reading} on FD \texttt{n}
+            }
+        \item[Redirecting Output:] \PB{\small\texttt{[n]>word}}\\
+            {\small
+                The file resulting from the expansion of \texttt{word} is opened for \PS{writing} on FD \texttt{n}\\[-0.5em]
+                {\tiny\{~If the file does not exist it is created; if it does exist it is \textbf{truncated to zero size}~\}}
+            }
+        \item[Appending Output:] \PB{\small\texttt{[n]>>word}}\\
+            {\small
+                The file resulting from the expansion of \texttt{word} is opened for \PS{appending} on FD \texttt{n}
+            }
+        \item[Duplicating FDs:] \PB{\small\texttt{[n]<\&number}} \,and\, \PB{\small\texttt{[n]>\&number}}\\
+            {\small
+                The file descriptor denoted by \texttt{n} is made to be a copy of file descriptor \texttt{number}\\
+                If \texttt{number} does not specify an open file descriptor, a redirection error occurs
+            }
+        \item[Closing FDs:] \PB{\small\texttt{[n]<\&-}} \,and\, \PB{\small\texttt{[n]>\&-}}\\
+            {\small
+                The file descriptor denoted by \texttt{n} is closed
+            }
+        \item[Moving FDs:] \PB{\small\texttt{[n]<\&number-}} \,and\, \PB{\small\texttt{[n]>\&number-}}\\
+            {\small
+                The FD \texttt{number} is moved to FD \texttt{n} and FD \texttt{number} is then closed
+            }
+        \item[I/O FDs:] \PB{\small\texttt{[n]<>word}}\\
+            {\small
+                The file resulting form \texttt{word} is opened for both \PS{reading and writing} on FD \texttt{n}\\[-0.5em]
+                {\tiny\{~If the file does not exist, it is created~\}}
+            }
+    \end{description}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Few more basic examples}
+    \begin{overlayarea}{\textwidth}{0.2\textheight}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash, numbers=none]
+                # Standard prcess situation
+                $ command
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, numbers=none]
+                # Redirect the standard output of a command to a file
+                $ command > File
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=MyBash, numbers=none]
+                # Redirect the standard error of a command to a file
+                $ command 2> File
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<4>
+            \begin{lstlisting}[style=MyBash, numbers=none]
+                # Redirect both std output and std error to a file
+                $ command &> File
+                # Equivalent to
+                $ command > File 2>&1
+                # WRONG CODE! Explanation later
+                # command > File 2> File 
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<5>
+            \begin{lstlisting}[style=MyBash, numbers=none]
+                # The order of the redirections matters!
+                $ command > File 2>&1
+                # command 2>&1 > File
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<6>
+            \begin{lstlisting}[style=MyBash, numbers=none]
+                # The order of the redirections matters!
+                # command > File 2>&1
+                $ command 2>&1 > File
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<7>
+            \begin{lstlisting}[style=MyBash, numbers=none]
+                # Redirect the std input of a command to a file
+                $ command < File
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+    \vfill
+    \begin{center}
+        \begin{tikzpicture}
+            \tikzset{
+                fd/.style={minimum size=6mm, draw=#1, thick, font=\ttfamily\small},
+                output/.style={minimum height=6mm, minimum width=3cm, draw=#1, thick, font=\small, rounded corners=1mm, text=PB},
+                output/.default=PB
+            }
+            \begin{scope}[visible on=<1>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \foreach \n in {0,1,2}{
+                    \node[output, right = 15mm of fd\n] (output\n) {Terminal};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+            \end{scope}
+            \begin{scope}[visible on=<2>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \foreach \n/\l in {0/Terminal,1/File,2/Terminal}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+            \end{scope}
+            \begin{scope}[visible on=<3>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \foreach \n/\l in {0/Terminal,1/Terminal,2/File}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+            \end{scope}
+            \begin{scope}[visible on=<4-5>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \foreach \n/\l in {0/Terminal,1/File}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+                \draw (fd2) -| ($(fd1.east)!0.5!(output1.west)$);
+            \end{scope}
+            \begin{scope}[visible on=<6>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \foreach \n/\l in {0/Terminal,1/Terminal, 2/File}{
+                    \node[output, right = 15mm of fd\n] (output\n.west) {\l};
+                    
+                }
+                \draw[to] (fd0.east) -- (output0.west);
+                \draw[to] (fd1.east) -- (output2.west);
+                \draw[to] (fd2.east) -- (output1.west);
+            \end{scope}
+            \begin{scope}[visible on=<7>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \foreach \n/\l in {0/File,1/Terminal,2/Terminal}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+            \end{scope}
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The \bash|exec| built-in}
+    \vspace{-2mm}
+    \begin{varblock}{quote}[0.6\textwidth]{\texttt{exec \ldots [command [arguments]]}}[Bash manual]
+        [\ldots] If no command is specified, redirections may be used to affect the current shell environment [\ldots]\smallskip
+    \end{varblock}
+    \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-4mm]
+        # Redirect both std output and std error to "log.txt"
+        $ exec > log.txt 2>&1
+        # ALL output including stderr now goes into "log.txt"
+    \end{lstlisting}
+    Otherwise, for local changes, command grouping helps:
+    \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm]
+        # Redirect both std output and std error to "messages.log"
+        {
+            date
+            # some other commands
+            echo '...done!'
+        } > messages.log 2>&1
+    \end{lstlisting} 
+    \FrameRemark{To check the open file descriptors you can use: $\;$ \bash|ls -l /proc/$$/fd|}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Few more advanced examples}
+    \vspace{-5mm}
+    \begin{overlayarea}{\textwidth}{0.34\textheight}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=3mm]
+                # Open a file for reading using a custom file descriptor
+                $ exec 3< File
+                # grep "foo" <&3 # NOTE: You can't rewind a fd in Bash!
+                # ...                    Close and open it again in case
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=3mm]
+                # Open a file for reading using a custom file descriptor
+                $ exec 3< File
+                # grep "foo" <&3 # NOTE: You can't rewind a fd in Bash!
+                # ...                    Close and open it again in case
+                $ exec 3<&-
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=3mm]
+                # Open a file for writing using a custom file descriptor
+                $ exec 4> File
+                # echo "foo" >&4 
+                # ...
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<4>
+            \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=3mm]
+                # Open a file for writing using a custom file descriptor
+                $ exec 4> File
+                # echo "foo" >&4 
+                # ...
+                $ exec 4>&-
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<5>
+            \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=3mm]
+                $ echo "foo bar" > File
+                # Open a file both for writing and reading with a custom FD
+                $ exec 6<> File
+                $ read -n 3 var <&6  # read the first 3 characters from FD 6
+                $ echo $var 
+                $ echo -n + >&6      # write "+" at 4th position
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<6>
+            \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=3mm]
+                $ echo "foo bar" > File
+                # Open a file both for writing and reading with a custom FD
+                $ exec 6<> File
+                $ read -n 3 var <&6  # read the first 3 characters from FD 6
+                $ echo $var 
+                $ echo -n + >&6      # write "+" at 4th position
+                $ exec 6>&-          # @|\URL[red]{https://unix.stackexchange.com/questions/131801/closing-a-file-descriptor-vs\#comment615492\_131833}{close FD 6}[background-color]|@
+                $ cat File
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<7>
+            \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=3mm]
+                # Redirect standard output temporarily to file
+                $ exec 3>&1 1> File
+                $ date
+                $ echo "This goes to File without redirection!"
+                $ date
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<8>
+            \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=3mm]
+                # Redirect standard output temporarily to file
+                $ exec 3>&1 1> File
+                $ date
+                $ echo "This goes to File without redirection!"
+                $ date
+                $ exec 1>&3 3>&-
+                $ echo "I see this in the terminal again!"
+                $ cat File
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+    \begin{center}
+        \begin{tikzpicture}
+            \tikzset{
+                fd/.style={minimum size=6mm, draw=#1, thick, font=\ttfamily\small},
+                output/.style={minimum height=6mm, minimum width=3cm, draw=#1, thick, font=\small, rounded corners=1mm, text=PB},
+                output/.default=PB
+            }
+            \begin{scope}[visible on=<1>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \node[fd=PQ, below = 5mm of fd2] (fd3) {3};
+                \foreach \n/\l in {0/Terminal,1/Terminal,2/Terminal,3/File}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+                \node[anchor=north, text=PB, font=\scriptsize] at (output3.south) {Open for reading};
+            \end{scope}
+            \begin{scope}[visible on=<2>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \foreach \n/\l in {0/Terminal,1/Terminal,2/Terminal}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+                \begin{scope}[opacity=0.2]
+                    \node[fd=PQ, below = 5mm of fd2] (fd3) {3};
+                    \node[output, right = 15mm of fd3] (output3) {File};
+                    \draw[to] (fd3.east) -- (output3.west);
+                \end{scope}
+                \node[anchor=north, text=PB, font=\scriptsize] at (output3.south) {Closed};
+            \end{scope}\begin{scope}[visible on=<3>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \node[fd=PQ, below = 5mm of fd2] (fd3) {4};
+                \foreach \n/\l in {0/Terminal,1/Terminal,2/Terminal,3/File}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+                \node[anchor=north, text=PB, font=\scriptsize] at (output3.south) {Open for writing};
+            \end{scope}
+            \begin{scope}[visible on=<4>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \foreach \n/\l in {0/Terminal,1/Terminal,2/Terminal}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+                \begin{scope}[opacity=0.2]
+                    \node[fd=PQ, below = 5mm of fd2] (fd3) {4};
+                    \node[output, right = 15mm of fd3] (output3) {File};
+                    \draw[to] (fd3.east) -- (output3.west);
+                \end{scope}
+                \node[anchor=north, text=PB, font=\scriptsize] at (output3.south) {Closed};
+            \end{scope}
+            \begin{scope}[visible on=<5>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \node[fd=PQ, below = 5mm of fd2] (fd3) {6};
+                \foreach \n/\l in {0/Terminal,1/Terminal,2/Terminal,3/File}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+                \node[anchor=north, text=PB, font=\scriptsize] at (output3.south) {Open for reading and writing};
+            \end{scope}
+            \begin{scope}[visible on=<6>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \foreach \n/\l in {0/Terminal,1/Terminal,2/Terminal}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+                \begin{scope}[opacity=0.2]
+                    \node[fd=PQ, below = 5mm of fd2] (fd3) {6};
+                    \node[output, right = 15mm of fd3] (output3) {File};
+                    \draw[to] (fd3.east) -- (output3.west);
+                \end{scope}
+                \node[anchor=north, text=PB, font=\scriptsize] at (output3.south) {Closed};
+            \end{scope}
+            \begin{scope}[visible on=<7>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \node[fd=PQ, below = 5mm of fd2] (fd3) {3};
+                \foreach \n/\l in {0/Terminal,1/File,2/Terminal,3/Terminal}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+                \node[anchor=north, text=PB, font=\scriptsize] at (output3.south) {Open for writing};
+            \end{scope}
+            \begin{scope}[visible on=<8>]
+                \node[fd=fg] (fd0) {0};
+                \node[fd=PP, below = 5mm of fd0] (fd1) {1};
+                \node[fd=PT, below = 5mm of fd1] (fd2) {2};
+                \foreach \n/\l in {0/Terminal,1/Terminal,2/Terminal}{
+                    \node[output, right = 15mm of fd\n] (output\n) {\l};
+                    \draw[to] (fd\n.east) -- (output\n.west);
+                }
+                \begin{scope}[opacity=0.2]
+                    \node[fd=PQ, below = 5mm of fd2] (fd3) {3};
+                    \node[output, right = 15mm of fd3] (output3) {Terminal};
+                    \draw[to] (fd3.east) -- (output3.west);
+                \end{scope}
+                \node[anchor=north, text=PB, font=\scriptsize] at (output3.south) {Closed};
+            \end{scope}
+        \end{tikzpicture}
+    \end{center}
+    \FrameRemark{File descriptor numbers range from 0 to 255. }
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Redirecting standard output and error to the same place}
+    
+\end{frame}
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{A black hole in the operative system}
+    \begin{tikzpicture}[overlay, remember picture]
+        \node[anchor=north east] (fig) at ($(current page.north east)-(5mm,5mm)$) {\includegraphics[width=3cm]{BlackHole}};
+        \node[text=bg, font=\ttfamily] at ($(fig.center)!0.7!(fig.south)$) {/dev/null};
+    \end{tikzpicture}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
