@@ -121,14 +121,14 @@
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<2>
-        \begin{lstlisting}[style=MyBash, style=oddnumbers, xleftmargin=2mm, xrightmargin=2mm, aboveskip=2mm]
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, xleftmargin=-1mm, xrightmargin=-2mm, aboveskip=2mm]
             $ aVar="Kal El"
             $ bVar="Clark Kent"
             $ [ ${aVar} = ${aVar} ]
             bash: [: too many arguments
             $ if [ "${aVar}" = "${aVar}" ]; then echo 'YES'; else echo 'NO'; fi
             |+YES+|
-            $ if [ "${aVar}" \> "$bVar" ]; then echo 'YES'; else echo 'NO'; fi
+            $ if [ "${aVar}" \> "${bVar}" ]; then echo 'YES'; else echo 'NO'; fi
             |+NO+|
             $ if [ 319 \< 7 ]; then echo 'YES'; else echo 'NO'; fi
             |+YES+| # 319 is < than 7 but it is not less than 7...
