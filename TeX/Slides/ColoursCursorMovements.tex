@@ -29,7 +29,7 @@
     \FrameRemark{The colors can vary depending of the terminal configuration!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Colours and formatting format codes}
+\begin{frame}[fragile]{Colours and format codes}
     \vspace{-4mm}
     \begin{onlyenv}<1>
         \begin{description}
@@ -42,7 +42,7 @@
             \item[5 or 6] Slow/Rapid Blink
             \item[7] Swap foreground and background colours
             \item[8] Hidden (useful for passwords)
-            \item[2\{1..8\}] Reset second digit format (e.g.\ \PB{21} to unbold)
+            \item[2\{1..8\}] Reset second digit format (e.g.\ \PB{24} to stop underlining)$^\star$
             \item[30 to 37] Set foreground colour \tikzmark{8start}
             \item[40 to 47] Set background colour \tikzmark{8end}
             \item[38;5;\{0..255\}] Set foreground colour \tikzmark{256start}
@@ -103,6 +103,7 @@
             \node[anchor=north east, font=\ttfamily\large, rounded corners=1mm, draw=PP] at ($(current page.north east)-(8mm,4.5mm)$) {<Esc>[\tc{red}{FormatCode}m};
         \end{scope}
     \end{tikzpicture}
+    \FrameRemark{$^\star$ GNOME Terminal 3.28 (VTE 0.52), debuting in Ubuntu 18.04 LTS, adds support for a \URL[PB]{https://askubuntu.com/a/985386}{few more styles}. Use code \PB{22} to unbold since \PB{21} is double underline!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Defining variables for colour codes}
