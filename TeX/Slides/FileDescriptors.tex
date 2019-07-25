@@ -4,7 +4,7 @@
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}<1-3>[fragile, label=FDfigure]{File descriptors: a graphical overview} % https://tex.stackexchange.com/a/119310
+\begin{frame}<1-2,4>[fragile, label=FDfigure]{File descriptors: a graphical overview} % https://tex.stackexchange.com/a/119310
     \vspace{-5mm}
     \begin{varblock}{example}[0.66\textwidth]{By default}
         Every new process starts with \textbf{three} open file descriptors 
@@ -31,11 +31,11 @@
                 \draw[to] (scriptNew.0) -- (fd1new.180) node[fill=bg, midway, inner ysep=0mm, font=\scriptsize, text=PP, sloped] {Std Output};
                 \draw[to] (scriptNew.0) -- (fd2new.180) node[fill=bg, midway, inner ysep=0mm, font=\scriptsize, text=PT, sloped] {Std Error};
             \end{scope}
-            \begin{scope}[scope on=<3>]
+            \begin{scope}[scope on=<4>]
                 \draw[to] (fd1.0) -- ++(5mm,0) |- ($(script)!0.5!(scriptNew)$) -| ($(fd0new.180)-(5mm,0)$) -- (fd0new.180);
                 \node[text=PB, fill=bg] at ($(script)!0.5!(scriptNew)$) {Pipeline};
             \end{scope}
-            \begin{scope}[scope on=<4>]
+            \begin{scope}[scope on=<5>]
                 \draw[to, PQ] (fd1.0) -- ++(5mm,0) |- ($(script)!0.5!(scriptNew)$) -| ($(fd0new.180)-(5mm,0)$) -- (fd0new.180);
                 \node[text=PT, fill=bg, draw=PQ, rounded corners=1mm] at ($(script)!0.5!(scriptNew)$) {Pipeline};
             \end{scope}
@@ -772,7 +772,7 @@
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\againframe<2,4>{FDfigure}
+\againframe<3,5>{FDfigure}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Pipes}
     \vspace{-1mm}
