@@ -1,3 +1,23 @@
-% 1. Rename all .jpeg into .jpg
-% 2. Rename single spaces in filenames to underscores
-% 3. Report of how many files per extension in present folder (loop to find extensions [just if with regex or grep instead of sort+uniq] , then loop over extensions to count them)
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 25 Jul 2019          %
+%-------------------------------%
+
+\BeginExercise[Loops, loops everywhere]
+    Consider the following tasks and write for each a short script.
+    \begin{enumerate}[after=\vspace{-0.6\baselineskip}]
+        \item Given two extensions, rename all files in the present folder having the first extension, changing it in the second provided one.
+        \item Suppose to have files in a folder with single spaces in the name. Create a script to rename them, substituting the space into an underscore.
+              Use the touch expansion with the brace-expansion feature in order to create a test environment to test your script.
+        \item Create an empty folder and move into it.
+              Create some empty files via
+              \begin{lstlisting}[style=MyBash, numbers=none]
+                  touch conf.{1000..200000..5000} prng.{1000..180000..3000}
+              \end{lstlisting}
+              Implement a script that
+              \begin{enumerate}[after=\vspace{-0.6\baselineskip}]
+                  \item deletes conf or prng files, if a prng or conf with the same number is not present;
+                  \item find the largest number for which both a conf and a prng file exits.
+              \end{enumerate}
+    \end{enumerate}
+\EndExercise[DodgerBlue]
