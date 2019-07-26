@@ -14,46 +14,31 @@
     \raisebox{-0.4ex}{\resizebox{!}{2ex}{\URLsymbol[#4]{#1}}}{\href{#2}{\textcolor{#1}{#3}}}
 }
 
-\newcommand\fancybox[3]{%
-\tcbset{
-    mybox/.style={
-        enhanced,
-        boxsep=0mm,
-        opacityfill=0,
-        overlay={
-            \coordinate (X) at ([xshift=-1mm, yshift=-1.5mm]frame.north west);
-            \node[align=right, text=#1, text width=4cm, anchor=north east] at (X) {#2};
-            \draw[line width=0.8mm, color=#1] (frame.north west) -- (frame.south west);
-            }
-        }
-    }
-\begin{tcolorbox}[mybox]
-    #3
-\end{tcolorbox}
-}
+\newmdenv[
+  topline=false,
+  bottomline=false,
+  rightline=false,
+  skipabove=\topsep,
+  skipbelow=\topsep,
+  innerleftmargin=1em,
+  linewidth=0.8mm,
+]{MDexercise}
 
-% Now that we have the exercise style, create counter and exercise delimiters
-% NOTE: It is not possible to put a listing in a custom environment with other latex code
 \newcounter{Exercise}
-\makeatletter
-\newcommand{\BeginExercise}[1][]
+\NewDocumentEnvironment{exercise}{ O{Navy} m }
 {%
-    \refstepcounter{Exercise}
-    \noindent\tikzmark{boxStart}\ifstrempty{#1}{}{%
-        \textbf{#1}\\[0.3em]
-    }
+    \begin{MDexercise}[linecolor=#1]
+        \refstepcounter{Exercise}
+        \noindent\tikzmark{boxStart}\ifstrempty{#2}{}{%
+            \textbf{#2}\\[0.3em]
+        }
+}
+{%
+        \begin{tikzpicture}[remember picture, overlay] % https://tex.stackexchange.com/questions/299972/tikz-remember-picture-on-wrong-page#comment726359_299972
+            %Adjust start-end coordinates
+            \node[align=right, font=\large, text=#1, text width=3cm, base left = 1em of boxStart] {Exercise~\theExercise};
+        \end{tikzpicture}
+    \end{MDexercise}
+
 }
 
-\newcommand{\EndExercise}[1][Navy]
-{%
-    \tikzmark{boxEnd}
-    \begin{tikzpicture}[remember picture, overlay]
-        %Adjust start-end coordinates
-        \path coordinate (lineStart) at ($(boxStart)+(-1em,1.5*\f@size pt)$)
-              coordinate (lineEnd)   at ($(lineStart |- boxEnd)+(0,-0.8*\f@size pt)$);
-        \node[align=right, font=\large, text=#1, text width=3cm, base left = 1em of boxStart] {Exercise~\theExercise};
-        \draw[line width=0.8mm, color=#1] (lineStart) -- (lineEnd);
-    \end{tikzpicture}
-    \par\vspace{1ex}
-}
-\makeatother

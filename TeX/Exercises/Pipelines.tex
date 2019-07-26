@@ -1,0 +1,16 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 26 Jul 2019          %
+%-------------------------------%
+
+\begin{exercise}[Black]{A strange pipeline}
+    Pipelines are handy and by now you will know them quite well.
+    To practice a bit with redirections, try to think about how having a pipeline which redirect only standard error to the following command, while standard output is redirected to the terminal.
+    You can use this compound command to test your solution
+    \begin{lstlisting}[style=MyBash]
+        { echo "I'm stdout"; echo "I'm stderr" >&2; }
+    \end{lstlisting}
+    and pipe to the \bash|rev| command to see that the effect should have effect on the standard error only.
+\end{exercise}
+
+% { echo "I'm stdout"; echo "I'm stderr" >&2; } 3>&1 1>&2 2>&3 3>&- | rev

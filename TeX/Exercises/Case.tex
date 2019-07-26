@@ -1,1 +1,50 @@
-% Complete command line parser: while + case
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 26 Jul 2019          %
+%-------------------------------%
+
+\begin{exercise}{The most flexible command line parser}
+    Most Bash commands can be comfortably be used thanks to command line options, which usually have a short and a long version.
+    The \bash|-h| or \bash{--|+help+|} option is the starting point when you want to discover what a script does.
+    Therefore, \textbf{any script} you will write \textbf{should have a \bash{--|+help+|} option} to provide information about itself.
+    In this exercise you will write by hand your command line parser, which you will use over and over again in all your scripts!
+
+    In general a command line parser is a block of code, which processes the command line parameters, doing some actions (typically setting global variables for the rest of the script).
+    Here reasonable requirements you should fulfil.
+    \begin{enumerate}
+        \item Validate as often as possible the value of each option, checking for missing values as well.
+        \item By convention, \bash|--| should separate script options from file(s) or, more in general, a list of ``known objects''.
+        \item If an option is not recognised, an error should be given.
+        \item Although it is nothing more than a common habit, short options have only one dash followed by one character only, while long options start with a double dash.
+        \item If the user asked for the help, all other (potentially wrong) options should be ignored.
+    \end{enumerate}
+    In this exercise, just as practice example, you should implement the following options.
+    \begin{description}
+        \item[\texttt{-f, --file}] ~\\
+            An existing file to be stored in a variable.
+        \item[\texttt{-b, --beta}] ~\\
+            A positive number with at maximum $4$ decimal digits.
+            The number without \texttt{+} and with exactly $4$ decimal digits should be stored in a variable.
+        \item[\texttt{-v, --verbose}] ~\\
+            An option without value which should be used to activate a verbose mode.
+            If given it should set a global variable to \bash|'TRUE'|, which otherwise should be set to \bash|'FALSE'|.
+        \item[\texttt{-s, --sizes}] ~\\
+            An option that can take an arbitrary number of positive integer numbers, which should be stored in an array.
+        \item[\texttt{-a, --aspectRatios}] ~\\
+            Exactly the same as the \bash|-s| option but values should be stored in a different array.
+        \item[\texttt{-r, --range}] ~\\
+            An option to specify a lower and an upper bound to be stored in two variables.
+        \item[\texttt{-w, --walltime}] ~\\
+            A string in the format \bash{d-hh:mm:ss} which should be stored in a variable.
+            The user can either specify it like that or specify integers followed by \texttt{d}, \texttt{h}, \texttt{m}, \texttt{s} (e.g. \texttt{1d4h}).
+        \item[\texttt{--}] ~\\
+            If present, a double dash indicates that what follows should be a list of files.
+            Store them in an array, without checking if they exist.
+    \end{description}
+    \textbf{Requirement:} The options \texttt{-s} and the option \texttt{-a} are mutually exclusive, i.e. cannot be specified at the same time.
+    Approach the problem supposing to have a larger set of mutually exclusive options.
+
+    \medskip
+    \textbf{Bonus track:} How would you allow the user to combine multiple short options?
+    In this case the user might specify e.g.\ \bash|-vs 7 13| instead of \bash{|+-v -s 7 13+|}.
+\end{exercise}
