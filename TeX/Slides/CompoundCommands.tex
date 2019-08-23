@@ -1,0 +1,190 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 21 Aug 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Compound commands}
+    \begin{itemize}
+        \item \only<2>{\pgfsetfillopacity{0.5}}\bash{if} statements\tikzmark{doneStart}
+        \item \bash{for} loops
+        \item \bash{while}, \bash{until} loops
+        \item \bash{[[} keyword
+        \item \bash{case}, \bash{select} constructs\tikzmark{doneEnd}\pgfsetfillopacity{1}\medskip
+        \item \tc<2>{PP}{Subshells}\tikzmark{nowStart}
+        \item \tc<2>{PP}{Command grouping}
+        \item \tc<2>{PP}{Arithmetic evaluation}\tikzmark{nowEnd}\\[-0.5ex] {\tiny\{~Slightly different from the \PQ{Arithmetic expansion} we already discussed~\}}\medskip
+        \item \tc<2>{PB}{[Functions]\tikzmark{fcts}} {\tiny\{~Discussed in detail in a separate section~\}}
+    \end{itemize}
+    \begin{tikzpicture}[remember picture, overlay]
+        \begin{scope}[scope on=<2>]
+            \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (doneStart -| doneEnd) ++(8mm,1mm) -- ($(doneEnd)+(8mm,-1mm)$) 
+                      node[midway, right=3mm, text width=40mm, align=center] {Already discussed in details};
+            \draw[very thick, decorate, decoration={brace,amplitude=6pt}, PP] (nowStart -| nowEnd) ++(8mm,1mm) -- ($(nowEnd)+(8mm,-1mm)$) 
+                      node[midway, right=3mm, text width=40mm, align=center, text=PP] {What we are going to discuss};
+            \path[from, PB] ($(fcts)-(6.8mm,3mm)$) edge[out=270, in=180] node[pos=1, right, font=\footnotesize, text=PB] {Strictly speaking not a compound command, but they work in a similar way} ++(2cm,-1cm);
+        \end{scope}
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Subshells}
+    \vspace{-8mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{varblock}{}[0.8\textwidth]{Definition}
+            A subshell is \textbf{a child process} but it is one \textbf{that inherits more than a normal external command} does.
+            It can see all the variables of your script, not just the ones that have been exported to the environment.
+        \end{varblock}
+        \begin{varblock}{quote}[0.88\textwidth]{Unix Process}<only@1>
+            Every process on a Unix system has its own parcel of memory, for holding its variables, its file descriptors, its copy of the Environment inherited from its parent process, and so on.
+            The changes to the variables (and other private information) in one process do not affect any other processes currently running on the system.
+        \end{varblock}
+        \begin{varblock}{alerted}[0.6\textwidth]{Use them consciously}<only@1>
+            Forking a subshell leads to a speed penalty which often is irrelevant but which you should keep in mind!
+        \end{varblock}
+        \begin{itemize}[<2>]
+            \item It is explicitly forced using the parenthesis \PB{\texttt{(\ldots)}}
+            \item Changes e.g. to variables done in a subshell are not remembered when exiting the subshell: A subshell can be thought as a temporary shell!
+            \item There are many instances in which a shell creates a subshell without parentheses being placed by the programmer
+                  \begin{itemize}
+                      \item \PP{In pipelines} $\;\longleftarrow\;$ \alert{\textbf{Every command in a pipeline is run in its own subshell!}}
+                      \item \PP{In command substitution}
+                      \item Executing other programs or scripts
+                      \item In any external command that executes new shells (e.g. \bash{awk}, \bash{sed}, \bash{perl})
+                      \item In process substitution
+                      \item In backgrounded commands and coprocs
+                  \end{itemize}
+        \end{itemize}
+    \end{overlayarea}
+    \FrameRemark[2]{From Bash v4.2 the shell option \texttt{lastpipe} can be enabled so that the last command in a pipeline is not run in a subshell.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Subshells: Examples}
+    \begin{lstlisting}[style=MyBash]
+        # Changes in a subshell do not propagate back
+        $ aVar="Hello"; pwd
+        /home/sciarra/Documents
+        $ ( aVar="Goodbye"; echo "${aVar}" ); echo "${aVar}"
+        |+Goodbye+|
+        |+Hello+|
+        $ ( cd /tmp; pwd ); pwd
+        |+/tmp
+        /home/sciarra/Documents+|
+        # It is often a feature to take advantage of!
+        $ (cd /tmp || exit 1; tar ...)
+        $ (. ~/AuxiliaryBashTools.bash; ...)
+        # In a subshell the script variable are accessible
+        $ ( echo "${aVar} from the subshell" )
+        |+Hello from the subshell+|
+        # Implicit subshells: be aware of them!
+        $ echo "Goodbye" | read aVar; echo "${aVar}"
+        |+Hello+|
+        $ read aVar <<< "Goodbye"; echo "${aVar}"; unset aVar
+        |+Goodbye+|
+    \end{lstlisting}
+    \FrameRemark{\URL[PB]{http://mywiki.wooledge.org/BashFAQ/024}{Advanced reading} about pipelines and subshells: Why can't I pipe data to read?}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Command grouping}{We already said something about it, let us go through once again}
+    \vspace{-4mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{itemize}
+            \item Commands may be grouped together using curly braces \PB{\texttt{\{\ldots\}}}
+            \item Command groups allow a collection of commands to be considered as a whole with regards to redirection and control flow
+            \item All compound commands such as \bash|if| statements and \bash|while| loops do this as well, but command groups do \textbf{only} this
+            \item Command groups are executed in the same shell as everything else, NOT in a new one!
+        \end{itemize}
+        \begin{lstlisting}[style=MyBash, numbers=none]
+            $ { echo "$(date)"
+            >   rsync -av . /backup; echo "$(date)";@|\tikzmark{sc}|@ } >backup.log 2>&1
+        \end{lstlisting}
+        \smallskip
+        \begin{varblock}{quote}[0.9\textwidth]{}<only@1>
+            The above example truncates and opens the file backup.log on stdout, then points stderr at where stdout is currently pointing (backup.log), then runs each command with those redirections applied.
+            The file descriptors remain open until all commands within the command group complete before they are automatically closed.
+            This means backup.log is only opened a single time, not opened and closed for each command.
+        \end{varblock}
+        \begin{tikzpicture}[remember picture, overlay]
+            \begin{scope}[scope on=<2->]
+                \path[from, PT] ($(sc)-(0.9mm,1.5mm)$) edge[out=270, in=90] node[pos=1, below, font=\large, text=PT] (q) {Why is this semicolon absolutely \textbf{mandatory}?} ++(0cm,-1cm);
+            \end{scope}
+            \node[visible on=<3->, text width=5.6cm, align=center, below = 1mm of q, font=\scriptsize] {Because otherwise the closing curly bracket would be a argument of the final \mbox{command} in the group, \bash|echo| in this case};
+        \end{tikzpicture}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Arithmetic evaluation: The \bash|let| builtin}
+    \vspace{-4mm}
+    \begin{itemize}
+        \item Sometimes we want to do arithmetic instead of string operations
+        \item One way to do so is to use the \bash|let| builtin
+              \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm]
+                  $ aVar=4+5; echo "${aVar}"
+                  |+4+5+|
+                  $ let aVar=4+5; echo "${aVar}"; unset aVar
+                  |+9+|
+              \end{lstlisting}
+        \item However, it requires quotes to use arithmetic operators $\quad${\tiny\{~\bash|help let|~\}}
+              \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm]
+                  $ let aVar=2<3
+                  |+bash: 3: No such file or directory+|
+                  $ let aVar='2<3'; echo "${aVar}"; unset aVar
+                  |+1+|
+              \end{lstlisting}
+        \item \bash|let| accepts more than one expression
+              \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm]
+                  $ let aVar='2<3' bVar=3*7; echo "${aVar} ${bVar}"
+                  |+1 21+|
+                  $ unset aVar bVar
+              \end{lstlisting}
+        \item If the last expression evaluates to 0, \bash|let| returns 1; \bash|let| returns 0 otherwise.
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Arithmetic evaluation: The command grouping \PB{\texttt{((\ldots))}}}
+    \vspace{-4mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{itemize}
+            \item<only@1> \PB{\texttt{(( expression ))}} $\;$is  equivalent to$\;$ \bash|let "expression"|
+            \item<only@1> No quote is needed in it, since only arithmetic operations are there performed
+            \item<only@1> However, only one expression can be evaluated (not bad for the exit code)
+                  \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm]
+                      $ (( aVar=7*3**2 )); echo "${aVar}"
+                      |+63+|
+                      $ (( aVar=1+${aVar}/20 )); echo "${aVar}"; unset aVar
+                      |+4+|
+                  \end{lstlisting}
+            \item<only@1> Although not a compound command, the arithmetic substitution uses the same syntax
+                  \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm]
+                      $ (( aVar=7*3**2 )); echo "${aVar}"
+                      |+63+|
+                      $ echo "aVar=$(( 7*3**2 ))"; unset aVar
+                      |+63+|
+                  \end{lstlisting}
+            \item<only@1> Assignments in arithmetic substitution work but are confusing and should be avoided!
+                  \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm]
+                      $ echo "_${bVar}_ $(( bVar=7*3**2 )) _${bVar}_"
+                      |+__ 63 _63_+|
+                  \end{lstlisting}
+            \item<only@2> Arithmetic evaluation is very helpful in combination with conditionals
+                  \begin{lstlisting}[style=MyBash, aboveskip=2mm, belowskip=-6mm]
+                      $ ((aVar=(5+2)*3))
+                      $ if (($aVar == 21)); then
+                      >   echo 'Blackjack!'
+                      > fi
+                      |+Blackjack!+|
+                  \end{lstlisting}
+            \item<only@2> Because the inside of \PB{\texttt{((\ldots))}} is C-like, a variable (or expression) that \PP{evaluates to zero} will be considered \PP{false} for the purposes of the arithmetic evaluation.
+                  Then, because the evaluation is false, it will \PP{exit with a status of 1}.
+                  Likewise, if the expression inside \PB{\texttt{((\ldots))}} \PS{is non-zero}, it will be considered \PS{true}; and since the evaluation is true, it will \PS{exit with status 0}.
+                  \begin{lstlisting}[style=MyBash, aboveskip=2mm, belowskip=-6mm]
+                      $ flag=0  # no error
+                      $ while read line; do
+                      >   if [[ ${line}= *err* ]]; then flag=1; fi
+                      > done < inputfile
+                      $ if ((flag)); then echo 'Houston, we have a problem!'; fi
+                  \end{lstlisting}
+        \end{itemize}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+

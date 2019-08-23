@@ -1,0 +1,228 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 23 Aug 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Functions, finally! Overview}
+    \vspace{-4mm}
+    \begin{itemize}
+        \item Functions are the last basic Bash feature we'll learn
+              \begin{itemize}
+                  \item They give you an incredible opportunity to structure and increase readability of your script
+                  \item They can be used to split large script across multiple files in an elegant way
+                  \item \alert{Learn them well, for real!}
+              \end{itemize}
+        \item \PB{Functions are a tricky world!}
+        \item They have several features that we might call \textbf{issues} if compared to other languages
+        \item[\PT{$\bullet$}] Indeed, functions in Bash are not as powerful as we might expect
+              \begin{itemize}
+                  \item[\PT{$\to$}] Return value
+                  \item[\PT{$\to$}] Reusability
+                  \item[\PT{$\to$}] Scope
+                  \item[\PT{$\to$}] I/O + \ldots
+              \end{itemize}
+              \begin{varblock}{quote}[0.9\textwidth]{}[Greg's Wiki]
+                  Don't bite the newbie for not understanding all this. Shell functions are totally f\texttt{***}ed. \\[-1.3ex] ~
+              \end{varblock}
+    \end{itemize}
+    \vspace{-4mm}
+    \begin{varblock}{example}[1.03\textwidth]{\textbf{Do not be scared!}}
+        Learn, understand and use functions for what they are, not for what you would like them to be!
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Basic syntax}
+    \vspace{-2mm}
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        # POSIX compliant syntax
+        NAME () |+COMPOUND-COMMAND [ REDIRECTIONS ]+|
+        # Totally equivalent syntax (in Bash), but not POSIX
+        function NAME |+[()] COMPOUND-COMMAND [ REDIRECTIONS ]+|
+    \end{lstlisting}
+    \vspace{1mm}
+    \begin{description}[X]
+        \setlength{\itemsep}{3mm}
+        \item[\textbf{NAME:}] ~\\
+            A \textbf{sane} function name should be an alphanumeric string, maybe containing underscore and not starting with a number.
+            However, insane names are accepted in Bash and, in principle, names like \PB{\texttt{:}} or \PB{\texttt{[\}\{}} are allowed.
+            But please, avoid them! Really!! $\;${\tiny\URL[PB]{https://stackoverflow.com/a/44041384}{Exploring allowed names}}
+        \item[\textbf{COMPOUND-COMMAND:}] ~\\
+            The body of a function can be any compound command.
+            \begin{itemize}
+                \item \bash|{ list; }| \alert{$\;\longleftarrow\;$ Use this if you do not have a reason to use a different one}
+                \item \bash|(list)| or \bash|((expression))| or \bash|[[ expression ]]|
+            \end{itemize}
+            %This is typically \bash|{ list; }|, but three other forms of compound commands are technically allowed: \bash|(list)|, \bash|((expression))|, and \bash|[[ expression ]]|.
+        \item[\textbf{REDIRECTIONS:}] ~\\
+            They take place when the function is called and they refer to the whole compound-command.
+    \end{description}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Functions: The most basic example}
+    \vspace{-5mm}
+    \begin{varblock}{example}[0.95\textwidth]{Just accomplish a \textbf{detached} task}
+        Whenever a block of code can be executed as standalone, without needing either input information nor variables, it is straightforward to include it in a dedicated function
+    \end{varblock}
+    \begin{lstlisting}[style=MyBash, xrightmargin=1mm, xleftmargin=1mm]
+        #!/bin/bash
+        
+        function CreateListOfFiles()
+        {
+            printf "#%19s %20s %15s %20s %20s %6s       %s\n" \
+                   "user" "group" "permissions"               \
+                   "size(KB)" "permissions" "type" "path"
+            find $(pwd) |+-printf+| "%20u %20g %15m %20k %20M %6y       %p\n"
+        }
+    \end{lstlisting}
+    \begin{varblock}{}[0.9\textwidth]{Note}
+        This will do absolutely nothing when run. This is because it has only been stored in memory, much like a variable, but it has not yet been called.
+    \end{varblock}
+    \begin{lstlisting}[style=MyBash, firstnumber=10, xrightmargin=1mm, xleftmargin=1mm]
+        CreateListOfFiles
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Variables in functions and their scopes}
+    \vspace{-4mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{itemize}
+            \item Variable in Bash are by definition \alert{\textbf{global}}!
+            \item Variables declared using the \bash|local| builtin have a lifetime limited to the function scope
+            \item Bash uses \textbf{dynamic scoping} to control a variable's visibility within functions
+                  \begin{itemize}
+                      \item In a function all variables visible in the caller are visible and might be changed
+                      \item Declaring a local variable with the same name of an already existing variable shadows the variable from the caller, whose value cannot be retrieved from within the function.
+                  \end{itemize}
+            \item<only@3-> Unless you have a reason not to do so, declare all variables in functions as \bash|local|
+            \item<only@3-> Do not assign a value to a local variable at declaration, because you might obfuscate/loose an exit code!
+            \item<only@4-> \PP{If a variable at the current local scope is unset, it will remain so until it is reset in that scope or until the function returns.
+                           Once the function returns, any instance of the variable at a previous scope will become visible.}\\
+                           \textbf{However,} \PB{if the unset acts on a variable at a previous scope, any instance of a variable with that name that had been shadowed will become visible!}
+        \end{itemize}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash]
+                #!/bin/bash
+                
+                LevelOne() {
+                    LevelTwo
+                    echo "In ${FUNCNAME}, aVar = ${aVar}"
+                }
+                LevelTwo() {
+                    local aVar; aVar="${FUNCNAME} local"
+                    LevelThree
+                }
+                LevelThree() { echo "In ${FUNCNAME}, aVar = ${aVar}"; }
+                
+                aVar='global'; LevelOne
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash]
+                $ ./script.bash
+                |+In LevelThree, aVar = LevelTwo local
+                In LevelOne, aVar = global+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, xleftmargin=1mm, xrightmargin=1mm]
+                $ function Test { aVar="$(exit 1)"; echo $?; }; Test
+                1  # Fine, but we pollute caller with 'aVar' variable
+                $ function Test { local aVar="$(exit 1)"; echo $?; }; Test
+                0  # <- local's exit code!
+                $ function Test { local aVar; aVar="$(exit 1)"; echo $?; }; Test
+                1
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Passing arguments to functions}
+    \vspace{-3mm}
+    \begin{varblock}{example}[0.9\textwidth]{So far so good}
+        Delegating tasks to functions, even if the task requires variables, is quite straightforward, provided to keep scope rules in mind
+    \end{varblock}
+    \begin{varblock}{quote}[0.95\textwidth]{The Pandora's box}[Bash manual]<2->
+        When a function is executed, the arguments to the function become the positional parameters during its execution.
+        The special parameter \texttt{\#} that expands to the number of positional parameters is updated to reflect the change.
+        Special parameter 0 is unchanged.\\[-1.5ex] ~
+    \end{varblock}
+    \begin{itemize}[<3->]
+        \item Arguments to functions are meant to provide \textbf{input} to a function
+        \item Bash uses strictly \PP{call-by-value} semantics
+        \item You can't pass arguments ``by reference''\\[-0.5ex] {\tiny\{~at least not until Bash 4.3 (and even there the \bash|declare -n| mechanism has serious security flaws)~\}}
+        \item \alert{Passing the name of a variable to a function}, which should use it, requires \bash|eval| acrobatics and it \alert{should be as far as possible avoided!}
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Passing arguments to functions: Example}
+    \vspace{-2mm}
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[style=MyBash]
+            #!/bin/bash
+            
+            function SecondsToTimeStringWithDays()
+            {
+                local inputTime days hours minutes seconds
+                inputTime=$1
+                ((    days=(inputTime)/86400 ))
+                ((   hours=(inputTime - days*86400)/3600 ))
+                (( minutes=(inputTime - days*86400 - hours*3600)/60 ))
+                (( seconds=inputTime%60 ))
+                printf "%d-%02d:%02d:%02d\n" \
+                       "${days}" "${hours}" "${minutes}" "${seconds}"
+            }
+            
+            for example in 31536000 86400 3600; do
+                SecondsToTimeStringWithDays ${example}
+            done
+        \end{lstlisting}
+        \begin{lstlisting}[style=MyBash, aboveskip=2mm]
+            $ ./scriptAbove
+            |+365-00:00:00+|
+            |+1-00:00:00+|     # What is bad in the function above?
+            |+0-01:00:00+|
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash]
+            #!/bin/bash
+            
+            function SecondsToTimeStringWithDays() # Better code!
+            {
+                if [[ ! ${1} =~ ^[1-9][0-9]*$ ]]; then
+                   echo "ERROR: Function ${FUNCNAME} wrongly called!"
+                   return 1
+                fi
+                local inputTime days hours minutes seconds
+                inputTime=$1
+                ((    days=(inputTime)/86400 ))
+                ((   hours=(inputTime - days*86400)/3600 ))
+                (( minutes=(inputTime - days*86400 - hours*3600)/60 ))
+                (( seconds=inputTime%60 ))
+                printf "%d-%02d:%02d:%02d\n" \
+                       "${days}" "${hours}" "${minutes}" "${seconds}"
+            }
+            
+            for example in 31536000 86400 3600 ''; do
+                SecondsToTimeStringWithDays ${example}
+            done
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{The \bash|return| builtin and functions' exit code}
+    
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Returning stuff from functions}
+    
+\end{frame}
+
+
+
+
+
+
+
+
