@@ -103,7 +103,7 @@
         \begin{onlyenv}<1>
             \begin{lstlisting}[style=MyBash]
                 #!/bin/bash
-                
+
                 LevelOne() {
                     LevelTwo
                     echo "In ${FUNCNAME}, aVar = ${aVar}"
@@ -113,7 +113,7 @@
                     LevelThree
                 }
                 LevelThree() { echo "In ${FUNCNAME}, aVar = ${aVar}"; }
-                
+
                 aVar='global'; LevelOne
             \end{lstlisting}
         \end{onlyenv}
@@ -161,7 +161,7 @@
     \begin{onlyenv}<1>
         \begin{lstlisting}[style=MyBash]
             #!/bin/bash
-            
+
             function SecondsToTimeStringWithDays()
             {
                 local inputTime days hours minutes seconds
@@ -173,7 +173,7 @@
                 printf "%d-%02d:%02d:%02d\n" \
                        "${days}" "${hours}" "${minutes}" "${seconds}"
             }
-            
+
             for example in 31536000 86400 3600; do
                 SecondsToTimeStringWithDays ${example}
             done
@@ -188,7 +188,7 @@
     \begin{onlyenv}<2>
         \begin{lstlisting}[style=MyBash]
             #!/bin/bash
-            
+
             function SecondsToTimeStringWithDays() # Better code!
             {
                 if [[ ! ${1} =~ ^[1-9][0-9]*$ ]]; then
@@ -204,7 +204,7 @@
                 printf "%d-%02d:%02d:%02d\n" \
                        "${days}" "${hours}" "${minutes}" "${seconds}"
             }
-            
+
             for example in 31536000 86400 3600 ''; do
                 SecondsToTimeStringWithDays ${example}
             done
@@ -328,8 +328,171 @@
         \end{varblock}
     \end{overlayarea}
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Splitting large scripts across multiple files}{A Bash script should not be \textbf{too} large, though}
+    \vspace{-3mm}
+    \begin{onlyenv}<1>
+        \begin{varblock}{example}[0.9\textwidth]{Declaring a function does not mean to run it}
+            You can collect functions in a separate file, which is meant to be sourced at need!
+        \end{varblock}
+        \begin{lstlisting}[style=MyBash, numbers=none]
+            # Collection of tools
 
+            function ExtractColumnFromFile()
+            {
+                # ...
+            }
 
+            function CalculateSizeOfFiles()
+            {
+                # ...
+            }
+
+            function ReportOnLargestDirectories()
+            {
+                # ...
+            }
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, numbers=none]
+            #!/bin/bash
+
+            source /home/sciarra/Script/UtilityFunctions.bash
+            source /home/sciarra/Script/UtilityFunctions_nice.bash
+            source /home/sciarra/Script/UtilityFunctions_cool.bash
+
+            # Call to functions (only, maybe)
+        \end{lstlisting}
+        \begin{itemize}
+            \item \PP{As long as the sourced files contain functions only},
+                  \begin{itemize}
+                      \item the \textbf{sourcing order does not matter} and
+                      \item functions in a file can even use functions in another file!
+                  \end{itemize}
+            \item The shebang can/should be included in the main file only!
+            \item Prevent auxiliary files from being run, only sourced!
+        \end{itemize}
+        \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=1mm, xrightmargin=1mm]
+            if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+              echo "Script \"${BASH_SOURCE[0]}\" can only been sourced!" 2>&1
+              exit -1
+            fi
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Functions: Miscellaneous}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{onlyenv}<1>
+            \vspace{-3mm}
+            \begin{itemize}
+                \item Functions can be marked as read-only using the \bash|readonly| builtin
+                \item Functions can be unset via \,\bash|unset -f|
+                \item Functions can be recursive
+                      \begin{lstlisting}[style=MyBash, xrightmargin=12mm, aboveskip=2mm, belowskip=-6mm]
+                          function CountTill5From()
+                          {
+                              if [[ $1 < 5 ]]; then
+                                  echo $1; CountTill5From $(($1 + 1))
+                              fi
+                          }
+                      \end{lstlisting}
+                \item The \bash|FUNCNEST| variable may be used to limit the depth of the function call stack and restrict the number of function invocations
+                      \,{\tiny\{~By default, no limit is placed on the number of recursive calls~\}}
+            \end{itemize}
+            \begin{lstlisting}[style=MyBash, xrightmargin=-2mm, xleftmargin=2mm, aboveskip=0mm]
+                $ FUNCNEST=2; CountTill5From()
+                |+1
+                2
+                bash: CountTill5From: maximum function nesting level exceeded (2)+|
+                $ unset -v FUNCNEST
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2->
+            \vspace{-9mm}
+            \begin{varblock}{alert}[0.9\textwidth]{About recursion}
+                \begin{itemize}
+                    \item \emph{\guillemotleft To iterate is human, to recur, divine.\guillemotright} -- L. Peter Deutsch
+                    \item There are cases where it is needed
+                    \item In Bash rarely, though
+                    \item The fact that by default in Bash there is no limit to the number of function invocations is something to have clear in mind!
+                    \item For example, what does the following code do? \,\alert{\textbf{DON'T RUN IT!}}
+                          \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-6mm, xrightmargin=21mm]
+                              :(){ :|:& };:   # Do NOT run this line!
+                          \end{lstlisting}
+                          \begin{uncoverenv}<3>
+                              It is equivalent to
+                              \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm, xrightmargin=21mm]
+                                  # Do NOT run this code!
+                                  function bomb() { bomb | bomb & }; bomb
+                              \end{lstlisting}
+                          \end{uncoverenv}
+                \end{itemize}
+            \end{varblock}
+            \vspace{-1mm}
+            \begin{varblock}{quote}[\textwidth]{}[Wikipedia]<only@3>
+                \small A \textbf{fork bomb} is a denial-of-service attack wherein a process continually replicates itself to deplete available system resources,
+                \textbf{slowing down or crashing the system} due to resource starvation.\\[-1.5ex] ~
+            \end{varblock}
+        \end{onlyenv}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{A last big warning: The \bash|eval| builtin}
+    \vspace{-3mm}
+    \begin{overlayarea}{\textwidth}{0.64\textheight}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=2mm, xrightmargin=2mm]
+                $ help eval
+                |+eval: eval [arg ...]
+                Execute arguments as a shell command.
+
+                Combine ARGs into a single string, use the result as input
+                to the shell, and execute the resulting commands.
+
+                Exit Status:
+                Returns exit status of command or success if command is null.+|
+            \end{lstlisting}
+            \begin{itemize}
+                \item \emph{\guillemotleft\bash|eval| is a common misspelling of \textbf{evil}\guillemotright} -- Greg's Wiki
+                \item It causes your code to be parsed twice instead of once; this means that, for example, if your code has variable references in it, the shell's parser will evaluate the contents of that variable.
+                      This can lead to unexpected results!
+            \end{itemize}
+        \end{onlyenv}
+        \begin{onlyenv}<2->
+            \begin{lstlisting}[style=MyBash, emph={[7]_fifth_array}]
+                # This code is evil and should never be used!
+                function FifthElementOf() {
+                  local _fifth_array=$1
+                  eval echo "\"The fifth element is \${$_fifth_array[4]}\""
+                }
+            \end{lstlisting}
+            \smallskip
+            \begin{lstlisting}[style=MyBash, emph={[7]_fifth_array}, belowskip=-5mm]
+                # Source/define the function above
+                $ array=(zero one two three four five)
+                $ FifthElementOf array
+                |+The fifth element is four+|
+            \end{lstlisting}
+            You might be thinking - \PP{``It looks OK, isn't it? What's wrong man?''} \uncover<3->{- Consider then:}
+        \end{onlyenv}
+        \begin{onlyenv}<3->
+            \begin{lstlisting}[style=MyBash, emph={[7]_fifth_array}, aboveskip=2mm]
+                $ FifthElementOf 'x}"; da@|\tikzmark{date}|@te; #'
+                |+The fifth element is
+                Wed 28 Aug 14:43:59 CEST 2019+|  # AAAAAARRRGGGGHHH!!!!
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+    {\Large\begin{varblock}{alert}[\textwidth]{Take-home lesson}<3->
+        An inappropriate use of \bash|eval| can lead to \alert{arbitrary code execution}!
+    \end{varblock}}
+    \begin{tikzpicture}[remember picture, overlay, scope on=<4>]
+        \path[from] (date) edge[out=270, in=180] node[pos=1, right] {\color{red}What about $\;$ \bash|rm -rf /| $\;$ here?} ++(15mm,-1mm);
+    \end{tikzpicture}
+    \FrameRemark{Advanced, but \URL[PB]{http://mywiki.wooledge.org/BashFAQ/048}{very informative article} which you should spend some time at some point on.}
+\end{frame}
 
 
 

@@ -1,0 +1,52 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 28 Aug 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Do not underestimate the difference}
+    \vspace{-3mm}
+    \begin{description}[XXX]
+        \item[\textbf{Internal Commands:}] ~ \\
+            Commands which are built into the shell.
+            This means that the code that implements a builtin is in \bash|/bin/bash|.
+        \item[\textbf{External Commands:}] ~ \\
+            When an external command has to be executed, the shell looks for its path given in \bash|PATH| variable and also a new process has to be spawned and the command gets executed.
+    \end{description}
+    \begin{varblock}{example}[0.8\textwidth]{The precedence order for command names}
+        \begin{enumerate}
+            \item Alias
+            \item Function {\tiny\{~You can shadow builtin commands creating a function with the same name~\}}
+            \item Builtin  {\tiny\{~The \bash|builtin| builtin serves to refer to a shadowed builtin $\;\to\;$ \bash|help builtin|~\}}
+            \item Keywords
+            \item External command in the directories listed in \texttt{\$\{PATH\}} in order.
+        \end{enumerate}
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{A trivial benchmark}
+    \begin{lstlisting}[style=MyBash]
+        $ mkdir tmpFolder; cd tmpFolder
+        $ time for i in {1000..9999}; do echo > $i; done; echo
+        |+
+        real    0m12.026s
+        user    0m0.434s
+        sys     0m0.857s
+        +|
+        $ time for i in {1000..9999}; do /bin/echo > $i; done; echo
+        |+
+        real    0m27.441s
+        user    0m9.504s
+        sys     0m5.034s
+        +|
+        $ cd ..; rm -r tmpFolder
+    \end{lstlisting}
+    \medskip
+    \begin{varblock}{}[0.9\textwidth]{Do not overdo, just keep it in mind}
+        \begin{itemize}
+            \item \emph{\guillemotleft premature optimization is the root of all evil\guillemotright} -- Donald Knuth
+            \item Unnecessary use of external commands are welcome
+        \end{itemize}
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
