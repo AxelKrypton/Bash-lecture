@@ -1,0 +1,213 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 29 Aug 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Processes in the terminal}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 pages 104-107}}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item The \bash|ps| command displays information about (a selection of) the active processes
+        \item A process is \emph{\guillemotleft an instance of a computer program that is being executed\guillemotright} -- Wikipedia
+        \item The shell associates a \textbf{job} with each pipeline
+        \item It keeps a table of currently executing jobs, which may be listed with the \bash|jobs| builtin
+        \item When Bash starts a job asynchronously (i.e. in background), it prints a line that looks like
+              \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm, xrightmargin=25mm]
+                  $ sleep 30 & # <- The ampersand symbol starts
+                  [1] 25647    #    a process in background
+              \end{lstlisting}
+              indicating that this job is job number 1 and that the process ID of the last process in the pipeline associated with this job is 25647
+              \,{\tiny\{~We will come back to the process ID later~\}}
+        \item All of the processes in a single pipeline are members of the same job
+        \item Bash uses the job abstraction as the basis for job control
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Job control: A graphical overview}
+    \vspace{-4mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{center}
+            \begin{tikzpicture}[every node/.append style={transform shape}]
+                \newcommand{\drawCube}[3][]{
+                    \begin{scope}[#1] % Here #1 works because of fragile, otherwise ####1 would be needed!
+                        \draw (#2) -- ++(\cubex,0,0) -- ++(0,0,-\cubez) -- ++(0,\cubey,0) -- ++(-\cubex,0,0) -- ++(0,0,\cubez) -- cycle;
+                        \draw (#2) ++(\cubex,\cubey,0) -- ++(-\cubex,0,0);
+                        \draw (#2) ++(\cubex,\cubey,0) -- ++(0,-\cubey,0);
+                        \draw (#2) ++(\cubex,\cubey,0) -- ++(0,0,-\cubez);
+                        \node at ($(#2)+(\cubex/2,\cubey/2,0)$) {#3};
+                    \end{scope}
+                }
+                \path coordinate (A) at (0,0,0)
+                      coordinate (B) at (8,0,0)
+                      coordinate (C) at (8,0,4.8)
+                      coordinate (D) at (0,0,4.8)
+                      coordinate (L) at ($(A)!0.5!(D)$)
+                      coordinate (R) at ($(B)!0.5!(C)$)
+                      coordinate (bg) at (0,0,1.6)
+                      coordinate (fg) at (0,0,4.0);
+                \filldraw[fill=PB!10, thick] (A) -- (B) -- (R) -- (L) -- cycle;
+                \filldraw[fill=PP!10, thick] (D) -- (C) -- (R) -- (L) -- cycle;
+                \begin{scope}[canvas is xz plane at y=0]
+                    \node[PB, yscale=-1, font=\Large, anchor=north east] at (8,0.0) {Background};
+                    \node[PP, yscale=-1, font=\Large, anchor=south east] at (8,4.8) {Foreground};
+                \end{scope}
+                \pgfmathsetmacro{\cubex}{0.8}
+                \pgfmathsetmacro{\cubey}{0.8}
+                \pgfmathsetmacro{\cubez}{0.8}
+                \tikzset{
+                    cube/.style 2 args={every path/.style={#1, fill=#1!40}, every node/.style={text=black}, scope on=<#2>}
+                }
+                \drawCube[cube={PP}{1}]{$(fg)+(2.0-\cubex/2,0,0)$}{[1]};
+                \drawCube[cube={PB}{2}]{$(bg)+(2.0-\cubex/2,0,0)$}{[1]};
+                \drawCube[cube={PB}{3}]{$(bg)+(2.0-\cubex/2,0,0)$}{[1]};
+                \drawCube[cube={PB}{3}]{$(bg)+(3.6-\cubex/2,0,0)$}{[2]};
+                \drawCube[cube={PB}{5}]{$(bg)+(2.0-\cubex/2,0,0)$}{[1]};
+                \drawCube[cube={PB}{5}]{$(bg)+(3.6-\cubex/2,0,0)$}{[2]};
+                \drawCube[cube={PB}{5}]{$(bg)+(5.2-\cubex/2,0,0)$}{[3]};
+                \begin{scope}[visible on=<6>]
+                    \drawCube[cube={PB}{6}]{$(bg)+(1.6-\cubex/2,0,0)$}{[1]};
+                    \draw[to] ($(bg)+(1.6,0,0)$) -- node[pos=1, left] {\bash|fg|} ++(0,0,1.6);
+                    \drawCube[cube={PP}{6}]{$(fg)+(3.6-\cubex/2,0,0)$}{[2]};
+                    \draw[to] ($(fg)+(3.6+\cubex/2,0,-\cubez/2)$) -- ++(0.8,0,0) -- node[pos=1, right] {\bash|bg|} ++(0,0,-2);
+                \end{scope}
+                \drawCube[cube={PP}{7}]{$(fg)+(2.0-\cubex/2,0,0)$}{[1]};
+                \drawCube[cube={Gray}{8}]{-1.2*\cubex,0,2.8}{[1]};
+                \drawCube[cube={PB}{9}]{$(bg)+(2.0-\cubex/2,0,0)$}{[1]};
+            \end{tikzpicture}
+        \end{center}
+        \vspace{-2mm}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash, xrightmargin=2mm, xleftmargin=2mm]
+                $ jobs
+                $ emacs Loops.tex   # <- each pipeline is a fg job by default
+                # Shell is blocked till you have the emacs process
+                # in foreground. You can close it to get the shell back.
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, xrightmargin=2mm, xleftmargin=2mm]
+                $ jobs
+                $ emacs Loops.tex   # <- each pipeline is a fg job by default
+                # Shell is blocked till you have the emacs process
+                # in foreground. You can close it to get the shell back.
+                $ emacs Loops.tex & # <- use the ampersand to start it in bg
+                |+[1] 5642+|
+                $ jobs
+                |+[1]+  Running                 emacs Loops.tex &+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=MyBash, xrightmargin=2mm, xleftmargin=2mm]
+                $ jobs
+                $ emacs Loops.tex   # <- each pipeline is a fg job by default
+                # Shell is blocked till you have the emacs process
+                # in foreground. You can close it to get the shell back.
+                $ emacs Loops.tex & # <- use the ampersand to start it in bg
+                |+[1] 5642+|
+                $ jobs
+                |+[1]+  Running                 emacs Loops.tex &+|
+                $ sleep 30 &
+                |+[2] 20943+|
+                $ jobs
+                |+[1]-  Running                 emacs Loops.tex &
+                [2]+  Running                 sleep 30 &+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<4>
+            \begin{lstlisting}[style=MyBash, xrightmargin=2mm, xleftmargin=2mm, firstnumber=14]
+                # After half a minute and closing emacs
+                |+[2]+  Done                    sleep 30
+                [1]+  Done                    emacs Loops.tex+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<5>
+            \begin{lstlisting}[style=MyBash, xrightmargin=2mm, xleftmargin=2mm, firstnumber=14]
+                # After half a minute and closing emacs
+                |+[2]+  Done                    sleep 30
+                [1]+  Done                    emacs Loops.tex+|
+                # You can start many jobs in background
+                $ for index in 30 60 90; do sleep ${index} @|\tikzmark{ampersand}|@& done && unset index
+                |+[1] 23559
+                [2] 23560
+                [3] 23561+|
+                $ jobs
+                |+[1]   Running                 sleep ${index} &
+                [2]-  Running                 sleep ${index} &
+                [3]+  Running                 sleep ${index} &+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{itemize}[<only@6>]
+            \item Every running process can receive signals during its execution
+            \item Some signals are bound to common keyboard shortcuts\\[0.5ex]
+                  {\small
+                  \begin{tabular}{rll}
+                      \PB{\textbf{CTRL-Z}}              & sends SIGTSTP to the foreground job & {\color{PP}\scriptsize\{~usually suspending it~\}}                     \\
+                      \PB{\textbf{CTRL-C}}              & sends SIGINT to the foreground job  & {\color{PP}\scriptsize\{~usually terminating it~\}}                    \\
+                      \PB{\textbf{CTRL-\textbackslash}} & sends SIGQUIT to the foreground job & {\color{PP}\scriptsize\{~usually causing it to dump core and abort~\}} \\
+                  \end{tabular}}
+            \item Jobs can be moved to background using the \bash|bg| builtin
+            \item Jobs can be moved to foreground using the \bash|fg| builtin
+            \item Any signal can be sent to a process/job using the \bash|kill| builtin
+            \item The \bash|disown| builtin make the shell ``forget'' a job
+        \end{itemize}
+        \begin{onlyenv}<7>
+            \begin{lstlisting}[style=MyBash, xrightmargin=2mm, xleftmargin=2mm, firstnumber=26]
+                $ emacs Loops.tex
+                # Process in foreground, shell not usable
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<8>
+            \begin{lstlisting}[style=MyBash, xrightmargin=2mm, xleftmargin=2mm, firstnumber=26]
+                $ emacs Loops.tex
+                # Process in foreground, shell not usable
+                # -> suspend via CTRL-Z 
+                # You get your shell back, but emacs is blocked
+                |+[1]+  Stopped                 emacs -nw Loops.tex+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<9>
+            \begin{lstlisting}[style=MyBash, xrightmargin=2mm, xleftmargin=2mm, firstnumber=26]
+                $ emacs Loops.tex
+                # Process in foreground, shell not usable
+                # -> suspend via CTRL-Z 
+                # You get your shell back, but emacs is blocked
+                |+[1]+  Stopped                 emacs -nw Loops.tex+|
+                $ bg 
+                # Alternative syntax:
+                #   bg %1     <- Using the jobnumber
+                #   bg %+     <- The last started in bg, or suspended from fg
+                #   bg %%     <- Equivalent to %+ (default if no job specified)
+                #   bg %ema   <- Job whose command begins with 'ema'
+                #   bg %?mac  <- Job whose command contains 'mac'
+                # It is an error if there is more than one matching job!
+                |+[1]+ emacs Loops.tex &+|
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+    \begin{tikzpicture}[remember picture, overlay]
+        \begin{scope}[scope on=<5>]
+            \path[from] (ampersand) ++(2mm,-1mm) edge[out=270, in=180] node[pos=1, right, red] {No semicolon!} ++(6mm,-6mm);
+        \end{scope}
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Handling jobs in a script: \bash|kill|, \bash|wait| and \PB{\texttt{\$!}}}
+    \begin{itemize}
+        \item What we have discussed so far is very handy in interactive sessions
+        \item In scripts, it is sometimes needed to run jobs in background
+        \item 
+    \end{itemize}
+    \FrameRemark{This article on \URL[PB]{http://mywiki.wooledge.org/ProcessManagement}{Process Management} is wonderful (long and advanced in its second part, though).}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
