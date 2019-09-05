@@ -8,10 +8,10 @@
     \vspace{-3mm}
     \begin{itemize}
         \item The \bash|ps| command displays information about (a selection of) the active processes
-        \item A process is \emph{\guillemotleft an instance of a computer program that is being executed\guillemotright} -- Wikipedia
-        \item The shell associates a \textbf{job} with each pipeline
+        \item A \alert{\textbf{process}} is \emph{\guillemotleft an instance of a computer program that is being executed\guillemotright} -- Wikipedia
+        \item The shell associates a \alert{\textbf{job}} with each pipeline
         \item It keeps a table of currently executing jobs, which may be listed with the \bash|jobs| builtin
-        \item When Bash starts a job asynchronously (i.e. in background), it prints a line that looks like
+        \item When Bash (in interactive mode$^\star$) starts a job asynchronously (i.e. in background), it prints a line that looks like
               \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm, xrightmargin=25mm]
                   $ sleep 30 & # <- The ampersand symbol starts
                   [1] 25647    #    a process in background
@@ -21,6 +21,7 @@
         \item All of the processes in a single pipeline are members of the same job
         \item Bash uses the job abstraction as the basis for job control
     \end{itemize}
+    \FrameRemark{$^\star$Job control is by default turned off in non-interactive mode, but it might be activated via\, \bash|set -m|.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Job control: A graphical overview}
@@ -147,7 +148,7 @@
                   \end{tabular}}
             \item Jobs can be moved to background using the \bash|bg| builtin
             \item Jobs can be moved to foreground using the \bash|fg| builtin
-            \item Any signal can be sent to a process/job using the \bash|kill| builtin
+            \item Any signal can be sent to a process/job using the \bash|kill| builtin \,{\tiny\{~More on it in a moment~\}}
             \item The \bash|disown| builtin make the shell ``forget'' a job
         \end{itemize}
         \begin{onlyenv}<7>
@@ -191,19 +192,346 @@
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Handling jobs in a script: \bash|kill|, \bash|wait| and \PB{\texttt{\$!}}}
-    \begin{itemize}
-        \item What we have discussed so far is very handy in interactive sessions
-        \item In scripts, it is sometimes needed to run jobs in background
-        \item 
-    \end{itemize}
-    \FrameRemark{This article on \URL[PB]{http://mywiki.wooledge.org/ProcessManagement}{Process Management} is wonderful (long and advanced in its second part, though).}
+\begin{frame}{Handling processes in a script\uncover<5->{: PIDs and parents}}
+    \vspace{-6mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{onlyenv}<2>
+            \vspace{-5mm}
+            \begin{center}
+                \begin{tikzpicture}
+                    \node (fig) {\includegraphics[width=0.6\textwidth]{Danger}};
+                    \begin{scope}[every node/.style={starburst, fill=yellow, draw=red, line width=2pt, font=\Large\bfseries, text=red, anchor=north}]
+                        \node[starburst point height=5mm, rotate=+10] at (fig.north west) {Minefield};
+                        \node[starburst point height=8mm, rotate=-10, anchor=center] at (fig.north east) {Not the full story!};
+                    \end{scope}
+                \end{tikzpicture}
+            \end{center}
+        \end{onlyenv}
+        \begin{onlyenv}<3-4>
+            \begin{itemize}
+                \item What we have discussed so far is very handy in interactive sessions
+                \item In a script, job control is turned off by default and you will hardly need it!
+                \item What is sometimes needed is to run processes in background
+                \item In such a case, it is important to be aware of
+                      \begin{itemize}
+                          \item what the \bash|kill| builtin does
+                          \item what is the \bash|wait| builtin meant for
+                          \item how to handle processes within a script $\,\to\,$ use of \PB{\texttt{\$!}}
+                      \end{itemize}
+                \item<4> Even \textbf{more important}, you have to understand \alert{\textbf{the parent-child relationship}}!\\[1ex]
+                         \centerline{\includegraphics[width=0.4\textwidth]{ParentChild}}
+            \end{itemize}
+        \end{onlyenv}
+        \begin{itemize}[<only@5->]
+            \item In UNIX, processes are identified by a number called a PID (for Process IDentifier)
+            \item Each \textbf{running} process has a unique identifier
+            \item Do not assume anything about \PP{PIDs}: For all intents and purposes, they \PP{are random}!
+            \item Each UNIX process also has a parent process which is the process that started it.
+            \item The parent process can change to the \texttt{init} process if the parent process ends before the new process does \,$\to$\, i.e. \texttt{init} will pick up orphaned processes
+        \end{itemize}
+        \vspace{-3mm}
+        \begin{varblock}{quote}[\textwidth]{System processes}[Greg's Wiki]<only@6-7>
+            A process PID will \textbf{never} be freed up for use after the process dies until the parent process waits for the PID to see whether it ended and retrieve its exit code.
+            If the parent ends, the process is returned to \textnormal{\texttt{init}}, which does this for you.
+            This is important for one major reason: \alert{if the parent process manages its child process, it can be absolutely certain that, even if the child process dies, no other new process can accidentally recycle the child process PID until the parent process has waited for that PID and noticed the child died}.
+            This gives the parent process the guarantee that the PID it has for the child process will \textbf{always} point to that child process, whether it is alive or a ``zombie''.
+            Nobody else has that guarantee.
+        \end{varblock}
+        \begin{tikzpicture}[remember picture, overlay]
+            \node[starburst, starburst point height=1cm, fill=yellow, draw=red, line width=2pt, visible on=<7>, rotate=10, font=\HUGE\bfseries, text=red, anchor=center] at ($(current page.center)-(0,22mm)$) {Not true in the shell!};
+        \end{tikzpicture}
+        \begin{onlyenv}<8>
+            \vspace{-2mm}
+            \begin{columns}[c]
+                \begin{column}{0.25\textwidth}
+                    \centering\includegraphics[width=0.8\textwidth]{Danger}
+                \end{column}
+                \begin{column}{0.7\textwidth}
+                    \begin{varblock}{quote}[\textwidth]{What happens in the shell}[Greg's Wiki]
+                        Shells aggressively reap their child processes and store the exit status in memory, where it becomes available to your script upon calling \textnormal{\bash|wait|}.
+                        But because the child might have already been reaped before you call wait, there is no zombie to hold the PID.\\
+                        \alert{\textbf{The kernel is free to reuse that PID, and your guarantee has been violated!}}\\[-1.5ex] ~
+                    \end{varblock}
+                    \vspace{-3mm}
+                    \centering\tiny We will see an explicit example in few slides
+                \end{column}
+            \end{columns}
+        \end{onlyenv}
+    \end{overlayarea}
+    \FrameRemark[2-]{This article on \URL[PB]{http://mywiki.wooledge.org/ProcessManagement}{Process Management} is good (long and advanced in its second part, though). Refer to it to discover more.}
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{A bit of syntax: Retrieving a process PID}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item The \PB{\texttt{\$!}} special parameter holds the \PP{PID} of \textbf{the most recently executed background job}
+              \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm, xrightmargin=25mm]
+                  #!/bin/bash
 
-
-
-
-
+                  #...
+                  command &
+                  pid=$!
+                  # ...
+              \end{lstlisting}
+        \item You cannot reliably determine when or how a process was started purely from its identifier number (PID): \PP{do not make any assumption!}
+        \item As you might know, there are some metadata stored together with the PID, such as the \textbf{process name} and the \textbf{issued command} to start the process. \alert{\textbf{Never rely on those!}}
+    \end{itemize}
+    \vspace{-1mm}
+    \begin{varblock}{alert}[\textwidth]{Stay away from parsing the process tree!}
+        UNIX comes with a set of handy tools, among which is \bash|ps|.
+        This is a very helpful utility that you can use from the command line to get an overview of what processes are running.\\
+        \alert{However, \bash|ps| output is unpredictable, highly OS-dependent, and not built for parsing!\\\textbf{Do not parse it in shell scripts! Ever!}}
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{A bit of syntax: The \bash|wait| builtin}
+    \vspace{-4mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{lstlisting}[style=MyBash, numbers=none]
+            wait |+[-fn] [jobspec or pid ...]+|
+        \end{lstlisting}
+        \begin{itemize}
+            \item \alert<3>{\bash|wait| waits until the child process specified by each process ID \texttt{pid} or job specification \texttt{jobspec} exits and return the exit status of the last command waited for}
+            \item \alert<2>{If no arguments are given, all currently active child processes are waited for, and the return status is zero}
+            \item \alert<4>{\bash|wait -n|$\;$ waits for a single job to terminate and returns its exit status}
+            \item \alert<5>{If not an active child process of the shell is passed to \bash|wait|, the return status is \textbf{127}}
+        \end{itemize}
+        \vspace{-2mm}
+        \begin{onlyenv}<1>
+            \centerline{\rule{8cm}{0.5pt}}
+            \begin{itemize}
+                \small
+                \item If a job specification is given, all processes in the job are waited for
+                \item Supplying the \bash|-f| option, when job control is enabled, forces \bash|wait| to wait for each \texttt{pid} or \texttt{jobspec} to terminate before returning its status, instead of returning when it changes status
+            \end{itemize}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
+                # In a Bash script
+                date
+                { sleep 1; exit 1; } & { sleep 3; exit 2; } &
+                { sleep 5; exit 3; } & { sleep 7; exit 4; } &
+                wait # All currently active child processes are waited for
+                date
+            \end{lstlisting}
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=1mm]
+                $ ./script-above.bash
+                |+Wed  4 Sep 16:13:27 CEST 2019
+                Wed  4 Sep 16:13:34 CEST 2019+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
+                # In a Bash script
+                date; sleep 3 & pid=$!
+                echo "PID=$pid";  ps -p $pid;  wait $pid; date
+            \end{lstlisting}
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=1mm]
+                $ ./script-above.bash
+                |+Wed  4 Sep 16:17:19 CEST 2019
+                PID=11353
+                  PID TTY          TIME CMD
+                11353 pts/11   00:00:00 sleep
+                Wed  4 Sep 16:17:22 CEST 2019+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<4>
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
+                # In a Bash script (-n option since Bash v4.3)
+                { sleep 1; exit 1; } & { sleep 3; exit 2; } &
+                { sleep 2; exit 3; } &
+                for f in {1..3}; do
+                   wait -n; echo "wait return status: $? at $(date +'%X')"
+                done
+            \end{lstlisting}
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=1mm]
+                $ ./script-above.bash
+                |+wait return status: 1 at 16:36:16
+                wait return status: 3 at 16:36:17
+                wait return status: 2 at 16:36:18+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<5>
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
+                $ wait 1234
+                |+bash: wait: pid 1234 is not a child of this shell+|
+                $ echo $?
+                |+127+|
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{A bit of syntax: The \bash|kill| builtin}
+    \vspace{-4mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{lstlisting}[style=MyBash, numbers=none]
+            kill |+[-s sigspec] [-n signum] [-sigspec] jobspec or pid+|
+        \end{lstlisting}
+        \begin{itemize}
+            \item Despite its name, the \bash|kill| command sends a signal to a process
+            \item There are different way to specify a signal, use what you prefer
+            \item If no signal is specified, SIGTERM (15) is sent
+        \end{itemize}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash, style=smaller, numbers=none, xleftmargin=1mm]
+                $ kill -l
+                |+ 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL       5) SIGTRAP
+                 6) SIGABRT      7) SIGBUS       8) SIGFPE       9) SIGKILL     10) SIGUSR1
+                11) SIGSEGV     12) SIGUSR2     13) SIGPIPE     14) SIGALRM     15) SIGTERM
+                16) SIGSTKFLT   17) SIGCHLD     18) SIGCONT     19) SIGSTOP     20) SIGTSTP
+                21) SIGTTIN     22) SIGTTOU     23) SIGURG      24) SIGXCPU     25) SIGXFSZ
+                26) SIGVTALRM   27) SIGPROF     28) SIGWINCH    29) SIGIO       30) SIGPWR
+                31) SIGSYS      34) SIGRTMIN    35) SIGRTMIN+1  36) SIGRTMIN+2  37) SIGRTMIN+3
+                38) SIGRTMIN+4  39) SIGRTMIN+5  40) SIGRTMIN+6  41) SIGRTMIN+7  42) SIGRTMIN+8
+                43) SIGRTMIN+9  44) SIGRTMIN+10 45) SIGRTMIN+11 46) SIGRTMIN+12 47) SIGRTMIN+13
+                48) SIGRTMIN+14 49) SIGRTMIN+15 50) SIGRTMAX-14 51) SIGRTMAX-13 52) SIGRTMAX-12
+                53) SIGRTMAX-11 54) SIGRTMAX-10 55) SIGRTMAX-9  56) SIGRTMAX-8  57) SIGRTMAX-7
+                58) SIGRTMAX-6  59) SIGRTMAX-5  60) SIGRTMAX-4  61) SIGRTMAX-3  62) SIGRTMAX-2
+                63) SIGRTMAX-1  64) SIGRTMAX+|
+                $ kill -l 15
+                |+TERM+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \vspace{-2mm}
+        \begin{varblock}{quote}[0.8\textwidth]{\bash|man 2 kill|}<only@2>
+            If signal is 0, then no signal is sent, but existence and permission checks are still performed; this can be used to check for the existence of a process ID or process group ID that the caller is permitted to signal.
+        \end{varblock}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, aboveskip=2mm]
+                # Waiting for a process to end
+                # (when you have permissions to send signals)
+                while kill -0 "${pid}"; do
+                    sleep 1
+                done
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+    \FrameRemark{The \bash|kill| builtin offers more complex functionalities, like sending a signal to a process group when the used PID is negative. Read about it in the manual.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{A potentially catastrophic hidden danger}
+    \begin{overlayarea}{\textwidth}{0.5\textheight}
+        \begin{onlyenv}<2-4>
+            \begin{lstlisting}[style=MyBash]
+                #!/bin/bash
+                                            #  EXAMPLE 1: wait
+                ( exit 12 ) &
+                pid=$!
+                while { sleep 0 & [ "$pid" != "$!" ]; }; do
+                    :
+                done
+                wait "$pid"
+                echo "$?"
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<5>
+            \begin{lstlisting}[style=MyBash, emph={[8]long_running_command}]
+                #!/bin/bash
+                                            #  EXAMPLE 2: kill
+                long_running_command &
+                pid=$!
+                echo "Killing long_running_command on PID ${pid} in 24h"
+                sleep 86400
+                echo 'Time up!'
+                kill "${pid}"
+            \end{lstlisting}
+            \begin{center}
+                \Large \PQ{Who will receive the SIGTERM signal?!}
+            \end{center}
+        \end{onlyenv}
+        \begin{uncoverenv}<3-4>
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=1mm]
+                $ ./script-above.bash
+                |+0+|   # Yes, 0 and not 12... WHAAAAAT?
+            \end{lstlisting}
+        \end{uncoverenv}
+        \begin{center}
+            \only<2>{\includegraphics[width=3cm]{MemeEatingCereals}}
+            \only<3>{\includegraphics[width=4cm]{MemeSplitting}}
+        \end{center}
+    \end{overlayarea}
+    \begin{varblock}{alert}[0.9\textwidth]{\textbf{Sad but true!}}<only@4->
+        The way shells are programmed, as soon as a child process dies, the shell will call \PB{\emph{wait()}} on it right away (storing the termination status as part of its internal state), which will free the PID for reuse by another process.
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{I absolutely need to know if the PID is the right one, what should I do?}
+    \vspace{-3mm}
+    \large
+    \begin{varblock}{example}[\textwidth]{\textbf{Do not use Bash!}}<2->
+        Yes, implement the code launching a background process in C or Python, Perl, Ruby, etc.
+        \textbf{Not in shell.}
+        Those will not have this problem, since they won't reap children by default (like the shell does) and you will have to do it explicitly there.
+        Or consider launching background processes using a system manager, such as \bash|systemd|.
+    \end{varblock}
+    \small
+    \begin{varblock}{}[0.95\textwidth]{However}<only@3>
+        Note that the kernel will typically try hard to avoid reusing PIDs, at least try to delay reusing a PID, exactly because in some cases there are no guarantees that the PID hasn't been reused, so the kernel tries to minimise this situation where a signal will be delivered to the wrong process.
+    \end{varblock}
+    \vspace{-2pt}
+    \begin{onlyenv}<4>
+        \begin{varblock}{}[0.95\textwidth]{Alternatively}
+            You can save the start time of the original process and, before using it, check that the start time of the process with that PID matches what you saved.
+            The pair PID, start-time is a unique identifier for the processes in Linux.
+            However, this does not solve the issue here.
+        \end{varblock}
+        \begin{lstlisting}[style=MyBash, numbers=none]
+            $ sleep 10 &
+            |+[1] 4451+|
+            $ ps -p 4451 -h -o lstart
+            |+Thu Sep  5 18:22:43 2019+|
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{A work-around for exit codes}
+    \vspace{-4mm}
+    \begin{overlayarea}{\textwidth}{\textheight}
+        \begin{itemize}
+            \item If you have several (maybe long) processes in background during the execution of a script and you are interested in their exit code, you can write them to a file
+            \item Alternatively, a possible idea is to use redirection faking a file and taking advantage of the fact that \PP{\textbf{in Bash the processes inside the process substitution are not waited for}}
+        \end{itemize}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash, emph={[7]command_pid, exitCode}, emph={[8]another_command}]
+                #!/bin/bash
+                {
+                    command_pid=$!
+                    # ...
+                    another_command &
+                    # ...
+                    read <&3 exitCode
+                    if [[ "${exitCode}" -eq 0 ]]; then
+                        echo "command was successful!"
+                    fi
+                } 3< <(command > logfile 2>&1; echo "$?")
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2-3>
+            \begin{lstlisting}[style=MyBash, emph={[7]sleep_pid, exitCode, waitCode}]
+                #!/bin/bash
+                {
+                    sleep_pid=$!
+                    while { ( exit 12 ) & [ "${sleep_pid}" != "$!" ]; }; do
+                        :
+                    done
+                    wait "${command_pid}"
+                    waitCode=$?
+                    read <&3 exitCode
+                    echo "Command in process substitution: ${exitCode}"
+                    echo "Command in           while loop: ${waitCode}"
+                } 3< <(sleep 1; echo "$?")
+            \end{lstlisting}
+            \begin{uncoverenv}<3>
+                \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=1mm]
+                    $ ./script-above.bash
+                    |+Command in process substitution: 0
+                    Command in           while loop: 12+|
+                \end{lstlisting}
+            \end{uncoverenv}
+        \end{onlyenv}
+    \end{overlayarea}
+\end{frame}
 
 
 
