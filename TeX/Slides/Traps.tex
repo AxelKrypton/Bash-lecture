@@ -1,0 +1,184 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 6 Sep 2019           %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Motivation}
+    \vspace{-2mm}
+    Consider the following script (\alert{not nice code}):
+    \begin{lstlisting}[style=MyBash, aboveskip=3mm, belowskip=-5mm]
+        #!/bin/bash
+        
+        function CreateAuxiliaryFiles(){
+            # ...
+        }
+        function CleanAuxiliaryFiles(){
+            # ...
+        }
+        CreateAuxiliaryFiles
+        gnuplot "${temporaryFileToPlot}"
+        if [[ "${savePlot}" = 'TRUE' ]]; then
+            pdflatex "${outputFilename}.tex"
+        fi
+        CleanAuxiliaryFiles
+        exit 0
+    \end{lstlisting}
+    \begin{varblock}{alert}[\textwidth]{}
+        \Large \alert{What happens if the script is terminated by the user, e.g. via CTRL-C?}
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Signal handlers or traps}
+    \begin{onlyenv}<1-2>
+        \begin{itemize}
+            \item As you know you can send signals to processes via the \bash|kill| builtin
+            \item However, in shell scripts, \PP{\textbf{it is possible to associate a behaviour upon receiving a signal!}}
+            \item If you think about it, it is a very powerful technique
+            \item In order to perform an action when a signal is received, a trap has to be set up
+        \end{itemize}
+        \smallskip
+        \begin{center}
+            \begin{tikzpicture}
+                \begin{scope}[every node/.style={thick, ellipse, minimum width=2cm}]
+                    \node[draw=PB, fill=PP!20] (a) {Process A};
+                    \node[draw=PQ, fill=PT!20, below right = of a] (b) {Process B};
+                \end{scope}
+                \begin{scope}[scope on=<2>]
+                    \path[to] (a) edge[out=0, in=90] node[midway, right=2mm, font=\small, text=PS] {Signal} (b);
+                    \path[to] (b) edge[out=270, in=180] node[pos=1, right=1mm] {Do the action associated to the signal} ++(1cm, -15mm);
+                \end{scope}
+            \end{tikzpicture}
+        \end{center}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \medskip
+        \colorbox{background-color}{\bash|trap 'some code' signal(s)|}\\[0.3em]
+        \begingroup\leftskip1em
+            Using this form, a signal handler is set up for each signal in the list\\
+            When one of these signals is received, the commands in the first argument will be executed\\[0.4em]
+        \endgroup
+        \colorbox{background-color}{\bash|trap '' signal(s)|}\\[0.3em]
+        \begingroup\leftskip1em
+            Using this form, each signal in the list will be ignored. \alert{Most scripts should not do this!}\\[0.4em]
+        \endgroup
+        \colorbox{background-color}{\bash|trap - signal(s)|}\\[0.3em]
+        \begingroup\leftskip1em
+            Using this form, each signal in the list will be restored to its default behaviour\\[0.4em]
+        \endgroup
+        \colorbox{background-color}{\bash|trap signal(s)|}\\[0.3em]
+        \begingroup\leftskip1em
+            Using this form, the one signal listed will be restored to its default behaviour\\[0.4em]
+        \endgroup
+        \colorbox{background-color}{\bash|trap|}\\[0.3em]
+        \begingroup\leftskip1em
+            With no arguments, print a list of signal handlers\\
+        \endgroup
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Common used signals}
+    \begin{description}[TERMX]
+        \item[\textbf{HUP}] Hang Up. The controlling terminal has gone away.
+        \item[\textbf{INT}] Interrupt. The user has pressed the interrupt key (usually \textbf{Ctrl-C} or \textbf{DEL}).
+        \item[\textbf{QUIT}] Quit. The user has pressed the quit key (usually \textbf{Ctrl-\textbackslash}). Exit and dump core.
+        \item[\textbf{KILL}] Kill. \alert{This signal cannot be caught or ignored.} Unconditionally fatal. \textbf{\textbf{No cleanup possible.}}
+        \item[\textbf{TERM}] Terminate. This is the default signal sent by the \bash|kill| builtin.
+        \item[\textbf{EXIT}] Not really a signal. In a Bash script (non-interactive), an EXIT trap is run on any exit, signalled or not. In other POSIX shells only when the shell process exits.
+    \end{description}
+    \begin{varblock}{}[0.9\textwidth]{Remember}
+        If you are asking a program to terminate, you should always use SIGTERM.% (simply \bash|kill process_ID|).
+        This will give the program a chance to catch the signal and clean up.
+        If you use SIGKILL, the program cannot clean up, and \textbf{may leave files in a corrupted state}.
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{A simple example}
+    \vspace{-4mm}
+    \begin{varblock}{quote}[\textwidth]{Common use case}
+        \normalsize\textnormal{Traps can be set up to intercept a fatal signal, perform cleanup, and then exit gracefully}
+    \end{varblock}
+    \begin{lstlisting}[style=MyBash, emph={[7]temporaryFile}, belowskip=-5mm]
+        #!/bin/bash
+        
+        temporaryFile=$(mktemp) || exit
+        trap 'rm -f "${temporaryFile}"' EXIT
+    \end{lstlisting}
+    Use a function whenever you need to achieve a more complex task
+    \begin{lstlisting}[style=MyBash, emph={[7]temporaryFile}, aboveskip=2mm, belowskip=-5mm, xleftmargin=2mm, xrightmargin=3mm]
+        #!/bin/bash
+        
+        function CleanAuxiliaryFiles(){ # If you trap INT (CTRL-C)
+            # ...                       # do not forget to exit unless
+        }                               # you have reasons not to do so
+        trap 'CleanAuxiliaryFiles' EXIT
+    \end{lstlisting}
+    \small
+    \begin{varblock}{}[\textwidth]{Only in Bash!}
+        The special name EXIT is preferred for any signal handler that simply wants to clean up upon exiting.
+        So to clean up, just trap EXIT and call a cleanup function from there. \textbf{Don't trap a bunch of signals.}
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{When is the signal exactly handled?}
+    \vspace{-5mm}
+    \begin{varblock}{alert}[0.9\textwidth]{A subtle but important feature}
+        When Bash is executing an external command in the foreground, it does not handle any signals received until the foreground process terminates
+    \end{varblock}
+    \begin{overlayarea}{\textwidth}{0.33\textheight}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=MyBash]
+                #!/bin/bash
+                
+                echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
+                trap 'echo "Doing some cleaning before exiting!"' EXIT
+                echo "Wait 1h"
+                sleep 3600
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash]
+                #!/bin/bash
+                
+                echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
+                trap 'echo "Doing some cleaning before exiting!"' EXIT
+                echo "Wait 1h"; sleep 3600 & wait $!
+                # Note that sleep 3600 will not be killed and will
+                # continue to run when you send a INT signal!
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=MyBash]
+                #!/bin/bash
+                
+                echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
+                unset -v pid
+                trap 'echo "Cleaning!"; [[ $pid ]] && kill "${pid}"' EXIT
+                echo "Wait 1h"
+                sleep 3600 & pid=$!; wait
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+    \begin{itemize}
+        \item If you kill the script using $\;$\bash|kill -s INT|$\;$ from another terminal (not with CTRL-C), bash will wait for \bash|sleep| to exit before calling the trap\\
+              $\;\to\;$\alert{\textbf{That's probably not what you expect!}}
+        \item<2-> A work-around is to use a \PB{\textbf{builtin}} that will be interrupted, such as \bash|wait|
+        \item<2-> \PP{Any bash internal command will be interrupted by a (non-ignored) incoming signal!}
+        \item<3-> If you want the background job to be killed when the script is killed, add that to the trap!
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{What is indeed CTRL-C doing?}
+    
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+

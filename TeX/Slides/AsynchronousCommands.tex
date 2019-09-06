@@ -532,7 +532,35 @@
         \end{onlyenv}
     \end{overlayarea}
 \end{frame}
-
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Process Management: Conclusions\hfill\uncover<2>{\small\URL[PB]{https://www.quora.com/What-is-the-difference-between-the-SIGINT-and-SIGTERM-signals-in-Linux-What\%E2\%80\%99s-the-difference-between-the-SIGKILL-and-SIGSTOP-signals}{SIGTERM vs SIGKILL cartoon}}}
+    \vspace{-3mm}
+    \begin{itemize}
+        \setlength{\itemsep}{1mm}
+        \item It is a potentially tough world: Be scared but not too much
+        \item Bash might not be the most indicate tool
+        \item Be aware of the truth (what we just discussed)
+        \item If you want to have something running in background, why do you want so?
+        \item There are tools which you might consider:\\[0.3ex]
+        \begin{enumerate}
+            \item \bash|systemd| (system manager)
+            \item \bash|timeout| (run a command with a time limit)
+            \item \bash|xargs -P| \,or\, \bash|parallel| (to run independent tasks in parallel)
+        \end{enumerate}
+    \end{itemize}
+    \begin{varblock}{quote}[\textwidth]{About using $\;$\bash|kill -9|}[Greg's Wiki]<2>
+        Do not use kill -9, ever.
+        For any reason.
+        \textbf{Unless you wrote the program to which you're sending the SIGKILL, and know that you can clean up the mess it leaves.}
+        Because you're debugging it.
+        If a process is not responding to normal signals, it's probably in ``state D'' (as shown on \textnormal{\bash|ps u|}), which means it's currently executing a system call.
+        If that's the case, you're probably looking at a dead hard drive, or a dead NFS server, or a kernel bug, or something else along those lines.\\
+        And you won't be able to kill the process anyway, SIGKILL or not.
+    \end{varblock}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=north east] at ($(current page.north east)-(8mm,3mm)$) {};
+    \end{tikzpicture}
+\end{frame}
 
 
 
