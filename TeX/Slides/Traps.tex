@@ -168,8 +168,92 @@
     \end{itemize}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{What is indeed CTRL-C doing?}
-    
+\begin{frame}[fragile]{What is indeed CTRL-C doing?}
+    \vspace{-3mm}
+    Let us consider again the previous example
+    \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm]
+        #!/bin/bash
+
+        echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
+        trap 'echo "Doing some cleaning before exiting!"' EXIT
+        echo "Wait 1h"; sleep 3600
+    \end{lstlisting}
+    \begin{overlayarea}{\textwidth}{0.5\textheight}
+        \begin{itemize}
+            \item<1-> As said, sending to this script the INT signal from another terminal does not terminate it
+            \item<1-> However, CTRL-C does terminate it\ldots\ but why?
+            \item<2-> Because \PP{\textbf{processes are organised in groups}}:
+                      \begin{itemize}
+                          \item The leader process (i.e. the process that created the group)
+                          \item Any other process started by the leader process
+                      \end{itemize}
+            \item<2-> \alert{\textbf{CTRL-C sends the INT signal to the entire process group}}
+            \item<2-> Terminals keep track of the foreground process group: When receiving a CTRL-C, they send the SIGINT to the entire foreground group!
+        \end{itemize}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=2mm, xrightmargin=2mm]
+                kill -s INT -123 # will kill the process group with the ID 123
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+    \FrameRemark{Note that you can't rely on the process group ID of a script to be the same as \texttt{\$\$}, as that depends greatly on how the script was started.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Trapping SIGINT and SIGQUIT: Be careful!}
+    \vspace{-3mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{itemize}
+            \item Bash is among a few shells that implement a \textbf{wait and cooperative exit} approach at handling SIGINT/SIGQUIT delivery
+            \item When interpreting a script, upon receiving a SIGINT,
+            \begin{enumerate}
+                \item \textbf{it doesn't exit straight away}, instead
+                \item \PP{it waits for the currently running command to return} and
+                \item \alert{it only exits -- \textbf{by killing itself with SIGINT} -- if that command was also killed by that SIGINT}
+            \end{enumerate}
+            \item<only@1> The idea is that, if your script calls \bash|vi| for instance, and you press CTRL-C within \bash|vi| to cancel an action, that should not be considered as a request to abort the script
+        \end{itemize}
+        \begin{varblock}{alert}[0.9\textwidth]{What does it mean?}<only@1>
+            Imagine you're writing a script and that script exits normally upon receiving SIGINT.
+            That means that if that script is invoked from another bash script, \\\alert{\textbf{CTRL-C will no longer interrupt that other script!}}
+        \end{varblock}
+        \begin{onlyenv}<2>
+            \begin{varblock}{}[0.95\textwidth]{}
+                \small The \bash|ping| command returns with 0 when host is reachable (the ping has been answered) and non-zero otherwise when interrupted (which is the only way for ping to return in that case).
+            \end{varblock}
+            \begin{lstlisting}[style=MyBash, belowskip=-5mm]
+                #!/bin/bash
+                for index in {1..254}; do
+                    ping -c 2 "192.168.1.$i"
+                done
+            \end{lstlisting}
+            \begin{varblock}{}[0.95\textwidth]{}
+                \small CTRL-C will send a INT signal to the script, but since \bash|ping| just returns 0 or 1 and is not killed by SIGINT, only the \alert{\textbf{current}} \bash|ping| will terminate and the \bash|for| loop will continue!
+            \end{varblock}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            \begin{varblock}{}[1.03\textwidth]{}
+                Commands that don't have a SIGINT handler (like \bash|sleep|) or \textbf{do the right thing of killing themselves with SIGINT upon receiving SIGINT} (like \bash|bash| itself does) don't exhibit the problem!
+            \end{varblock}
+            \begin{lstlisting}[style=MyBash]
+                #!/bin/bash
+                index=1
+                while [[ "${index}" -le 100 ]]; do
+                  printf "%d " "$((index++))"
+                  sleep 1
+                done; echo  # This script terminates correctly via CTRL-C
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<4>
+            \medskip
+            \begin{varblock}{alert}[\textwidth]{Take-home lesson}
+                If you choose to set up a handler for SIGINT (rather than using the EXIT trap), you should be aware that \alert{\textbf{a process that exits in response to SIGINT should kill itself with SIGINT rather than simply exiting}}, to avoid causing problems for its caller.
+                The same goes for SIGQUIT.
+            \end{varblock}
+            \begin{lstlisting}[style=MyBash, numbers=none]
+                trap 'DoYourStuffHere; trap - INT; kill -s INT "$$"' INT
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
 \end{frame}
 
 
