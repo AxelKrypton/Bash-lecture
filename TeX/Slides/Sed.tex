@@ -1,0 +1,291 @@
+%------------3mm-------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 10 Sep 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Sed: A marvelous utility}
+    \vspace{-3mm}
+    \begin{varblock}{quote}[\textwidth]{The awful truth about \bash|sed|}
+        \textnormal{Sed is extremely powerful.
+        Unfortunately, most people never learn its real power.
+        The language is simpler than the average user thinks, because the documentation is far from being ideal.
+        Sed has several commands, but most people only learn the substitute command \texttt{'s'}.
+        And the GNU manual begins exactly with examples about the \texttt{'s'} command.}
+    \end{varblock}
+    \vspace{-1mm}
+    \begin{varblock}{example}[\textwidth]{Not bad!}
+        The substitute command is just one command.
+        Sed has at least 20 different commands for you.
+        You can even write \URL[PB]{https://catonmat.net/wp-content/uploads/2008/09/sedtris.sed}{Tetris} in it (not to mention that \PS{it's Turing complete}).
+    \end{varblock}
+    \vspace{-1mm}
+    \begin{varblock*}{}[0.76\textwidth]{Some references}
+        \URL[PB]{https://www.gnu.org/software/sed/manual}{The official GNU manual} {\tiny\{~The PDF is 85 pages long\ldots~\}}\\
+        \URL[PS]{http://www.grymoire.com/Unix/Sed.html\#uh-0}{A very nice tutorial} {\tiny\{~Bash code there often uses deprecated features, but you should know it by now!~\}}\\
+        \URL[PT]{http://sed.sourceforge.net/sed1line.txt}{One-liners, with some comments}\\
+        \URL[PQ]{https://catonmat.net/sed-one-liners-explained-part-one}{More one-liners, explained but advanced!}
+    \end{varblock*}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The PDF manual is 85 pages long. What should I learn here?}
+    \vspace{-4mm}
+    \begin{itemize}
+        \item We will focus on the abstract idea of \textbf{how} \bash|sed| processes a file
+        \item Some of the simplest commands (acting on a single line) will be introduced
+        \item Learning Sed is almost like learning a new programming language, mastering it is probably not needed for a physicist either
+    \end{itemize}
+    \begin{uncoverenv}<2->
+        \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm]
+            # Invocation
+            sed |+OPTIONS... [SCRIPT] [INPUTFILE...]+|
+    
+            # General command syntax to be put in [SCRIPT]
+            [addr]X[options]
+        \end{lstlisting}
+    \end{uncoverenv}
+    \begin{itemize}[<3>]
+        \item \texttt{X} is a \bash|sed| command.
+        \item \texttt{[addr]} is an optional line address.\\
+              If \texttt{[addr]} is specified, the command \texttt{X} will be executed only on the matched lines.\\
+              \texttt{[addr]} can be a single line number, a regular expression, or a range of lines.
+        \item Additional \texttt{[options]} are used for some \bash|sed| commands.
+        \item Quote the commands to avoid shell globbing conflicts.\\
+              Usually you want to use single quotes.
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Some of the most used commands}
+    \vspace{-2mm}
+    \begin{description}[XXX]
+        \item[{s/regexp/replacement/[flags]}] ~\\[0.5ex]
+            Match the regular-expression against the content of the pattern space.\\
+            If found, replace matched string with replacement.
+        \item[p] ~\\[0.5ex]
+            Print the pattern space, up to the first newline.
+        \item[d] ~\\[0.5ex]
+            Delete the pattern space; immediately start next cycle.
+        \item[=] ~\\[0.5ex]
+            Print the current input line number (with a trailing newline).
+        \item[\{ cmd ; cmd \ldots \}] ~\\[0.5ex]
+            Group several commands together.
+        \item[q] ~\\[0.5ex]
+            Exit \bash|sed| without processing any more commands or input.
+    \end{description}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{A \bash|sed| cycle: Being line oriented}
+    \vspace{-4mm}
+    \begin{overlayarea}{\textwidth}{0.26\textheight}
+        \begin{enumerate}
+            \setcounter{enumi}{-1}
+            \item<only@0> % Here I cheat and I do a horrible work-around to avoid a vertical shift I have no clue why it occurs!
+            \item<only@2> The next line is read from the input file and placed it in the pattern space.\\
+                          If the end of file is found, and if there are additional files to read, the current file is closed, the next file is opened, and the first line of the new file is placed into the pattern space.
+            \item<only@3> The line count is incremented by one.\\
+                          Opening a new file does not reset this number.
+            \item<only@4> Each \bash|sed| command is examined.
+                          If there is a restriction placed on the command, and the current line in the pattern space meets that restriction, the command is executed.
+                          Some commands, like \texttt{'d'} cause \bash|sed| to go to the top of the loop.
+                          The \texttt{'q'} command causes \bash|sed| to stop.
+                          Otherwise the next command is examined.
+            \item<only@5> After all of the commands are examined, the pattern space is printed to the output (unless sed has the optional "-n" argument) and the pattern space is emptied.
+        \end{enumerate}%}
+    \end{overlayarea}
+    \begin{center}
+        \begin{tikzpicture}
+            \coordinate (O) at (0,0);
+            \begin{scope}[node distance=4mm, every node/.style={thick}]
+                \node[draw=PB, background fill=PP!10,  fill on=<2-4>, cloud, cloud puffs=11, text=PB, text width=1cm, align=center] (space) at (O) {Pattern space};
+                \node[draw, fill=gray!20, ellipse, above = of space, xshift=55mm] (file) {Input file};
+                \node[draw=PS, fill=PS!10, ellipse, text=PS, below = of space, xshift=55mm] (output) {Output};
+                \node[draw=PQ, fill=PT!10, circle, text=PQ, above = of space, xshift=-35mm, label=below:{\footnotesize Line counter}] (linenr) {=\strut};
+                \node[draw=PB, fill=PB!20, rounded corners=1mm, text=black, below = of space, xshift=-25mm] (exit) {EXIT};
+            \end{scope}
+            \path[to, visible on=<2->] (file) edge[out=180, in=90, looseness=0.6] node[pos=0.3, above=2pt, font=\scriptsize] {Read line into pattern space} (space);
+            \path[to, visible on=<3->, overlay] (linenr) edge[out=60, in=330, looseness=4] node[pos=0.5, right, font=\scriptsize\ttfamily, text=PQ] {++} (linenr);
+            \path[to, visible on=<4->] (space) edge[out=60, in=330, looseness=3] node[pos=0.5, right, font=\scriptsize, text=PP] {Every command is examined and maybe executed} (space)
+                                               edge[out=300, in=150, looseness=0.6] node[pos=0.6, above, font=\scriptsize, text=PS] {Some commands print something} (output)
+                                               edge[out=180, in=90] node[pos=0.4, left=2mm, font=\scriptsize, text=PB] {Sed might terminate} (exit);
+            \path[to, visible on=<5->] (space) edge[out=270, in=180, looseness=0.6] node[pos=0.6, below=1mm, font=\scriptsize, text=PS] {Print, maybe, and empty pattern space} (output);
+        \end{tikzpicture}
+    \end{center}
+    \FrameRemark{There is also a hold space and this flow gets modified by more complex commands. This is a good approximation.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Address restrictions}
+    \vspace{-3mm}
+    \begin{varblock}{quote}[\textwidth]{A command can be limited to some lines using restrictions}
+        \vspace{-2mm}\textnormal{
+            \begin{itemize}
+                \item A positive line number (use \texttt{\$} to refer to the last line)
+                \item A regular expression \PP{\texttt{/regex/}} or \PP{\texttt{\textbackslash$\bullet$regex$\bullet$}} where \PP{$\bullet$} is any character {\tiny\{~not to be matched!~\}}
+                \item Use an exclamation mark after the address to negate that address
+                \item A comma separated pair to specify a range of lines
+            \end{itemize}
+        }
+    \end{varblock}
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        |++|                # Command applies
+        |+3+|               #  - to line 3 only
+        |+/^#/+|            #  - to lines starting by #
+        |+\%^//%+|          #  - to lines starting by //
+        |+5!+|              #  - not to line 5
+        |+1,3+|             #  - to first three lines
+        |+3,$+|             #  - from line 3 to the end
+        |+1,/one/+|         #  - till the first line matching 'one'
+        |+/begin/,/end/$+|  #  - from the first line matching 'begin'
+                        #    to the first matching 'end' (included)
+    \end{lstlisting}
+    \FrameRemark{\URL[PB]{https://www.gnu.org/software/sed/manual/sed.html\#BRE-syntax}{Basic Regular Expression (BRE)} VS \URL[PB]{https://www.gnu.org/software/sed/manual/sed.html\#ERE-syntax}{Extended Regular Expression (ERE)}}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The main commands: Substitute}
+    \vspace{-2mm}
+    \begin{onlyenv}<1>
+        \begin{varblock}{quote}[0.9\textwidth]{\texttt{s/regexp/replacement/[flags]}}
+            \textnormal{The \texttt{'s'} command attempts to match the pattern space against the supplied regular expression \texttt{regexp};
+            if the match is successful, then that portion of the pattern space which was matched is replaced with \texttt{replacement}.}
+        \end{varblock}
+        \begin{itemize}
+            \item The \texttt{/} is called delimiter and can replaced with any character
+            \item The delimiter can appear in \texttt{regexp} or \texttt{replacement} only if escaped
+            \item Unescaped \alert{\texttt{\&}} characters reference \alert{the whole matched portion of the pattern space}
+            \item The replacement can contain \PP{\texttt{\textbackslash1}, \ldots, \texttt{\textbackslash9}} references,
+                  which refer to the portion of the match which is contained between the \PP{first, \ldots, nineth} \texttt{\textbackslash(} and its matching \texttt{\textbackslash)}
+            \item Important-to-know flags are
+                  \begin{itemize}
+                      \item[g] Apply the replacement to all matches to the \texttt{regexp}, not just the first
+                      \item[number] Only replace the number-th match of the \texttt{regexp} (between 1 and 512)
+                      \item[p] If the substitution was made, then print the new pattern space
+                  \end{itemize}
+        \end{itemize}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash]
+            $ seq 11 12 | sed 's/12/twelve/'
+            |+11
+            twelve+|
+            $ seq 11 12 | sed 's/1/X/'
+            |+X1
+            X2+|
+            $ seq 11 12 | sed 's/1/X/g'
+            |+XX
+            X2+|
+            $ seq 11 12 | sed 's/1/X/2'
+            |+1X
+            12+|
+            $ seq 11 12 | sed 's/2/Y/p'
+            |+11
+            1Y
+            1Y+|
+            $ sed 's/[0-9]\+/(&)/' <<< 'Wed 09 Sep 2019'
+            |+Wed (09) Sep 2019+|
+            $ sed 's/[0-9]\+/(&)/g' <<< 'Wed 09 Sep 2019'
+            |+Wed (09) Sep (2019)+|
+            $ sed -r 's/[0-9]+/(&)/g' <<< 'Wed 09 Sep 2019'
+            |+Wed (09) Sep (2019)+| # -r option for ERE
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \begin{lstlisting}[style=MyBash, firstnumber=23, xrightmargin=2mm]
+            $ seq 11 12 | sed 's/1/&&/'
+            |+111
+            112+|
+            $ sed 's/\([a-z]\+\) \([a-z]\+\)/\2 \1/' <<< 'hello world'
+            |+world hello+|
+            $ sed 's/^\(.\)\(.\)\(.\)\(.\) /\3\2\1\4/' <<< 'nice star'
+            |+cinestar+|
+            $ printf "=%0.s" {1..20} | sed 's/./&:/10'; echo
+            |+==========:==========+|
+            $ cd /usr/local/bin
+            $ sed 's/\/usr\/local\/bin/\/common\/bin/' <<< "${PWD}/emacs"
+            |+/common/bin/emacs+|
+            $ sed 's_/usr/local/bin_/common/bin_' <<< "${PWD}/emacs"
+            |+/common/bin/emacs+|
+            $ sed 's:/usr/local/bin:/common/bin:' <<< "${PWD}/emacs"
+            |+/common/bin/emacs+|
+            $ sed 's|/usr/local/bin|/common/bin|' <<< "${PWD}/emacs"
+            |+/common/bin/emacs+|
+            $ value='3 5'; sed 's/Y/'"${value}"'/' <<< "XYZ"
+            |+X3 5Z+|
+            $ value='3 5'; sed 's/Y/'${value}'/' <<< "XYZ"
+            |+sed: -e expression #1, char 5: unterminated `s' command+|
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The main commands: Print}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item Print out the pattern space
+        \item Note that \PP{the printing induced by the \texttt{p} command is unrelated to the printing done by \bash|sed| at the end of the cycle}
+        \item Hence, this command is usually only used in conjunction with the \bash|-n| command-line option of \bash|sed| (whose long name is \texttt{--quite} or \texttt{--silent})
+        \item It is commonly used together with an address restriction
+    \end{itemize}
+    \begin{lstlisting}[style=MyBash]
+        $ sed 'p' <<< 'Echo me'
+        |+Echo me
+        Echo me+|
+        $ sed -n 'p' <<< 'Only once'
+        |+Only once+|
+        $ seq 1 9 | sed -n '5 p'
+        |+5+|
+        $ seq 1 9 | sed -n '7,$ p'
+        |+7
+        8
+        9+|    # Try out: seq 10 | sed -n '1~3 p'
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The main commands: Delete}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item Delete the pattern space and \PP{immediately start next cycle}
+        \item It is used to delete lines from the input file(s)
+        \item It is commonly used together with an address restriction
+    \end{itemize}
+    \medskip
+    \begin{lstlisting}[style=MyBash]
+        $ seq 10 | sed '3,$ d'
+        |+1
+        2+|
+        $ sed '2 d' <<< $'A\n nice but\n cold place'
+        |+A
+         cold place+|
+        $ sed '/b/,/f/ d' <<< $'a\nb\nc\nd\ne\nf\ng'
+        |+a
+        g+|
+        $ sed '/^#/ d' filename  # Remove bash comments
+        # ... <- look up option -i of sed to edit the file in place
+        $ sed '/^$/ d' filename  # Remove empty lines
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The main commands: quit, line number and groups}
+    \vspace{-4mm}
+    \begin{itemize}
+        \item The \texttt{'q'} command exits \bash|sed| without processing any more commands or input.
+              This command exits at the end of the cycle, i.e. it prints the current pattern space.
+        \item The \texttt{'='} command prints out the current input line number (with a trailing newline).
+        \item A group of commands may be enclosed between \texttt{\{} and \texttt{\}} characters.
+              This is particularly useful when you want a group of commands to be triggered by a single address (or address-range) match. 
+    \end{itemize}
+    \begin{lstlisting}[style=MyBash]
+        $ sed 15 | sed '2q'
+        |+1
+        2+|
+        $ sed '=' <<< $'aaa\nbbb'
+        |+1
+        aaa
+        2
+        bbb+|
+        $ sed -n '$=' filename  # Equivalent to 'wc -l < filename'
+        $ seq 3 | sed -n '2{s/2/X/ ; p}'
+        |+X+|
+    \end{lstlisting}
+\end{frame}
+
+
+
+
