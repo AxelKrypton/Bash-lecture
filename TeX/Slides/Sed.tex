@@ -4,7 +4,7 @@
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Sed: A marvelous utility}
+\begin{frame}{Sed: A marvellous utility}
     \vspace{-3mm}
     \begin{varblock}{quote}[\textwidth]{The awful truth about \bash|sed|}
         \textnormal{Sed is extremely powerful.
@@ -38,8 +38,8 @@
     \begin{uncoverenv}<2->
         \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm]
             # Invocation
-            sed |+OPTIONS... [SCRIPT] [INPUTFILE...]+|
-    
+            sed |+[OPTIONS...] [SCRIPT] [INPUTFILE...]+|
+
             # General command syntax to be put in [SCRIPT]
             [addr]X[options]
         \end{lstlisting}
@@ -263,7 +263,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The main commands: quit, line number and groups}
-    \vspace{-4mm}
+    \vspace{-3mm}
     \begin{itemize}
         \item The \texttt{'q'} command exits \bash|sed| without processing any more commands or input.
               This command exits at the end of the cycle, i.e. it prints the current pattern space.
