@@ -63,7 +63,7 @@
         \item Before starting processing the input file(s), the \texttt{BEGIN} block, if present, is processed.
               There is no default action for this block.
         \item Input is read until the \textbf{R}ecord \textbf{S}eparator is found (generally an end-of-line).
-        \item Some default record processing is done, e.g. splitting it in fields, and builtin variables are updated.
+        \item Some default record processing is done, e.g. splitting it in fields (removing separators), and builtin variables are set.
         \item Processing of the part of input is done, executing the blocks in the given orders.\\
               An action in a block might jump to reading from the input, skipping the following blocks.
         \item Input is read again, i.e. go to \MakeEnumerateBox{2}.
@@ -79,21 +79,52 @@
     \FrameRemark{There are exceptions to the flow above (e.g. the \texttt{exit} keyword). \alert{Use this slide as approximated overview.}}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{8 powerful \bash|awk| builtin variables and the field placeholders}
-    \begin{description}
-        \item[\textbf{FS}]
-        \item[\textbf{OFS}]
-        \item[\textbf{RS}]
-        \item[\textbf{ORS}]
-        \item[\textbf{NR}]
-        \item[\textbf{NF}]
-        \item[\textbf{FILENAME}]
-        \item[\textbf{FNR}]
-    \end{description}
-    \begin{description}
-        \item[\$n] 
-        \item[\$(n)]
-    \end{description}
+\begin{frame}{8 powerful \bash|awk| builtin variables}
+    \begin{varblock}{quote}[0.7\textwidth]{You can change this to a string or regular expression}
+        \normalfont
+        \begin{description}[XXXXXX]
+            \item[\textbf{FS}] \textbf{F}ield \textbf{S}eparator. \PP{White-space} by default.
+            \item[\textbf{OFS}] \textbf{O}utput \textbf{F}ield \textbf{S}eparator. \PP{Single white-space} by default.
+            \item[\textbf{RS}] \textbf{R}ecord \textbf{S}eparator. \PP{End of line} by default.
+            \item[\textbf{ORS}] \textbf{O}utput \textbf{R}ecord \textbf{S}eparator. \PP{End of line} by default.
+        \end{description}
+    \end{varblock}
+    \begin{varblock}{}[0.68\textwidth]{Variable automatically set}
+        \begin{description}[\textbf{FILENAME}]
+            \item[\textbf{NR}] \textbf{N}umber of \textbf{R}ecord.
+            \item[\textbf{NF}] \textbf{N}umber of \textbf{F}ield.
+            \item[\textbf{FILENAME}] The name of the file being processed.
+            \item[\textbf{FNR}] \textbf{N}umber of \textbf{R}ecord within the \textbf{F}ile being processed.
+        \end{description}
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The field placeholders}
+    \vspace{-4mm}
+    \begin{varblock}{example}[0.8\textwidth]{Field placeholders, automatically set}
+        \begin{description}[XXXXXX]
+            \item[\$n] The fields can be accessed via \$1, \ldots,\$9, \$10, \ldots
+            \item[\$0] This special placeholder can be used to access the full record
+        \end{description}
+    \end{varblock}
+    \begin{lstlisting}[style=MyBash]
+        $ awk '{print $1}' <<< $'A 1 \n B 2 \n C 3'
+        |+A
+        B
+        C+|
+        $ awk '{print $1, $10, $(10)}' <<< "1 2 3 4 5 6 7 8 9 A"
+        |+1 A A+|
+        $ awk '{print $1 "|" $2}' <<< "A:B C::D"
+        |+A:B|C::D+|
+        $ awk 'BEGIN{FS=":"}{print $1 "|" $2}' <<< "A:B C::D"
+        |+A|B C+|
+        $ awk 'BEGIN{FS="::"}{print $1 "|" $2}' <<< "A:B C::D"
+        |+A:B C|D+|
+        $ awk 'BEGIN{FS=":"; OFS="|"}{print $1, $2}' <<< "A:B C::D"
+        |+A|B C+|
+        $ awk 'BEGIN{ORS="|"}{print $1}' <<< $'A 1 \n B 2 \n C 3'
+        |+A|B|C+|  # without final new line
+    \end{lstlisting}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Variables in \bash|awk| and passing Bash variables to \bash|awk|}
@@ -118,7 +149,60 @@
     \end{lstlisting}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{A (very limited) taste of \bash|awk| by examples}
-    
+\begin{frame}[fragile]{A (very limited) taste of \bash|awk| by examples}
+    \vspace{-3mm}
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm]
+            $ seq 100 | awk '{sum+=$1}END{print "Gauss answered " sum}'
+            |+Gauss answered 5050+|
+
+            $ shuf -i 1-20 -n 100 -r |
+            > awk '$1>10{high++}END{print "Drawn " high " numbers >10."}'
+            |+Drawn 52 numbers >10.+|
+
+            # Print every line that is longer than 80 characters
+            awk 'length($0) > 80' filename
+
+            # Print the length of the longest input line
+            awk '    { if (length($0) > max) {max = length($0)} }
+                 END { print max }' filename
+
+            # Print every line that has at least one field
+            awk 'NF > 0' filename
+
+            # Count the lines in a file
+            awk 'END { print NR }' filename
+
+            # Print the even-numbered lines in the data file
+            awk 'NR % 2 == 0' data
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm, belowskip=-5mm]
+            # Throwing two dice 1000 times and getting distribution
+            $ paste <(shuf -i 1-6 -n 1000 -r) <(shuf -i 1-6 -n 1000 -r) |
+            > awk '{dice[$1+$2]++}
+            >      END
+            >      {
+            >        for(key in dice){
+            >          printf "P(%2d) ~ %.3f\n", key, dice[key]/NR
+            >        }
+            >      }'
+            |+P( 2) ~ 0.038+|  # 1/36 = 0.028
+            |+P( 3) ~ 0.051+|  # 2/36 = 0.056
+            |+P( 4) ~ 0.081+|  # 3/36 = 0.083
+            |+P( 5) ~ 0.100+|  # 4/36 = 0.111
+            |+P( 6) ~ 0.156+|  # 5/36 = 0.139
+            |+P( 7) ~ 0.161+|  # 6/36 = 0.167
+            |+P( 8) ~ 0.148+|  # 5/36 = 0.139
+            |+P( 9) ~ 0.115+|  # 4/36 = 0.111
+            |+P(10) ~ 0.070+|  # 3/36 = 0.083
+            |+P(11) ~ 0.052+|  # 2/36 = 0.056
+            |+P(12) ~ 0.028+|  # 1/36 = 0.028
+        \end{lstlisting}
+        \begin{varblock}{alert}[0.7\textwidth]{}
+            \Large \alert{As you can imagine, \bash|awk| is plenty of features!}
+        \end{varblock}
+    \end{onlyenv}
 \end{frame}
 

@@ -1,0 +1,228 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 13 Sep 2019          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Require a minimum Bash version}
+    \vspace{-3mm}
+    \begin{varblock}{example}[0.6\textwidth]{}
+        Using modern Bash features is important, but be sure you can then use them where your script are needed!
+    \end{varblock}
+    \begin{varblock}{quote}[0.4\textwidth]{}
+        \normalfont
+        Bash \PQ{v2.0} $\;\longrightarrow\;$ Released in \PQ{1996}\\
+        Bash \PT{v3.0} $\;\longrightarrow\;$ Released in \PT{2004}\\
+        Bash \PP{v4.0} $\;\longrightarrow\;$ Released in \PP{2009}\\
+        Bash \PP{v4.1} $\;\longrightarrow\;$ Released in \PP{2009}\\
+        Bash \PP{v4.2} $\;\longrightarrow\;$ Released in \PP{2011}\\
+        Bash \PP{v4.3} $\;\longrightarrow\;$ Released in \PP{2014}\\
+        Bash \PS{v4.4} $\;\longrightarrow\;$ Released in \PS{2016}\\
+        Bash \PS{v5.0} $\;\longrightarrow\;$ Released in \PS{2019}
+    \end{varblock}
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        $ echo "${BASH_VERSINFO[@]}"
+        |+4 4 20 1 release x86_64-pc-linux-gnu+|
+        $ echo "${BASH_VERSINFO[@]:0:3}" | tr ' ' '.'
+        |+4.4.20+|
+        # You can use the 'hash' builtin to check command existence 
+    \end{lstlisting}
+    \FrameRemark{Keep in mind that locally install a recent Bash version is pretty straightforward.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Be sensible!}
+    \vspace{-2mm}
+    \begin{varblock}{example}[0.95\textwidth]{}
+        \large \PS{Using Bash v3.0 or higher means you can avoid ancient scripting techniques!}
+    \end{varblock}
+    \medskip
+    \parbox[c][0.7\textheight][t]{\textwidth}{
+        \begin{onlyenv}<1>
+            \begin{enumerate}
+                \item When writing Bash scripts, \alert{do not use the \bash{[} command.}\\
+                      \PS{Bash has a far better keyword:} \bash{[[}
+                \item It's also time \alert{you forget about \texttt{`...`}}.
+                      It isn't consistent with the syntax of expansion and is terribly hard to nest without a dose of painkillers.
+                      \PS{Use \texttt{\$(...)} instead.}
+                \item And for heaven's sake, \textbf{use more quotes!}\\
+                      \PS{Protect your strings and parameter expansions from word splitting.}\\
+                      Word splitting will eat your babies if you don't quote things properly.
+                \item Learn to \PS{use parameter expansions} instead of \bash|sed|, \bash|awk| or \bash|cut| to manipulate simple strings in Bash.
+                \item \PS{Use built-in arithmetic} instead of \bash|expr| to do simple calculations, especially when just incrementing a variable!
+            \end{enumerate}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{enumerate}
+                \setcounter{enumi}{5}
+                \item Always use the correct shebang. If you're writing a Bash script, you need to put \bash|\#!/usr/bin/env bash|$\;$ at the top of your script.
+                \item Stay away from scripting examples you see on the Web!
+                      If you want to get inspired, understand them \textbf{completely}.
+                      Mostly any scripts you will find on the Web are broken in some way.
+                      \alert{Do not copy/paste from them!}
+                \item Almost as important as the result of your code is the \textbf{readability of your code}.
+                      Chances are that you aren't just going to write a script once and then forget about it.
+            \end{enumerate}
+            \begin{varblock}{quote}[0.85\textwidth]{}[Greg's Wiki]
+                Trust me when I say, no piece of code is ever 100\% finished, with the exception of some very short and useless chunks of nothingness.
+            \end{varblock}
+        \end{onlyenv}
+    }
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Being aware is the first step}
+    \begin{itemize}
+        \item Writing good Bash scripts is after all tough
+        \item Bash shell allows you to do quite a lot of things, offering you considerable flexibility
+        \item However, it does very little to discourage misuse and other ill-advised behaviour
+        \item Many awful and dangerous scripts end up in production or even in Linux distributions!!
+        \item The result of these, and also your very own scripts written in a time of neglect, can often be \textbf{disastrous}
+    \end{itemize}
+    \begin{varblock*}{example}[0.45\textwidth]{Important reading}
+        \URL[PT]{http://mywiki.wooledge.org/BashPitfalls}{Bash Pitfalls}$\quad${\tiny\{~59 discussed items~\}}\\
+        \URL[PB]{https://wiki.bash-hackers.org/scripting/obsolete}{Obsolete and deprecated syntax}\\
+        \URL[PP]{http://mywiki.wooledge.org/ShellHallOfShame}{Shell Hall of Shame}
+    \end{varblock*}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Never do anything along these lines in your scripts!}
+    \begin{enumerate}
+        \setcounter{enumi}{-1}
+        \item<only@0> % Here I cheat and I do a horrible work-around to avoid a vertical shift I have no clue why it occurs!
+        \item<only@1>
+            \alert{\large\textbf{Don't ever parse the output of the \bash|ls| command!}}
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=38mm]
+                ls -l | awk '{ print $8 }'  # BAD CODE!
+            \end{lstlisting}
+            \begin{itemize}
+                \item \bash|ls| will mangle the filenames of files if they contain characters unsupported by your locale.
+                      As a result, \alert{parsing filenames out of ls is \textbf{never} guaranteed to actually give you a file that you will be able to find}.
+                      \bash|ls| might have replaced certain characters in the filename by question marks.
+                \item Secondly, \bash|ls| separates lines of data by newlines.
+                      This way, every bit of information on a file is on a new line.
+                      \alert{\textbf{Unfortunately} filenames themselves can \textbf{also} contain newlines!}
+                      This means that if you have a filename that contains a newline in the current directory, it will completely break your parsing and as a result, break your script!
+                \item Last but not least,\\ $\to\;$\alert{\textbf{the output format} of \bash|ls -l| \textbf{is not guaranteed consistent across platforms}}.
+            \end{itemize}
+            \PS{Use e.g.\ \textbf{globbing} or \bash|stat| or \bash|find|.}
+        \item<only@2>
+            \alert{\large\textbf{Don't ever test or filter filenames with the \bash|grep| command!}}
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=15mm]
+                if echo "${file}" | fgrep '.txt'; then  # BAD CODE!
+
+                ls *.txt | grep 'story'            # ALSO BAD CODE!
+            \end{lstlisting}
+            \begin{itemize}
+                \item Unless your \bash|grep| pattern is really smart it will probably not be trustworthy
+                \item In the first example above, the test would match both \texttt{story.txt} \textbf{and} \texttt{story.txt.exe}!
+                \item If you make \bash|grep| patterns that are smart enough, they'll probably be so ugly, massive and unreadable that you shouldn't use them anyway!
+            \end{itemize}
+            \PS{The alternative is called \textbf{globbing}.}\\
+            Bash has a feature called \textbf{Pathname Expansion}.
+            This will help you enumerate all files that match a certain pattern.
+            Also, you can use globs to test whether a filename matches a certain glob pattern.
+        \item<only@3>
+            \alert{\large\textbf{Avoid unnecessary use of the \bash|cat| command!}}
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=35mm]
+                cat filename | grep 'pattern'  # BAD CODE!
+            \end{lstlisting}
+            \begin{itemize}
+                \item Don't use \bash|cat| to feed a single file's content to a filter.
+                      \bash|cat| is a utility used to \textbf{concatenate} the contents of several files together.
+            \end{itemize}
+            To feed the contents of a file to a process you will probably be able to\\ $\to\;$\PS{pass the filename as an argument to the program!}\\
+            If the manual of the program does not specify any way to do this,\\ $\to\;$\PS{you should use redirection!}
+        \item<only@3>
+            \alert{\large\textbf{Don't use a \bash|for| loop to read the lines of a file!}}
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=35mm]
+                for line in $(<file); do  # BAD CODE!
+            \end{lstlisting}
+            \begin{itemize}
+                \item command substitutions remove any trailing newlines!
+            \end{itemize}
+            \PS{Use a \bash|while read| loop instead.}
+        \item<only@4>
+            \alert{\large\textbf{For the love of god and all that is holy, do not use \bash|seq| to count!}}
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=35mm]
+                for index in $(seq 1 10); do  # BAD CODE!
+            \end{lstlisting}
+            \begin{itemize}
+                \item Bash is able enough to do the counting for you.
+                      You do not need to spawn an external application (especially a single-platform one) to do some counting and then pass that application's output to Bash for word splitting.
+            \end{itemize}
+            \PS{Use one of the following approaches.}
+            \begin{itemize}
+                \item In general, C-style for loops are the best method for implementing a counter
+                      \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm, xrightmargin=38mm]
+                          for ((i=1; i<=10; i++)); do  # BEST WAY
+                      \end{lstlisting}
+                \item If you actually wanted a stream of numbers separated by newlines as test input, consider
+                      \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm, xrightmargin=65mm]
+                          printf '\%d\n' {1..10}
+                      \end{lstlisting}
+                      You can also loop over the result of a sequence expansion if the range is constant, but the shell needs to expand the full list into memory before processing the loop body.
+                      This method can be wasteful and is less versatile than other arithmetic loops.
+            \end{itemize}
+        \item<only@5>
+            \alert{\large\textbf{\bash|expr| is a relic of ancient Rome. Do not wield it!}}
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=48mm]
+                i=`expr $i + 1`  # VERY BAD CODE!
+            \end{lstlisting}
+            \begin{itemize}
+                \item You're basically
+                      \begin{itemize}
+                          \item spawning a new process,
+                          \item calling another C program to do some arithmetic for you and
+                          \item return the result as a string to Bash.
+                      \end{itemize}
+                      Bash can do all this itself and so much faster, more reliably and in all, better!\\ {\scriptsize\{~no numbers $\to$ string $\to$ number conversions~\}}
+            \end{itemize}
+            \PS{In Bash you should use either $\;$\bash|let i++|$\;$ or $\;$\bash|((i++))|.}
+    \end{enumerate}
+    \begin{varblock}{}[0.75\textwidth]{Do not worry!}<only@5>
+        We all did at least one of the previous in the past.\\
+        You learn by your mistakes as soon you know they are mistakes!
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Clean code}
+    \vspace{-3mm}
+    \begin{itemize}
+        \setlength{\itemsep}{1mm}
+        \item Bash is a scripting language\\ $\to$ this does not mean at all that it has not to fulfil good coding practices
+        \item If you ignore what clean code is, have a look \URL[PB]{https://itp.uni-frankfurt.de/\~strongmatter/seminar_slides_GU/2019.06.03.sciarra.pdf}{here}!
+        \item Use meaningful names and strive for readability.
+        \item If you do tricky stuff in your script, comment them!
+        \item If you need to work on a larger script in Bash,
+              \begin{itemize}
+                  \item split your source code across files and
+                  \item test your code, for real, i.e. write unit tests!\\ \URL[PS]{https://github.com/kward/shunit2}{Shell unit test framework}
+              \end{itemize}
+        \item A good/clean code is
+              \begin{itemize}
+                  \item Readable
+                  \item Maintainable
+                  \item Easy to extend
+                  \item Easy to use
+                  \item Hard to break
+                  \item Testable/Tested
+              \end{itemize}
+    \end{itemize}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=south east] at ($(current page.south east)+(-6mm,6mm)$) {\includegraphics[width=4cm]{Readability.jpg}};
+    \end{tikzpicture}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
