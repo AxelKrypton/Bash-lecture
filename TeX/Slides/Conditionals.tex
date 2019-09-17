@@ -73,17 +73,18 @@
     \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{The \bash|test| command and its friend \bash{[}}{Many tests are supported $\to$ for a complete list refer to the manual}
-    \vspace{-6mm}
+\begin{frame}[fragile]{The \bash|test| command and its friend \bash{[}}
+    \vspace{-5mm}
     \begin{center}
-        \begin{minipage}{0.8\textwidth}
-            \begin{description}[<only@1>][\texttt{-n STRING}]
+        \begin{minipage}{0.85\textwidth}
+            \begin{description}[<only@1>][\texttt{-v VARIABLE}]
                 \item[\texttt{-e FILE}] True if file exists
                 \item[\texttt{-f FILE}] True if file is a regular file (not a directory or device file)
                 \item[\texttt{-d FILE}] True if file is a directory
                 \item[\texttt{-s FILE}] True if file exists and is not empty
                 \item[\texttt{-z STRING}] True if the string is empty (it's length is zero)
                 \item[\texttt{-n STRING}] True if the string is not empty (it's length is not zero)
+                \item[\texttt{-v VARIABLE}] True if the shell variable is set (has been assigned a value)$^\star$
             \end{description}
         \end{minipage}
         \begin{minipage}{0.9\textwidth}
@@ -149,6 +150,10 @@
             |+YES+|
         \end{lstlisting}
     \end{onlyenv}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=north east, font=\scriptsize, visible on=<1>] at ($(current page.north east)-(1mm,1mm)$) {$^\star$\PB{Since Bash v4.2}};
+    \end{tikzpicture}
+    \FrameRemark{Many more tests are supported $\to$ for a complete list refer to the Bash manual (v5.0 \S6.4).}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \bash{[[} keyword}

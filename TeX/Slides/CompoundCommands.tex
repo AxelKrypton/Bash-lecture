@@ -95,7 +95,7 @@
         \end{itemize}
         \begin{lstlisting}[style=MyBash, numbers=none]
             $ { echo "$(date)"
-            >   rsync -av . /backup; echo "$(date)";@|\tikzmark{sc}|@ } >backup.log 2>&1
+            >   rsync -av |+.+| /backup; echo "$(date)";@|\tikzmark{sc}|@ } >backup.log 2>&1
         \end{lstlisting}
         \smallskip
         \begin{varblock}{quote}[0.9\textwidth]{}<only@1>
@@ -151,7 +151,7 @@
                       $ (( aVar=7*3**2 )); echo "${aVar}"
                       |+63+|
                       $ (( aVar=1+${aVar}/20 )); echo "${aVar}"; unset aVar
-                      |+4+|
+                      |+4+|        # '${}' not really needed@|$^\star$|@
                   \end{lstlisting}
             \item<only@1> Although not a compound command, the arithmetic substitution uses the same syntax
                   \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm]
@@ -168,7 +168,7 @@
             \item<only@2> Arithmetic evaluation is very helpful in combination with conditionals
                   \begin{lstlisting}[style=MyBash, aboveskip=2mm, belowskip=-6mm]
                       $ ((aVar=(5+2)*3))
-                      $ if (($aVar == 21)); then
+                      $ if ((aVar == 21)); then
                       >   echo 'Blackjack!'
                       > fi
                       |+Blackjack!+|
@@ -185,6 +185,7 @@
                   \end{lstlisting}
         \end{itemize}
     \end{overlayarea}
+    \FrameRemark[1]{$^\star$Using the \texttt{\$\{\}} makes Bash use \bash|''| for uninitialised variables and might trigger errors (\texttt{0} is used for uninitialised variables referenced without \texttt{\$\{\}} syntax).}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 

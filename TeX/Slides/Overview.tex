@@ -26,7 +26,7 @@
                 \end{tabular}
             };
             \node[right = of A3] {Dr. Alessandro Sciarra};
-            \node[right = of A4] {sciarra@th.physik.uni-frankfurt.de};
+            \node[right = of A4] {sciarra@itp.uni-frankfurt.de};
         \end{tikzpicture}
     \end{center}
 \end{frame}
@@ -104,24 +104,27 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{The mind setup of this course}
-    I know, the amount of information given in this lecture is huge, but
-    \begin{varblock}{alerted}[0.4\textwidth]{Remember:}
+    \vspace{-3mm}
+    \begin{varblock}{alerted}[0.35\textwidth]{Remember:}<3->
         \PQ{\large This is not the full story!}
     \end{varblock}
     \vspace{1mm}
-    \begin{enumerate}[<+(1)->]
-        \item You will often not receive all the details\\
-              $\;\to\;$ be active, ask, use manuals, go beyond this lecture!
-        \item Often it is hard (very hard) to enucleate all details of and exceptions to rules \\
-              $\;\to\;$ experience and practice will fill the gap
-        \item From rules/practical examples to abstract ideas/good practices
-        \item 100\% Bash, no focus on portability or differences among \\ various shell languages {\tiny \{~I am not at that level~\}}\\
-              $\;\to\;$ sh, ksh, csh, tcsh, bash, zsh, fish, \ldots
-        \item \PT{Interactive lecture: ask, ask, ask!}
+    \begin{enumerate}
+        \setcounter{enumi}{1}
+        \item<3-> The amount of information given in this lecture is \textbf{huge}, I am aware of it
+        \item<3-> You will not receive all the details (I tried to pass on the important information, though)\\
+                  $\;\to\;$ be active, ask, use manuals, go beyond this lecture!
+        \item<4-> Often it is hard (very hard) to enucleate all details of and exceptions to rules \\
+                  $\;\to\;$ experience and practice will fill the gap
+        \item<4-> From rules/practical examples to abstract ideas/good practices
+        \item<5-> 100\% Bash, no focus on portability or differences among \\ various shell languages {\tiny \{~I am not at that level~\}}\\
+                  $\;\to\;$ sh, ksh, csh, tcsh, bash, zsh, fish, \ldots
+        \setcounter{enumi}{0}
+        \item<2-> \PS{\textbf{Relaxed atmosphere!}}\\
+                  \PT{Interactive lecture: ask, ask, ask!}
     \end{enumerate}
     \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=south east] (fig) at (current page.south east) {\includegraphics[width=28mm]{Relax}};
-        \node[above = 1pt of fig.south] {\fontsize{3}{5}\selectfont Photo by Ashley Whitlatch on Unsplash};
+        \node[anchor=south east, visible on=<2->] (fig) at (current page.south east) {\includegraphics[width=42mm]{Relax}};
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -165,7 +168,7 @@
     \begin{itemize}
         \item[] \URL{http://tldp.org/LDP/Bash-Beginners-Guide/html/}{Bash Beginners Guide}\PB{\tiny\{~A nice, from-zero tutorial~\}} \tikzmark{TutorialBegin}
         \item[] \URL{https://www.shellscript.sh/}{Shell scripting tutorial}\PB{\tiny\{~Nice tutorial, but not only Bash~\}}
-        \item[] \URL{http://mywiki.wooledge.org/BashGuide}{Bash Guide}\PB{\tiny\{~Very precise guide, not completely from zero, though~\}} \tikzmark{TutorialEnd}
+        \item[] \URL[PS]{http://mywiki.wooledge.org/BashGuide}{Bash Guide}\PB{\tiny\{~Very precise guide, not completely from zero, though~\}} \tikzmark{TutorialEnd}
         \item[] \URL{https://github.com/AxelKrypton/Bash_lecture_2019}{All material \tikzmark{MeOnGitHub}of this lecture}
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay]
@@ -174,6 +177,7 @@
         \path[to] (MeOnGitHub) ++(0,-2mm) edge[out=270, in=180] node[pos=1, anchor=west] {My GitHub page \hspace{1mm}\raisebox{-1.3mm}{\includegraphics[width=5mm]{AxelKrypton}}} ++(25mm, -8mm);
         \node[anchor=north, inner ysep=3mm] (book) at ($(current page.north)!0.5!(current page.north east)$) {\includegraphics[width=16mm]{Cookbook}};
         \node[right = 1mm of book, inner ysep=3mm] {\includegraphics[width=16mm]{LearningBash}};
+        \path[from] (TutorialEnd) ++(-0mm,-1mm) edge[out=330, in=180] node[pos=1, right=2pt, font=\scriptsize, text=PS] {Main reference for preparing this lecture} ++(12mm, -6mm);
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -187,7 +191,7 @@
             \item \tc<2>{Monday}{Inception/Philosophy}
             \item \tc<2>{Monday}{Commands and arguments}
             \item \tc<2>{Monday}{Strings and types of commands}
-            \item \tc<2>{Monday}{Quoting and special characters} %Escape characters
+            \item \tc<2>{Monday}{Quoting and special characters}
             \item \tc<2>{Monday}{Variables and special parameter}
             \item \tc<2>{Monday}{Shell expansion}
             \item \tc<2>{Monday}{Word splitting}
@@ -195,10 +199,7 @@
             \item \tc<2>{Monday}{Conditionals and tests}
             \item \tc<2>{Tuesday}{Loops}
             \item \tc<2>{Tuesday}{Choices}
-        \end{enumerate}
-        \columnbreak
-        \begin{enumerate}\addtocounter{enumi}{11}
-            \item \tc<2>{Tuesday}{Colors and terminal commands}
+            \item \tc<2>{Tuesday}{Colours and terminal commands}
             \item \tc<2>{Tuesday}{Namerefs and Indirect expansion}
             \item \tc<2>{Tuesday}{Arrays and associative arrays}
             \item \tc<2>{Tuesday}{File descriptors and redirection}
@@ -207,20 +208,53 @@
             \item \tc<2>{Wednesday}{Asynchronous Commands}
             \item \tc<2>{Wednesday}{Functions}
             \item \tc<2>{Wednesday}{Awk and Sed}
-            \item \tc<2>{Wednesday}{Miscellaneous}
             \item \tc<2>{Wednesday}{Some good practices}
+            \item \tc<2>{Wednesday}{What to do now?}
         \end{enumerate}
     \end{multicols}
     \vspace{-2mm}
-    \begin{varblock}{}[0.6\textwidth]{}<2>
+    \begin{varblock}{quote}[0.5\textwidth]{}<2>
+        \normalfont
         \tc{Monday}{Monday}$\quad$---$\quad$
         \tc{Tuesday}{Tuesday}$\quad$---$\quad$
         \tc{Wednesday}{Wednesday}
     \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Bonus track: Iceland}{The magic of an incredible island}
-    \begin{tikzpicture}[remember picture, overlay]
+\begin{frame}[fragile]{A slide about notation}
+    \vspace{-5mm}
+    \begin{varblock*}{quote}[0.72\textwidth]{Slides notation}
+        \normalfont
+        \begin{itemize}
+            \setlength{\itemindent}{-1mm}
+            \item Slides are (too) full of text for a later reading!
+            \item Many examples to immediately show you how rules apply
+            \item In Bash code, syntax highlighted to help recognise the elements
+            \item Prompt commands are always preceded by a dollar sign 
+                  \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xleftmargin=1mm, xrightmargin=12mm]
+                      $ ls
+                  \end{lstlisting}
+                  {\tiny\{~When the \texttt{\$} is absent, the code refers to a script or it is pseudo-code~\}}
+        \end{itemize}
+    \end{varblock*}
+    \colorlet{Study}{DarkGreen}
+    \colorlet{Instructive}{DodgerBlue}
+    \colorlet{Inspirational}{OrangeRed}
+    \colorlet{Technical}{black}
+    \begin{varblock*}{alert}[0.57\textwidth]{Exercise colour notation}
+        \begin{itemize}
+            \setlength{\itemindent}{-1mm}
+            \item \tc{Study}{Review the morning lecture}
+            \item \tc{Instructive}{Focusing on and playing with a Bash feature}
+            \item \tc{Inspirational}{Inspirational for real life}
+            \item \tc{Technical}{Technical}
+        \end{itemize}
+    \end{varblock*}
+    \FrameRemark{This note usually provides further (advanced) information. Links here are worth the reading.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Bonus track\uncover<2>{: Iceland}}{\uncover<2>{The magic of an incredible island}}
+    \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
         \node (plan) at ($(current page.center)-(0,6mm)$) {\includegraphics[width=0.8\textwidth, clip, trim=1mm 0 0 0]{Map2}};
         \begin{scope}[x={($ (plan.south east) - (plan.south west) $ )},y={( $ (plan.north west) - (plan.south west)$ )}, shift={(plan.south west)}]
             %\draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
