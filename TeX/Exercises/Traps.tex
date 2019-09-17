@@ -1,0 +1,31 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 17 Sep 2019          %
+%-------------------------------%
+
+\begin{exercise}[Instructive]{Using traps to clean up}
+    The main purpose of this exercise is to understand how a trap works and how it can be useful.
+    We will consider the most common case, cleaning up, but signal handling can be used for much more than that.
+    
+    Suppose you have an analysis tool that takes a file with only one column in input and produces a file in output.
+    Suppose as well that your tool produces temporary files which are auxiliary for the analysis.
+    We will mimic the analysis tool via \bash|sort -g| (redirecting the output) and the temporary files will be simply touched.
+    Write a script to complete the following operations.
+    \begin{enumerate}
+        \item Split the data file into several files, each having one column of the original file.
+        \item For each single-column file
+              \begin{itemize}
+                  \item process it with the analysis tool (which will produce an output file);
+                  \item create the auxiliary files, e.g.\ with \bash|touch| \texttt{column\_\$\{index\}\_\{0..9\}.aux} (or similar);
+                  \item sleep for one second;
+                  \item remove the auxiliary files.
+              \end{itemize}
+    \end{enumerate}
+    You can produce a fake data file via \,\bash{seq 0 .001 1 | shuf | columns -c 11 -W 100}\, which has 11 columns, each with 91 lines.
+    \begin{enumerate}
+        \setcounter{enumi}{2}
+        \item Run the script (ideally in a new folder) and abort it with CTRL-C after few seconds.
+              Your folder should have been polluted by a bunch of files.
+        \item Add a \bash|trap| to your script to clean up on exit.
+    \end{enumerate}
+\end{exercise}

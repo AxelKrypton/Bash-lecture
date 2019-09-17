@@ -1,1 +1,31 @@
-% Function as logger: errors in red, warning in orange/yellow, info in green (-> add debug, trace ON/OFF)
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 17 Sep 2019          %
+%-------------------------------%
+
+\begin{exercise}[Instructive]{The world of functions}
+    In this exercise we will write few functions to practice and understand how they can be useful.
+    \begin{enumerate}
+        \item In the exercise session from yesterday, you learnt how to provide your script with command line options and, then, how to parse them.
+              Write a function that takes over this responsibility.
+              How do you invoke this function?
+        \item Write a function which checks if an element is in a given array.
+              How is input passed to this function?
+              How would you signal to the caller the presence/absence of the element?
+              Your function must work in general.
+              Test it with
+              \begin{lstlisting}[style=MyBash]
+                  array=("first element"  "to be found"  "something")
+                  string="to be found"
+              \end{lstlisting}
+              or with \bash|string="notExisting"|.
+        \item Write a function that, given two integers, calculates their \textbf{greatest common divisors} using the \URL[Blue]{https://en.wikipedia.org/wiki/Greatest\_common\_divisor\#Euclid's\_algorithm}{Euclid's algorithm}.
+              This is a great opportunity to write a recursive function.
+              Write another function which calculates the \textbf{least common multiple} of two integers, using the relation
+              \[
+                \mbox{lcm}(a,b)\cdot\mbox{gcd}(a,b)=a\cdot b \quad.
+              \]
+    \end{enumerate}
+\end{exercise}
+
+

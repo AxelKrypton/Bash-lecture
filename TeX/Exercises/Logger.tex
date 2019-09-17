@@ -1,0 +1,50 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 17 Sep 2019          %
+%-------------------------------%
+
+\begin{exercise}[Inspirational]{A (colourful) logger}
+    Now that you are more confident with functions, try to implement some functionality to easily log information to the user.
+    Often such a functionality is called logger.
+    We will focus on a basic version, but a bit of imagination you can improve it.
+    \begin{enumerate}
+        \item Start with two basic functions which should simply print what they receive to the output, prefixing it with a label and using a given colour.
+              Using them via
+              \begin{lstlisting}[style=MyBash]
+                  PrintInfo 'An informational message'
+                  PrintError 'An error message
+              \end{lstlisting}
+              should give\\[0.3ex]
+              {
+                \ttfamily
+                \hspace*{5mm}\color{ForestGreen}\underline{INFO}: An informational message\\
+                \hspace*{5mm}\color{red}\underline{ERROR}: An error message\\[0.5ex]
+              }
+              where you can also put the label in \textbf{bold} if you wish.
+              Write error messages to standard error.
+        \item Work on the functions in a way such that each parameter is printed on a new line, with a hanged indentation with respect to the label.
+              For example, 
+              \begin{lstlisting}[style=MyBash]
+                  PrintError 'An error message' 'which spans two lines' 'or three'
+              \end{lstlisting}
+              should give\\[0.3ex]
+              {
+                \ttfamily\color{red}
+                \hspace*{5mm}\underline{ERROR}:~An error message\\
+                \hspace*{5mm}\phantom{\underline{ERROR}:}~which spans two lines\\
+                \hspace*{5mm}\phantom{\underline{ERROR}:}~or three
+              }
+        \item You should have noticed that there is a lot of code duplication.
+              Write a generic \bash|Logger| function which take a label as first argument (either \texttt{INFO} or \texttt{ERROR}) and does what the other two functions where doing, depending on the label.
+              Use the \bash|Logger| in the \bash|PrintInfo| and \bash|PrintError| functions.
+              It is up to you if you want to use the \bash|Logger| everywhere or having a wrapper per level.
+        \item Add a warning level to your logger, with the correspondent \bash|PrintWarning| wrapper.
+        \item Additional optional level might be \texttt{FATAL}, \texttt{INTERNAL}, \texttt{DEBUG} and \texttt{TRACE}.
+              A fatal error is an error which causes a script to terminate, while an error might not necessarily be cause of abort.
+              Internal messages might be thought to be for developers.
+              Debug and trace levels are thought for low level messages and they should be switched off in normal, production runs.
+              Use an environment variable to set the logger level.
+              Give a meaningful priority to your logger levels and make it such that only the levels more important than the chosen level are switched on.
+    \end{enumerate}
+\end{exercise}
+
