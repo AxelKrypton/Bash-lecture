@@ -5,34 +5,64 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Do not be afraid}
+    \vspace{-4mm}
     \begin{itemize}
-        \item You received a huge amount of information
-        \item Nobody can expect have everything well settled in their head
-        \item You have these slides, work on them
+        \item \alert{You received a huge amount of information}
+        \item Nobody can expect to have everything well settled in their head \textbf{right now}
+        \item \PS{\textbf{You have these slides, work on them}}
         \item Links are important to make a further step forward
     \end{itemize}
-    \begin{varblock}{}[0.9\textwidth]{Bash is more than that}
-        You learnt a lot, but there is much more out there
+    \vspace{-2mm}
+    \begin{varblock}{}[0.6\textwidth]{Bash is more than that}<2>
+        You learnt a lot, but there is much more out there!
     \end{varblock}
+    \vspace{5mm}
+    \begin{columns}[c]
+        \begin{column}{0.3\textwidth}
+            \begin{tikzpicture}
+                \node[inner sep=0mm] (fig) {\includegraphics[width=35mm, clip, trim=8mm 5mm 8mm 0]{KnowBash.jpg}};
+                \begin{scope}[scope on=<2>]
+                    \draw[red, line width=2mm] (fig.south west) -- (fig.north east);
+                    \path[overlay, from] (fig.north east) ++(2pt,2pt) edge[out=45, in=180] node[pos=1, right=2pt, font=\scriptsize, text=PS] {Well, not yet, I would say!} ++(6mm,4pt);
+                \end{scope}
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{varblock}{alert}[0.8\textwidth]{}<2>
+                \alert{Unfortunately it is not that easy!}
+            \end{varblock}
+            \begin{varblock}{quote}[\textwidth]{}<2>
+                \normalfont
+                You need practice and our job offers plenty of possibility for that!
+            \end{varblock}
+        \end{column}
+    \end{columns}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{So, what should I do now?}
+    \vspace{-2mm}
     \begin{enumerate}
-        \item<1-> It is matter of doing small steps!
+        \setlength{\itemsep}{1mm}
+        \item<1-> \PB{\textbf{It is matter of doing small steps!}}
                   \begin{itemize}
                     \item Whenever reasonable, give it a chance
                     \item Take every daily-life opportunity to recall aspects of Bash
-                    \item These three days should a very good starting point for your work!
+                    \item These three days should be a very good starting point for your work!
                   \end{itemize}
-        \item<2-> I hope you enjoyed the course\ldots\ did you?\\
+        \item<2-> \PS{\textbf{I hope you enjoyed the course}}
                   \begin{itemize}
                       \item I would love to get a feedback from each of you
-                      \item Feel free to send me an email \,\href{mailto:sciarra@itp.uni-frankfurt.de}{{\small\Letter}}
+                      \item Feel free to send me an email \,\PS{\href{mailto:sciarra@itp.uni-frankfurt.de}{{\small\Letter}}}
+                            \begin{itemize}
+                                \item Did I meet your expectation? If no, why?
+                                \item Was the lecture \textbf{prohibitively} dense? {\tiny\{~Dense it had to be\ldots~\}}
+                                \item What would you change--add--remove?
+                            \end{itemize}
                   \end{itemize}
-        \item<3-> Last but not least, haven't you already planned your trip to Iceland? $\;$\raisebox{-3pt}{\includegraphics[height=12pt]{Wink}}
+        \item<3-> Last but not least, \PP{\textbf{haven't you already planned your trip to Iceland?}} $\;$\raisebox{-1pt}{\includegraphics[height=12pt]{Wink}}
     \end{enumerate}
     \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=north east, cloud, aspect=2, draw=PB, fill=PP!20, text=PB, visible on=<4>] at ($(current page.north east)+(-14mm,-20mm)$) {Thank you!};
+        \node[anchor=south, cloud, cloud puffs=19, aspect=4, draw=PB, fill=PP!20, text=PB, font=\large\bfseries, visible on=<4>] at ($(current page.south)+(0mm,8mm)$) {Thank you for attending!};
     \end{tikzpicture}
     
 \end{frame}

@@ -223,7 +223,7 @@
             \begin{lstlisting}[style=MyBash, belowskip=-5mm]
                 #!/bin/bash
                 for index in {1..254}; do
-                    ping -c 2 "192.168.1.$i"
+                    ping -c 2 "192.168.1.${index}"
                 done
             \end{lstlisting}
             \begin{varblock}{}[0.95\textwidth]{}

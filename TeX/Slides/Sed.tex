@@ -22,7 +22,7 @@
     \vspace{-1mm}
     \begin{varblock*}{}[0.76\textwidth]{Some references}
         \URL[PB]{https://www.gnu.org/software/sed/manual}{The official GNU manual} {\tiny\{~The PDF is 85 pages long\ldots~\}}\\
-        \URL[PS]{http://www.grymoire.com/Unix/Sed.html\#uh-0}{A very nice tutorial} {\tiny\{~Bash code there often uses deprecated features, but you should know it by now!~\}}\\
+        \URL[PS]{http://www.grymoire.com/Unix/Sed.html}{A very nice tutorial} {\tiny\{~Bash code there often uses deprecated features, but you should know it by now!~\}}\\
         \URL[PT]{http://sed.sourceforge.net/sed1line.txt}{One-liners, with some comments}\\
         \URL[PQ]{https://catonmat.net/sed-one-liners-explained-part-one}{More one-liners, explained but advanced!}
     \end{varblock*}
@@ -134,7 +134,7 @@
         |+1,3+|             #  - to first three lines
         |+3,$+|             #  - from line 3 to the end
         |+1,/one/+|         #  - till the first line matching 'one'
-        |+/begin/,/end/$+|  #  - from the first line matching 'begin'
+        |+/begin/,/end/+|   #  - from the first line matching 'begin'
                         #    to the first matching 'end' (included)
     \end{lstlisting}
     \FrameRemark{\URL[PB]{https://www.gnu.org/software/sed/manual/sed.html\#BRE-syntax}{Basic Regular Expression (BRE)} VS \URL[PB]{https://www.gnu.org/software/sed/manual/sed.html\#ERE-syntax}{Extended Regular Expression (ERE)}}
