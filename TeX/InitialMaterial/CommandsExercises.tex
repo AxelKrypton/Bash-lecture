@@ -25,20 +25,20 @@
 ]{MDexercise}
 
 \newcounter{Exercise}
-\NewDocumentEnvironment{exercise}{ O{Navy} m }
+\NewDocumentEnvironment{exercise}{ O{Navy} m }%
 {%
-    \begin{MDexercise}[linecolor=#1]
-        \refstepcounter{Exercise}
+    \begin{MDexercise}[linecolor=#1]%
+        \refstepcounter{Exercise}%
         \noindent\tikzmark{boxStart}\ifstrempty{#2}{}{%
             \textbf{#2}\\[0.3em]
-        }
-        \begin{tikzpicture}[remember picture, overlay] % https://tex.stackexchange.com/questions/299972/tikz-remember-picture-on-wrong-page#comment726359_299972
+        }%
+        \begin{tikzpicture}[remember picture, overlay]% https://tex.stackexchange.com/questions/299972/tikz-remember-picture-on-wrong-page#comment726359_299972
             %Adjust start-end coordinates
-            \node[align=right, font=\large, text=#1, text width=3cm, base left = 1em of boxStart] {Exercise~\theExercise};
-        \end{tikzpicture}
-}
+            \node[align=right, font=\large, text=#1, text width=3cm, base left = 1em of boxStart] {Exercise~\theExercise};%
+        \end{tikzpicture}\ignorespaces
+}%
 {%
-    \end{MDexercise}
+    \end{MDexercise}%
 }
 
 % Colors for exercise categories
