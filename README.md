@@ -8,7 +8,7 @@ Material relative to a 3-days crash lecture about `Bash` scripting language to b
   - [x] Overview (to be reviewed, add pins to Iceland)
   - [x] Day 1 (to be reviewed)
   - [x] Day 2 (to be reviewed)
-  - [ ] Day 3
+  - [x] Day 3 (to be reviewed)
 
 - [ ] Exercises
   - [x] Day 1 (to be reviewed)
