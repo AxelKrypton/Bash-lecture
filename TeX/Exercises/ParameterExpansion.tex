@@ -1,0 +1,48 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 16 Sep 2019          %
+%-------------------------------%
+
+\begin{exercise}[Inspirational]{Understanding the power of parameter expansion}
+    Go through the following list of tasks and explore the parameter expansion syntax.
+    Feel free to simply play in the terminal or write one or more script(s).
+    \begin{enumerate}
+        \item The \bash|EDITOR| environment variable is used to specify the user preferred text editor.
+              Suppose to have a variable \bash|filename| which store the name of a file.
+              Then the command
+              \begin{lstlisting}[style=MyBash]
+                  ${EDITOR} "${filename}"
+              \end{lstlisting}
+              would open the file to edit.
+              How would you make this command safer, considering the possibility that either of the variable (or both) is unset?
+              Use a default value for \bash|EDITOR| and abort if \bash|filename| is unset.
+        \item The environment \bash|PATH| variable contains the locations where the OS looks for commands as colon-separated list.
+              Print the highest- and lowest-priority locations.
+              How would you, instead, exclude the highest- and the lowest-priority locations?
+        \item It is common to have to deal with strings that contain some information separated by a delimiter.
+              Consider for example the string \bash|"b5.6789_s9876_thermalizeFromHot"| which identify a LQCD simulation.
+              The characters 'b' and 's' refer to a beta and a seed value.
+              Such prefixes are alphabetic strings, whose length might vary.
+              Assuming the beta and the seed values format are fixed, how would you extract
+              \begin{itemize}
+                  \item the beta value?
+                  \item the seed value?
+                  \item the postfix after the last '\_'?
+                  \item the beta and the seed prefixes?
+              \end{itemize}
+              Test your code on different strings like \bash|"beta5.6789_seed9876_continueWithNewChain"| or \bash|"beta5.6789_s9876_thermalizeFromConf"|.
+        \item The \bash|printf| builtin has the following interesting feature.
+              \begin{quote}
+                \emph{
+                    The format is reused as necessary to consume all  of  the  arguments.
+                    If the format requires more arguments than are supplied, the extra format specifications behave as if a zero value or null string, as appropriate, had  been supplied.
+                }
+              \end{quote}
+              It is then easily possible to concatenate strings using a delimiter.
+              \begin{lstlisting}[style=MyBash]
+                  printf '%s_' First Second Third
+              \end{lstlisting}
+              Use this command to assign the resulting string to a variable, getting rid of the trailing underscore.
+              Run \bash|help printf| to get inspired.
+    \end{enumerate}
+\end{exercise}
