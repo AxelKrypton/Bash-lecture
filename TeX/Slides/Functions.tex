@@ -213,11 +213,11 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \bash|return| builtin and functions' exit code}
-    \vspace{-3mm}
+    \vspace{-4mm}
     \begin{varblock}{quote}[0.6\textwidth]{Functions' exit code}
         \textnormal{When executed, the exit status of a function is the exit status of the \textbf{last command executed} in the body.}
     \end{varblock}
-    \begin{lstlisting}[style=MyBash, numbers=none]
+    \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-6mm]
         $ help return
         |+return: return [n]+|           # ATTENTION: 0 <= N <=255
         |+Return from a shell function.
@@ -232,8 +232,12 @@
         a function or script.+|
     \end{lstlisting}
     \medskip
-    \begin{varblock}{alert}[0.7\textwidth]{}
+    \begin{varblock}{alert}[0.65\textwidth]{}
         \large \alert{Do not use \bash|return| to retrieve the function result!}
+    \end{varblock}
+    \vspace{-1mm}
+    \begin{varblock}{example}[0.85\textwidth]{}
+        \PS{Use \bash|return| to early terminate a function and/or to give back an exit code!}
     \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
