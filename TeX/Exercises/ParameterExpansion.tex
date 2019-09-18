@@ -5,7 +5,7 @@
 
 \begin{exercise}[Inspirational]{Understanding the power of parameter expansion}
     Go through the following list of tasks and explore the parameter expansion syntax.
-    Feel free to simply play in the terminal or write one or more script(s).
+    Feel free to simply play in the terminal or write one or more scripts.
     \begin{enumerate}
         \item The \bash|EDITOR| environment variable is used to specify the user preferred text editor.
               Suppose to have a variable \bash|filename| which store the name of a file.
@@ -21,16 +21,16 @@
               How would you, instead, exclude the highest- and the lowest-priority locations?
         \item It is common to have to deal with strings that contain some information separated by a delimiter.
               Consider for example the string \bash|"b5.6789_s9876_thermalizeFromHot"| which identify a LQCD simulation.
-              The characters 'b' and 's' refer to a beta and a seed value.
+              The characters \texttt{'b'} and \texttt{'s'} refer to a beta and a seed value.
               Such prefixes are alphabetic strings, whose length might vary.
               Assuming the beta and the seed values format are fixed, how would you extract
               \begin{itemize}
                   \item the beta value?
                   \item the seed value?
-                  \item the postfix after the last '\_'?
+                  \item the postfix after the last \texttt{'\_'}?
                   \item the beta and the seed prefixes?
               \end{itemize}
-              Test your code on different strings like \bash|"beta5.6789_seed9876_continueWithNewChain"| or \bash|"beta5.6789_s9876_thermalizeFromConf"|.
+              Test your code on different strings like \bash|"beta6.0000_seed1111_continueWithNewChain"| or \bash|"beta6.1234_s1234_thermalizeFromConf"|.
         \item The \bash|printf| builtin has the following interesting feature.
               \begin{quote}
                 \emph{
