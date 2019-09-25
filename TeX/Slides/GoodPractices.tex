@@ -103,7 +103,8 @@
                       This means that if you have a filename that contains a newline in the current directory, it will completely break your parsing and as a result, break your script!
                 \item Last but not least,\\ $\to\;$\alert{\textbf{the output format} of \bash|ls -l| \textbf{is not guaranteed consistent across platforms}}.
             \end{itemize}
-            \PS{Use e.g.\ \textbf{globbing} or \bash|stat| or \bash|find|.}
+            \PS{Use e.g.\ \textbf{globbing} or \bash|stat| or \bash|find|.}\\
+            {$\;$\small\URL[PB]{http://mywiki.wooledge.org/ParsingLs}{Instructive and very encouraged reading}}
         \item<only@2>
             \alert{\large\textbf{Don't ever test or filter filenames with the \bash|grep| command!}}
             \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=15mm]

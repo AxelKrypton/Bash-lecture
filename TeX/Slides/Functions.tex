@@ -320,6 +320,8 @@
                 }
                 ExampleFunction() {
                     local notGlobalVar; ExampleFunction_implementation
+                    # Do here something with 'notGlobalVar'
+                    echo "In ExampleFunction, got '${notGlobalVar}'"
                 }
                 # Here at the global scope, 'notGlobalVar' is not visible
                 ExampleFunction
