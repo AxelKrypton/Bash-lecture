@@ -12,10 +12,10 @@ Material relative to a 3-days crash lecture about `Bash` scripting language to b
 
 - [ ] Exercises
   - [x] Day 1
-  - [x] Day 2 (to be reviewed)
+  - [x] Day 2
   - [x] Day 3 (to be reviewed)
 
 - [ ] Sample solutions
   - [x] Day 1
-  - [ ] Day 2
+  - [x] Day 2
   - [ ] Day 3
