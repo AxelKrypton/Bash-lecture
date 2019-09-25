@@ -7,16 +7,16 @@
     Go through the few slides discussed in the lecture about \bash|awk| and \bash|sed|, focusing on the examples there.
     Once prepared an input file via
     \begin{lstlisting}[style=MyBash]
-        paste <(shuf -n 100 /usr/share/dict/ngerman) <(shuf -i 1-5000 -n 100 )
+        paste <(shuf -n 20 /usr/share/dict/ngerman) <(shuf -i 1-5000 -n 20)
     \end{lstlisting}
     achieve the following tasks in either of the tools.
     \begin{enumerate}
         \item Print the first 5 and last 10 lines.
         \item Print every third line.
-        \item Display only lines for which the number on the second column is smaller than 10.
+        \item Display only lines for which the number on the second column is smaller than 1000.
         \item Calculate the average of the second column.
         \item Print lines starting by a vowel.
-        \item Print the first colon word if the second column contains a number larger than 3000.
+        \item Print the first column word if the second column contains a number larger than 3000.
     \end{enumerate}
 \end{exercise}
 

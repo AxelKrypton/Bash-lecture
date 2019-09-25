@@ -9,14 +9,15 @@
         \item In the exercise session from yesterday, you learnt how to provide your script with command line options and, then, how to parse them.
               Write a function that takes over this responsibility.
               How do you invoke this function?
+              Take the opportunity to structure further more your code, extracting more functions to avoid code duplication.
         \item Write a function which checks if an element is in a given array.
               How is input passed to this function?
               How would you signal to the caller the presence/absence of the element?
               Your function must work in general.
               Test it with
               \begin{lstlisting}[style=MyBash]
-                  array=("first element"  "to be found"  "something")
-                  string="to be found"
+                  array=("first element"  $'to be\nfound'  "something")
+                  string=$'to be\nfound'
               \end{lstlisting}
               or with \bash|string="notExisting"|.
         \item Write a function that, given two integers, calculates their \textbf{greatest common divisors} using the \URL[Blue]{https://en.wikipedia.org/wiki/Greatest\_common\_divisor\#Euclid's\_algorithm}{Euclid's algorithm}.
