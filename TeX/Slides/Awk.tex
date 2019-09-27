@@ -150,7 +150,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A (very limited) taste of \bash|awk| by examples}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{onlyenv}<1>
         \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm]
             $ seq 100 | awk '{sum+=$1}END{print "Gauss answered " sum}'
@@ -172,13 +172,32 @@
 
             # Count the lines in a file
             awk 'END { print NR }' filename
-
-            # Print the even-numbered lines in the data file
-            awk 'NR % 2 == 0' data
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<2>
-        \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm, belowskip=-5mm]
+        \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm, belowskip=-3mm]
+            # Print the even-numbered lines in the data file
+            awk 'NR % 2 == 0' data
+
+            # Sum two columns of a file line by line adding a column
+            awk '{print $1, $2, $1+$2}' data
+
+            # Prepare powers of each column adding columns
+            awk '{
+                    for(field=1; field<=NF; field++){
+                        for(n=1; n<=4; n++){
+                            printf "%f ", $field**n
+                        }
+                    }
+                    printf "\n";
+                 }' data
+        \end{lstlisting}
+        \begin{varblock}{alert}[0.7\textwidth]{}
+            \Large \alert{As you can imagine, \bash|awk| is plenty of features!}
+        \end{varblock}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm]
             # Throwing two dice 1000 times and getting distribution
             $ paste <(shuf -i 1-6 -n 1000 -r) <(shuf -i 1-6 -n 1000 -r) |
             > awk '{dice[$1+$2]++}
@@ -200,9 +219,6 @@
             |+P(11) ~ 0.052+|  # 2/36 = 0.056
             |+P(12) ~ 0.028+|  # 1/36 = 0.028
         \end{lstlisting}
-        \begin{varblock}{alert}[0.7\textwidth]{}
-            \Large \alert{As you can imagine, \bash|awk| is plenty of features!}
-        \end{varblock}
     \end{onlyenv}
 \end{frame}
 

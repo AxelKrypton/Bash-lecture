@@ -176,13 +176,13 @@
             # The variable aVar is set and not empty/null
             $ echo "_${aVar}_"
             |+_Hello_+|
-            $ echo "_${aVar-Goodbye}_   _${aVar:-Goodbye}_"
+            $ echo "_${aVar-Goodbye}_   _${aVar:-Goodbye}_"  # Use default Value
             |+_Hello_   _Hello_+|
-            $ echo "_${aVar=Goodbye}_   _${aVar:=Goodbye}_"
+            $ echo "_${aVar=Goodbye}_   _${aVar:=Goodbye}_"  # Assign default Value
             |+_Hello_   _Hello_+|
-            $ echo "_${aVar?Goodbye}_   _${aVar:?Goodbye}_"
+            $ echo "_${aVar?Goodbye}_   _${aVar:?Goodbye}_"  # Exit with message
             |+_Hello_   _Hello_+|
-            $ echo "_${aVar+Goodbye}_   _${aVar:+Goodbye}_"
+            $ echo "_${aVar+Goodbye}_   _${aVar:+Goodbye}_"  # Use alternative value
             |+_Goodbye_   _Goodbye_+|
             $ aVar=""
             # The variable aVar is now set BUT empty/null
@@ -439,14 +439,14 @@
             The shell scans the results of parameter expansion, command substitution, and arithmetic expansion that did not occur within double quotes for word splitting!
         \end{varblock}
         \begin{itemize}
-            \item The shell treats each character of \bash|IFS| as a delimiter, and splits the results of the other expansions into words using these characters \textbf{as field terminators} (these are all dropped)
+            \item The shell treats each character of \bash|IFS| as a delimiter, and splits the results of the other expansions into words using these characters \textbf{as field \alert{\underline{terminators}}} (these are all dropped)
             \item Whitespace characters $\;$\PP{\texttt{\textvisiblespace\textbackslash{}t\textbackslash{}n}}$\;$ contained in \bash|IFS| are called \PP{IFS whitespaces}
             \item \alert{IFS whitespaces at the beginning/end} of the results of previous expansions \alert{are ignored}
             \item \alert{Adjacent IFS whitespaces} are considered all together as \alert{single field terminator}
             \item \alert{Any other character} in \bash|IFS| that is not an IFS whitespace \alert{\textbf{always} delimits a field}
             \item If the value of \bash|IFS| is null, no word splitting occurs
             \item Implicit null arguments, resulting from the expansion of empty parameters, are removed
-            \item \PQ{Note that if no expansion occurs, no splitting is performed}
+            \item \PQ{\textbf{Note that if no expansion occurs, no splitting is performed}}
         \end{itemize}
     \end{onlyenv}
     \begin{onlyenv}<2>
@@ -483,7 +483,7 @@
             |+5 args: <   > <home> <sciarra> <Documents> <Seminars   >+|
             $ IFS='@|\textvisiblespace|@/'; args ${aVar}; unset IFS # Note the space in IFS
             |+5 args: <> <home> <sciarra> <Documents> <Seminars>+|
-            # Remember $'' special quoting to allow backslash
+            # Remember $'' special quoting to allow backslash escaping
             $ aVar=$'\n   \n  xxx \t   \t  xx  \t'
             $ args ${aVar}
             |+2 args: <xxx> <xx>+|

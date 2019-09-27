@@ -256,7 +256,7 @@
     \vspace{-3mm}
     \begin{itemize}
         \item By default, \bash|IFS| is unset and acts as if it were set to \bash|<space><tab><newline>|
-        \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=15mm, belowskip=-6mm]
+        \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=15mm, belowskip=-6mm, aboveskip=2mm]
             #The following two lines have the same effect
             $ IFS=$' \t\n'
             $ unset IFS
@@ -265,17 +265,17 @@
         \item Therefore, you can use any of these forms of white space to delimit words
         \item The \bash|IFS| variable comes into play also in special parameter \texttt{\$*} expansion!
     \end{itemize}
-    \vspace{-4mm}
+    \vspace{-5mm}
     \begin{overlayarea}{\textwidth}{0.35\textheight}
         \begin{varblock}{alerted}[0.8\textwidth]{\Large \textbf{Attention}}<only@1>
             \PQ{\large It is crucial to understand the role of the \bash|IFS| variable!}
         \end{varblock}
         \begin{varblock}{quote}[0.9\textwidth]{\URL[PB]{http://mywiki.wooledge.org/Arguments}{When and why not to use a custom IFS}}[Greg's wiki]<only@2>
             It is important that you understand the danger of changing the way the shell behaves.
-            If you modify \bash|IFS|, word splitting will happen in a non-default manner henceforth.
-            Some will recommend you save \bash|IFS| and reset it to the default later on.
-            Others will recommend to unset \bash|IFS| after you're done with your custom word splitting.\\
-            Personally, I prefer to recommend you \textbf{to NOT modify} \bash|IFS| \textbf{on the script level}.
+            If you modify \textnormal{\bash|IFS|}, word splitting will happen in a non-default manner henceforth.
+            Some will recommend you save \textnormal{\bash|IFS|} and reset it to the default later on.
+            Others will recommend to unset \textnormal{\bash|IFS|} after you're done with your custom word splitting.\\
+            Personally, I prefer to recommend you \textbf{to NOT modify} \textnormal{\bash|IFS|} \textbf{on the script level}.
             \alert{\textbf{Ever!}}\\[-0.7em] ~
         \end{varblock}
     \end{overlayarea}

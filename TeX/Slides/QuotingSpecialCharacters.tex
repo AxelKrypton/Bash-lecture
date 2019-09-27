@@ -43,7 +43,7 @@
         \end{lstlisting}
         \centerline{\tiny }
         \medskip
-        \begin{lstlisting}[style=MyBash, style=oddnumbers]
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, firstnumber=10]
             $ echo 'PATH contains ${PATH}'
             |+PATH contains ${PATH}+|
             $ echo "PATH contains ${PATH}"
@@ -54,7 +54,7 @@
     \end{onlyenv}
     \begin{onlyenv}<2>
         \renewcommand\thelstnumber{\ifnum\value{lstnumber}=11\relax\else\arabic{lstnumber}\fi}
-        \begin{lstlisting}[style=MyBash, style=oddnumbers]
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, firstnumber=16]
             $ ls *.tex
             |+Day_1.tex   Day_2.tex   Day_3.tex+|
             $ ls '*.tex'

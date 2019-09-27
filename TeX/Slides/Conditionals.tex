@@ -204,7 +204,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Control Operators}
     \vspace{-3mm}
-    \begin{overlayarea}{\textwidth}{0.6\textheight}
+    \begin{overlayarea}{\textwidth}{0.625\textheight}
         \begin{description}[<only@1>][\texttt{\&\&}]
             \setlength{\itemsep}{5mm}
             \item[\texttt{\&\&}]
@@ -222,7 +222,7 @@
                      if ! COMMAND_1; then COMMAND_2; fi
                  \end{lstlisting}
         \end{description}
-        \begin{onlyenv}<2>
+        \begin{onlyenv}<2-3>
             \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm]
                 # The use of control operators is handy in simple cases
                 [[ $PATH ]] && echo 'PATH variable set and non empty!'
@@ -234,9 +234,11 @@
                 grep -q goodword "$file" && ! grep -q badword "$file" && rm "$file" || echo "Couldn't delete: $file"
             \end{lstlisting}
             \centerline{\small\PQ{What happens if the first \bash{grep} fails (sets the exit status to 1)?}}
-            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
-                grep -q goodword "$file" && ! grep -q badword "$file" && { rm "$file" || echo "Couldn't delete: $file"; }
-            \end{lstlisting}
+            \begin{uncoverenv}<3>
+                \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
+                    grep -q goodword "$file" && ! grep -q badword "$file" && { rm "$file" || echo "Couldn't delete: $file"; }
+                \end{lstlisting}
+            \end{uncoverenv}
         \end{onlyenv}
     \end{overlayarea}
     \begin{varblock}{alerted}[0.8\textwidth]{Do not get overzealous with conditional operators}

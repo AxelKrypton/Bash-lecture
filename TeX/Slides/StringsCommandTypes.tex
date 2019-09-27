@@ -42,7 +42,7 @@
             \end{tikzpicture}
         \end{center}
     \end{onlyenv}
-    \vspace{-8mm}
+    \vspace{-6mm}
     \begin{onlyenv}<2->
         \setlength{\columnsep}{-5mm}
         \begin{multicols}{5}
@@ -55,7 +55,7 @@
             \end{enumerate}
         \end{multicols}
     \end{onlyenv}
-    \vspace{-5mm}
+    \vspace{-3mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{onlyenv}<2>
             \begin{itemize}
@@ -97,7 +97,7 @@
             \begin{itemize}
                 \item Builtins are basic commands that Bash has built into it
                 \item They can be thought as functions that are already provided
-                \item We will learn \tc<5>{PP}{most of them}.
+                \item We will learn about (or at least mention) \tc<5>{PP}{most of them}
                 \item Keywords which are provided as builtins are nevertheless highlighted as \tc<6>{keywords-color}{keywords}
             \end{itemize}
             \begin{onlyenv}<4>
@@ -116,7 +116,7 @@
                 \end{lstlisting}
             \end{onlyenv}
             \begin{onlyenv}<5>
-                \begin{lstlisting}[style=MyBash, numbers=none, deleteemph={[5]:,.,[,alias, bg, break, case, cd, continue, declare, echo, eval, exec, exit, export, false, fg, help, if, jobs, kill, let, local,printf, pwd, read, readonly, return, set, shift, source, test, true, unalias, unset, until, wait, while}, emph={[7]:,.,[,alias, bg, break, case, cd, continue, declare, echo, eval, exec, exit, export,false, fg, help, if, jobs, kill, let, local,printf, pwd, read, readonly, return, set, shift, source, test, true, unalias, unset, until, wait, while}, emphstyle={[7]\color{PP}}]
+                \begin{lstlisting}[style=MyBash, numbers=none, deleteemph={[5]:,.,[,alias, bg, break, case, cd, continue, declare, disown, echo, eval, exec, exit, export, false, fg, help, if, jobs, kill, let, local,printf, pwd, read, readonly, return, set, shift, shopt, source, test, trap, true, unalias, unset, until, wait, while}, emph={[7]:,.,[,alias, bg, break, case, cd, continue, declare, disown, echo, eval, exec, exit, export,false, fg, help, if, jobs, kill, let, local,printf, pwd, read, readonly, return, set, shift, shopt, source, test, trap, true, unalias, unset, until, wait, while}, emphstyle={[7]\color{PP}}]
                    :         complete   export    let        shift     umask  
                    .         compgen    false     local      shopt     unalias
                    [         continue   fc        logout     source    unset  
@@ -152,7 +152,7 @@
             \end{varblock}
             \begin{itemize}
                 \item Flow control constructs is achieved thanks to keywords
-                \item We will explore all of them in detail (except \bash|coproc|)
+                \item We will explore all of them in detail \,\,{\tiny\{~except \bash|coproc|~\}}
             \end{itemize}
             \begin{lstlisting}[style=MyBash, numbers=none]
                 if     elif   esac     while   done      time   !    coproc
