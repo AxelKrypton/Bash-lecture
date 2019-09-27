@@ -255,14 +255,26 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Bonus track\uncover<2>{: Iceland}}{\uncover<2>{The magic of an incredible island}}
     \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
-        \node (plan) at ($(current page.center)-(0,6mm)$) {\includegraphics[width=0.8\textwidth, clip, trim=1mm 0 0 0]{Map2}};
+        \node[inner sep=0pt] (plan) at ($(current page.center)-(0,6mm)$) {\includegraphics[width=0.8\textwidth, clip, trim=1mm 0 0 0]{Map2}};
         \begin{scope}[x={($ (plan.south east) - (plan.south west) $ )},y={( $ (plan.north west) - (plan.south west)$ )}, shift={(plan.south west)}]
             %\draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
-            \node[anchor=south, inner sep=0] at (0.25,0.32) {\includegraphics[width=3mm]{Pin}};
-            \node[anchor=south, inner sep=0] at (0.24,0.28) {\includegraphics[width=3mm]{Pin}};
-            \node[anchor=south, inner sep=0] at (0.31,0.34) {\includegraphics[width=3mm]{Pin}};
-            \node[anchor=south, inner sep=0] at (0.71,0.29) {\includegraphics[width=3mm]{Pin}};
-            \node[anchor=south, inner sep=0] at (0.47,0.14) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.175,0.280) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.180,0.238) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.255,0.260) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.235,0.240) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.240,0.310) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.320,0.350) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.310,0.290) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.335,0.270) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.370,0.355) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.400,0.155) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.450,0.140) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.480,0.120) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.655,0.295) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.705,0.265) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.730,0.340) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.735,0.305) {\includegraphics[width=3mm]{Pin}};
+            \node[anchor=south, inner sep=0] at (0.810,0.400) {\includegraphics[width=3mm]{Pin}};
         \end{scope}
         \node[below = 2mm of plan.south east, anchor=east, font=\tiny] {{\raisebox{-2mm}{\Large\textcopyright}} Photos throughout the lecture: All rights are reserved};
     \end{tikzpicture}

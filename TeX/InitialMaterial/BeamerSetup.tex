@@ -1,3 +1,51 @@
+\makeatletter
+\newif\ifgraphicexist
+
+\catcode`\*=11
+\newcommand\IfImageCanBeIncluded[1]{% Taken from https://tex.stackexchange.com/a/99099
+    \begingroup
+        \global\graphicexisttrue
+        \let\input@path\Ginput@path
+        \filename@parse{#1}%
+        \ifx\filename@ext\relax
+            \@for\Gin@temp:=\Gin@extensions\do{%
+                \ifx\Gin@ext\relax
+                  \Gin@getbase\Gin@temp
+                \fi}%
+        \else
+            \Gin@getbase{\Gin@sepdefault\filename@ext}%
+            \ifx\Gin@ext\relax
+                \global\graphicexistfalse
+                \def\Gin@base{\filename@area\filename@base}%
+                \edef\Gin@ext{\Gin@sepdefault\filename@ext}%
+            \fi
+        \fi
+        \ifx\Gin@ext\relax
+            \global\graphicexistfalse
+        \else 
+            \@ifundefined{Gin@rule@\Gin@ext}%
+                {\global\graphicexistfalse}%
+                {}%
+        \fi
+        \ifx\Gin@ext\relax 
+            \gdef\imageextension{unknown}%
+        \else
+            \xdef\imageextension{\Gin@ext}%
+        \fi 
+    \endgroup 
+    \ifgraphicexist
+        \expandafter \@firstoftwo
+    \else
+        \expandafter \@secondoftwo
+    \fi
+}
+\catcode`\*=12
+\makeatother
+
+% Compile with or without photos
+\newif\ifCompileWithPhotos
+\CompileWithPhotosfalse
+
 \mode<presentation>
 {
     \usetheme{Relax}
@@ -6,14 +54,24 @@
     %\setbeamerfont{section title}{size=\Huge}
     \defbeamertemplate*{section page}{Iceland}[3][]
     {
-        \begin{tikzpicture}[overlay,remember picture]
+        \begin{tikzpicture}[overlay,remember picture, every node/.style={inner sep=0pt}]
             \usebeamercolor{section page background canvas}
             \fill[bg] (current page.south west) rectangle (current page.north east);
-            \node[anchor=west] (photo) at ($(current page.west)+(5mm,0)$) {\includegraphics[width=0.85\textwidth]{#2}};
-            \node[text depth=0.5ex, below = 3mm of photo.south east, anchor=east]{#3};
-            \node[text depth=0.5ex, above = 4mm of photo.north west, anchor=west]
+            \node[text depth=0.5ex, anchor=west] () (sectionTitle) at ($(current page.north west)+(5mm,-8mm)$)
                   {\usebeamerfont{section title}\usebeamercolor[fg]{section title}\insertsectionhead};
-            \node[anchor=north east, inner sep=0] (plan) at ($(current page.north east)-(1mm,1mm)$) {\includegraphics[width=0.2\textwidth, clip, trim=0 0 0 1mm]{Map}};
+            \node[anchor=north east, inner sep=0] (plan) at ($(current page.north east)-(1mm,1mm)$) {\includegraphics[width=0.21\textwidth, clip, trim=0 0 0 1mm]{Map}};
+            \node[anchor=north] (photo) at ($(plan.south west)!0.5!(sectionTitle.south west |- plan.south)-(0,1mm)$) {
+                \ifCompileWithPhotos
+                    \IfImageCanBeIncluded{#2}{%
+                        \includegraphics[width=0.85\textwidth]{#2}
+                    }{%
+                        \includegraphics[width=0.75\textwidth]{example-image-a}
+                    }
+                \else
+                    \includegraphics[width=0.75\textwidth]{example-image-a}
+                \fi
+            };
+            \node[text depth=0.5ex, below = 2mm of photo.south east, anchor=north east, xshift=-2pt]{#3};
             \ifthenelse{\isempty{#1}}{}%
             {
                 \begin{scope}[x={($ (plan.south east) - (plan.south west) $ )},y={( $ (plan.north west) - (plan.south west)$ )}, shift={(plan.south west)}]
@@ -21,6 +79,11 @@
                     \node[anchor=south, inner sep=0] at (#1) {\includegraphics[width=2mm]{Pin}};
                 \end{scope}
             }
+            \ifCompileWithPhotos
+                \IfImageCanBeIncluded{#2}{%
+                    \node[rotate=90, anchor=west, font=\ssmall] at ($(current page.south east)+(-2mm,1mm)$) {{\raisebox{-2mm}{\Large\textcopyright}} Photo: All rights are reserved};
+                }{}
+            \fi
         \end{tikzpicture}
     }
 }
