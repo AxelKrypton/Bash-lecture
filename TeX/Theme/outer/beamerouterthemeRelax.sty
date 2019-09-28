@@ -1,0 +1,34 @@
+\mode<presentation>
+
+% Frame title
+\defbeamertemplate*{frametitle}{Relax}[1][]
+{
+  \begin{beamercolorbox}[sep=0.5cm,wd=0.96\paperwidth]{frametitle} 
+    \usebeamercolor{frametitle}%
+    \usebeamerfont{frametitle}%
+    \vbox{}\vskip-1ex%
+    \strut\insertframetitle\strut\par%
+    {%
+      \ifx\insertframesubtitle\@empty%
+      \else%
+      {\vskip-.15ex\hskip.1ex\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
+      \fi
+    }%
+    \vskip-1.5ex%
+  \end{beamercolorbox}
+}
+
+% Frame footer
+\defbeamertemplate*{footline}{Relax}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1ex]{frametitle}
+    \usebeamercolor[fg]{page number in head/foot}
+    \hskip 2.5ex\strut{}\insertframenumber/\strut{}\inserttotalframenumber\vskip0.2ex
+  \end{beamercolorbox}%
+  }
+}
+
+
+\mode<all>

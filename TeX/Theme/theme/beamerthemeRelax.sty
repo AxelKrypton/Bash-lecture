@@ -1,0 +1,29 @@
+\mode<presentation>
+
+% Requirement
+\RequirePackage{tikz}
+\usetikzlibrary{positioning,calc}
+
+%Logo for titlepage
+\newcommand{\titlepagelogo}[1]{\def\inserttitlepagelogo{#1}}
+%Default empty values
+\titlepagelogo{}
+
+% Option for color https://tex.stackexchange.com/a/294821/128737
+\DeclareOptionBeamer{style}{
+    \PassOptionsToPackage{style=#1}{beamercolorthemeRelax}
+}
+\ExecuteOptionsBeamer{style=blue}
+\ProcessOptionsBeamer
+
+% Settings
+\useinnertheme{Relax}
+\useoutertheme{Relax}
+\usecolortheme{Relax}
+\usefonttheme{Relax}
+
+% Various
+\setbeamertemplate{navigation symbols}{} %Remove beamer navigation symbols
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+
+\mode<all>

@@ -1,0 +1,114 @@
+\mode<presentation>
+
+% Requirement
+\RequirePackage{xcolor}
+
+% All colours used in all styles
+\definecolor{Aoi}{RGB}{105,210,231} % http://www.colourlovers.com/palette/92095/Giant_Goldfish
+\definecolor{BeachStorm}{RGB}{224,228,204}
+\definecolor{UnrealFoodPills}{RGB}{250,105,0}
+\definecolor{Abyss}{RGB}{3,22,52}  %http://www.colourlovers.com/palette/292482/Terra
+\definecolor{SkyBlue}{RGB}{21,172,254} % http://www.colourlovers.com/palette/4581817/Under_a_Summer_Sky
+\definecolor{CoralRed}{RGB}{253,94,57}
+\definecolor{Marine}{RGB}{0,30,177}       % http://www.colourlovers.com/color/001EB1/Ultramarine_Edge
+\definecolor{Schizophrenia}{RGB}{153,1,0} % http://www.colourlovers.com/color/990100/Schizophrenia
+\definecolor{BladeOfGrass}{RGB}{5,114,28} % http://www.colourlovers.com/color/05721C/Blade_of_Grass
+
+\definecolor{MicroscopeSlide}{RGB}{252,246,222} % https://www.colourlovers.com/palette/4604019/m514
+\definecolor{GreenBlue}{RGB}{16,188,97}
+\definecolor{EnergisingGreen}{RGB}{63,148,1} % https://www.colourlovers.com/palette/4603957/-acean
+\definecolor{Agreenable}{RGB}{26,137,34}
+\definecolor{DarkGreen}{RGB}{0,80,0}
+\definecolor{ForestGreen}{RGB}{34,139,34}
+% \definecolor{}{RGB}{}
+% \definecolor{}{RGB}{}
+% \definecolor{}{RGB}{}
+% \definecolor{}{RGB}{}
+% \definecolor{}{RGB}{}
+
+% Preliminary logic to support different styles  ->  https://tex.stackexchange.com/a/294821/128737
+\DeclareOptionBeamer{style}{\def\beamer@mytheme@style{#1}}
+\ExecuteOptionsBeamer{style=blue}
+\ProcessOptionsBeamer
+
+\def\beamer@mytheme@stylegreen{green}%
+\def\beamer@mytheme@styleblue{blue}%
+
+\ifx\beamer@mytheme@style\beamer@mytheme@stylegreen%
+        \colorlet{PB}{DarkGreen}
+        \colorlet{PP}{ForestGreen}
+        \colorlet{PS}{SkyBlue}
+        \colorlet{PT}{UnrealFoodPills}
+        \colorlet{PQ}{Schizophrenia}
+        \colorlet{ALERT}{PT}
+        \colorlet{BGDARK}{GreenBlue}
+        \colorlet{BGLIGHT}{MicroscopeSlide}
+        \colorlet{TEXT}{Abyss}
+\else%
+    \ifx\beamer@mytheme@style\beamer@mytheme@styleblue%
+        \colorlet{PB}{Marine}
+        \colorlet{PP}{SkyBlue}
+        \colorlet{PS}{BladeOfGrass}
+        \colorlet{PT}{CoralRed}
+        \colorlet{PQ}{Schizophrenia}
+        \colorlet{ALERT}{UnrealFoodPills}
+        \colorlet{BGDARK}{Aoi}
+        \colorlet{BGLIGHT}{BeachStorm!25}
+        \colorlet{TEXT}{Abyss}
+    \else%
+        \errmessage{Unrecognised style passed to the theme!}
+    \fi%
+\fi%
+
+% For the palettes
+\setbeamercolor*{palette base}     {fg=PB}
+\setbeamercolor*{palette primary}  {fg=PP, bg=BGLIGHT}
+\setbeamercolor*{palette secondary}{fg=PS, bg=BGLIGHT}
+\setbeamercolor*{palette tertiary} {fg=PT, bg=BGLIGHT}
+\setbeamercolor*{palette quatenary}{fg=PQ, bg=BGLIGHT}
+
+% Text ATTENTION: No space after comma in use={...}
+\setbeamercolor*{normal text}             {                       fg=TEXT,                 bg=BGLIGHT}
+\setbeamercolor*{alerted text}            {                       fg=ALERT,                bg=BGLIGHT}
+\setbeamercolor*{dark alerted text}       {use=palette quatenary, fg=palette quatenary.fg, bg=BGLIGHT}
+\setbeamercolor*{example text}            {use=palette secondary, fg=palette secondary.fg, bg=BGLIGHT}
+\setbeamercolor*{structure}               {use=palette base,      fg=palette base.fg,      bg=BGLIGHT}
+\setbeamercolor*{page number in head/foot}{                       fg=BGDARK,               bg=BGLIGHT}
+\setbeamercolor*{block body}              {use={normal text},     fg=normal text.fg,       bg=BGLIGHT}
+\setbeamercolor*{block quote body}        {use={normal text},     fg=normal text.fg,       bg=BGLIGHT}
+
+% Other elements
+\setbeamercolor*{title page header}{fg=BGDARK}
+\setbeamercolor*{title}            {fg=BGLIGHT}
+\setbeamercolor*{author}           {use=normal text, fg=normal text.fg}
+\setbeamercolor*{date}             {use=normal text, fg=normal text.fg}
+\setbeamercolor*{header text}      {use=normal text, fg=normal text.fg}
+\setbeamercolor*{section}          {use=title page header, fg=title page header.fg}
+\setbeamercolor*{frametitle}       {use=palette primary,   fg=palette primary.fg}
+\setbeamercolor*{framesubtitle}    {use=palette base,      fg=palette base.fg}
+\setbeamercolor*{section title}    {use=title,             fg=title.fg}
+
+% Backgrounds
+\setbeamercolor*{background canvas}             {use=title,             bg=title.fg}
+\setbeamercolor*{title page background canvas}  {use=title page header, bg=title page header.fg}
+\setbeamercolor*{section page background canvas}{use=title page header, bg=title page header.fg}
+
+% For the blocks frames
+\setbeamercolor*{block title}        {use={title,frametitle},    fg=frametitle.fg,    bg=title.fg}
+\setbeamercolor*{block title alerted}{use={title,alerted text},  fg=alerted text.fg,  bg=title.fg}
+\setbeamercolor*{block title example}{use={title,example text},  fg=example text.fg,  bg=title.fg}
+\setbeamercolor*{block title quote}  {use={title,framesubtitle}, fg=framesubtitle.fg, bg=title.fg}
+
+% Items
+\setbeamercolor*{item}         {use={title,framesubtitle}, fg=framesubtitle.fg, bg=title.fg}
+\setbeamercolor{section in toc}{use={title,frametitle},    fg=frametitle.fg,    bg=title.fg}
+
+% Extra commands for user
+\newcommand{\PB}[1]{{\usebeamercolor[fg]{palette base}#1}}
+\newcommand{\PP}[1]{{\usebeamercolor[fg]{palette primary}#1}}
+\newcommand{\PS}[1]{{\usebeamercolor[fg]{palette secondary}#1}}
+\newcommand{\PT}[1]{{\usebeamercolor[fg]{palette tertiary}#1}}
+\newcommand{\PQ}[1]{{\usebeamercolor[fg]{palette quatenary}#1}}
+
+
+\mode<all>

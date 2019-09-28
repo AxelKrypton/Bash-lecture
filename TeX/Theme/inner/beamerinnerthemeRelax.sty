@@ -1,0 +1,380 @@
+\mode<presentation>
+
+\RequirePackage{xifthen}
+\RequirePackage{xparse}
+\RequirePackage{xstring}
+
+\setbeamertemplate{sections/subsections in toc}[square]
+\setbeamertemplate{items}[circle]
+\setbeamertemplate{itemize item}{\raise0.8pt\hbox{$\bullet$}}
+\setbeamertemplate{itemize subitem}{\hbox{$\circ$}}
+\setbeamertemplate{enumerate item}[square]
+
+%inspired from https://stackoverflow.com/a/2612825
+% Here first optional argument -> \itemindent
+%    second mandatory argument -> \leftmargin
+\newenvironment{customlist}[2][0mm]{
+  \ifnum\@itemdepth >2\relax\@toodeep\else
+    \advance\@itemdepth\@ne%
+    \beamer@computepref\@itemdepth%
+    \usebeamerfont{itemize/enumerate \beameritemnestingprefix body}%
+    \usebeamercolor[fg]{itemize/enumerate \beameritemnestingprefix body}%
+    \usebeamertemplate{itemize/enumerate \beameritemnestingprefix body begin}%
+    \begin{list}
+    {
+      \usebeamertemplate{itemize \beameritemnestingprefix item}
+    }
+    {
+      \ifx #2\@empty \else \leftmargin=#2 \fi
+      \itemindent=#1
+      \def\makelabel##1{%
+      {%
+        \hss\llap{{%
+          \usebeamerfont*{itemize \beameritemnestingprefix item}%
+              \usebeamercolor[fg]{itemize \beameritemnestingprefix item}##1}}%
+      }%
+      }%
+    }
+  \fi
+}
+{
+  \end{list}
+  \usebeamertemplate{itemize/enumerate \beameritemnestingprefix body end}%
+}
+
+
+\defbeamertemplate*{title page}{Relax}[1][]
+{
+  \usebeamercolor{title page background canvas}
+  \begin{tikzpicture}[overlay,remember picture]
+    \fill[bg] (current page.south west) rectangle (current page.north east);
+    \ifx\inserttitlegraphic\@empty%
+    \else%
+        \node[anchor=south east] at ($(current page.south east)+(-1mm,1mm)$) {\inserttitlegraphic};
+    \fi%
+    \ifx\inserttitlepagelogo\@empty%
+    \else%
+        \node[anchor=south west] at ($(current page.south west)+(1mm,1mm)$) {\inserttitlepagelogo};
+    \fi%
+  \end{tikzpicture}
+  \vbox{}
+  \vfill
+  \begingroup
+    \centering
+    \begin{beamercolorbox}[sep=8pt,center,#1]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%
+    \end{beamercolorbox}%
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center,#1]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}
+  \endgroup
+  \vfill
+}
+
+\defbeamertemplate*{section page}{Relax}[1][]
+{
+  \begin{tikzpicture}[overlay,remember picture]
+      \usebeamercolor{section page background canvas}
+      \fill[bg] (current page.south west) rectangle (current page.north east);
+      \node[text depth=0.5ex] at (current page.center)
+            {\usebeamerfont{section title}\usebeamercolor[fg]{section title}\insertsectionhead};
+  \end{tikzpicture}
+}
+
+% Block environments
+\NewDocumentEnvironment{varblock}{s m O{.9\textwidth} m O{} D<>{} }%
+{%
+    \centering
+    \setlength{\textwidth}{#3}%
+    % https://tex.stackexchange.com/questions/63223/xparse-empty-arguments#comment134247_63228
+    \if\relax\detokenize{#6}\relax%
+        \begin{actionenv}%
+    \else
+        \begin{actionenv}<#6>%
+    \fi
+        \def\insertblocktitle{#4}%
+        \def\insertquoteblockauthor{#5}%
+        \par%
+        \IfStrEqCase{#2}{%
+            {}{\usebeamertemplate{block begin}}%
+            {alert}{\usebeamertemplate{block alerted begin}}%
+            {alerted}{\usebeamertemplate{block alerted begin}}%
+            {block alerted}{\usebeamertemplate{block alerted begin}}%
+            {example}{\usebeamertemplate{block example begin}}%
+            {block example}{\usebeamertemplate{block example begin}}%
+            {quote}{\usebeamertemplate{block quote begin}}%
+            {block quote}{\usebeamertemplate{block quote begin}}%
+        }[\errmessage{Unrecognised block type passed to varblock environment!}]%
+        % Not starred version centered
+        \IfBooleanTF{#1}{}{\centering}%
+}{%
+        \par%
+        \IfStrEqCase{#2}{%
+            {}{\usebeamertemplate{block end}}%
+            {alert}{\usebeamertemplate{block alerted end}}%
+            {alerted}{\usebeamertemplate{block alerted end}}%
+            {block alerted}{\usebeamertemplate{block alerted end}}%
+            {example}{\usebeamertemplate{block example end}}%
+            {block example}{\usebeamertemplate{block example end}}%
+            {quote}{\usebeamertemplate{block quote end}}%
+            {block quote}{\usebeamertemplate{block quote end}}%
+        }[\errmessage{Unrecognised block type passed to varblock environment!}]%
+    \end{actionenv}%
+}
+% https://tex.stackexchange.com/a/45402/128737
+\ExplSyntaxOn
+\cs_new:cpn {varblock*} {\varblock*}
+\cs_new_eq:cN {endvarblock*} \endvarblock
+\ExplSyntaxOff
+
+\NewDocumentEnvironment{quoteblock}{m o}%
+{
+  \par\vskip\medskipamount%
+  \usebeamercolor{block title quote}
+  \ifx\insertblocktitle\@empty%
+    \newcommand{\yskiplength}{1ex}
+  \else%
+    \newcommand{\yskiplength}{0.8ex}
+  \fi%
+  \begin{tikzpicture}
+    \node [
+      draw=fg, inner sep=1ex,
+      inner ysep=\yskiplength,
+      rounded corners
+    ] (BOXCONTENT) \bgroup \noindent%
+    \begin{minipage}{\textwidth-1em}
+        \ifx\insertblocktitle\@empty\else\vspace*{1ex}\fi%
+        \usebeamerfont{block quote body}
+}{
+  \end{minipage}%
+  \egroup;
+  \usebeamercolor{block title quote}
+  \ifthenelse{\isempty{#1}}%
+  {}%
+  {
+    \node [
+      fill=bg,
+      anchor=west,
+      text=fg,
+      rounded corners
+    ] at ([shift={(5pt,0)}]BOXCONTENT.north west) {#1};
+  }
+  \IfNoValueF{#2}
+  {
+    \node [
+      fill=bg,
+      anchor=east,
+      text=fg, font=\small
+    ] at ([shift={(-5pt,0)}]BOXCONTENT.south east) {#2};
+  }
+  \end{tikzpicture}
+  \vskip\smallskipamount
+}
+
+\defbeamertemplate*{block begin}{Relax}
+{
+  \par\vskip\medskipamount%
+  \usebeamercolor{block title}
+  \ifx\insertblocktitle\@empty%
+    \newcommand{\yskiplength}{1ex}
+  \else%
+    \newcommand{\yskiplength}{0.8ex}
+  \fi%
+  \begin{tikzpicture}
+    \node [
+      draw=fg, inner sep=1ex,
+      inner ysep=\yskiplength,
+      align=center, rounded corners
+    ] (BOXCONTENT) \bgroup \noindent%
+    \begin{minipage}{\textwidth-1em}
+        \ifx\insertblocktitle\@empty\else\vspace*{1ex}\fi%
+        \usebeamerfont{beamer body}%
+        \usebeamercolor[fg]{block body}%
+}
+
+\defbeamertemplate*{block end}{Relax}
+{
+  \end{minipage}%
+  \egroup;
+  \usebeamercolor{block title}
+  \ifx\insertblocktitle\@empty
+  \else%
+  {
+    \node[
+      fill=bg,
+      anchor=west,
+      text=fg,
+      rounded corners
+    ] at ([shift={(5pt,0)}]BOXCONTENT.north west) {\insertblocktitle};
+  }
+  \fi
+  \end{tikzpicture}
+  \vskip\smallskipamount
+}
+
+\defbeamertemplate*{block alerted begin}{Relax}
+{
+  \par\vskip\medskipamount%
+  \usebeamercolor{block title alerted}
+  \ifx\insertblocktitle\@empty%
+    \newcommand{\yskiplength}{1ex}
+  \else%
+    \newcommand{\yskiplength}{0.8ex}
+  \fi%
+  \begin{tikzpicture}
+    \node [
+      draw=fg, inner sep=1ex,
+      inner ysep=\yskiplength,
+      align=center, rounded corners
+    ] (BOXCONTENT) \bgroup \noindent%
+    \begin{minipage}{\textwidth-1em}
+        \ifx\insertblocktitle\@empty\else\vspace*{1ex}\fi%
+        \usebeamerfont{beamer body}%
+        \usebeamercolor[fg]{block body}%
+}
+
+\defbeamertemplate*{block alerted end}{Relax}
+{
+  \end{minipage}%
+  \egroup;
+  \usebeamercolor{block title alerted}
+  \ifx\insertblocktitle\@empty
+  \else%
+  {
+    \node [
+      fill=bg,
+      anchor=west,
+      text=fg,
+      rounded corners
+    ] at ([shift={(5pt,0)}]BOXCONTENT.north west) {\insertblocktitle};
+  }
+  \fi
+  \end{tikzpicture}
+  \vskip\smallskipamount
+}
+
+\defbeamertemplate*{block example begin}{Relax}
+{
+  \par\vskip\medskipamount%
+  \usebeamercolor{block title example}
+  \ifx\insertblocktitle\@empty%
+    \newcommand{\yskiplength}{1ex}
+  \else%
+    \newcommand{\yskiplength}{0.8ex}
+  \fi%
+  \begin{tikzpicture}
+    \node [
+      draw=fg, inner sep=1ex,
+      inner ysep=\yskiplength,
+      align=center, rounded corners
+    ] (BOXCONTENT) \bgroup\noindent%
+    \begin{minipage}{\textwidth-1em}
+        \ifx\insertblocktitle\@empty\else\vspace*{1ex}\fi%
+        \usebeamerfont{beamer body}%
+        \usebeamercolor[fg]{block body}%
+}
+
+\defbeamertemplate*{block example end}{Relax}
+{
+    \end{minipage}%
+    \egroup;
+    \usebeamercolor{block title example}
+    \ifx\insertblocktitle\@empty
+    \else%
+    {
+        \node [
+        fill=bg,
+        anchor=west,
+        text=fg,
+        rounded corners
+        ] at ([shift={(5pt,0)}]BOXCONTENT.north west) {\insertblocktitle};
+    }
+    \fi
+  \end{tikzpicture}
+  \vskip\smallskipamount
+}
+%===================================
+%New block template for quotation
+%===================================
+\defbeamertemplate*{block quote begin}{Relax}
+{
+  \par\vskip\medskipamount%
+  \usebeamercolor{block title quote}
+  \ifx\insertblocktitle\@empty%
+    \newcommand{\yskiplength}{1ex}
+  \else%
+    \newcommand{\yskiplength}{0.8ex}
+  \fi%
+  \begin{tikzpicture}
+    \node [
+      draw=fg, inner sep=1ex,
+      inner ysep=\yskiplength,
+      rounded corners
+    ] (BOXCONTENT) \bgroup \noindent%
+    \begin{minipage}{\textwidth-1em}
+        \ifx\insertblocktitle\@empty\else\vspace*{1ex}\fi%
+        \usebeamerfont{block quote body}
+        \usebeamercolor[fg]{block quote body}%
+}
+
+\defbeamertemplate*{block quote end}{Relax}
+{
+  \end{minipage}%
+  \egroup;
+  \usebeamercolor{block title quote}
+  \ifx\insertblocktitle\@empty\else%
+    \node [
+      fill=bg,
+      anchor=west,
+      text=fg,
+      rounded corners
+    ] at ([shift={(5pt,0)}]BOXCONTENT.north west) {\insertblocktitle};
+  \fi
+  \ifx\insertquoteblockauthor\@empty\else%
+    \node [
+      fill=bg,
+      anchor=east,
+      text=fg, font=\small
+    ] at ([shift={(-5pt,0)}]BOXCONTENT.south east) {\insertquoteblockauthor};
+  \fi
+  \end{tikzpicture}
+  \vskip\smallskipamount
+}
+
+%Now add environment to use quote block from user file as other blocks.
+%(inspired from /usr/share/texlive/texmf-dist/tex/latex/beamer/beamerbaselocalstructure.sty)
+%\newenvironment<>{stdquoteblock}[2][]%
+\NewDocumentEnvironment{stdquoteblock}{ O{} m D<>{} }%
+{
+    \if\relax\detokenize{#3}\relax%
+        \begin{actionenv}%
+    \else
+        \begin{actionenv}<#3>%
+    \fi
+    \def\insertblocktitle{#2}%
+    \def\insertquoteblockauthor{#1}%
+    \par%
+    \usebeamertemplate{block quote begin}
+}
+{
+    \par%
+      \usebeamertemplate{block quote end}%
+    \end{actionenv}
+}
+
+
+
+\mode
+<all>
