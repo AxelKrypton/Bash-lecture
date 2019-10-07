@@ -18,7 +18,13 @@
                 \end{scope}
             }
             \node[right = of A0] {\{07,08,09\}.10.2019};
-            \node[right = of A1] {Morning: 09:15 to 12:00$\quad$ Afternoon: 14:15 to 17:00};
+            \node[right = of A1] {
+                \begin{tabular}{@{}r@{\;}l}
+                    Morning:   & 09:15 to 12:00 \\
+                    Afternoon: & 14:15 to 17:00 $\;\,${\tiny\{~only registered people~\}}
+                \end{tabular}
+                %Morning: 09:15 to 12:00$\quad$ Afternoon: 14:15 to 17:00
+            };
             \node[right = of A2] {
                 \begin{tabular}{@{}r@{\;}l}
                     Morning:   & FIAS H100 (Mon), GSC 0|07-0|08 (Tue, Wed) \\
@@ -49,6 +55,31 @@
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay]
         \node[anchor=south east, inner sep=0] at (current page.south east) {\includegraphics[height=4cm]{Superman}};
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{The mind setup of this course}
+    \vspace{-3mm}
+    \begin{varblock}{alerted}[0.35\textwidth]{Remember:}<3->
+        \PQ{\large This is not the full story!}
+    \end{varblock}
+    \vspace{1mm}
+    \begin{enumerate}
+        \setcounter{enumi}{1}
+        \item<3-> The amount of information given in this lecture is \textbf{huge}, I am aware of it
+        \item<3-> You will not receive all the details (I tried to pass on the important information, though)\\
+                  $\;\to\;$ be active, ask, use manuals, go beyond this lecture!
+        \item<4-> Often it is hard (very hard) to enucleate all details of and exceptions to rules \\
+                  $\;\to\;$ experience and practice will fill the gap
+        \item<4-> From rules/practical examples to abstract ideas/good practices
+        \item<5-> 100\% Bash, no focus on portability or differences among \\ various shell languages {\tiny \{~I am not at that level~\}}\\
+                  $\;\to\;$ sh, ksh, csh, tcsh, dash, zsh, fish, \ldots
+        \setcounter{enumi}{0}
+        \item<2-> \PS{\textbf{Relaxed atmosphere!}}\\
+                  \PT{Interactive lecture: ask, ask, ask!}
+    \end{enumerate}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=south east, visible on=<2->] (fig) at (current page.south east) {\includegraphics[width=42mm]{Relax}};
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -101,31 +132,6 @@
         \end{itemize}
         Knowing another scripting language (e.g.\ Python) helps!
     \end{varblock}
-\end{frame}
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{The mind setup of this course}
-    \vspace{-3mm}
-    \begin{varblock}{alerted}[0.35\textwidth]{Remember:}<3->
-        \PQ{\large This is not the full story!}
-    \end{varblock}
-    \vspace{1mm}
-    \begin{enumerate}
-        \setcounter{enumi}{1}
-        \item<3-> The amount of information given in this lecture is \textbf{huge}, I am aware of it
-        \item<3-> You will not receive all the details (I tried to pass on the important information, though)\\
-                  $\;\to\;$ be active, ask, use manuals, go beyond this lecture!
-        \item<4-> Often it is hard (very hard) to enucleate all details of and exceptions to rules \\
-                  $\;\to\;$ experience and practice will fill the gap
-        \item<4-> From rules/practical examples to abstract ideas/good practices
-        \item<5-> 100\% Bash, no focus on portability or differences among \\ various shell languages {\tiny \{~I am not at that level~\}}\\
-                  $\;\to\;$ sh, ksh, csh, tcsh, bash, zsh, fish, \ldots
-        \setcounter{enumi}{0}
-        \item<2-> \PS{\textbf{Relaxed atmosphere!}}\\
-                  \PT{Interactive lecture: ask, ask, ask!}
-    \end{enumerate}
-    \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=south east, visible on=<2->] (fig) at (current page.south east) {\includegraphics[width=42mm]{Relax}};
-    \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{What to expect from the lecture?}
@@ -276,7 +282,7 @@
             \node[anchor=south, inner sep=0] at (0.735,0.305) {\includegraphics[width=3mm]{Pin}};
             \node[anchor=south, inner sep=0] at (0.810,0.400) {\includegraphics[width=3mm]{Pin}};
         \end{scope}
-        \node[below = 2mm of plan.south east, anchor=east, font=\tiny] {{\raisebox{-2mm}{\Large\textcopyright}} Photos throughout the lecture: All rights are reserved};
+        \node[below = 3mm of plan.south east, anchor=east, font=\tiny] {{\raisebox{-2mm}{\Large\textcopyright}} Photos throughout the lecture: All rights are reserved};
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

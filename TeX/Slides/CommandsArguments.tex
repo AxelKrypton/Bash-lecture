@@ -10,16 +10,15 @@
         \item \alert{The first word} of the line is the name of \alert{the command} to be executed.
         \item \PP{All the remaining words} become \PP{arguments} to that command (options, filenames, etc.).
     \end{itemize}
-    \vfill
-    \begin{lstlisting}[style=MyBash, showspaces=true]
+    \begin{lstlisting}[style=MyBash, showspaces=true, aboveskip=1mm]
          $@|~|@command arg1 arg2   arg3       arg4
          $@|~|@command arg1 arg2 arg3 arg4
     \end{lstlisting}
-    \vfill
+    \vspace{2mm}
     \begin{varblock}{alerted}[0.75\textwidth]{}
         \PQ{The amount of whitespace between arguments does not matter!}
     \end{varblock}
-    \begin{lstlisting}[style=MyBash]
+    \begin{lstlisting}[style=MyBash, aboveskip=2mm]
         $ echo I am Clark Kent
         |+I am Clark Kent+|                        # <- Same output
         $ echo I    am  Clark         Kent
@@ -35,13 +34,14 @@
 \begin{frame}[fragile]{The first hurdle: spaces}{How can a so innocent, invisible character hurt me? ...well...}
     \vspace{-3mm}
     \begin{itemize}
-        \item To a shell, whitespace is incredibly important.
-        \item Don't be fooled into thinking a space or tab more or less won't make much of a difference.
-        \item  Whitespace is \textbf{vital} to allowing your shell to understand you. 
+        \item To a shell, whitespace is incredibly important
+        \item Don't be fooled into thinking a space or tab more or less won't make much of a difference
+        \item  Whitespace is \textbf{vital} to allowing your shell to understand you
     \end{itemize}
     \begin{lstlisting}[style=MyBash, aboveskip=4mm]
-        $ ls
-        |+The secret voice.mp3  secret+|
+        $ ls -1
+        |+The secret voice.mp3
+        secret+|
         $ rm The secret voice.mp3  # rm gets 3 arguments, not 1!
         |+rm: cannot remove 'The': No such file or directory+|
         |+rm: cannot remove 'voice.mp3': No such file or directory+|
@@ -49,7 +49,7 @@
         |+The secret voice.mp3+|       # Where's your file 'secret'!?
     \end{lstlisting}
     \centerline{\ssmall \bash|ls| and \bash|rm| are commands to list the present working directory content and to remove files, respectively.}
-    \vspace{-2mm}
+    \vspace{-3mm}
     \begin{overlayarea}{\textwidth}{0.3\textheight}
         \begin{varblock}{example}[0.5\textwidth]{}<only@1>
             We will deepen into \PS{Word splitting} later!
