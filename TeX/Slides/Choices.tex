@@ -96,7 +96,7 @@
             \begin{lstlisting}[style=MyBash]
                 $ select file in *; do
                 >     echo "You picked \"${file}\" (${REPLY})"
-                >     break;
+                >     break
                 > done
                 |+1) Day_1.tex
                 2) Day_2.tex
@@ -104,7 +104,7 @@
                 #? 2
                 You picked "Day_2.tex" (3)+|
                 $ echo "After select: \"${file}\" (${REPLY})"
-                |+After select: "Day_2.tex" (2)+|
+                |+After select: "Day_2.tex" (3)+|
                 $ unset file
             \end{lstlisting}
         \end{onlyenv}

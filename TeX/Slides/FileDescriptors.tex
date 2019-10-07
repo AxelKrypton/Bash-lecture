@@ -784,11 +784,11 @@
         \item The former \bash{command}'s std output is connected to the latter \bash{command}'s std input
         \item This connection is performed before any redirection specified by the commands
         \item Pipes are widely used as a means of post-processing application output
-        \item \alert{The pipe operator creates a subshell environment for each command!}
+        \item \alert{The pipe operator creates a subshell environment for each command!} \,{\tiny\{~More on subshells tomorrow~\}}
     \end{itemize}
     \begin{onlyenv}<1>
         \begin{lstlisting}[style=MyBash]
-            $ message=Test
+            $ message='Test'
             $ echo 'Salut, le monde!' | read message
             $ echo "The message is: $message"
             |+The message is: Test+|
@@ -816,7 +816,7 @@
     \vspace{-2mm}
     \begin{lstlisting}[style=MyBash]
         # Finding the maximum of a list
-        $ for f in {1..5}; do
+        $ for index in {1..5}; do
         >     echo $((RANDOM/RANDOM)).${RANDOM}
         > done
         |+1.4122
@@ -824,7 +824,7 @@
         0.19098
         0.6631
         0.15050+|
-        $ for f in {1..5}; do
+        $ for index in {1..5}; do
         >     echo $((RANDOM/RANDOM)).${RANDOM}
         > done | sort -n
         |+0.1455
@@ -832,7 +832,7 @@
         0.9598
         1.18896
         1.2768+|
-        $ for f in {1..5}; do
+        $ for index in {1..5}; do
         >     echo $((RANDOM/RANDOM)).${RANDOM}
         > done | sort -n | tail -n1
         |+2.21350+|
@@ -846,19 +846,19 @@
         \item Bash provides an array variable \bash|PIPESTATUS| containing a list of exit status values from the processes in the most-recently-executed foreground process
     \end{itemize}
     \begin{lstlisting}[style=MyBash]
-        $ for f in {1..5}; do
+        $ for index in {1..5}; do
         >     echo $((RANDOM/RANDOM)).${RANDOM}
-        > done | sort -n | tail -n1 | grep '9'
+        > done | sort -n | tail -n1 | grep 'x'
         $ echo $?
         1
-        $ for f in {1..5}; do
+        $ for index in {1..5}; do
         >     echo $((RANDOM/RANDOM)).${RANDOM}
-        > done | sort -n | tail -n1 | grep '9'
+        > done | sort -n | tail -n1 | grep 'x'
         $ echo ${PIPESTATUS[@]}
         |+0 0 0 1+|
-        $ for f in {1..5}; do
+        $ for index in {1..5}; do
         >     echo $((RANDOM/RANDOM)).${RANDOM}
-        > done | sort -n | rm 2> /dev/null | tail -n1 | grep '9'
+        > done | sort -n | rm 2> /dev/null | tail -n1 | grep 'x'
         $ echo ${PIPESTATUS[@]}
         |+0 141 1 0 1+| # @|\URL[red]{https://stackoverflow.com/a/19120674}{Pipes must have a reader (rm is not) and a writer}[background-color]|@
     \end{lstlisting}
