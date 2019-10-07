@@ -412,9 +412,9 @@
             |+7+|
             $ aVar=22; echo $(( aVar / 3 )); unset aVar
             |+7+|
-            $ echo $(( aVar / 3 ))     # aVar is unset, no ${} => 0 is used:  $((0/3))
+            $ echo $(( aVar / 3 ))     # aVar is unset,  no  ${} => 0 is used:  $((0/3))
             |+0+|
-            $ echo $(( ${aVar} / 3 ))  # aVar is unset, no ${} => '' is used: $(( /3))
+            $ echo $(( ${aVar} / 3 ))  # aVar is unset, with ${} => '' is used: $(( /3))
             |+bash: / 3 : syntax error: operand expected (error token is "/ 3 ")+|
             $ echo $(( ))
             |+0+|
@@ -467,7 +467,7 @@
             |+4 args: <This> <is> <a> <variable>+|
             $ aVar="     This   is  a    variable   "; args ${aVar}
             |+4 args: <This> <is> <a> <variable>+|
-            $ aVar="/home/sciarra/Documents/Seminars"; args ${aVar}
+            $ aVar="/home/sciarra/Documents/Seminars/"; args ${aVar}
             |+1 args: </home/sciarra/Documents/Seminars/>+|
             $ IFS='/'; args ${aVar}; unset IFS
             |+5 args: <> <home> <sciarra> <Documents> <Seminars>+|

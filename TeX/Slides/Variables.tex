@@ -122,8 +122,8 @@
             7
             $ declare -i aVar=5; aVar+=aVar; echo "$aVar"; unset aVar
             10
-            $ declare -i aVar=5; aVar+="foo"; echo "$aVar"; unset aVar
-            10
+            $ declare -i aVar=5; aVar+='foo'; echo "$aVar"; unset aVar
+            5
             # "foo" refers to the variable foo in arithmetic evaluation
         \end{lstlisting}
         \begin{varblock}{alerted}[0.9\textwidth]{The use of integer variables is exceedingly rare!}

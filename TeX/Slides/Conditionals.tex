@@ -130,7 +130,7 @@
             $ if [ "${aVar}" = "${aVar}" ]; then echo 'YES'; else echo 'NO'; fi
             |+YES+|
             $ if [ "${aVar}" \> "${bVar}" ]; then echo 'YES'; else echo 'NO'; fi
-            |+NO+|
+            |+YES+|
             $ if [ 319 \< 7 ]; then echo 'YES'; else echo 'NO'; fi
             |+YES+| # 319 is < than 7 but it is not less than 7...
             $ unset aVar bVar
