@@ -7,7 +7,8 @@
 
 # TASK 2
 
-printf '%40s  %s\n'\
+printf '%35s  %s\n'\
+       '' ''\
        'PATH:' "${PATH}"\
        'Highest priority in PATH:' "${PATH%%:*}"\
        'Lowest priority in PATH:' "${PATH##*:}"\
@@ -31,7 +32,7 @@ seedValue=${secondField: -4}
 betaPrefix=${firstField/${betaValue}}
 seedPrefix=${secondField/${seedValue}}
 
-printf '%15s  %s\n'\
+printf '%35s  %s\n'\
        'String:' "${stringToParse}"\
        'Beta prefix:' "${betaPrefix}"\
        'Beta value:' "${betaValue}"\
@@ -43,5 +44,6 @@ printf '%15s  %s\n'\
 # TASK 4
 
 printf -v listOfWords '%s_' First Second Third
-echo "listOfWords:  ${listOfWords%?}"
-echo
+printf '%35s  %s\n'\
+       "listOfWords:" "${listOfWords%?}"\
+       '' ''

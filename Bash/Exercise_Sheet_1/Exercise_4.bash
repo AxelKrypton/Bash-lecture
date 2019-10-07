@@ -31,7 +31,7 @@ printf '  %s\n'\
        ''\
        ''\
        'From the Bash manual it is clear that Bash can deal with bases between 2 and 64.'\
-       'For a base larger than 10, letters are used to represent numbers larger than 10.'\
+       'For a base larger than 10, letters are used to represent numbers larger than 9.'\
        'In this way one can handle numbers till base 36 (10 digits and 26 letters). It'\
        'does not matter if a letter is upper-case or lower-case. However, to handle bases'\
        'between 37 and 62, 26 new symbols are needed and upper-case letters are used and,'\

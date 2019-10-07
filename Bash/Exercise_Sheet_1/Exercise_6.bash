@@ -8,7 +8,7 @@ fi
 if [[ $1 = '-n' ]]; then
     #Numeric mode, check 2 more arguments
     if [[ $# -ne 3 ]]; then
-        echo "Error: Numeric mode requires exactly 3 arguments."
+        echo "Error: Numeric mode requires exactly 3 arguments (-n, 2 or 8, and I or II or III)."
         exit 1
     else
         if [[ $2 -ne 2 && $2 -ne 8 ]]; then
@@ -42,7 +42,7 @@ if [[ $1 = '-n' ]]; then
 elif [[ $1 = '-f' ]]; then
     #File mode, check 1 more argument
     if [[ $# -ne 2 ]]; then
-        echo "Error: File mode requires exactly 2 arguments."
+        echo "Error: File mode requires exactly 2 arguments (-f and a three lower-case-characters argument)."
         exit 1
     else
         if [[ ! $2 =~ ^[a-z]{3}$ ]]; then
