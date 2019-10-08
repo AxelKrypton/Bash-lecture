@@ -158,7 +158,7 @@
                       \end{lstlisting}
                 \item If you actually wanted a stream of numbers separated by newlines as test input, consider
                       \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm, xrightmargin=65mm]
-                          printf '\%d\n' {1..10}
+                          printf '%d\n' {1..10}
                       \end{lstlisting}
                       You can also loop over the result of a sequence expansion if the range is constant, but the shell needs to expand the full list into memory before processing the loop body.
                       This method can be wasteful and is less versatile than other arithmetic loops.
