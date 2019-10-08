@@ -14,7 +14,7 @@
                   ${EDITOR} "${filename}"
               \end{lstlisting}
               would open the file to edit.
-              How would you make this command safer, considering the possibility that either of the variable (or both) is unset?
+              How would you make this command safer, considering the possibility that either of the variable (or both) is unset or null?
               Use a default value for \bash|EDITOR| and abort if \bash|filename| is unset.
         \item The environment \bash|PATH| variable contains the locations where the OS looks for commands as colon-separated list.
               Print the highest- and lowest-priority locations.

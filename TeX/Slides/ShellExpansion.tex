@@ -45,11 +45,11 @@
         \begin{itemize}
             \item It comes in two forms:
                 \begin{enumerate}
-                    \item \bash|[preamble]{comma separated list}[postscript]|
-                    \item \bash|[preamble]{X..Y[..increment]}[postscript]|
+                    \item \bash|[prefix]{comma separated list}[postfix]|
+                    \item \bash|[prefix]{X..Y[..increment]}[postfix]|
                 \end{enumerate}
-            \item<only@1> \bash|[preamble]| and \bash|[postscript]| are optional 
-            \item<only@1> \bash|[preamble]| and \bash|[postscript]| might contain other brace expansions
+            \item<only@1> \bash|[prefix]| and \bash|[postfix]| are optional 
+            \item<only@1> \bash|[prefix]| and \bash|[postfix]| might contain other brace expansions
             \item<only@1> Brace expansions can be nested and, if so, they work from the outside in
             \item<only@1> \bash|X| and \bash|Y| are either characters or numbers
             \item<only@1> \bash|increment| is an optional integer (if omitted, it is +1 or -1 as appropriate)
@@ -58,7 +58,7 @@
         \end{itemize}
         \vspace{-3mm}
         \begin{varblock}{}[\textwidth]{Result of the expansion}<only@1>
-            A space separated list of all combinations of \bash|[preamble]| and \bash|[postscript]| with the elements in the brace.
+            A space separated list of all combinations of \bash|[prefix]| and \bash|[postfix]| with the elements in the brace.
             In \MakeEnumerateBox{2}, the sequence in braces is at first completed going back to \MakeEnumerateBox{1}.
             Order is respected left to right. Multiple non-nested braces expand to all combinations.
         \end{varblock}
