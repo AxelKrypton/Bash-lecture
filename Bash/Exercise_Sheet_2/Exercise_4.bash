@@ -13,9 +13,9 @@ for value in "$@"; do
     fi
 done
 
-echo -e "Options passed to the script: \e[96m$@\e[0m"
+echo -e "\n  Options passed to the script: \e[96m$@\e[0m"
 set -- "${newOptions[@]}"
-echo -e "Options parsed by the script: \e[95m$@\e[0m"
+echo -e "  Options parsed by the script: \e[95m$@\e[0m\n"
 
 # Global variable of the script
 filename=''
@@ -42,7 +42,7 @@ for option in "$@"; do
                '-r | --range' 'Lower and upper bounds'\
                '-w | --walltime' 'Walltime either as "d-hh:mm:ss" or with shorter notation'\
                '--' 'Separate options from list of files'
-        printf '\n\e[1;4;91mATTENTION\e[24m:\e[22m Options "-s" and "-a" are mutually exclusive!\n\n\n\e[0m'
+        printf '\n \e[1;4;91mATTENTION\e[24m:\e[22m Options "-s" and "-a" are mutually exclusive!\n\n\n\e[0m'
         
         exit 0
     fi
@@ -55,10 +55,10 @@ while [[ $# -gt 0 ]]; do
             shift ;;
         -f | --file )
             if [[ $2 =~ ^(-|$) ]]; then
-                printf "\n  \e[91mThe value of the option \e[1m${1}\e[22m was not correctly specified (either forgotten or invalid)!\e[0m\n\n"
+                printf "\n  \e[91mThe value of the option \e[1m${1}\e[22m was not correctly specified (either forgotten or invalid)!\e[0m\n\n" >&2
                 exit 1
             elif [[ ! -f $2 ]]; then
-                printf "\n  \e[91mThe value of the option \"${1}\" does not refer to an existing, regular file!\n\n"
+                printf "\n  \e[91mThe value of the option \"${1}\" does not refer to an existing, regular file!\n\n" >&2
                 exit 1
             else
                 filename="$2"
@@ -67,7 +67,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         -b | --beta )
             if [[ ! $2 =~ ^[0-9]*[.][0-9]{4}$ ]]; then
-                printf "\n  \e[91mThe value of the option \e[1m${1}\e[22m was not correctly specified (either forgotten or invalid)!\e[0m\n\n"
+                printf "\n  \e[91mThe value of the option \e[1m${1}\e[22m was not correctly specified (either forgotten or invalid)!\e[0m\n\n" >&2
                 exit 1
             else
                 beta="$2"
@@ -104,7 +104,7 @@ while [[ $# -gt 0 ]]; do
                     rangeMax="$2"                    
                 fi
             else
-                printf "\n  \e[91mThe value of the option \e[1m${1}\e[22m was not correctly specified (either forgotten or invalid)!\e[0m\n\n"
+                printf "\n  \e[91mThe value of the option \e[1m${1}\e[22m was not correctly specified (either forgotten or invalid)!\e[0m\n\n" >&2
                 exit 1                
             fi
             shift 3
@@ -115,7 +115,7 @@ while [[ $# -gt 0 ]]; do
             if [[ $2 =~ ${formatRegexA} ]] || [[ $2 =~ ${formatRegexB} ]]; then
                 walltime=$2
             else
-                printf "\n  \e[91mThe value of the option \e[1m${1}\e[22m was not correctly specified (either forgotten or invalid)!\e[0m\n\n"
+                printf "\n  \e[91mThe value of the option \e[1m${1}\e[22m was not correctly specified (either forgotten or invalid)!\e[0m\n\n" >&2
                 exit 1                
             fi
             shift 2
@@ -125,16 +125,18 @@ while [[ $# -gt 0 ]]; do
             break
             ;;
         * )
-            echo -e "\e[91mUnrecognised option \[1m${1}\e[22m."
+            echo -e "\e[91mUnrecognised option \[1m${1}\e[22m." >&2
             exit 1
             ;;
     esac
 done
 
 if [[ ${#mutuallyExclusiveSpecifiedOptions[@]} -gt 1 ]]; then
-    echo -e '\e[91mThe options'
-    printf '  \e[1m%s\e[22m\n' "${mutuallyExclusiveOptions[@]}"
-    echo -e 'are mutually exclusive and cannot be combined!\e[0m'
+    {
+        echo -e '\e[91mThe options'
+        printf '  \e[1m%s\e[22m\n' "${mutuallyExclusiveOptions[@]}"
+        echo -e 'are mutually exclusive and cannot be combined!\e[0m'
+    } >&2
     exit 1
 fi
 

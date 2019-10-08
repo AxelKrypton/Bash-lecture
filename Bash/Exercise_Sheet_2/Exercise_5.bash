@@ -4,7 +4,12 @@ printf "\n\e[1;38;5;202mWelcome to: Find the intruder for robots!\e[93m :)\e[0m\
 while [[ ! ${wordsNumber} =~ ^[1-9][0-9]*$ ]]; do
     printf '\e[96mHow many words would you like to play with? \e[0m'
     read wordsNumber
+    if [[ ${wordsNumber} -eq 1 ]]; then
+        printf '\n\e[1;4;93mWARNING\e[24m:\e[22m Playing with one word would be cheating!\e[0m\n\n'
+        wordsNumber='nonsense' # just to renter the loop
+    fi
 done
+
 
 if [[ ${wordsNumber} -gt 10 ]]; then
     printf '\n\e[1;4;93mWARNING\e[24m:\e[22m Maximum allowed number is 10, drawing 10 words.\e[0m\n\n'
@@ -19,7 +24,7 @@ while [[ ! -f ${dictionary} ]]; do
 done
 
 listOfWords=( $(shuf "${dictionary}" -n ${wordsNumber}) )
-intruder=${listOfWords[$(shuf -i 1-${#listOfWords[@]} -n 1)]}
+intruder=${listOfWords[$(shuf -e ${!listOfWords[@]} -n 1)]}
 
 PS3="$(printf '\e[96mWhich is the word not belonging to the group? \e[0m')"
 select guess in "${listOfWords[@]}"; do

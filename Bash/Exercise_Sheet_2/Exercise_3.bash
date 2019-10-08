@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ ! "$1 $2" =~ ^-t\ [12w]$ ]]; then
-    printf '\n  Give "-t N" (N=w, N=1 or N=2) as option to select the exercise task.\n\n'
+    printf '\n  Give "-t N" (N=w, N=1 or N=2) as option to select the exercise task.\n\n' >&2
     exit 1
 else
     set -- "$1 $2" "${@:3}"
@@ -13,11 +13,11 @@ if [[ $1 = '-t w' ]]; then
 
     echo
     stringArray=( $'Hello\nworld' 'Hello' 'Bye' 'Goodbye everyone' 'Wow' )
-    numberArray=( 2 101 31 5 7 11 )
+    numberArray=( 200 101 31 5 7 11 )
     sparseArray=( [10]=$'Hello\nworld' [3]='Bye' [5]='Ciao' )
     printf "%.0s-" {1..50}; echo
     echo "stringArray=( \$'Hello\nworld' 'Hello' 'Bye' 'Goodbye everyone' 'Wow' )"
-    echo 'numberArray=( 2 101 31 5 7 11 )'
+    echo 'numberArray=( 200 101 31 5 7 11 )'
     echo "sparseArray=( [10]=\$'Hello\nworld' [3]='Bye' [5]='Ciao' )"
 
     # Longest entry of array
@@ -31,7 +31,7 @@ if [[ $1 = '-t w' ]]; then
 
     # Maximum of numeric array
     for entry in "${numberArray[@]}"; do
-        if [[ ${#entry} -gt "${maximum}" ]]; then
+        if [[ ${entry} -gt "${maximum}" ]]; then
             maximum="${entry}"
         fi
     done
@@ -124,15 +124,19 @@ if [[ $1 = '-t 2' ]]; then
     numberB=$2
 
     if [[ ! ${numberA} =~ ^[1-9][0-9]*$ ]]; then
-        echo "First integer wrongly specified!"; exit 1
+        echo "First integer wrongly specified!" >&2; exit 1
     fi
     if [[ ! ${numberB} =~ ^[1-9][0-9]*$ ]]; then
-        echo "Second integer wrongly specified!"; exit 2
+        echo "Second integer wrongly specified!">&2; exit 2
     fi
 
+    # Find prime factorisation and store it in (sparse) arrays:
+    #     index -> as factor
+    #   content -> as power of the factor
     numberA_factors=()
     numberB_factors=()
     tmpFactors=( $(factor ${numberA}) )
+    # In the following for, skip first entry of array which is 'number:' (see factor command)
     for factor in ${tmpFactors[@]:1}; do
         # unset entries referred without $ are 0 in arithmetic expansion
         numberA_factors[factor]=$(( numberA_factors[factor]+1 ))
@@ -142,6 +146,8 @@ if [[ $1 = '-t 2' ]]; then
         numberB_factors[factor]=$(( numberB_factors[factor]+1 ))
     done
 
+    # Collect common factors in arrays with the same logic as above
+    # taking largest or smallest exponent for GCD and LCM, respectively
     lcm_factors=()
     gcd_factors=()
     for factor in ${!numberA_factors[@]}; do
@@ -158,7 +164,7 @@ if [[ $1 = '-t 2' ]]; then
         fi       
     done
 
-    #Final logic
+    #Final logic: calculate result
     gcd=1
     for factor in ${!gcd_factors[@]}; do
         gcd=$(( gcd * factor**gcd_factors[factor] ))

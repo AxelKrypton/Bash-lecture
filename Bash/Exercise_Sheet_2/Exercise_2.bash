@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ ! "$1 $2" =~ ^-t\ [123]$ ]]; then
-    printf '\n  Give "-t N" (N=1, N=2 or N=3) as option to select the exercise task.\n\n'
+    printf '\n  Give "-t N" (N=1, N=2 or N=3) as option to select the exercise task.\n\n' >&2
     exit 1
 else
     set -- "$1 $2"
@@ -15,8 +15,10 @@ if [[ $1 = '-t 1' ]]; then
     extension_2='jpg'
 
     for file in *.${extension_1}; do
-        if [[ -e ${file} ]]; then # To avoid loop iteration if glob is not matched
-            echo mv "${file}" "${file/%.${extension_1}/.${extension_2}}"
+        if [[ -f ${file} ]]; then # To avoid loop iteration if glob is not matched
+            if [[ ! -e "${file/%.${extension_1}/.${extension_2}}" ]]; then
+                echo mv "${file}" "${file/%.${extension_1}/.${extension_2}}"
+            fi
         fi
     done
 
@@ -27,9 +29,11 @@ fi
 
 if [[ $1 = '-t 2' ]]; then
 
-    for file in *\ *; do
-        if [[ -e ${file} ]]; then # To avoid loop iteration if glob is not matched
-            echo mv "${file}" "${file// /_}"
+    for fileOrFolder in *\ *; do
+        if [[ -e ${fileOrFolder} ]]; then # To avoid loop iteration if glob is not matched
+            if [[ ! -e "${fileOrFolder// /_}" ]]; then
+                echo mv "${fileOrFolder}" "${fileOrFolder// /_}"
+            fi
         fi
     done
 
