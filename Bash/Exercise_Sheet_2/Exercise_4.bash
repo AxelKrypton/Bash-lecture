@@ -2,14 +2,14 @@
 
 # Splitting combined short options into multiple short options
 newOptions=()
-for value in "$@"; do
-    if [[ $value =~ ^-[[:alpha:]]+$ ]]; then
-        splittedOptions=( $(grep -o "." <<< "${value:1}") )
+for argument in "$@"; do
+    if [[ $argument =~ ^-[[:alpha:]]{2,}$ ]]; then
+        splittedOptions=( $(grep -o "." <<< "${argument:1}") )
         for option in "${splittedOptions[@]}"; do
             newOptions+=( "-$option" )
         done
     else
-        newOptions+=( "$value" )
+        newOptions+=( "$argument" )
     fi
 done
 
@@ -35,7 +35,7 @@ for option in "$@"; do
         printf '\n\n\e[92m Available options to the present script:\n\n'
         printf '    \e[96m%-20s\e[0m  ->  \e[95m%s\e[0m\n'\
                '-f | --file' 'Existing input file name'\
-               '-b | --beta' 'A positive number with at maximum 4 decimal digits'\
+               '-b | --beta' 'A positive number with exactly 4 decimal digits'\
                '-v | --verbose' 'Enable verbose mode'\
                '-s | --sizes' 'Positive integer(s)'\
                '-a | --aspectRatios' 'Positive integer(s)'\
@@ -58,7 +58,7 @@ while [[ $# -gt 0 ]]; do
                 printf "\n  \e[91mThe value of the option \e[1m${1}\e[22m was not correctly specified (either forgotten or invalid)!\e[0m\n\n" >&2
                 exit 1
             elif [[ ! -f $2 ]]; then
-                printf "\n  \e[91mThe value of the option \"${1}\" does not refer to an existing, regular file!\n\n" >&2
+                printf "\n  \e[91mThe value of the option \"${1}\" does not refer to an existing, regular file!\n\n\e[0m" >&2
                 exit 1
             else
                 filename="$2"
