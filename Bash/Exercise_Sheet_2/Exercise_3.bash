@@ -55,6 +55,9 @@ if [[ $1 = '-t w' ]]; then
     echo    
 
     # Sort (alphabetically!) an array before bash 4.4 coping with '\n' in entries (indeed before bash v4)
+    # NOTE: Using -d $'\0' rather than -d '' makes no difference, but it makes it obvious
+    #       what you're expecting the delimiter to be!
+    #          https://transnum.blogspot.com/2008/11/bashs-read-built-in-supports-0-as.html
     sorted_A=()
     while read -d $'\0' element; do
         sorted_A[${#sorted_A[@]}]="${element}"
@@ -67,7 +70,7 @@ if [[ $1 = '-t w' ]]; then
 
     # Sort an array after bash 4.4
     echo '---- Bash >= v4.4 ----'
-    readarray -d '' -t sorted_B < <(printf '%s\0' "${stringArray[@]}" | sort -z)
+    readarray -d $'\0' -t sorted_B < <(printf '%s\0' "${stringArray[@]}" | sort -z)
     for index in "${!sorted_B[@]}"; do
         echo "sorted_B[$index]=${sorted_B[index]}"
     done
