@@ -46,7 +46,7 @@
             \item[30 to 37] Set foreground colour \tikzmark{8start}
             \item[40 to 47] Set background colour \tikzmark{8end}
             \item[38;5;\{0..255\}] Set foreground colour \tikzmark{256start}
-            \item[38;5;\{0..255\}] Set background colour \tikzmark{256end}  
+            \item[48;5;\{0..255\}] Set background colour \tikzmark{256end}
             \item[90 to 97] Set bright foreground colour \tikzmark{16start}
             \item[100 to 107] Set bright background colour \tikzmark{16end}
         \end{description}
@@ -68,7 +68,7 @@
             |+Default+| @|\texttt{\textbf{Bold}}|@
             $ echo -e "Default \e[4mUnderlined\e[0m"
             |+Default+| @|\texttt{\underline{Underlined}}|@
-            $ echo -e "Default \e[4\e[91mUnderlined\e[0m"
+            $ echo -e "Default \e[4m\e[91mUnderlined\e[0m"
             |+Default+| @|\texttt{\tc{red}{\underline{Underlined}}}|@
             $ echo -e "Default \e[4;91mUnderlined\e[0m"
             |+Default+| @|\texttt{\tc{red}{\underline{Underlined}}}|@
