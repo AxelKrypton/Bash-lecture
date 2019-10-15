@@ -55,8 +55,8 @@ fi
 case "${task}" in
     1 )
         PrintInfo "Print the first 5 and last 10 lines:"\
-                  "  sed -n '1,5p ; 10,\$p' \"${inputFile}\""\
-        sed -n '1,5p ; 10,$p' "${inputFile}"
+                  "  sed -n '1,5p ; '\"\$(( \$(wc -l < ${inputFile}) - 10))\"',\$p' \"${inputFile}\""
+        sed -n '1,5p ; '"$(( $(wc -l < ${inputFile}) - 10))"',$p' "${inputFile}"
         ;;
     2 )
         PrintInfo "Print every third line:"\
