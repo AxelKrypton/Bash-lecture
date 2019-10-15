@@ -43,7 +43,7 @@
         
         if@|\textvisiblespace|@COMMAND; then
             # COMMAND's exit code was 0
-        elif@|\textvisiblespace|@ANOTHER_COMMAND
+        elif@|\textvisiblespace|@ANOTHER_COMMAND; then
             # ANOTHER_COMMAND's exit code was 0
         else
             # ANOTHER_COMMAND's exit code was different from 0
@@ -98,12 +98,12 @@
         \end{minipage}
         \begin{minipage}{0.9\textwidth}
             \begin{description}[<only@3>][\texttt{INT -eq INT}]
-                \item[\texttt{INT -eq INT}] True if both integers are identical.
-                \item[\texttt{INT -ne INT}] True if the integers are not identical.
-                \item[\texttt{INT -lt INT}] True if the first integer is less than the second.
-                \item[\texttt{INT -gt INT}] True if the first integer is greater than the second.
-                \item[\texttt{INT -le INT}] True if the first integer is less than or equal to the second.
-                \item[\texttt{INT -ge INT}] True if the first integer is greater than or equal to the second.
+                \item[\texttt{INT -eq INT}] True if both integers are identical
+                \item[\texttt{INT -ne INT}] True if the integers are not identical
+                \item[\texttt{INT -lt INT}] True if the first integer is less than the second
+                \item[\texttt{INT -gt INT}] True if the first integer is greater than the second
+                \item[\texttt{INT -le INT}] True if the first integer is less than or equal to the second
+                \item[\texttt{INT -ge INT}] True if the first integer is greater than or equal to the second
             \end{description}
         \end{minipage}
     \end{center}
@@ -160,7 +160,7 @@
     \vspace{-3mm}
     \begin{itemize}[<only@1>]
         \item It supports the tests supported by the \bash{test} and \bash{[} commands$^{\star}$
-        \item String equality (\texttt{=} or \texttt{==}) and inequality (\texttt{!=}) comparison is changed to \alert{pattern matching} by default; use quotes to perform a string comparison
+        \item String equality (\texttt{=} or \texttt{==}) and inequality (\texttt{!=}) comparison is changed to \alert{pattern matching} by default; use quotes either on l.h.s. or on r.h.s. to perform a string comparison
         \item \alert{It does not allow word-splitting} of its arguments!
         \item However, be aware that simple strings still have to be quoted properly
         \item Few more additional tests supported:
@@ -175,7 +175,7 @@
     \begin{onlyenv}<2>
         \begin{lstlisting}[style=MyBash, style=oddnumbers, style=smaller, xleftmargin=1mm, xrightmargin=1mm]
             $ aVar="Day_1.tex"; bVar='Hello world'
-            # Significative examples
+            # Pattern matching VS string comparison
             $ if [[ ${aVar} = *.tex ]]; then echo 'YES'; else echo 'NO'; fi
             |+YES+|
             $ if [[ ${aVar} = "*.tex" ]]; then echo 'YES'; else echo 'NO'; fi
@@ -202,7 +202,7 @@
     \FrameRemark{$^{\star}$ Except \PB{\texttt{~EXPR -a EXPR~}} and \PB{\texttt{~EXPR -o EXPR~}} which should in any case not be used!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Control Operators}
+\begin{frame}[fragile]{Control operators}
     \vspace{-3mm}
     \begin{overlayarea}{\textwidth}{0.625\textheight}
         \begin{description}[<only@1>][\texttt{\&\&}]
@@ -230,7 +230,7 @@
                 rm file || echo 'Could not delete file!'
                 mkdir TeX && cd TeX
                 source AuxiliaryOps.bash || exit 1
-                # Avoid complicate one-liners which might easily be wrong!
+                # Avoid complicated one-liners which might easily be wrong!
                 grep -q goodword "$file" && ! grep -q badword "$file" && rm "$file" || echo "Couldn't delete: $file"
             \end{lstlisting}
             \centerline{\small\PQ{What happens if the first \bash{grep} fails (sets the exit status to 1)?}}

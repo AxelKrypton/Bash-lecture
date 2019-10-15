@@ -163,7 +163,7 @@
                 # Process in foreground, shell not usable
                 # -> suspend via CTRL-Z 
                 # You get your shell back, but emacs is blocked
-                |+[1]+  Stopped                 emacs -nw Loops.tex+|
+                |+[1]+  Stopped                 emacs Loops.tex+|
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<9>
@@ -172,7 +172,7 @@
                 # Process in foreground, shell not usable
                 # -> suspend via CTRL-Z 
                 # You get your shell back, but emacs is blocked
-                |+[1]+  Stopped                 emacs -nw Loops.tex+|
+                |+[1]+  Stopped                 emacs Loops.tex+|
                 $ bg 
                 # Alternative syntax:
                 #   bg %1     <- Using the jobnumber
@@ -426,7 +426,7 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<5>
-            \begin{lstlisting}[style=MyBash, emph={[8]long_running_command}]
+            \begin{lstlisting}[style=MyBash, emph={[8]long_running_command}, firstnumber=10]
                 #!/bin/bash
                                             #  EXAMPLE 2: kill
                 long_running_command &
@@ -508,14 +508,14 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<2-3>
-            \begin{lstlisting}[style=MyBash, emph={[7]sleep_pid, exitCode, waitCode}]
+            \begin{lstlisting}[style=MyBash, emph={[7]sleep_pid, exitCode, waitCode}, firstnumber=12]
                 #!/bin/bash
                 {
                     sleep_pid=$!
                     while { ( exit 12 ) & [ "${sleep_pid}" != "$!" ]; }; do
                         :
                     done
-                    wait "${command_pid}"
+                    wait "${sleep_pid}"
                     waitCode=$?
                     read <&3 exitCode
                     echo "Command in process substitution: ${exitCode}"
@@ -538,7 +538,7 @@
     \begin{itemize}
         \setlength{\itemsep}{1mm}
         \item It is a potentially tough world: Be scared but not too much
-        \item Bash might not be the most indicate tool
+        \item Bash might not be the most appropriate tool
         \item Be aware of the truth (what we just discussed)
         \item If you want to have something running in background, why do you want so?
         \item There are tools which you might consider:\\[0.3ex]

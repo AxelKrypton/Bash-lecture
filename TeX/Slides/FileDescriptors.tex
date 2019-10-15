@@ -7,7 +7,7 @@
 \begin{frame}<1-2,4>[fragile, label=FDfigure]{File descriptors: a graphical overview} % https://tex.stackexchange.com/a/119310
     \vspace{-5mm}
     \begin{varblock}{example}[0.66\textwidth]{By default}
-        Every new process starts with \textbf{three} open file descriptors 
+        Every new process starts with \textbf{three} open file descriptors.
     \end{varblock}
     \vfill
     \begin{center}
@@ -204,11 +204,11 @@
     \end{description}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Few more basic examples}
+\begin{frame}[fragile]{A few more basic examples}
     \begin{overlayarea}{\textwidth}{0.2\textheight}
         \begin{onlyenv}<1>
             \begin{lstlisting}[style=MyBash, numbers=none]
-                # Standard prcess situation
+                # Standard process situation
                 $ command
             \end{lstlisting}
         \end{onlyenv}
@@ -347,7 +347,7 @@
     \FrameRemark{To check the open file descriptors you can use: $\;$ \bash|ls -l /proc/$$/fd|}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Few more advanced examples}
+\begin{frame}[fragile]{A few more advanced examples}
     \vspace{-5mm}
     \begin{overlayarea}{\textwidth}{0.38\textheight}
         \begin{onlyenv}<1>
@@ -610,7 +610,7 @@
     \end{center}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{A kind of black hole in the operative system}
+\begin{frame}[fragile]{A kind of black hole in the operating system}
     \begin{tikzpicture}[overlay, remember picture]
         \node[anchor=north east] (fig) at ($(current page.north east)-(3mm,3mm)$) {\includegraphics[width=3cm]{BlackHole}};
         \node[text=bg, font=\ttfamily] at ($(fig.center)!0.7!(fig.south)$) {/dev/null};
@@ -729,7 +729,7 @@
         command |+[n]<<< STRING+|
     \end{lstlisting}
     \begin{itemize}[<only@1-2>]
-        \item Herestrings are shorter, less intrusive and overall more convenient than Heredoc\\[-0.5ex]
+        \item Herestrings are shorter, less intrusive and overall more convenient than Heredocs\\[-0.5ex]
               {\tiny\{~However, they are not portable to the Bourne shell~\}}
         \item The \texttt{STRING} undergoes:
               \begin{itemize}

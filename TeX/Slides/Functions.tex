@@ -118,14 +118,14 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<2>
-            \begin{lstlisting}[style=MyBash]
+            \begin{lstlisting}[style=MyBash, firstnumber=14]
                 $ ./script.bash
                 |+In LevelThree, aVar = LevelTwo local
                 In LevelOne, aVar = global+|
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<3>
-            \begin{lstlisting}[style=MyBash, style=oddnumbers, xleftmargin=1mm, xrightmargin=1mm]
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, xleftmargin=1mm, xrightmargin=1mm, firstnumber=16]
                 $ function Test { aVar="$(exit 1)"; echo $?; }; Test
                 1  # Fine, but we pollute caller with 'aVar' variable
                 $ function Test { local aVar="$(exit 1)"; echo $?; }; Test
@@ -140,7 +140,7 @@
 \begin{frame}{Passing arguments to functions}
     \vspace{-3mm}
     \begin{varblock}{example}[0.8\textwidth]{So far so good}
-        Delegating tasks to functions, even if the task requires variables, is quite straightforward, provided to keep scope rules in mind
+        Delegating tasks to functions, even if the task requires variables, is quite straightforward, provided one keeps scope rules in mind
     \end{varblock}
     \begin{varblock}{quote}[0.95\textwidth]{The Pandora's box}[Bash manual]<2->
         When a function is executed, the arguments to the function become the positional parameters during its execution.
@@ -178,7 +178,7 @@
                 SecondsToTimeStringWithDays ${example}
             done
         \end{lstlisting}
-        \begin{lstlisting}[style=MyBash, aboveskip=2mm]
+        \begin{lstlisting}[style=MyBash, aboveskip=2mm, firstnumber=18]
             $ ./scriptAbove
             |+365-00:00:00+|
             |+1-00:00:00+|     # What is bad in the function above?
@@ -186,7 +186,7 @@
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<2>
-        \begin{lstlisting}[style=MyBash]
+        \begin{lstlisting}[style=MyBash, firstnumber=22]
             #!/bin/bash
 
             function SecondsToTimeStringWithDays() # Better code!
@@ -407,7 +407,7 @@
                 \item The \bash|FUNCNEST| variable may be used to limit the depth of the function call stack and restrict the number of function invocations
                       \,{\tiny\{~By default, no limit is placed on the number of recursive calls~\}}
             \end{itemize}
-            \begin{lstlisting}[style=MyBash, xrightmargin=-2mm, xleftmargin=2mm, aboveskip=0mm]
+            \begin{lstlisting}[style=MyBash, xrightmargin=-2mm, xleftmargin=2mm, aboveskip=0mm, numbers=none]
                 $ FUNCNEST=2; CountTill5From()
                 |+1
                 2
@@ -461,7 +461,7 @@
                 Returns exit status of command or success if command is null.+|
             \end{lstlisting}
             \begin{itemize}
-                \item \emph{\guillemotleft\bash|eval| is a common misspelling of \textbf{evil}\guillemotright} -- Greg's Wiki
+                \item \emph{\guillemotleft\textnormal{\bash|eval|} is a common misspelling of \textbf{evil}\guillemotright} -- Greg's Wiki
                 \item It causes your code to be parsed twice instead of once; this means that, for example, if your code has variable references in it, the shell's parser will evaluate the contents of that variable.
                       This can lead to unexpected results!
             \end{itemize}
@@ -475,7 +475,7 @@
                 }
             \end{lstlisting}
             \smallskip
-            \begin{lstlisting}[style=MyBash, emph={[7]_fifth_array}, belowskip=-5mm]
+            \begin{lstlisting}[style=MyBash, emph={[7]_fifth_array}, belowskip=-5mm, firstnumber=6]
                 # Source/define the function above
                 $ array=(zero one two three four five)
                 $ FifthElementOf array
@@ -484,7 +484,7 @@
             You might be thinking -- \PP{``It looks OK, isn't it? What's wrong man?''} \uncover<3->{-- Consider then:}
         \end{onlyenv}
         \begin{onlyenv}<3->
-            \begin{lstlisting}[style=MyBash, emph={[7]_fifth_array}, aboveskip=2mm]
+            \begin{lstlisting}[style=MyBash, emph={[7]_fifth_array}, aboveskip=2mm, firstnumber=10]
                 $ FifthElementOf 'x}"; da@|\tikzmark{date}|@te; #'
                 |+The fifth element is
                 Wed 28 Aug 14:43:59 CEST 2019+|  # AAAAAARRRGGGGHHH!!!!

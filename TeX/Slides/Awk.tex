@@ -22,7 +22,7 @@
         }\\[-1ex] ~
     \end{varblock}
     \begin{varblock*}{}[0.85\textwidth]{Some references}
-        Awk can be considered to all intents and purposes as a programming language!\\
+        Awk can be considered for all intents and purposes as a programming language!\\
         $\quad$\URL[PB]{https://www.gnu.org/software/gawk/manual/}{The official GNU manual} {\tiny\{~The PDF is \alert{570} pages long\ldots~\}}\\
         $\quad$\URL[PS]{http://www.grymoire.com/Unix/Awk.html}{A base tutorial}
     \end{varblock*}
@@ -40,7 +40,7 @@
             # Invocation
             awk |+[OPTIONS...] 'program' [INPUTFILE...]+|
 
-            # General structure to be put in [SCRIPT]
+            # General structure of program (single quoted, usually)
             |+  BEGIN { action }+|     # Optional block
             |+pattern { action }+|     #
             |+...               +|     # { action } can be omitted
@@ -49,7 +49,7 @@
         \end{lstlisting}
     \end{uncoverenv}
     \begin{itemize}[<3>]
-        \item \texttt{BEGIN} and \texttt{END} are special pattern, indeed
+        \item \texttt{BEGIN} and \texttt{END} are special patterns, indeed
         \item The default action is print the record (i.e. the line)
         \item If only the \texttt{BEGIN} block is given, no input is read
         \item If no input is given but one is needed, \bash|awk| reads from standard input
@@ -193,7 +193,7 @@
                  }' data
         \end{lstlisting}
         \begin{varblock}{alert}[0.7\textwidth]{}
-            \Large \alert{As you can imagine, \bash|awk| is plenty of features!}
+            \Large \alert{As you can imagine, \bash|awk| has plenty of features!}
         \end{varblock}
     \end{onlyenv}
     \begin{onlyenv}<3>

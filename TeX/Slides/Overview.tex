@@ -69,7 +69,7 @@
         \item<3-> The amount of information given in this lecture is \textbf{huge}, I am aware of it
         \item<3-> You will not receive all the details (I tried to pass on the important information, though)\\
                   $\;\to\;$ be active, ask, use manuals, go beyond this lecture!
-        \item<4-> Often it is hard (very hard) to enucleate all details of and exceptions to rules \\
+        \item<4-> Often it is hard (very hard) to clarify all details of and exceptions to rules \\
                   $\;\to\;$ experience and practice will fill the gap
         \item<4-> From rules/practical examples to abstract ideas/good practices
         \item<5-> 100\% Bash, no focus on portability or differences among \\ various shell languages {\tiny \{~I am not at that level~\}}\\
@@ -106,7 +106,7 @@
         \begin{itemize}
             \item A scripting language which may get hard to read $\to$ you need some \PP{``code sense''}
             \item The effort required to a newbie is quite large $\to$ you need to practice!
-            \item \ldots{}I am here to help you filling up this gap!
+            \item \ldots{}I am here to help you fill up this gap!
         \end{itemize}
     }
 \end{frame}
@@ -150,7 +150,7 @@
         \item Knowing all details and tweaks of Bash is probably not your goal \\
               $\;\to\;$ nor is it probably needed in your daily work
         \item \PT{Having an overview} is, instead, very important (e.g.\ to \PT{decide when to use Bash})
-        \item As soon as something smells odd, it is important \PT{to be able to deepen in}
+        \item As soon as something smells odd, it is important \PT{to be able to have a detailed look}
     \end{itemize}
     \begin{varblock}{}[0.8\textwidth]{}%Can I switch this integral with this sum?}
         %Usually a physicist assumes it is possible and goes back as soon as something starts looking odd\ldots
@@ -164,12 +164,13 @@
     \PB{\underline{About Bash world}:}
     \begin{itemize}
         \item[] \URL{https://www.gnu.org/software/bash/manual/}{Bash official manual}
-        \item[] \URL{http://manpages.ubuntu.com/manpages/bionic/man7/bash-builtins.7.html}{List of Bash builtins with description}
+        \item[] \URL{http://manpages.ubuntu.com/manpages/bionic/man7/bash-builtins.7.html}{List of Bash builtins with descriptions}
         \item[] \URL{http://mywiki.wooledge.org/BashFAQ/061}{Notable changes in released bash versions}\PB{\tiny\{~More extensive list \URL[PB]{http://wiki.bash-hackers.org/scripting/bashchanges}{also available}~\}}
         \item[] \URL{https://devhints.io/bash}{A nice Bash cheatsheet}
         \item[] \URL{https://bashmenot.mietek.io/reference/}{An incredible (sadly not maintained) Bash library}\PB{\tiny\{~Clone from Github to use it~\}}
+        \item[] \URL{https://explainshell.com/}{An online help to get relevant manual pages of a given command}
     \end{itemize}
-    \vspace{3mm}
+    \vspace{1mm}
     \PB{\underline{Didactical material}:}
     \begin{itemize}
         \item[] \URL{http://tldp.org/LDP/Bash-Beginners-Guide/html/}{Bash Beginners Guide}\PB{\tiny\{~A nice, from-zero tutorial~\}} \tikzmark{TutorialBegin}
@@ -180,7 +181,7 @@
     \begin{tikzpicture}[remember picture, overlay]
         \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (TutorialBegin -| TutorialEnd) ++(5mm,1mm) -- ($(TutorialEnd)+(5mm,-1mm)$) 
               node[midway, right=3mm, text width=25mm, font=\small, align=center, text=PP] {Material used to prepare this lecture};
-        \path[to] (MeOnGitHub) ++(0,-2mm) edge[out=270, in=180] node[pos=1, anchor=west] {My GitHub page \hspace{1mm}\raisebox{-1.3mm}{\includegraphics[width=5mm]{AxelKrypton}}} ++(25mm, -8mm);
+        \path[to] (MeOnGitHub) ++(0,-2mm) edge[out=270, in=180] node[pos=1, anchor=west] {My GitHub page \hspace{1mm}\raisebox{-1.3mm}{\includegraphics[width=5mm]{AxelKrypton}}} ++(20mm, -6mm);
         \node[anchor=north, inner ysep=3mm] (book) at ($(current page.north)!0.5!(current page.north east)$) {\includegraphics[width=16mm]{Cookbook}};
         \node[right = 1mm of book, inner ysep=3mm] {\includegraphics[width=16mm]{LearningBash}};
         \path[from] (TutorialEnd) ++(-0mm,-1mm) edge[out=330, in=180] node[pos=1, right=2pt, font=\scriptsize, text=PS] {Main reference for preparing this lecture} ++(12mm, -6mm);
@@ -194,11 +195,11 @@
     \vspace{-5mm}
     \begin{multicols}{2}
         \begin{enumerate}
-            \item \tc<2>{Monday}{Inception/Philosophy}
+            \item \tc<2>{Monday}{Inception and philosophy}
             \item \tc<2>{Monday}{Commands and arguments}
             \item \tc<2>{Monday}{Strings and types of commands}
             \item \tc<2>{Monday}{Quoting and special characters}
-            \item \tc<2>{Monday}{Variables and special parameter}
+            \item \tc<2>{Monday}{Variables and special parameters}
             \item \tc<2>{Monday}{Shell expansion}
             \item \tc<2>{Monday}{Word splitting}
             \item \tc<2>{Monday}{Patterns}
@@ -206,12 +207,12 @@
             \item \tc<2>{Tuesday}{Loops}
             \item \tc<2>{Tuesday}{Choices}
             \item \tc<2>{Tuesday}{Colours and terminal commands}
-            \item \tc<2>{Tuesday}{Namerefs and Indirect expansion}
+            \item \tc<2>{Tuesday}{Namerefs and indirect expansion}
             \item \tc<2>{Tuesday}{Arrays and associative arrays}
             \item \tc<2>{Tuesday}{File descriptors and redirection}
             \item \tc<2>{Wednesday}{Compound commands}
             \item \tc<2>{Wednesday}{Built-in VS external programs}
-            \item \tc<2>{Wednesday}{Asynchronous Commands}
+            \item \tc<2>{Wednesday}{Asynchronous commands}
             \item \tc<2>{Wednesday}{Functions}
             \item \tc<2>{Wednesday}{Awk and Sed}
             \item \tc<2>{Wednesday}{Some good practices}
@@ -256,7 +257,7 @@
             \item \tc{Technical}{Technical}
         \end{itemize}
     \end{varblock*}
-    \FrameRemark{This note usually provides further (advanced) information. Links here are worth the reading.}
+    \FrameRemark{This note usually provides further (advanced) information. Links here are worth the read.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Bonus track\uncover<2>{: Iceland}}{\uncover<2>{The magic of an incredible island}}
@@ -286,7 +287,7 @@
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{A short but intense journey}{Few more recommendations}
+\begin{frame}{A short but intense journey}{A few more recommendations}
     \vspace{-3mm}
     \begin{itemize}
         \item I am aware that you will receive a lot (really a lot) of information
@@ -300,7 +301,7 @@
         \item You will also learn general coding principles, which are independent of the language \\
               {\small$\;\to\;$ \URL[PP]{https://crc-tr211.org/\#Seminars}{Clean code talk given on 03.06.2019}}
         \item You enjoy the journey! {\tiny\{~\ldots{}at least discovering Iceland\ldots~\}}
-        \item \PS{You give me a feedback at the end of the lecture!}
+        \item \PS{You give me feedback at the end of the lecture!}
     \end{itemize}
     \vfill\hfill\uncover<3>{\LARGE\PT{Are you ready?}\hspace{3mm}}
 \end{frame}

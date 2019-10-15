@@ -13,7 +13,7 @@
     \begin{enumerate}
         \item Globs {\tiny\{~Used also in patterns of Parameter Expansion~\}}\tikzmark{curlyStart}
         \item Extended Globs\tikzmark{curlyEnd}
-        \item Regular\tikzmark{REleft} expression {\tiny\{~Since Bash v3.0~\}}\tikzmark{RE}
+        \item Regular\tikzmark{REleft} expressions {\tiny\{~Since Bash v3.0~\}}\tikzmark{RE}
     \end{enumerate}
     \begin{tikzpicture}[remember picture, overlay]
         \draw[very thick, decorate, decoration={brace,amplitude=3pt}] (curlyStart) ++(8mm,1mm) -- ($(curlyEnd -| curlyStart)+(8mm,-1mm)$) 
@@ -26,7 +26,7 @@
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Filename Expansion}{Glob patterns}
+\begin{frame}{Filename expansion}{Glob patterns}
     \vspace{-3mm}
     \begin{varblock}{}[0.9\textwidth]{How does it work?}
         If a character among \PB{\texttt{*}}, \PB{\texttt{?}}, \PB{\texttt{[}} appears, then the word is regarded as a pattern, and replaced with an alphabetically sorted list of filenames matching the pattern
@@ -51,7 +51,7 @@
 \begin{frame}[fragile]{The \texttt{[\ldots]} pattern}
     \vspace{-3mm}
     \begin{itemize}
-        \item There are some special rules which it might be interesting to know
+        \item There are some special rules which might be interesting to know
         \item A pair of characters separated by a hyphen denotes a range expression\\
               $\to\;$ any character that falls between those two characters, inclusive, is matched
         \item If the first character following the \PB{\texttt{[}} is a \PP{\texttt{!}} or a \PP{\texttt{\^{}}} then any character not enclosed is matched

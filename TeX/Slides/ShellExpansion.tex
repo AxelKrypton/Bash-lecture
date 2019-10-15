@@ -16,7 +16,7 @@
         \item Word splitting\tikzmark{ExpD}
         \item Filename expansion\tikzmark{ExpE}
     \end{itemize}
-    \begin{varblock}{alerted}[0.85\textwidth]{Quote Removal}
+    \begin{varblock}{alerted}[0.85\textwidth]{Quote removal}
         After the preceding expansions, all unquoted occurrences of the characters\\
         \alert{\texttt{\textbackslash}}, \alert{\texttt{'}}, and \alert{\texttt{"}}
         that did not result from one of the above expansions are removed.
@@ -117,8 +117,8 @@
         \item Braces after the dollar are only sometimes necessary\\
               $\to$ it is good practice to always use them: \PP{\texttt{\$\{\ldots\}}}
         \item Basic form: \PB{\texttt{\$\{parameter\}}} $\,\to\,$ The value of parameter is substituted
-        \item It is plenty of incredibly powerful modified forms of parameter expansion
-              $\to$ You will learn them by using, but \alert{keep in mind they exist}!
+        \item There are plenty of incredibly powerful modified forms of parameter expansion\\
+              $\to$ you will learn them by using, but \alert{keep in mind they exist}!
         \item General form: \PB{\texttt{\$\{[prefix]parameter[postfix]\}}}
         \item Not all (particular) cases are discussed here immediately
         \item More on parameter expansion in the future\\
@@ -166,8 +166,8 @@
         \end{center}
         \vspace{-3mm}
         \begin{varblock}{}[0.8\textwidth]{A different variant}
-            \small Omitting the colon results in a test only for a parameter that is unset \\
-            Put another way, if the colon is omitted, the operator tests only for existence
+            \small Omitting the colon results in a test only for a parameter that is unset. \\
+            Put another way, if the colon is omitted, the operator tests only for existence.
         \end{varblock}
     \end{onlyenv}
     \begin{onlyenv}<2>
@@ -220,7 +220,7 @@
             |+__   __+|
         \end{lstlisting}
         \begin{varblock}{}[0.9\textwidth]{Ok, but is all this useful? When?}
-            Ohhh yes! These kind of expansion are useful e.g. when it comes to check whether a variable is set, unset or set but empty.
+            Ohhh yes! These kinds of expansion are useful e.g. when it comes to checking whether a variable is set, unset or set but empty.
             Sometimes there are alternatives, but sometimes you need exactly this!
         \end{varblock}
     \end{onlyenv}
@@ -315,7 +315,7 @@
             }
         \item[Replace all:] \PB{\small\texttt{\$\{parameter//pattern/string\}}}\\
             {\small
-                As the previous, but \textbf{every} match is replaced.
+                As the previous, but \textbf{every} match is replaced
             }
         \item[Replace at start:] \PB{\small\texttt{\$\{parameter/\#pattern/string\}}}\\
             {\small
@@ -352,7 +352,7 @@
             }
         \item[All uppercase:] \PB{\small\texttt{\$\{parameter\^{}\^{}\}}}\\
             {\small
-                As the previous, but all characters are capitalised.
+                As the previous, but all characters are capitalised
             }
         \item[First uppercase:] \PB{\small\texttt{\$\{parameter,\}}}\\
             {\small
@@ -360,7 +360,7 @@
             }
         \item[All lowercase:] \PB{\small\texttt{\$\{parameter,,\}}}\\
             {\small
-                As the previous, but all characters are transformed to lowercase.
+                As the previous, but all characters are transformed to lowercase
             }
     \end{description}
     \begin{uncoverenv}<2>

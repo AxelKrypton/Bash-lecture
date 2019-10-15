@@ -66,9 +66,9 @@
         \begingroup\leftskip1em
             Using this form, each signal in the list will be restored to its default behaviour\\[0.4em]
         \endgroup
-        \colorbox{background-color}{\bash|trap signal(s)|}\\[0.3em]
+        \colorbox{background-color}{\bash|trap signal|}\\[0.3em]
         \begingroup\leftskip1em
-            Using this form, the one signal listed will be restored to its default behaviour\\[0.4em]
+            Legacy syntax: As the previous but for one signal only!\,{\tiny\{~Prefer the previous, slightly more explicit syntax~\}}\\[0.4em]
         \endgroup
         \colorbox{background-color}{\bash|trap|}\\[0.3em]
         \begingroup\leftskip1em
@@ -87,7 +87,7 @@
         \item[\textbf{EXIT}] Not really a signal. In a Bash script (non-interactive), an EXIT trap is run on any exit, signalled or not. In other POSIX shells only when the shell process exits.
     \end{description}
     \begin{varblock}{}[0.9\textwidth]{Remember}
-        If you are asking a program to terminate, you should always use SIGTERM.% (simply \bash|kill process_ID|).
+        If you are asking a program to terminate, you should always use SIGTERM. % (simply \bash|kill process_ID|).
         This will give the program a chance to catch the signal and clean up.
         If you use SIGKILL, the program cannot clean up, and \textbf{may leave files in a corrupted state}.
     \end{varblock}
@@ -96,7 +96,7 @@
 \begin{frame}[fragile]{A simple example}
     \vspace{-4mm}
     \begin{varblock}{quote}[\textwidth]{Common use case}
-        \normalsize\textnormal{Traps can be set up to intercept a fatal signal, perform cleanup, and then exit gracefully}
+        \normalsize\textnormal{Traps can be set up to intercept a fatal signal, perform cleanup, and then exit gracefully.}
     \end{varblock}
     \begin{lstlisting}[style=MyBash, emph={[7]temporaryFile}, belowskip=-5mm]
         #!/bin/bash
@@ -105,7 +105,7 @@
         trap 'rm -f "${temporaryFile}"' EXIT
     \end{lstlisting}
     Use a function whenever you need to achieve a more complex task
-    \begin{lstlisting}[style=MyBash, emph={[7]temporaryFile}, aboveskip=2mm, belowskip=-5mm, xleftmargin=2mm, xrightmargin=3mm]
+    \begin{lstlisting}[style=MyBash, emph={[7]temporaryFile}, aboveskip=2mm, belowskip=-5mm, xleftmargin=2mm, xrightmargin=3mm, firstnumber=5]
         #!/bin/bash
         
         function CleanAuxiliaryFiles(){ # If you trap INT (CTRL-C)
@@ -123,7 +123,7 @@
 \begin{frame}[fragile]{When is the signal exactly handled?}
     \vspace{-5mm}
     \begin{varblock}{alert}[0.9\textwidth]{A subtle but important feature}
-        When Bash is executing an external command in the foreground, it does not handle any signals received until the foreground process terminates
+        When Bash is executing an external command in the foreground, it does not handle any signals received until the foreground process terminates.
     \end{varblock}
     \begin{overlayarea}{\textwidth}{0.33\textheight}
         \begin{onlyenv}<1>
@@ -137,7 +137,7 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<2>
-            \begin{lstlisting}[style=MyBash]
+            \begin{lstlisting}[style=MyBash, firstnumber=7]
                 #!/bin/bash
                 
                 echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
@@ -148,7 +148,7 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<3>
-            \begin{lstlisting}[style=MyBash]
+            \begin{lstlisting}[style=MyBash, firstnumber=14]
                 #!/bin/bash
                 
                 echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
@@ -168,7 +168,7 @@
     \end{itemize}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{What is indeed CTRL-C doing?}
+\begin{frame}[fragile]{What indeed is CTRL-C doing?}
     \vspace{-3mm}
     Let us consider again the previous example
     \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm]
@@ -234,7 +234,7 @@
             \begin{varblock}{}[1.03\textwidth]{}
                 Commands that don't have a SIGINT handler (like \bash|sleep|) or \textbf{do the right thing of killing themselves with SIGINT upon receiving SIGINT} (like \bash|bash| itself does) don't exhibit the problem!
             \end{varblock}
-            \begin{lstlisting}[style=MyBash]
+            \begin{lstlisting}[style=MyBash, firstnumber=5]
                 #!/bin/bash
                 index=1
                 while [[ "${index}" -le 100 ]]; do

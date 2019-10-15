@@ -19,7 +19,7 @@
     \begin{tikzpicture}[remember picture, overlay]
         \begin{scope}[scope on=<2>]
             \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (doneStart -| doneEnd) ++(8mm,1mm) -- ($(doneEnd)+(8mm,-1mm)$) 
-                      node[midway, right=3mm, text width=40mm, align=center] {Already discussed in details};
+                      node[midway, right=3mm, text width=40mm, align=center] {Already discussed in detail};
             \draw[very thick, decorate, decoration={brace,amplitude=6pt}, PP] (nowStart -| nowEnd) ++(8mm,1mm) -- ($(nowEnd)+(8mm,-1mm)$) 
                       node[midway, right=3mm, text width=40mm, align=center, text=PP] {What we are going to discuss};
             \path[from, PB] ($(fcts)-(6.8mm,3mm)$) edge[out=270, in=180] node[pos=1, right, font=\footnotesize, text=PB] {Strictly speaking not a compound command, but they work in a similar way} ++(2cm,-1cm);
@@ -34,7 +34,7 @@
             A subshell is \textbf{a child process} but it is one \textbf{that inherits more than a normal external command} does.
             It can see all the variables of your script, not just the ones that have been exported to the environment.
         \end{varblock}
-        \begin{varblock}{quote}[0.88\textwidth]{Unix Process}<only@1>
+        \begin{varblock}{quote}[0.88\textwidth]{Unix process}<only@1>
             Every process on a Unix system has its own parcel of memory, for holding its variables, its file descriptors, its copy of the Environment inherited from its parent process, and so on.
             The changes to the variables (and other private information) in one process do not affect any other processes currently running on the system.
         \end{varblock}
@@ -124,14 +124,14 @@
                   |+9+|
               \end{lstlisting}
         \item However, it requires quotes to use arithmetic operators $\quad${\tiny\{~\bash|help let|~\}}
-              \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm]
+              \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm, firstnumber=4]
                   $ let aVar=2<3
                   |+bash: 3: No such file or directory+|
                   $ let aVar='2<3'; echo "${aVar}"; unset aVar
                   |+1+|
               \end{lstlisting}
         \item \bash|let| accepts more than one expression
-              \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm]
+              \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm, firstnumber=8]
                   $ let aVar='2<3' bVar=3*7; echo "${aVar} ${bVar}"
                   |+1 21+|
                   $ unset aVar bVar
@@ -154,19 +154,19 @@
                       |+4+|        # '${}' not really needed@|$^\star$|@
                   \end{lstlisting}
             \item<only@1> Although not a compound command, the arithmetic substitution uses the same syntax
-                  \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm]
+                  \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm, firstnumber=4]
                       $ (( aVar=7*3**2 )); echo "${aVar}"
                       |+63+|
                       $ echo "aVar=$(( 7*3**2 ))"; unset aVar
                       |+63+|
                   \end{lstlisting}
             \item<only@1> Assignments in arithmetic substitution work but are confusing and should be avoided!
-                  \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm]
+                  \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm, firstnumber=8]
                       $ echo "_${bVar}_ $(( bVar=7*3**2 )) _${bVar}_"
                       |+__ 63 _63_+|
                   \end{lstlisting}
             \item<only@2> Arithmetic evaluation is very helpful in combination with conditionals
-                  \begin{lstlisting}[style=MyBash, aboveskip=2mm, belowskip=-6mm]
+                  \begin{lstlisting}[style=MyBash, aboveskip=2mm, belowskip=-6mm, firstnumber=11]
                       $ ((aVar=(5+2)*3))
                       $ if ((aVar == 21)); then
                       >   echo 'Blackjack!'
@@ -176,10 +176,10 @@
             \item<only@2> Because the inside of \PB{\texttt{((\ldots))}} is C-like, a variable (or expression) that \PP{evaluates to zero} will be considered \PP{false} for the purposes of the arithmetic evaluation.
                   Then, because the evaluation is false, it will \PP{exit with a status of 1}.
                   Likewise, if the expression inside \PB{\texttt{((\ldots))}} \PS{is non-zero}, it will be considered \PS{true}; and since the evaluation is true, it will \PS{exit with status 0}.
-                  \begin{lstlisting}[style=MyBash, aboveskip=2mm, belowskip=-6mm]
+                  \begin{lstlisting}[style=MyBash, aboveskip=2mm, belowskip=-6mm, firstnumber=16]
                       $ flag=0  # no error
                       $ while read line; do
-                      >   if [[ ${line}= *err* ]]; then flag=1; fi
+                      >   if [[ ${line} == *err* ]]; then flag=1; fi
                       > done < inputfile
                       $ if ((flag)); then echo 'Houston, we have a problem!'; fi
                   \end{lstlisting}

@@ -84,7 +84,7 @@
                 They will be covered in depth later in the course
             \end{varblock}}
             \bigskip
-            For the moment, few hints:
+            For the moment, a few hints:
             \begin{itemize}
                 \item Functions in Bash are more powerful than aliases and the are often the way to go
                 \item Unlike aliases, they can be used in scripts, i.e. in non-interactive mode
@@ -163,16 +163,16 @@
             For example:
             \medskip
             \begin{lstlisting}[style=MyBash]
-                $ [ a < b ]   # Ooops, < means here input redirection!
+                $ [ a < b ]   # Oops, < means here input redirection!
                 |+-bash: b: No such file or directory+|
                 $ [[ a < b ]] # The meaning of < changes within [[ ]]
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<8>
             \begin{itemize}
-                \item Executable are the last type of command that Bash can execute
+                \item Executables are the last type of command that Bash can execute
                 \item They are also known as external commands or applications
-                \item They are typically invoked by their name, on constraint that Bash is able to find them
+                \item They are typically invoked by their name, on the constraint that Bash is able to find them
                 \item When a command is specified without a file path and it is \alert{not an alias, a function, a builtin or a keyword}, Bash searches through the directories contained in the variable \bash|PATH|
                 \item The search is done from left to right and the first executable found is run
             \end{itemize}
