@@ -88,11 +88,22 @@
     }
 }
 
-\AtBeginSection[] % <- Empty optional argument, do nothing for \section*
-{
-    \begin{frame}[plain, noframenumbering]{}
-         \sectionpage
-    \end{frame}
+\makeatletter
+\AtBeginSection[]% <- Empty optional argument, do nothing for \section*
+{%
+    \ifnum\beamer@tocsectionnumber>0%
+        \begin{frame}[plain, noframenumbering]{}
+             \sectionpage
+        \end{frame}
+    \fi
+}
+\makeatother
+
+%Append code to put third CSC logo on titlepage
+\appto\titlepage{%
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=south] at (current page.south) {\includegraphics[width=25mm]{LogoCSC}};
+    \end{tikzpicture}
 }
 
 %===============================================================%
