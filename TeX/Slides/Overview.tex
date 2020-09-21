@@ -1,11 +1,14 @@
 %-------------------------------%
 %  Author: Alessandro Sciarra   %
-%    Date: 17 May 2019          %
+%    Date: 17 September 2020    %
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[plain,noframenumbering]
     \titlepage
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=south] at (current page.south) {\includegraphics[width=25mm]{LogoCSC}};
+    \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[c]{Lecture format}
@@ -17,18 +20,18 @@
                     \node (A\n) at (0,-1.5*\n) {\includegraphics[width=10mm]{\f}};
                 \end{scope}
             }
-            \node[right = of A0] {\{07,08,09\}.10.2019};
+            \node[right = of A0] {\{26..30\}.10.2019};
             \node[right = of A1] {
                 \begin{tabular}{@{}r@{\;}l}
                     Morning:   & 09:15 to 12:00 \\
-                    Afternoon: & 14:15 to 17:00 $\;\,${\tiny\{~only registered people~\}}
+                    Afternoon: & 14:15 to 17:00 \Remark[2.5mm]{I can stay more, if you wish}
                 \end{tabular}
                 %Morning: 09:15 to 12:00$\quad$ Afternoon: 14:15 to 17:00
             };
             \node[right = of A2] {
                 \begin{tabular}{@{}r@{\;}l}
-                    Morning:   & FIAS H100 (Mon), GSC 0|07-0|08 (Tue, Wed) \\
-                    Afternoon: & ITP, room 01.120 {\tiny\{~only registered people~\}}
+                    Morning:   & ITP, room 00.111 \\
+                    Afternoon: & ITP, room 00.111 \Remark{First together, then alone}
                 \end{tabular}
             };
             \node[right = of A3] {Dr. Alessandro Sciarra};
@@ -72,7 +75,7 @@
         \item<4-> Often it is hard (very hard) to clarify all details of and exceptions to rules \\
                   $\;\to\;$ experience and practice will fill the gap
         \item<4-> From rules/practical examples to abstract ideas/good practices
-        \item<5-> 100\% Bash, no focus on portability or differences among \\ various shell languages {\tiny \{~I am not at that level~\}}\\
+        \item<5-> 100\% Bash, no focus on portability or differences among \\ various shell languages \Remark{I am not at that level}\\
                   $\;\to\;$ sh, ksh, csh, tcsh, dash, zsh, fish, \ldots
         \setcounter{enumi}{0}
         \item<2-> \PS{\textbf{Relaxed atmosphere!}}\\
@@ -165,17 +168,17 @@
     \begin{itemize}
         \item[] \URL{https://www.gnu.org/software/bash/manual/}{Bash official manual}
         \item[] \URL{http://manpages.ubuntu.com/manpages/bionic/man7/bash-builtins.7.html}{List of Bash builtins with descriptions}
-        \item[] \URL{http://mywiki.wooledge.org/BashFAQ/061}{Notable changes in released bash versions}\PB{\tiny\{~More extensive list \URL[PB]{http://wiki.bash-hackers.org/scripting/bashchanges}{also available}~\}}
+        \item[] \URL{http://mywiki.wooledge.org/BashFAQ/061}{Notable changes in released bash versions}\PB{\Remark{More extensive list \URL[PB]{http://wiki.bash-hackers.org/scripting/bashchanges}{also available}}}
         \item[] \URL{https://devhints.io/bash}{A nice Bash cheatsheet}
-        \item[] \URL{https://bashmenot.mietek.io/reference/}{An incredible (sadly not maintained) Bash library}\PB{\tiny\{~Clone from Github to use it~\}}
+        \item[] \URL{https://github.com/mietek/bashmenot}{An incredible (sadly not maintained) Bash library}\PB{\Remark{Clone from Github to use it, reference website is down}}
         \item[] \URL{https://explainshell.com/}{An online help to get relevant manual pages of a given command}
     \end{itemize}
     \vspace{1mm}
     \PB{\underline{Didactical material}:}
     \begin{itemize}
-        \item[] \URL{http://tldp.org/LDP/Bash-Beginners-Guide/html/}{Bash Beginners Guide}\PB{\tiny\{~A nice, from-zero tutorial~\}} \tikzmark{TutorialBegin}
-        \item[] \URL{https://www.shellscript.sh/}{Shell scripting tutorial}\PB{\tiny\{~Nice tutorial, but not only Bash~\}}
-        \item[] \URL[PS]{http://mywiki.wooledge.org/BashGuide}{Bash Guide}\PB{\tiny\{~Very precise guide, not completely from zero, though~\}} \tikzmark{TutorialEnd}
+        \item[] \URL{http://tldp.org/LDP/Bash-Beginners-Guide/html/}{Bash Beginners Guide}\PB{\Remark{A nice, from-zero tutorial}} \tikzmark{TutorialBegin}
+        \item[] \URL{https://www.shellscript.sh/}{Shell scripting tutorial}\PB{\Remark{Nice tutorial, but not only Bash}}
+        \item[] \URL[PS]{http://mywiki.wooledge.org/BashGuide}{Bash Guide}\PB{\Remark{Very precise guide, not completely from zero, though}} \tikzmark{TutorialEnd}
         \item[] \URL{https://github.com/AxelKrypton/Bash_lecture_2019}{All material \tikzmark{MeOnGitHub}of this lecture}
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay]
@@ -189,9 +192,11 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{What will we explore?}
-    \colorlet{Monday}{PP}
-    \colorlet{Tuesday}{PT}
-    \colorlet{Wednesday}{PS}
+    \colorlet{Monday}{PT}
+    \colorlet{Tuesday}{PS}
+    \colorlet{Wednesday}{Crimson}
+    \colorlet{Thursday}{Teal}
+    \colorlet{Friday}{RoyalBlue}
     \vspace{-5mm}
     \begin{multicols}{2}
         \begin{enumerate}
@@ -200,32 +205,34 @@
             \item \tc<2>{Monday}{Strings and types of commands}
             \item \tc<2>{Monday}{Quoting and special characters}
             \item \tc<2>{Monday}{Variables and special parameters}
-            \item \tc<2>{Monday}{Shell expansion}
-            \item \tc<2>{Monday}{Word splitting}
+            \item \tc<2>{Monday}{Shell expansion and word splitting}
             \item \tc<2>{Monday}{Patterns}
-            \item \tc<2>{Monday}{Conditionals and tests}
-            \item \tc<2>{Tuesday}{Loops}
-            \item \tc<2>{Tuesday}{Choices}
+            \item \tc<2>{Tuesday}{Shell options and flow control}
             \item \tc<2>{Tuesday}{Colours and terminal commands}
             \item \tc<2>{Tuesday}{Namerefs and indirect expansion}
             \item \tc<2>{Tuesday}{Arrays and associative arrays}
-            \item \tc<2>{Tuesday}{File descriptors and redirection}
+            \item \tc<2>{Tuesday}{GNU Coreutils}
+            \item \tc<2>{Tuesday}{Input and output}
+            \item \tc<2>{Wednesday}{File descriptors and redirection}
             \item \tc<2>{Wednesday}{Compound commands}
-            \item \tc<2>{Wednesday}{Built-in VS external programs}
-            \item \tc<2>{Wednesday}{Asynchronous commands}
             \item \tc<2>{Wednesday}{Functions}
-            \item \tc<2>{Wednesday}{Awk and Sed}
-            \item \tc<2>{Wednesday}{Some good practices}
-            \item \tc<2>{Wednesday}{What to do now?}
+            \item \tc<2>{Wednesday}{Built-in VS external programs}
+            \item \tc<2>{Thursday}{Asynchronous commands}
+            \item \tc<2>{Thursday}{Traps}
+            \item \tc<2>{Thursday}{Sed}
+            \item \tc<2>{Thursday}{The GNU Readline library}
+            \item \tc<2>{Friday}{Awk}
+            \item \tc<2>{Friday}{An interactive summary}
+            \item \tc<2>{Friday}{Some good practices}
+            \item \tc<2>{Friday}{Bash in real life}
+            \item \tc<2>{Friday}{What to do now?}
         \end{enumerate}
     \end{multicols}
-    \vspace{-2mm}
-    \begin{varblock}{quote}[0.5\textwidth]{}<2>
-        \normalfont
-        \tc{Monday}{Monday}$\quad$---$\quad$
-        \tc{Tuesday}{Tuesday}$\quad$---$\quad$
-        \tc{Wednesday}{Wednesday}
-    \end{varblock}
+    \begin{tikzpicture}[remember picture, overlay, every label/.append style={label distance=-2pt, font=\tiny}, scope on=<2>]
+        \foreach \d/\n [count=\i] in {Monday/26, Tuesday/27, Wednesday/28, Thursday/29, Friday/30}{
+            \node[anchor=north, draw, rounded corners=1pt, label={[\d]90:\d}, inner ysep=1mm, inner xsep=2mm, text=\d, draw=\d, fill=\d!5] (Mon) at ($(current page.north)+(\i cm,-5mm)$) {\n\vphantom{2367890}};
+        }
+    \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A slide about notation}
@@ -241,7 +248,7 @@
                   \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xleftmargin=1mm, xrightmargin=12mm]
                       $ ls
                   \end{lstlisting}
-                  {\tiny\{~When the \texttt{\$} is absent, the code refers to a script or it is pseudo-code~\}}
+                  \Remark{When the \texttt{\$} is absent, the code refers to a script or it is pseudo-code}
         \end{itemize}
     \end{varblock*}
     \colorlet{Study}{DarkGreen}
@@ -299,8 +306,8 @@
     {\large\PP{What do I expect?}}
     \begin{itemize}[<2->]
         \item You will also learn general coding principles, which are independent of the language \\
-              {\small$\;\to\;$ \URL[PP]{https://crc-tr211.org/\#Seminars}{Clean code talk given on 03.06.2019}}
-        \item You enjoy the journey! {\tiny\{~\ldots{}at least discovering Iceland\ldots~\}}
+              {\small$\;\to\;$ \URL[PP]{https://crc-tr211.org/seminar_slides_GU/2019.06.03.sciarra.pdf}{Clean code talk given on 03.06.2019}}
+        \item You enjoy the journey! \Remark{\ldots{}at least discovering Iceland\ldots}
         \item \PS{You give me feedback at the end of the lecture!}
     \end{itemize}
     \vfill\hfill\uncover<3>{\LARGE\PT{Are you ready?}\hspace{3mm}}
