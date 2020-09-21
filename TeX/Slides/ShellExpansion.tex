@@ -11,7 +11,7 @@
         \item Tilde expansion\tikzmark{ExpB}
         \item Parameter and variable expansion
         \item Arithmetic expansion
-        \item Process substitution \tc{Gray!80}{{\tiny~\{Not available if \URL[Gray]{https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html}{Bash in POSIX Mode (item 30)}\}}}
+        \item Process substitution \tc{Gray!80}{\Remark{Not available if \URL[Gray]{https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html}{Bash in POSIX Mode (item 30)}}}
         \item Command substitution\tikzmark{ExpC}
         \item Word splitting\tikzmark{ExpD}
         \item Filename expansion\tikzmark{ExpE}
@@ -40,7 +40,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Brace expansion}
-    \vspace{-5mm}
+    \vspace{-6mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item It comes in two forms:
@@ -63,7 +63,7 @@
             Order is respected left to right. Multiple non-nested braces expand to all combinations.
         \end{varblock}
         \begin{onlyenv}<2>
-            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm]
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=5mm]
                 $ echo {a,b,c}
                 |+a b c+|
                 $ echo {a,b,c}.tex
@@ -85,7 +85,7 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<3>
-            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm, firstnumber=18]
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=5mm, firstnumber=18]
                 $ echo {A..C}{0..2}
                 |+A0 A1 A2 B0 B1 B2 C0 C1 C2+|
                 $ echo {A..C}@|\textvisiblespace|@{0..2} # Here two independent expansions!
@@ -107,6 +107,77 @@
             \end{lstlisting}
         \end{onlyenv}
     \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Tilde expansion in its basic version}
+    %
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{The Directory Stack}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 6.8}}
+    \vspace{-3mm}
+    \begin{columns}[c]
+        \begin{column}{0.1\textwidth}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \begin{varblock}{example}[0.9\textwidth]{Intuitive definition of stack}
+                An abstract data type or data structure based on the principle of last in first out.
+            \end{varblock}
+        \end{column}
+        \begin{column}{0.3\textwidth}
+        \end{column}
+    \end{columns}
+    \vspace{6mm}
+    \begin{itemize}
+        \item The directory stack is a list of recently-visited directories
+        \item The \bash|dirs| builtin \PP{\textbf{displays}} the contents of the directory stack \\[1mm]
+        \item \alert{The current directory is always the ``top'' of the directory stack}
+        \item The \bash|pushd| builtin \PS{\textbf{adds}} directories to the  stack as it changes the current directory
+        \item The \bash|popd| builtin \PT{\textbf{removes}} specified directories from the stack and changes the current directory to the directory removed
+        \item Both \bash|pushd| and \bash|popd| accept a \PB{\texttt{-n}} option to avoid changing directory
+    \end{itemize}
+    \begin{tikzpicture}[remember picture, overlay]
+        \foreach \l [count=\n from 0, evaluate=\l as \shade using \l*20] in {5,4,...,0}{
+            \coordinate (tmpCoord) at ($(current page.east)+(-25mm,\n*6mm)$);
+            \colorlet{tmpColor}{PP!\shade!PS}
+            \node[draw, minimum size=6mm, text=tmpColor, fill=tmpColor!10] at (tmpCoord) {\l};
+        }
+        \path[from] ($(tmpCoord)+(-1mm,3mm)$) edge[out=90, in=0] node[pos=1, left] {Last In}   ++(-5mm,5mm);
+        \path[to] ($(tmpCoord)+(+1mm,3mm)$) edge[out=90, in=180] node[pos=1, right] {First Out} ++(+5mm,5mm);
+    \end{tikzpicture}
+    \FrameRemark{The contents of the directory stack are also visible as the value of the \,\bash|DIRSTACK|\, shell array variable.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The Directory Stack: An example usage}
+    \vspace{-3mm}
+    \begin{lstlisting}[style=MyBash]
+        $ cd ~; pwd; dirs -v
+        |+/home/sciarra+|
+        |+ 0  ~+|
+        $ cd ~/Documents/Seminars/BashCourse_2020; dirs -v
+        |+ 0  ~/Documents/Seminars/BashCourse_2020+|
+        $ pushd /myBackupDisk/University/Seminars/BashCourse_2020
+        # Stack automatically displayed on one line
+        $ dirs -v
+        |+ 0  /myBackupDisk/University/Seminars/BashCourse_2020+|
+        |+ 1  ~/Documents/Seminars/BashCourse_2020+|
+        $ pushd ~; pwd
+        # Stack automatically displayed on one line
+        |+/home/sciarra+|
+        $ dirs -v
+        |+ 0  ~+|
+        |+ 1  /myBackupDisk/University/Seminars/BashCourse_2020+|
+        |+ 2  ~/Documents/Seminars/BashCourse_2020+|
+        $ cd Documents; dirs -v
+        |+ 0  ~/Documents+|
+        |+ 1  /myBackupDisk/University/Seminars/BashCourse_2020+|
+        |+ 2  ~/Documents/Seminars/BashCourse_2020+|
+        $ popd; pwd  # Stack automatically displayed on one line
+        |+/myBackupDisk/University/Seminars/BashCourse_2020+|
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Tilde expansion and its advanced usage}
+    %
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Parameter expansion: Overview}
@@ -148,20 +219,20 @@
                     \PP{\ssmall\textbf{Assign Default Value}}
                 } & \makecell[tl]{Parameter unset or null: \PP{expansion of word is assigned to parameter}\\
                                   Otherwise: the value of parameter remains unchanged\\
-                                  The value of parameter is then substituted \\
-                                  {\tiny\{~Positional parameters and special parameters may not be assigned to in this way~\}}} \\
+                                  The value of parameter is then substituted\\
+                                  \Remark[0pt]{Positional parameters and special parameters may not be assigned to in this way}}\\
                 \makecell[tc]{
                     \PB{\small\texttt{\$\{parameter:?word\}}}\\[-0.5em]
                     \PP{\ssmall\textbf{Exit with message}}
                 } & \makecell[tl]{Parameter is null or unset: \PP{the expansion of word to the standard error}\\
                                   The shell, then, if it is not interactive, exits\\
                                   Otherwise, the value of parameter is substituted\\
-                                  {\tiny\{~If word is not present, a default message is produced~\}} } \\
+                                  \Remark[0pt]{If word is not present, a default message is produced}}\\
                 \makecell[tc]{
                     \PB{\small\texttt{\$\{parameter:+word\}}}\\[-0.5em]
                     \PP{\ssmall\textbf{Use Alternative value}}
                 } & \makecell[tl]{Parameter is null or unset: \PP{nothing is substituted}\\
-                                  Otherwise, the expansion of word is substituted} \\
+                                  Otherwise, the expansion of word is substituted}\\
             \end{tabular}
         \end{center}
         \vspace{-3mm}
@@ -237,11 +308,9 @@
             }
         \item[Substring Expansion:] \PB{\small\texttt{\$\{parameter:offset:length\}}}\\
             {\small
-                Expands to up to \texttt{length} characters of \texttt{parameter}
-                starting at the character specified by \texttt{offset} (0-indexed)\\
+                Expands to up to \texttt{length} characters of \texttt{parameter} starting at the character specified by \texttt{offset} (0-indexed)\\
                 If \texttt{:length} is omitted, go all the way to the end\\[-0.5em]
-                {\tiny\{~If \texttt{offset} is negative, count backward from the end
-                of \texttt{parameter} instead of forward from the beginning~\}}
+                \Remark[0pt]{If \texttt{offset} is negative, count backward from the end of \texttt{parameter} instead of forward from the beginning}
             }
     \end{description}
     \begin{uncoverenv}<2>
@@ -311,7 +380,7 @@
             {\small
                 Results in the expanded value of \texttt{parameter} with the first (unanchored) match\\
                 of \texttt{pattern} replaced by \texttt{string}\\[-0.5em]
-                {\tiny\{~Assume null string when the \texttt{/string} part is absent~\}}
+                \Remark[0pt]{Assume null string when the \texttt{/string} part is absent}
             }
         \item[Replace all:] \PB{\small\texttt{\$\{parameter//pattern/string\}}}\\
             {\small
@@ -534,7 +603,7 @@
             \begin{description}[Command substitution:]
                 \setlength{\itemsep}{3mm}
                 \item[Tilde expansion:]
-                    Easy to understand $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5.2}
+                    To be discussed next
                 \item[Process substitution:]
                     Useful, but not discussed here $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5.6}\\
                     It takes the form \alert{\texttt{<(\ldots)}} or \alert{\texttt{>(\ldots)}}
@@ -552,7 +621,7 @@
             \end{center}
             \begin{description}[\hspace{0.4\textwidth}]
                 \item[Filename expansion:]
-                    Discussed in a separate section about globbing
+                    Discussed in the next section about globbing
             \end{description}
         \end{column}
     \end{columns}

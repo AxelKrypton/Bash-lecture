@@ -152,7 +152,7 @@
             \end{varblock}
             \begin{itemize}
                 \item Flow control constructs is achieved thanks to keywords
-                \item We will explore all of them in detail \,\,{\tiny\{~except \bash|coproc|~\}}
+                \item We will explore all of them in detail \Remark[2mm]{except \bash|coproc|}
             \end{itemize}
             \begin{lstlisting}[style=MyBash, numbers=none]
                 if     elif   esac     while   done      time   !    coproc
@@ -205,8 +205,7 @@
     \begin{itemize}
         \item A script is a sequence of Bash commands in a file
         \item The commands are read and processed \PP{in order}
-        \item A new command is processed after the previous has \PP{ended} {\tiny~\{unless differently required\}}
-        %\item Use your favourite text editor to compose your script
+        \item A new command is processed after the previous has \PP{ended} \Remark{unless differently required}
         \item The first line of a script should be reserved for an \textbf{interpret directive} also called \alert{hashbang} or \alert{shebang}.
               This is used when the kernel executes a non-binary file.
               Use one of the two following alternatives: \\

@@ -1,6 +1,6 @@
 %-------------------------------%
 %  Author: Alessandro Sciarra   %
-%    Date: 5 Jun 2019           %
+%    Date: 21 Sep 2020          %
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -76,22 +76,25 @@
         \item Special variables (e.g. \bash{IFS})
         \item Shell expansion
               \begin{itemize}
-                  \item Parameters expansion
-                  \item \alert<2>{Word splitting}\tikzmark{ptC}
+                  \item Brace expansion
+                  \item Parameters expansion\tikzmark{ptC}
                   \item \ldots
+                  \item \alert<2>{Word splitting}
+                  \item Filename expansion
               \end{itemize}
         \item Globbing
-        \item Regular expressions
-        \item Brace expressions
-        \item \bash|if|, \bash|test| and \bash{[[}
+        %\item Regular expressions
+        %\item Brace expressions
+        %\item \bash|if|, \bash|test| and \bash{[[}
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
-        \coordinate (remark) at ($(ptA)!0.5!(ptC)+(3cm,0)$);
+        \coordinate (remark) at ($(ptA)!0.5!(ptC)+(25mm,0)$);
         \node[anchor=west, starburst, minimum height=3cm, starburst point height=8mm, line width=1mm,
               draw=PT, fill=yellow, fill opacity=0.3, text opacity=1, text=PQ,
               visible on=<2>, fill on=<2>, text on=<2>] (cloud) at ($(remark)+(3mm,0)$) {The Bash inner core};
         \node[below = 25mm of cloud, text=PP, rounded corners=3pt, draw=PB, thick, inner sep=2mm] (learn) {Take your time and learn them well!};
         \draw[to, shorter={2mm}{1mm}] (cloud.south) -- (learn);
     \end{tikzpicture}
+    \FrameRemark[2]{Some slides will unavoidably refer to later material: Hopefully, everything will be clarified at the end of the day and, for sure, by Friday!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

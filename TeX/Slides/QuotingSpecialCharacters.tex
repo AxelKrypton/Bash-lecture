@@ -8,7 +8,7 @@
     \vspace{-4mm}
     \begin{description}
         \item[Single quotes] Everything inside single quotes becomes a literal string\\[-0.3em]
-                             {~\tiny\{The only character that you can't safely enclose in single quotes is a single quote.\}}
+                             \Remark{The only character that you can't safely enclose in single quotes is a single quote.}
         \item[Double quotes] Performed actions:
                              \begin{itemize}
                                  \item Every substitution that begins with a dollar sign \texttt{\$}
@@ -19,7 +19,7 @@
         \item[Backticks] \tc{Gray!30}{\texttt{\textasciigrave\ldots\textasciigrave} is the legacy command substitution syntax}\\
                          \alert{Deprecated in favor of \texttt{\$(\ldots)}}
         \item[Backslash] Putting \texttt{\textbackslash} in front of a metacharacter removes its special meaning\\[-0.3em]
-                         {~\tiny\{This works inside double quotes, or in the absence of quotes. It does not work inside single quotes.\}} 
+                         \Remark{This works inside double quotes, or in the absence of quotes. It does not work inside single quotes.}
         \item[\texttt{\$'\ldots'}] A Bash extension that prevents everything except backslash escaping\\
                                    It also allows special backslash escape sequences like \texttt{\textbackslash{}n} for newline%, \t for tab, and \xnn for bytes specified in hexadecimal. 
         \item[\texttt{\$"\ldots"}] Bash extension used for \URL[PP]{http://mywiki.wooledge.org/BashFAQ/098}{localisation support}, not covered here

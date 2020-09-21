@@ -13,7 +13,7 @@
     \begin{enumerate}
         \item Globs {\tiny\{~Used also in patterns of Parameter Expansion~\}}\tikzmark{curlyStart}
         \item Extended Globs\tikzmark{curlyEnd}
-        \item Regular\tikzmark{REleft} expressions {\tiny\{~Since Bash v3.0~\}}\tikzmark{RE}
+        \item \tc<2>{Gray!50}{Regular\tikzmark{REleft} expressions \Remark{Since Bash v3.0}}\tikzmark{RE}
     \end{enumerate}
     \begin{tikzpicture}[remember picture, overlay]
         \draw[very thick, decorate, decoration={brace,amplitude=3pt}] (curlyStart) ++(8mm,1mm) -- ($(curlyEnd -| curlyStart)+(8mm,-1mm)$) 
@@ -21,7 +21,7 @@
         \node (RElabel) at (RE -| FE) {{\color{PT}\scriptsize\{~Cannot be used to select filenames!~\}}};
         \draw[from, shorter={1mm}{1mm}] (RE) -- (RElabel.west);
         \begin{scope}[scope on=<2>]
-            \path[from, shorter={1mm}{1mm}] (REleft) edge[out=270, in=180] node[pos=1, anchor=west] {We will discuss this later with conditional blocks} ++(1cm, -15mm);
+            \path[from, shorter={1mm}{1mm}] (REleft) edge[out=270, in=180] node[pos=1, anchor=west] {We will discuss this tomorrow with conditional blocks} ++(1cm, -15mm);
         \end{scope}
     \end{tikzpicture}
 \end{frame}

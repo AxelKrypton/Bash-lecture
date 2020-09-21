@@ -57,8 +57,10 @@
             \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm]
                 $ prefix='Day_'
                 $ day='Monday'
-                $ echo "${prefix}0.pdf are the slides for ${day}"
-                |+Day_0.pdf are the slides for Monday+|
+                $ echo "$prefix1.pdf are the slides for ${day}"
+                |+.pdf are the slides for Monday+|
+                $ echo "${prefix}1.pdf are the slides for ${day}"
+                |+Day_1.pdf are the slides for Monday+|
             \end{lstlisting}
             \alert{Always} using curly braces \alert{\texttt{\$\{...\}}} can be considered \alert{good programming practice}!
         \end{varblock}
@@ -163,7 +165,7 @@
                 $ echo "Today is ${today}"
                 |+Today is Monday+|
                 # Bash takes the content of the variable today
-                # and replaces ${today} by Monday. Equivalent to:
+                # and replaces ${today} by Monday. It seems equivalent to:
                 $ echo Today is Monday
                 |+Today is Monday+|
             \end{lstlisting}
