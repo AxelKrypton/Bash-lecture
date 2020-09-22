@@ -8,8 +8,8 @@
     Expansion is performed on the command line after it has been split into tok\tikzmark{tokens}ens:\\[0.5em]
     \begin{itemize}
         \item Brace expansion\tikzmark{ExpA}
-        \item Tilde expansion\tikzmark{ExpB}
-        \item Parameter and variable expansion
+        \item Parameter and variable expansion\tikzmark{ExpB}
+        \item Tilde expansion
         \item Arithmetic expansion
         \item Process substitution \tc{Gray!80}{\Remark{Not available if \URL[Gray]{https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html}{Bash in POSIX Mode (item 30)}}}
         \item Command substitution\tikzmark{ExpC}
@@ -23,7 +23,7 @@
     \end{varblock}
     \begin{tikzpicture}[remember picture, overlay]
         \coordinate (xPos) at ($(current page.north)!0.3!(current page.north east)$);
-        \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (ExpB -| xPos) ++(-8mm,1mm) -- ($(ExpC -| xPos)+(-8mm,-1mm)$)
+        \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (ExpB -| xPos) ++(-5mm,1mm) -- ($(ExpC -| xPos)+(-5mm,-1mm)$)
               coordinate[midway] (second);
         \node[anchor=west] at (second -| xPos) {\MakeEnumerateBox{2}$\quad$\alert{At the same time!}};
         \draw[from, shorter={0mm}{3mm}] (ExpA) -- (xPos |- ExpA) node[anchor=west] {\MakeEnumerateBox{1}};
@@ -107,77 +107,6 @@
             \end{lstlisting}
         \end{onlyenv}
     \end{overlayarea}
-\end{frame}
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Tilde expansion in its basic version}
-    %
-\end{frame}
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{The Directory Stack}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 6.8}}
-    \vspace{-3mm}
-    \begin{columns}[c]
-        \begin{column}{0.1\textwidth}
-        \end{column}
-        \begin{column}{0.6\textwidth}
-            \begin{varblock}{example}[0.9\textwidth]{Intuitive definition of stack}
-                An abstract data type or data structure based on the principle of last in first out.
-            \end{varblock}
-        \end{column}
-        \begin{column}{0.3\textwidth}
-        \end{column}
-    \end{columns}
-    \vspace{6mm}
-    \begin{itemize}
-        \item The directory stack is a list of recently-visited directories
-        \item The \bash|dirs| builtin \PP{\textbf{displays}} the contents of the directory stack \\[1mm]
-        \item \alert{The current directory is always the ``top'' of the directory stack}
-        \item The \bash|pushd| builtin \PS{\textbf{adds}} directories to the  stack as it changes the current directory
-        \item The \bash|popd| builtin \PT{\textbf{removes}} specified directories from the stack and changes the current directory to the directory removed
-        \item Both \bash|pushd| and \bash|popd| accept a \PB{\texttt{-n}} option to avoid changing directory
-    \end{itemize}
-    \begin{tikzpicture}[remember picture, overlay]
-        \foreach \l [count=\n from 0, evaluate=\l as \shade using \l*20] in {5,4,...,0}{
-            \coordinate (tmpCoord) at ($(current page.east)+(-25mm,\n*6mm)$);
-            \colorlet{tmpColor}{PP!\shade!PS}
-            \node[draw, minimum size=6mm, text=tmpColor, fill=tmpColor!10] at (tmpCoord) {\l};
-        }
-        \path[from] ($(tmpCoord)+(-1mm,3mm)$) edge[out=90, in=0] node[pos=1, left] {Last In}   ++(-5mm,5mm);
-        \path[to] ($(tmpCoord)+(+1mm,3mm)$) edge[out=90, in=180] node[pos=1, right] {First Out} ++(+5mm,5mm);
-    \end{tikzpicture}
-    \FrameRemark{The contents of the directory stack are also visible as the value of the \,\bash|DIRSTACK|\, shell array variable.}
-\end{frame}
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{The Directory Stack: An example usage}
-    \vspace{-3mm}
-    \begin{lstlisting}[style=MyBash]
-        $ cd ~; pwd; dirs -v
-        |+/home/sciarra+|
-        |+ 0  ~+|
-        $ cd ~/Documents/Seminars/BashCourse_2020; dirs -v
-        |+ 0  ~/Documents/Seminars/BashCourse_2020+|
-        $ pushd /myBackupDisk/University/Seminars/BashCourse_2020
-        # Stack automatically displayed on one line
-        $ dirs -v
-        |+ 0  /myBackupDisk/University/Seminars/BashCourse_2020+|
-        |+ 1  ~/Documents/Seminars/BashCourse_2020+|
-        $ pushd ~; pwd
-        # Stack automatically displayed on one line
-        |+/home/sciarra+|
-        $ dirs -v
-        |+ 0  ~+|
-        |+ 1  /myBackupDisk/University/Seminars/BashCourse_2020+|
-        |+ 2  ~/Documents/Seminars/BashCourse_2020+|
-        $ cd Documents; dirs -v
-        |+ 0  ~/Documents+|
-        |+ 1  /myBackupDisk/University/Seminars/BashCourse_2020+|
-        |+ 2  ~/Documents/Seminars/BashCourse_2020+|
-        $ popd; pwd  # Stack automatically displayed on one line
-        |+/myBackupDisk/University/Seminars/BashCourse_2020+|
-    \end{lstlisting}
-\end{frame}
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Tilde expansion and its advanced usage}
-    %
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Parameter expansion: Overview}
@@ -456,6 +385,153 @@
     \centerline{\includegraphics[width=0.5\textwidth, clip, trim=0 5mm 0 0]{GotPower}}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Tilde expansion in its basic version}
+    \vspace{-2mm}
+    \begin{enumerate}
+        \small
+        \item \PP{If a word begins with an unquoted tilde character \texttt{\textasciitilde}}\\
+              $\;\Rightarrow\;$ all of the characters up to the first unquoted slash are considered a \textbf{\PB{tilde-prefix}}.\\
+              \phantom{$\;\Rightarrow\;$} \Remark[0pt]{all characters are considered, if there is no unquoted slash}
+        \item \PP{If none of the characters in the tilde-prefix are quoted}\\
+              $\;\Rightarrow\;$ the characters in the tilde-prefix following the tilde are treated as a possible \textbf{\PS{login name}}.
+        \item \PP{If this login name is the null string}\\
+              $\;\Rightarrow\;$ the tilde is replaced with the value of the \bash|HOME| shell variable,\\
+              \phantom{$\;\Rightarrow\;$} or with the home directory of the user executing the shell, if \bash|HOME| is unset.\\
+              \PP{Otherwise}\\
+              $\;\Rightarrow\;$ the \textbf{\PB{tilde-prefix}} is replaced with the home directory associated with the specified \textbf{\PS{login name}}.
+        \item \alert{If the login name is invalid the word is left unchanged.}
+    \end{enumerate}
+    \begin{uncoverenv}<2>
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=4mm]
+            $ echo ~  ~palao
+            |+/home/sciarra /home/palao+|
+            $ echo ~"sciarra" ~sciar"ra" ~sciarra""
+            |+~sciarra ~sciarra ~sciarra+|
+            $ echo ~NotExistentUser # Invalid login name
+            |+~NotExistentUser+|
+        \end{lstlisting}
+    \end{uncoverenv}
+    \FrameRemark{Each variable assignment is also checked for unquoted tilde-prefixes immediately following a \bash|':'| or the first \bash|'='|.  In these cases, tilde expansion is also performed.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{The Directory Stack}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 6.8}}
+    \vspace{-3mm}
+    \begin{columns}[c]
+        \begin{column}{0.1\textwidth}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \begin{varblock}{example}[0.9\textwidth]{Intuitive definition of stack}
+                An abstract data type or data structure based on the principle of last in first out.
+            \end{varblock}
+        \end{column}
+        \begin{column}{0.3\textwidth}
+        \end{column}
+    \end{columns}
+    \vspace{6mm}
+    \begin{itemize}
+        \item The directory stack is a list of recently-visited directories
+        \item The \bash|dirs| builtin \PP{\textbf{displays}} the contents of the directory stack \\[1mm]
+        \item \alert{The current directory is always the ``top'' of the directory stack}
+        \item The \bash|pushd| builtin \PS{\textbf{adds}} directories to the  stack as it changes the current directory
+        \item The \bash|popd| builtin \PT{\textbf{removes}} specified directories from the stack and changes the current directory to the directory removed
+        \item Both \bash|pushd| and \bash|popd| accept a \PB{\texttt{-n}} option to avoid changing directory
+    \end{itemize}
+    \begin{tikzpicture}[remember picture, overlay]
+        \foreach \l [count=\n from 0, evaluate=\l as \shade using \l*20] in {5,4,...,0}{
+            \coordinate (tmpCoord) at ($(current page.east)+(-25mm,\n*6mm)$);
+            \colorlet{tmpColor}{PP!\shade!PS}
+            \node[draw, minimum size=6mm, text=tmpColor, fill=tmpColor!10] at (tmpCoord) {\l};
+        }
+        \path[from] ($(tmpCoord)+(-1mm,3mm)$) edge[out=90, in=0] node[pos=1, left] {Last In}   ++(-5mm,5mm);
+        \path[to] ($(tmpCoord)+(+1mm,3mm)$) edge[out=90, in=180] node[pos=1, right] {First Out} ++(+5mm,5mm);
+    \end{tikzpicture}
+    \FrameRemark{The contents of the directory stack are also visible as the value of the \,\bash|DIRSTACK|\, shell array variable.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The Directory Stack: An example usage}
+    \vspace{-3mm}
+    \begin{lstlisting}[style=MyBash]
+        $ cd ~; pwd; dirs -v
+        |+/home/sciarra+|
+        |+ 0  ~+|
+        $ cd ~/Documents/Seminars/BashCourse_2020; dirs -v
+        |+ 0  ~/Documents/Seminars/BashCourse_2020+|
+        $ pushd /myBackupDisk/University/Seminars/BashCourse_2020
+        # Stack automatically displayed on one line
+        $ dirs -v
+        |+ 0  /myBackupDisk/University/Seminars/BashCourse_2020+|
+        |+ 1  ~/Documents/Seminars/BashCourse_2020+|
+        $ pushd ~; pwd
+        # Stack automatically displayed on one line
+        |+/home/sciarra+|
+        $ dirs -v
+        |+ 0  ~+|
+        |+ 1  /myBackupDisk/University/Seminars/BashCourse_2020+|
+        |+ 2  ~/Documents/Seminars/BashCourse_2020+|
+        $ cd Documents; dirs -v
+        |+ 0  ~/Documents+|
+        |+ 1  /myBackupDisk/University/Seminars/BashCourse_2020+|
+        |+ 2  ~/Documents/Seminars/BashCourse_2020+|
+        $ popd; pwd  # Stack automatically displayed on one line
+        |+/myBackupDisk/University/Seminars/BashCourse_2020+|
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Tilde expansion and its advanced usage}
+    \vspace*{-3mm}
+    \begin{overlayarea}{\textwidth}{0.65\textheight}
+        \begin{onlyenv}<1-2>
+            \PB{If the tilde-prefix matches the following forms, a special expansion is done:}
+            \vspace{-4mm}
+            \begin{columns}
+                \begin{column}{\dimexpr\paperwidth-10mm}
+                    \begin{description}%[\texttt{1 2 \ldots}]
+                        \setlength{\itemsep}{2mm}
+                        \item[\texttt{\textasciitilde+}]
+                            \texttt{\$\{\tc{environment-color}{PWD}\}} is substituted.
+                        \item[\texttt{\textasciitilde-}]
+                            The value of the shell variable \bash|OLDPWD|, if it is set, is substituted.\\
+                            $\;\to\;$ \texttt{\$\{\tc{environment-color}{OLDPWD}-\tc{strings-color}{'\textasciitilde-'}\}}
+                        \item[\texttt{\textasciitilde N}]
+                            The string that would be displayed by \enspace\bash|dirs +N|\enspace is substituted.
+                        \item[\texttt{\textasciitilde+N}]
+                            The string that would be displayed by \enspace\bash|dirs +N|\enspace is substituted.
+                        \item[\texttt{\textasciitilde-N}]
+                            The string that would be displayed by \enspace\bash|dirs -N|\enspace is substituted.
+                    \end{description}
+                \end{column}
+            \end{columns}
+            \vspace{2mm}
+            \begin{varblock}{alert}[0.68\textwidth]{}
+                \large\alert{If the tilde expansion fails, the word is left unchanged!}
+            \end{varblock}
+        \end{onlyenv}
+        \begin{onlyenv}<3->
+            \begin{lstlisting}[style=MyBash]
+                $ dirs -v
+                |+ 0  ~+|
+                |+ 1  /scratch/latticeqcd/sciarra+|
+                |+ 2  /home/latticeqcd/public+|
+                |+ 3  /arc01/archive/latticeqcd/sciarra+|
+                |+ 4  /arc02/archive/latticeqcd/sciarra+|
+                $ cd ~2; pwd
+                |+/home/latticeqcd/public+|
+                $ cd ~-0; pwd; cd ~4; pwd
+                |+/arc02/archive/latticeqcd/sciarra+|
+                |+/arc02/archive/latticeqcd/sciarra+|
+                # Of course you can use them for any operation, e.g.
+                $ cp -r ~3/Results ~4/Results_backup
+                $ ls ~5
+                |+ls: cannot access ~5: No such file or directory+|
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+    \begin{varblock}{example}[0.65\textwidth]{}<uncover@2->
+        \large\PS{You can then take advantage of the Directory Stack!}
+    \end{varblock}
+    \FrameRemark{Bash also performs tilde expansion on words satisfying the conditions of variable assignments (e.g. \bash|alias|, \bash|declare|, \bash|export|, \bash|readonly|, \bash|local|).}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Arithmetic expansion}
     \vspace{-3mm}
     \begin{itemize}[<only@1>]
@@ -594,7 +670,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Other expansions}
-    \vspace{-12mm}
+    \vspace{-8mm}
     \begin{columns}
         \begin{column}{\dimexpr\paperwidth-10mm}
             \begin{center}
@@ -602,24 +678,21 @@
             \end{center}
             \begin{description}[Command substitution:]
                 \setlength{\itemsep}{3mm}
-                \item[Tilde expansion:]
-                    To be discussed next
-                \item[Process substitution:]
-                    Useful, but not discussed here $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5.6}\\
-                    It takes the form \alert{\texttt{<(\ldots)}} or \alert{\texttt{>(\ldots)}}
                 \item[Command substitution:]
                     It occurs when a command is enclosed as \alert{\texttt{\$(\ldots)}}\\
-                    Do not use the deprecated syntax \tc{Gray!30}{\texttt{\textasciigrave\ldots\textasciigrave}}
+                    Do not use the deprecated syntax \tc{Gray!30}{\texttt{\textasciigrave\ldots\textasciigrave}}\\
+                    Still to early to be discussed $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5.4}\\
+                    \Remark[0pt]{\alert{\texttt{\$(\ldots)}} is substituted by the standard output of the command (executed in a subshell), with any trailing newlines deleted.}
+                \item[Process substitution:]
+                    Useful, but not discussed here $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5.6}\\
+                    It takes the form \alert{\texttt{<(\ldots)}} or \alert{\texttt{>(\ldots)}}\\
+                    It will discussed in the section about redirection
             \end{description}
-            \vspace{-2mm}
-            \begin{varblock}{example}[0.8\textwidth]{Try to read about them alone}
-                The Bash manual is a very good source, you can start reading there!\\
-                \URL[PS]{http://mywiki.wooledge.org/BashGuide/InputAndOutput\#Process\_Substitution}{More on process substitution}
-            \end{varblock}
+            \vspace{2mm}
             \begin{center}
                 \large\fbox{\PP{\textbf{After}} Word Splitting:}
             \end{center}
-            \begin{description}[\hspace{0.4\textwidth}]
+            \begin{description}[Command substitution:]%[\hspace{0.4\textwidth}]
                 \item[Filename expansion:]
                     Discussed in the next section about globbing
             \end{description}
