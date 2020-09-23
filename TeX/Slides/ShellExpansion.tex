@@ -344,33 +344,43 @@
     \setbeamerfont{description item}{series=\bfseries}
     \setbeamercolor{description item}{fg=PP}
     \begin{description}[Replace at start:]
-        \item[First uppercase:] \PB{\small\texttt{\$\{parameter\^{}\}}}\\
+        \item[First uppercase:] \PB{\small\texttt{\$\{parameter\^{}pattern\}}}\\
             {\small
                 Results in the expanded value of \texttt{parameter} with the first character capitalised
             }
-        \item[All uppercase:] \PB{\small\texttt{\$\{parameter\^{}\^{}\}}}\\
+        \item[All uppercase:] \PB{\small\texttt{\$\{parameter\^{}\^{}pattern\}}}\\
             {\small
                 As the previous, but all characters are capitalised
             }
-        \item[First uppercase:] \PB{\small\texttt{\$\{parameter,\}}}\\
+        \item[First lowercase:] \PB{\small\texttt{\$\{parameter,pattern\}}}\\
             {\small
                 Results in the expanded value of \texttt{parameter} with the first character to lowercase
             }
-        \item[All lowercase:] \PB{\small\texttt{\$\{parameter,,\}}}\\
+        \item[All lowercase:] \PB{\small\texttt{\$\{parameter,,pattern\}}}\\
             {\small
                 As the previous, but all characters are transformed to lowercase
             }
     \end{description}
-    \begin{uncoverenv}<2>
-        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm]
-            $ aVar='hELLO, World!'
-            # Let us demonstrate a bit
-            $ echo "${aVar^}  -  ${aVar^^}"
-            |+HELLO, World!  -  HELLO, WORLD!+|
-            $ echo "${aVar,}  -  ${aVar,,}"
-            |+hELLO, World!  -  hello, world!+|
-        \end{lstlisting}
-    \end{uncoverenv}
+    \begin{overlayarea}{\textwidth}{0.4\textheight}
+        \vspace{-3mm}
+        \begin{varblock}{}[0.905\textwidth]{Pattern matching}<only@1>
+            \small
+            The pattern is expanded to produce a pattern just as in filename expansion.
+            Each character in the expanded value of parameter is tested against pattern, and, if it matches the pattern, its case is converted.
+            \alert{The pattern should not attempt to match more than one character.}\\
+            If pattern is omitted, it is treated like a \texttt{?}, which matches every character.
+        \end{varblock}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=5mm]
+                $ aVar='hELLO, World!'
+                # Let us demonstrate a bit
+                $ echo "${aVar^}  -  ${aVar^^}"
+                |+HELLO, World!  -  HELLO, WORLD!+|
+                $ echo "${aVar,}  -  ${aVar,,}  -  ${aVar,,[LW]}"
+                |+hELLO, World!  -  hello, world!  -  hEllO, world!+|
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
