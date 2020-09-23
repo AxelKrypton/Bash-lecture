@@ -1,22 +1,24 @@
 %-------------------------------%
 %  Author: Alessandro Sciarra   %
-%    Date: 24 Jul 2019          %
+%    Date: 23 Sep 2020          %
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Writing scripts}
+\begin{frame}{Writing scripts\hfill{\small\URL[PB]{https://google.github.io/styleguide/shellguide.html}{Google Shell Style Guide}}}
+    \vspace{-2mm}
     \begin{itemize}
-        \item Is it a Bash script? Take advantage of it!
+        \item Is it a Bash script? Take advantage of it! \Remark{Use a proper shebang!}
         \item You learnt all flow constructs, keep them in mind
         \item Use meaningful, lower-case (or mixed-case) variable names!
         \item Does your script accept command line options? Implement a \texttt{-h} option!
         \item If environment variables affect the script behaviour, document it
-        \item Do the error messages get printed to the standard error?
+        \item Do you need to set particular shell options? Make a note for maintenance!
+        \item \tc{Gray!60}{Do the error messages get printed to the standard error?}
         \item Take advantage of colours, if needed
         \item Do not make assumptions, be paranoid
         \item Use (associative) arrays for collections
-        \item Avoid unnecessary pipes, use herestrings!
-        \item Is the script getting large? Split it! {\tiny\{~More tomorrow with functions~\}}
+        \item \tc{Gray!60}{Avoid unnecessary pipes, use herestrings!}
+        \item Is the script getting large? Split it! \Remark{More tomorrow with functions}
         \item \ldots
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay]

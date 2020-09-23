@@ -1,6 +1,6 @@
 %-------------------------------%
 %  Author: Alessandro Sciarra   %
-%    Date: 12 Jul 2019          %
+%    Date: 23 Sep 2020          %
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -66,6 +66,7 @@
         |+bVar contains "aVar" which contains "Hello"+|
         $ unset aVar bVar
     \end{lstlisting}
+    \vspace{2mm}
     \begin{itemize}[<2->]
         \item If a \PB{\texttt{*}} or a \PB{\texttt{@}} is put at the end of parameter, the behaviour changes!\\[0.3em]
         \small\setlength{\itemsep}{0mm}
@@ -84,7 +85,7 @@
             \draw[to,] (alone) -- (L.west |- alone) node[pos=1, right, font=\footnotesize] {As above, but words are separated by the first character of the \bash|IFS|};
         \end{scope}
         \begin{scope}[scope on=<3>]
-            \draw[PT, rounded corners=3mm] ($(current page.south west)+(8mm,5mm)$) rectangle ($(current page.east)-(8mm,6mm)$);
+            \draw[PT, rounded corners=3mm] ($(current page.south west)+(8mm,8mm)$) rectangle ($(current page.east)-(8mm,6mm)$);
         \end{scope}
     \end{tikzpicture}
 \end{frame}
