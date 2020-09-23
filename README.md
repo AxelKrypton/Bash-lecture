@@ -27,16 +27,20 @@ Of course, its files have to be put in the correct place, e.g. in `~/texmf/tex/l
 
 ### Material of the lecture
 
-- [x] Lecture slides
-  - [x] Overview
-  - [x] Day 1
-  - [x] Day 2
-  - [x] Day 3
+- [ ] Lecture slides
+  - [X] Overview
+  - [X] Day 1
+  - [ ] Day 2
+  - [ ] Day 3
+  - [ ] Day 4
+  - [ ] Day 5
 
-- [x] Exercises
-  - [x] Day 1
-  - [x] Day 2
-  - [x] Day 3
+- [ ] Exercises
+  - [X] Day 1
+  - [ ] Day 2
+  - [ ] Day 3
+  - [ ] Day 4
+  - [ ] Day 5
 
 - [x] Sample solutions
   - [x] Day 1
