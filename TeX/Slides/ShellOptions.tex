@@ -1,0 +1,252 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 23 Sep 2020          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Modifying the shell behaviour}
+    \vspace{-2mm}
+    \begin{itemize}
+        \item There are some shell features that can be activated, if needed
+        \item There are two builtins that are responsible for that:
+              \begin{description}
+                  \item[\texttt{set}] associated to the \bash|SHELLOPTS| environment variable
+                  \item[\texttt{shopt}] associated to the \bash|BASHOPTS| environment variable
+              \end{description}
+    \end{itemize}
+    \begin{onlyenv}<1>
+        \begin{varblock}{quote}[0.87\textwidth]{Why two?}[Linux Shell Scripting with Bash]
+            Historically, the \textnormal{\bash|set|} command was used to turn options on and off.
+            As the number of options grew, \textnormal{\bash|set|} became more difficult to use because options are represented by single letter codes.
+            As a result, Bash provides the \textnormal{\bash|shopt|} (shell option) command to turn options on and off by name instead of a letter.
+            You can set certain options only by letter.
+            Others are available only under the \textnormal{\bash|shopt|} command.\\
+            \alert{This makes finding and setting a particular option a confusing task.}\\[-0.5em] ~
+        \end{varblock}
+        \begin{itemize}
+            \item The \bash|set| builtin allows you to also set positional parameters $\,\to\,$ it can be very handy!
+        \end{itemize}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{varblock}{quote}[\textwidth]{Gilles says\ldots}
+            \footnotesize
+            As far as I know, the \textnormal{\bash|set -o|} options are the ones that are inherited from other Bourne-style shells (mostly \textnormal{\texttt{ksh}}), and the \textnormal{\bash|shopt|} options are the ones that are specific to bash.
+            \alert{There's no logic that I know of.}
+        \end{varblock}
+        \vspace{-2mm}
+        \begin{varblock}{quote}[\textwidth]{}[\ldots{}St\'ephane comments]
+            \footnotesize
+            Well, there are \textnormal{\bash|set -o|}  options like \textnormal{\texttt{posix}}, \textnormal{\texttt{physical}}, \textnormal{\texttt{interactive-comments}} that are not in \textnormal{\texttt{ksh}}, and \textnormal{\bash|shopt|} ones that are in other shells including \textnormal{\texttt{ksh}} for some like \textnormal{\texttt{login\_shell}} or \textnormal{\texttt{nullglob}}.
+            Like you say, there's no logic.
+            It was probably the idea at the start (that \textnormal{\bash|SHELLOPTS|} would be the standard ones, and \textnormal{\bash|BASHOPTS|} the bash specific ones), but that got lost along the way, and\\
+            \alert{now it just ends up being annoying and a UI design fiasco.}\\[-0.7em] ~
+        \end{varblock}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The \bash|set| builtin}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 4.3.1}}
+    \vspace{-4mm}
+    \begin{itemize}
+        \item Without arguments, \,\bash|set|\, displays the names and values of all shell variables/functions.
+        \item When options are supplied, they set or unset shell attributes.
+        \item Using \texttt{+} rather than \texttt{-} causes these options to be turned off.
+        \item The \,\bash|set|\, options can also be used upon invocation of the shell.
+        \item The current set of options may be found in \PB{\texttt{\$-}}.
+        \item The remaining N arguments are positional parameters and are assigned, in order, to \PB{\texttt{\$1}}, \PB{\texttt{\$2}}, \ldots, \PB{\texttt{\$N}}.
+              The special parameter \PB{\texttt{\#}} is set to N.
+        \item If you want to set positional arguments that start by a dash, you need to use \PB{\texttt{-{}-}}.
+    \end{itemize}
+    \begin{uncoverenv}<2>
+        \begin{lstlisting}[style=myBash, aboveskip=2mm]
+            $ echo $-; set -u; echo $-; set +u; echo $-
+            |+himBHs+|
+            |+himuBHs+|
+            |+himBHs+|
+            $ echo $|+#+|; set -- -s --long; echo $|+#+|; echo $@
+            |+0+|
+            |+2+|
+            |+-s --long+|
+        \end{lstlisting}
+    \end{uncoverenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Some among the many available options (I)}
+    \vspace{-8mm}
+    \begin{columns}
+        \begin{column}{\dimexpr\paperwidth-10mm}
+            \begin{onlyenv}<1>
+                \begin{description}[XXX\texttt{-o noclobber}]
+                    \setlength{\itemsep}{3mm}
+                    \item[\PB{\texttt{-o noglob}}]
+                        It is the equivalent to \PB{\texttt{-f}}.\\
+                        Disable filename expansion (globbing).
+                    \item[\PB{\texttt{-o noclobber}}]
+                        It is the equivalent to \PB{\texttt{-C}}.\\
+                        Prevent output redirection from overwriting existing files.
+                    \item[\PB{\texttt{-o noexec}}]
+                        It is the equivalent to \PB{\texttt{-n}}.\\
+                        Read commands but do not execute them. \Remark{This may be used to check a script for syntax errors.}
+                    \item[\PB{\texttt{-o nounset}}]
+                        It is the equivalent to \PB{\texttt{-u}}.\\
+                        Treat unset variables and parameters other than the special parameters \texttt{@} or \texttt{*} as an error when performing parameter expansion.
+                        An error message will be written to the standard error, and a non-interactive shell will exit.
+                    \item[\PB{\texttt{-o pipefail}}]
+                        If set, the return value of a pipeline is the value of the last (rightmost) command to exit with a non-zero status, or zero if all commands in the pipeline exit successfully.
+                        This option is disabled by default.
+                \end{description}
+            \end{onlyenv}
+            \begin{onlyenv}<2->
+                \begin{description}[XXX\texttt{-o noclobber}]
+                    \item[\PB{\texttt{-o errexit}}]
+                        It is the equivalent to \PB{\texttt{-e}}.\\
+                        Roughly speaking, this option makes the shell exit immediately when a command returns a non-zero status.
+                        This is not always true, though.
+                    \item[\PB{\texttt{-o errtrace}}]
+                        It is the equivalent to \PB{\texttt{-E}}.
+                    \item[\PB{\texttt{-o functrace}}]
+                        It is the equivalent to \PB{\texttt{-T}}.
+                \end{description}
+                \begin{varblock}{alert}[0.94\textwidth]{An attempt to simplify error handling}
+                    %It is now too early to deepen into this aspect.
+                    We will come back to these options and discuss them in detail.
+                    Although setting \PB{\texttt{-e}} enables a nice feature, it also switches on lots of drawbacks that often need special handling.
+                \end{varblock}
+                \begin{center}
+                    \begin{tikzpicture}[every label/.style={text=PT, font=\bfseries}, scope on=<3>]
+                        \node[label={180:To me it actually seems like\ldots}, label={0:\ldots{}a nice try!}] (fig) {\includegraphics[height=25mm]{NiceTry}};
+                    \end{tikzpicture}
+                \end{center}
+            \end{onlyenv}
+        \end{column}
+    \end{columns}
+    \FrameRemark{For debug purposes you might also be interested in the \PB{\texttt{xtrace}} option, equivalent to \PB{\texttt{-x}}.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The \bash|shopt| builtin}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 4.3.2}}
+    \vspace{-2mm}
+    \begin{lstlisting}[style=myBash, numbers=none]
+        |+shopt [-pqsu] [-o] [optname ...]+|
+    \end{lstlisting}
+    \vspace{2mm}
+    \begin{description}[\texttt{xxxxxx}]
+        \item[\PB{\texttt{-s}}]
+            Enable (set) each \texttt{optname}.
+        \item[\PB{\texttt{-s}}]
+            Disable (unset) each \texttt{optname}.
+        \item[\PB{\texttt{-q}}]
+            No output; the return status indicates whether the \texttt{optname} is set or unset.\\[-1mm]
+            \Remark{If multiple \texttt{optname} arguments are given with \PB{\texttt{-q}}, the return status is zero if all optnames are enabled; non-zero otherwise.}
+        \item[\PB{\texttt{-p}}]
+            A list of all settable options is displayed, with an indication of whether or not each is set; if \texttt{optnames} are supplied, the output is restricted to those options.\\[-1mm]
+            \Remark[0pt]{Without options the behaviour of \,\bash|shopt|\, is the same as with the \PB{\texttt{-p}} option}
+        \item[\PB{\texttt{-o}}]
+            Restricts \texttt{optname} to be one of values of the \PB{\texttt{-o}} option of the \,\bash|set|\, builtin.
+    \end{description}
+    \begin{lstlisting}[style=myBash, aboveskip=2mm]
+        $ shopt extglob nullglob
+        |+extglob           on+|
+        |+nullglob          off+|
+        $ shopt -p extglob
+        |+shopt -s extglob+|
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Some among the many available options (II)}{Here focusing on those about globbing}
+    \begin{onlyenv}<1>
+        \vspace{-6mm}
+        \begin{columns}
+            \begin{column}{\dimexpr\paperwidth-10mm}
+                \begin{onlyenv}<1>
+                    \begin{description}[XX\texttt{failglob}]
+                        \setlength{\itemsep}{3mm}
+                        \item[\PB{\texttt{dotglob}}]
+                            If set, Bash includes filenames beginning with a \texttt{.} in the results of filename expansion.\\[-1mm]
+                            \Remark[0pt]{The filenames \texttt{.} and \texttt{..} must always be matched explicitly, even if \texttt{dotglob} is set}
+                        \item[\PB{\texttt{extglob}}]
+                            If set, the extended pattern matching features (described yesterday) are enabled.
+                        \item[\PB{\texttt{failglob}}]
+                            If set, patterns which fail to match filenames during filename expansion result in an expansion error.
+                        \item[\PB{\texttt{globstar}}]
+                            If set, the pattern \texttt{**} used in a filename expansion context will match all files and zero or more directories and subdirectories.
+                            If the pattern is followed by a \texttt{/}, only directories and subdirectories match. \Remark{This option exists since bash v4.0.}
+                        \item[\PB{\texttt{nullglob}}]
+                            If set, Bash allows filename patterns which match no files to expand to a null string, rather than themselves.
+                    \end{description}
+                \end{onlyenv}
+            \end{column}
+        \end{columns}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=myBash, style=smaller]
+            $ ls -a
+            @|\tc{RoyalBlue}{.}|@  @|\tc{RoyalBlue}{..}|@  .hiddenFile  @|\tc{RoyalBlue}{dir1}|@  file1.c  file2.dat  file3.txt
+            # Example of dotglob
+            $ shopt -s dotglob; echo *
+            |+.hiddenFile dir1 file1.c file2.dat file3.txt+|
+            $ shopt -u dotglob; echo *
+            |+dir1 file1.c file2.dat file3.txt+|
+            # Example of failglob
+            $ shopt -s failglob; echo *.pdf  # echo command not executed!
+            |+bash: no match: *.pdf+|
+            $ shopt -u failglob; echo *.pdf
+            |+*.pdf+|
+            # Example of nullglob
+            $ shopt -s nullglob; echo *.pdf
+            |++|
+            $ shopt -u nullglob; echo *.pdf
+            |+*.pdf+|
+            $ shopt -s extglob  # We saw it yesterday!
+            $ echo |+!(*.c|*.dat)+|
+            |+dir1 file3.txt+|
+            $ shopt -u extglob
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \begin{lstlisting}[style=myBash, style=smaller, firstnumber=22]
+            $ ls -a
+            @|\tc{RoyalBlue}{.}|@  @|\tc{RoyalBlue}{..}|@  .hiddenFile  @|\tc{RoyalBlue}{dir1}|@  file1.c  file2.dat  file3.txt
+            $ ls -a dir1/
+            @|\tc{RoyalBlue}{.}|@  @|\tc{RoyalBlue}{..}|@  @|\tc{RoyalBlue}{dir2}|@  file4.c
+            $ ls -a dir1/dir2/
+            @|\tc{RoyalBlue}{.}|@  @|\tc{RoyalBlue}{..}|@  file5.c
+            # Example of globstar
+            $ shopt -u globstar; echo **
+            |+dir1 file1.c file2.dat file3.txt+|
+            $ shopt -s globstar; echo **
+            |+dir1 dir1/dir2 dir1/dir2/file5.c dir1/file4.c file1.c file2.dat file3.txt+|
+            $ echo **/
+            |+dir1/ dir1/dir2/+|
+            $ echo **/*.c
+            |+dir1/dir2/file5.c dir1/file4.c file1.c+|
+            $ echo **.c  # ATTENTION: Equivalent to  *.c/*.c/*.c/...
+            |+file1.c+|
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<4->
+        \vspace{-2mm}
+        \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
+            # In a script to be sourced remember whether extglob was originally set
+            shopt -q extglob; extglobSet=$?
+            # set extglob if it wasn't originally set
+            [[ ${extglobSet} -ne 0 ]] && shopt -s extglob
+            # ...
+            # unset extglob if it wasn't originally set
+            [[ ${extglobSet} -ne 0 ]] && shopt -u extglob
+        \end{lstlisting}
+        \begin{varblock}{alert}[0.95\textwidth]{Some options affect the parser behaviour!}<uncover@5>
+            \footnotesize Some options changes the way certain characters are parsed.
+            It is necessary to have a newline (not just a semicolon) between e.g. \bash|shopt -s extglob| and any subsequent commands to use it.
+            \alert{You cannot enable such options inside a compound command that uses them}, because the entire block is parsed before the \bash|shopt| is evaluated.
+            Note that the typical function body (or an \bash|if|-clause) is a compound command.
+        \end{varblock}
+        \vspace{-2mm}
+        \begin{varblock*}{alert}[0.95\textwidth]{}<uncover@5>
+            \footnotesize This is also why \alert{\textbf{you cannot run}}
+            \begin{lstlisting}[style=myBash, numbers=none, belowskip=-6mm,aboveskip=2mm]
+                shopt -s extglob; ls |+!(*.txt)+|  # WRONG as one-liner
+            \end{lstlisting}
+            (when \bash|extglob| is previously unset), but must have a newline between the two commands.
+        \end{varblock*}
+    \end{onlyenv}
+    \FrameRemark[5]{Which options affect the parser behaviour is \URL[PB]{https://unix.stackexchange.com/q/573589/370049}{unfortunately not documented}, but \,\texttt{extglob}\, is for sure the most relevant one.}
+\end{frame}
