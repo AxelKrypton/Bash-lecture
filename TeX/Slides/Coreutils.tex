@@ -1,0 +1,129 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 24 Sep 2020          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{They are not part of bash but they naturally interact with it}
+    \vspace{-3mm}
+    \begin{varblock}{example}[0.8\textwidth]{GNU coreutils}
+        The GNU Core Utilities are the basic file, shell and text manipulation utilities of the GNU operating system.
+        These are the core utilities which are expected to exist on every operating system.
+    \end{varblock}
+    \begin{overlayarea}{\textwidth}{0.6\textheight}
+        \only<1-2>{\vspace{-3mm}}
+        \begin{varblock}{example}[0.8\textwidth]{The util-linux package}<only@1-2>
+            \textbf{util-linux} is a standard package distributed by the Linux Kernel Organization for use as part of the Linux operating system.
+        \end{varblock}
+        \begin{varblock}{alert}[\textwidth]{What should I do here?!}<only@2>
+            The \URL[PB]{https://www.gnu.org/software/coreutils/manual/coreutils.pdf}{v8.32 GNU coreutils manual} from February 2020 has \alert{297 pages} and there are \alert{98 available commands}.
+            There are more than \alert{100 commands} in the \textbf{util-linux} package.
+        \end{varblock}
+        \only<2>{\vspace{2mm}\centerline{\large\PQ{Don't panic. Discover, read the manuals and \textbf{learn when you need it}!}}}
+        \uncover<4>{\centerline{\ssmall The highlighted \tc{external-color}{\texttt{commands}} are those that have been touched at least ones during the lecture (some more are discovered in the exercises).}}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=myBash, style=smaller, numbers=none, aboveskip=1mm]
+                |+arch      cut        false     logname  od        runcon  tee       uptime
+                base64    date       fmt       ls       paste     seq     test      users
+                basename  dd         fold      md5sum   pathchk   shred   timeout   vdir
+                cat       df         groups    mkdir    pinky     shuf    touch     wc
+                chcon     dir        head      mkfifo   pr        sleep   tr        who
+                chgrp     dircolors  hostid    mknod    printenv  sort    true      whoami
+                chmod     dirname    hostname  mktemp   printf    split   truncate  yes
+                chown     du         id        mv       ptx       stat    tsort
+                chroot    echo       install   nice     pwd       stdbuf  tty
+                cksum     env        join      nl       readlink  stty    uname
+                comm      expand     kill      nohup    realpath  sum     unexpand
+                cp        expr       link      nproc    rm        tac     uniq
+                csplit    factor     ln        numfmt   rmdir     tail    unlink+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<4>
+            \begin{lstlisting}[style=myBash, style=smaller, numbers=none, aboveskip=1mm, deletekeywords={env, expr, nice, nohup}]
+                arch      cut        false     logname  od        runcon  tee       uptime
+                base64    date       fmt       ls       paste     seq     test      users
+                basename  dd         fold      md5sum   pathchk   shred   timeout   vdir
+                cat       df         groups    mkdir    pinky     shuf    touch     wc
+                chcon     dir        head      mkfifo   pr        sleep   tr        who
+                chgrp     dircolors  hostid    mknod    printenv  sort    true      whoami
+                chmod     dirname    hostname  mktemp   printf    split   truncate  yes
+                chown     du         id        mv       ptx       stat    tsort
+                chroot    echo       install   nice     pwd       stdbuf  tty
+                cksum     env        join      nl       readlink  stty    uname
+                comm      expand     kill      nohup    realpath  sum     unexpand
+                cp        expr       link      nproc    rm        tac     uniq
+                csplit    factor     ln        numfmt   rmdir     tail    unlink
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+    \FrameRemark{If you are interested in exploring how the GNU core utilities are designed, there is an amazing project $\,\to\,$ \URL[PB]{http://www.maizure.org/projects/decoded-gnu-coreutils/}{Decoded: GNU coreutils}}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Some GNU core utilities}{\URL[PB]{https://catonmat.net/ftp/gnu-coreutils-cheat-sheet.pdf}{Cheat-sheet}}
+    \vspace{-8mm}
+    \begin{columns}
+        \begin{column}{\dimexpr\paperwidth-10mm}
+            \begin{onlyenv}<1>
+                \begin{description}[XXX\texttt{unexpand}]
+                    \setlength{\itemsep}{1mm}
+                    \item[\PB{\texttt{basename}}]
+                        Strip directory and, optionally, a suffix from filenames.
+                    \item[\PB{\texttt{comm}}]
+                        Compare two sorted files line by line.
+                    \item[\PB{\texttt{dirname}}]
+                        Print a filename with its last non-slash component and trailing slashes removed.
+                    \item[\PB{\texttt{expand}}]
+                        Convert tabs to spaces.
+                    \item[\PB{\texttt{fmt}}]
+                        Reformat each paragraph in the file(s), writing to standard output.
+                    \item[\PB{\texttt{fold}}]
+                        Wrap each input line to fit in specified width.
+                    \item[\PB{\texttt{ln}}]
+                        Make links between files.
+                    \item[\PB{\texttt{nl}}]
+                        Write each input file to standard output, with line numbers added.
+                    \item[\PB{\texttt{realpath}}]
+                        Print the resolved absolute file name.
+                    \item[\PB{\texttt{tac}}]
+                        Write each input file to standard output in a reversed order (last line first).
+                    \item[\PB{\texttt{uniq}}]
+                        Report, omit or count repeated lines in a file
+                    \item[\PB{\texttt{unexpand}}]
+                        Convert spaces to tabs.
+                \end{description}
+            \end{onlyenv}
+        \end{column}
+    \end{columns}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Some commands from the util-linux package}{The project is available \URL[PB]{https://github.com/karelzak/util-linux}{on GitHub} and a list of the commands on \URL[PB]{https://en.wikipedia.org/wiki/Util-linux}{Wikipedia}}
+    \vspace{-1mm}
+    \begin{itemize}
+        \item This package is much more OS oriented.
+        \item Just have a look to it if you are curious, otherwise the following will be enough!
+    \end{itemize}
+    \vspace{-1mm}
+    \begin{varblock}{example}[\textwidth]{You can do better than that!}
+        At the end of this lecture you will have learnt to implement even more flexible versions of the following commands.
+        To know they exist might still be handy in some occasions, though.
+    \end{varblock}
+    \vspace{-5mm}
+    \begin{columns}
+        \begin{column}{\dimexpr\paperwidth-10mm}
+            \small
+            \begin{description}[xxxxxxxxxxx\texttt{failglob}]
+                \setlength{\itemsep}{1mm}
+                \item[\PB{\texttt{cal}}]
+                    Display a calendar and the date of Easter.
+                \item[\PB{\texttt{column}}]
+                    Format the input into multiple columns.
+                \item[\PB{\texttt{getopt}}]
+                    Parse command options.
+                \item[\PB{\texttt{rename}}]
+                    Rename the specified files by replacing the first occurrence\\ of an expression in their name by a replacement.
+            \end{description}
+        \end{column}
+    \end{columns}
+    \FrameRemark{There might be \URL[PB]{https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=961301}{an issue} on your OS, since the package \textbf{bsdmainutils} is providing column in Debian and \textbf{util-linux} will not ship column as long as \textbf{bsdmainutils} does.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
