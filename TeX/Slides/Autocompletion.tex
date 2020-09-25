@@ -1,0 +1,79 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 25 Sep 2020          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Programmable completion}{A complex world plenty of opportunities: \enspace\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 sections 8.6 and 8.7}}
+    \vspace{-3mm}
+    \begin{itemize}
+        \item Whenever you press \texttt{TAB} while typing in your terminal,\\ \PS{you trigger a series of operations that the shell executes underneath}.
+        \item This mechanism is actually programmable and it is usually available system-wide.
+        \item It is nothing but\ldots\ a bash script to be sourced in your environment!
+        \item It is usually automatically sourced somewhere, at university in the shell configuration file.
+    \end{itemize}
+    \begin{lstlisting}[style=myBash, numbers=none, aboveskip=2mm]
+        # In a default ~/.bashrc file at some point:
+        if [ -f /etc/bash_completion ]; then
+            . /etc/bash_completion
+        fi
+    \end{lstlisting}
+    \begin{lstlisting}[style=myBash, numbers=none, aboveskip=2mm, belowskip=-5mm]
+        $ cat /etc/bash_completion
+        |+. /usr/share/bash-completion/bash_completion+|
+        $ wc -l /usr/share/bash-completion/bash_completion
+        |+2171+|
+    \end{lstlisting}
+    \begin{itemize}
+        \item The mechanism is triggered via the \bash|complete| builtin.
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{The program completion ingredients}
+    \vspace{-6mm}
+    \begin{columns}
+        \begin{column}{\dimexpr\paperwidth-18mm}
+            \begin{onlyenv}<1>
+                \begin{description}[\texttt{XXCOMP\_WORDS}]
+                    \setlength{\itemsep}{2mm}
+                    \item[\PB{\texttt{compgen}}]
+                        Generate possible completion matches for word according to the options and write the matches to the standard output.
+                    \item[\PB{\texttt{complete}}]
+                        Specify how arguments should be completed.
+                    \item[\PB{\texttt{compopt}}]
+                        Modify completion options for each name according to the options, or for the currently-executing completion if no names are supplied.\\[6mm]
+                    \item[\PB{\texttt{COMP\_WORDS}}]
+                        An array variable consisting of the individual words in the current command line.
+                    \item[\PB{\texttt{COMP\_CWORD}}]
+                        An index into \PB{\texttt{\$\{COMP\_WORDS\}}} of the word containing the current cursor position.
+                    \item[\PB{\texttt{COMPREPLY}}]
+                        An array variable from which Bash reads the possible completions generated. Each array element contains one possible completion.
+                \end{description}
+            \end{onlyenv}
+        \end{column}
+    \end{columns}
+    \FrameRemark{There are further relevant variables --- \bash|COMP_WORDBREAKS|, \bash|COMP_LINE|, \bash|COMP_POINT|, etc. --- refer to the \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 sections 5.2}.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The standard pattern}
+    \vspace{-3mm}
+    \begin{enumerate}
+        \item Make the script for which you want to implement autocompletion executable
+        \item Create an autocompletion script \textbf{to be sourced} in your environment
+        \item Associate a function to the command you want (your script's name) using.
+              \begin{lstlisting}[style=myBash, numbers=none, aboveskip=3mm, belowskip=-5mm, xrightmargin=15mm]
+                  complete -F _script_completion  script
+              \end{lstlisting}
+              After having sourced the autocompletion script, this function will be automatically invoked by the shell when pressing \texttt{TAB} after the name of your script.
+        \item Write the autocompletion function keeping in mind how it works.
+    \end{enumerate}
+    \begin{varblock}{alert}[0.9\textwidth]{A standard invocation}
+        \begin{itemize}
+            \item \PB{\texttt{\$1}} is the name of the command whose arguments are being completed;
+            \item \PB{\texttt{\$2}} is the word being completed;
+            \item \PB{\texttt{\$3}} is the word preceding the word being completed;
+            \item The array variable \PB{\texttt{COMPREPLY}} contains possible completions.
+        \end{itemize}
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
