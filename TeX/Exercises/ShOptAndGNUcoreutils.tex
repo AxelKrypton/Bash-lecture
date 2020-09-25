@@ -1,0 +1,29 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 25 Sep 2020          %
+%-------------------------------%
+
+\begin{exercise}[Inspirational]{Shell options and GNU coreutils: Inquire about files}
+    Write a bash script that
+    \begin{enumerate}
+        \item takes one or more file extensions on the command line;
+        \item finds all the files from the invoking position with such an extension (also in sub-folders);
+        \item prints a small report about each extension, specifying
+              \begin{itemize}
+                  \item the number of existing files;
+                  \item the size of the largest file;
+                  \item The total number of lines of all files.
+              \end{itemize}
+    \end{enumerate}
+
+    You learn today about \emph{shell options} and \emph{GNU core utilities}.
+    Use this exercise to do some practice with them.
+    In particular, write this script enabling \bash|nounset| and \bash|errexit| options via
+    \begin{lstlisting}[style=myBash]
+        set -o nounset -o errexit   # equivalent to 'set -u -e' or 'set -ue'
+    \end{lstlisting}
+    at the beginning of your script after the shebang.
+
+    Make sure to test your script, ideally in a temporary folder created for this purpose.
+    Did you consider the possibility no files of the given extension exist?
+\end{exercise}
