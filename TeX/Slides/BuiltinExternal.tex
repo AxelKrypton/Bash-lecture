@@ -1,6 +1,6 @@
 %-------------------------------%
 %  Author: Alessandro Sciarra   %
-%    Date: 28 Aug 2019          %
+%    Date: 25 Sep 2020          %
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -16,8 +16,8 @@
     \begin{varblock}{example}[0.8\textwidth]{The precedence order for command names}
         \begin{enumerate}
             \item Alias
-            \item Function {\tiny\{~You can shadow builtin commands creating a function with the same name~\}}
-            \item Builtin  {\tiny\{~The \bash|builtin| builtin serves to refer to a shadowed builtin $\;\to\;$ \bash|help builtin|~\}}
+            \item Function \Remark{You can shadow builtin commands creating a function with the same name}
+            \item Builtin  \Remark{The \bash|builtin| builtin serves to refer to a shadowed builtin $\;\to\;$ \bash|help builtin|}
             \item Keywords
             \item External command in the directories listed in \texttt{\$\{PATH\}} in order.
         \end{enumerate}
@@ -27,25 +27,24 @@
 \begin{frame}[fragile]{A trivial benchmark}
     \begin{lstlisting}[style=MyBash]
         $ mkdir tmpFolder; cd tmpFolder
-        $ time for i in {1000..9999}; do echo > $i; done; echo
+        $ time for((i=0; i<10000; i++)); do echo > $i; done; echo
         |+
-        real    0m12.026s
-        user    0m0.434s
-        sys     0m0.857s
+        real    0m18.364s
+        user    0m0.659s
+        sys     0m1.600s
         +|
-        $ time for i in {1000..9999}; do /bin/echo > $i; done; echo
+        $ time for((i=0; i<10000; i++)); do /bin/echo > $i; done
         |+
-        real    0m27.441s
-        user    0m9.504s
-        sys     0m5.034s
-        +|
+        real    0m37.524s
+        user    0m12.325s
+        sys     0m8.010s+|
         $ cd ..; rm -r tmpFolder
     \end{lstlisting}
     \medskip
     \begin{varblock}{}[0.9\textwidth]{Do not overdo, just keep it in mind}
         \begin{itemize}
             \item \emph{\guillemotleft Premature optimisation is the root of all evil\guillemotright} -- Donald Knuth
-            \item Unnecessary use of external commands are welcome
+            \item To avoid unnecessary use of external commands is a good practice
         \end{itemize}
     \end{varblock}
 \end{frame}

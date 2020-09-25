@@ -1,8 +1,10 @@
 %-------------------------------%
 %  Author: Alessandro Sciarra   %
-%    Date: 19 Jul 2019          %
+%    Date: 25 Sep 2020          %
 %-------------------------------%
 
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\againframe<1,3>{IOflow}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}<1-2,4>[fragile, label=FDfigure]{File descriptors: a graphical overview} % https://tex.stackexchange.com/a/119310
     \vspace{-5mm}
@@ -177,7 +179,7 @@
         \item[Redirecting Output:] \PB{\small\texttt{[n]>word}}\\
             {\small
                 The file resulting from the expansion of \texttt{word} is opened for \PS{writing} on FD \texttt{n}\\[-0.5em]
-                {\tiny\{~If the file does not exist it is created; if it does exist it is \textbf{truncated to zero size}~\}}
+                \Remark[0pt]{If the file does not exist it is created; if it does exist it is \textbf{truncated to zero size}}
             }
         \item[Appending Output:] \PB{\small\texttt{[n]>>word}}\\
             {\small
@@ -199,7 +201,7 @@
         \item[I/O FDs:] \PB{\small\texttt{[n]<>word}}\\
             {\small
                 The file resulting form \texttt{word} is opened for both \PS{reading and writing} on FD \texttt{n}\\[-0.5em]
-                {\tiny\{~If the file does not exist, it is created~\}}
+                \Remark[0pt]{If the file does not exist, it is created}
             }
     \end{description}
 \end{frame}
@@ -651,16 +653,17 @@
             # here document
         |+WORD+|
     \end{lstlisting}
+    \vspace{2mm}
     \begin{itemize}
         \item Heredocs are useful to embed \textbf{short} blocks of multi-line data inside your script\\[-0.5ex]
-              {\tiny\{~Embedding larger blocks is bad practice!~\}}
+              \Remark[0pt]{Embedding larger blocks is bad practice!}
         \item In a Heredoc, you need to choose a \texttt{WORD} to act as a sentinel
         \item It can be any word: Choose one that won't appear in your data set
         \item All the lines that follow the first instance of the sentinel, up to the second instance, become the standard input for the \bash|command| 
         \item The second instance of the sentinel word has to be \alert{at the beginning of a line all by itself}
     \end{itemize}
     \begin{varblock}{quote}[0.7\textwidth]{Good practice}
-        \textnormal{You should keep \PP{your logic} {\tiny\{~your code~\}} and \PP{your input} {\tiny\{~your data~\}} \PP{separated}, preferably in different files, unless it i    s a small data set!}
+        \textnormal{You should keep \PP{your logic} \Remark[0pt]{your code} and \PP{your input} \Remark[0pt]{your data} \PP{separated}, preferably in different files, unless it is a small data set!}
     \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -700,15 +703,15 @@
         >         Ouch, it is not weekend: $(date +'%A')
         > END
         > fi
-        |+       Ouch, it is not weekend: Tuesday+|
+        |+       Ouch, it is not weekend: Wednesday+|
         # Removing leading tabs
         $ cat <<-END
-        >     abc seems to start with an a! # TAB before abc
+        >     abc seems to start with an a! # TAB before 'abc'
         > END                               # (CTRL-v TAB)
         |+abc seems to start with an a!+|
         # Avoiding expansion
         $ cat <<-'SENTINEL'
-        >     My home is ${HOME}            # TAB before My
+        >     My home is ${HOME}            # TAB before 'My'
         > SENTINEL
         |+My home is ${HOME}+|
     \end{lstlisting}
@@ -724,13 +727,14 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Here Strings}
-    \vspace{-1mm}
+    \vspace{-3mm}
     \begin{lstlisting}[style=MyBash, numbers=none]
         command |+[n]<<< STRING+|
     \end{lstlisting}
+    \vspace{2mm}
     \begin{itemize}[<only@1-2>]
         \item Herestrings are shorter, less intrusive and overall more convenient than Heredocs\\[-0.5ex]
-              {\tiny\{~However, they are not portable to the Bourne shell~\}}
+              \Remark[0pt]{However, they are not portable to the Bourne shell}
         \item The \texttt{STRING} undergoes:
               \begin{itemize}
                   \item tilde expansion
@@ -775,10 +779,11 @@
 \againframe<3,5>{FDfigure}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Pipes}
-    \vspace{-1mm}
+    \vspace{-3mm}
     \begin{lstlisting}[style=MyBash, numbers=none]
         command | command
     \end{lstlisting}
+    \vspace{2mm}
     \begin{itemize}
         \item The pipe is created using the \PB{\texttt{|}} operator between two commands
         \item The former \bash{command}'s std output is connected to the latter \bash{command}'s std input
@@ -787,7 +792,7 @@
         \item \alert{The pipe operator creates a subshell environment for each command!} \,{\tiny\{~More on subshells tomorrow~\}}
     \end{itemize}
     \begin{onlyenv}<1>
-        \begin{lstlisting}[style=MyBash]
+        \begin{lstlisting}[style=MyBash, aboveskip=3mm]
             $ message='Test'
             $ echo 'Salut, le monde!' | read message
             $ echo "The message is: $message"
@@ -800,10 +805,11 @@
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<2>
-        \begin{lstlisting}[style=MyBash, numbers=none]
+        \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
             command 2>&1 |  command
             command      |& command
         \end{lstlisting}
+        \vspace{2mm}
         \begin{itemize}
             \item \PB{\texttt{|\&}} also connects the first \bash{command}'s std error to the second \bash{command}'s std input
             \item It is shorthand for \PB{\texttt{2>\&1 |}}
@@ -813,7 +819,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Pipes: A simple example}
-    \vspace{-2mm}
+    \vspace{-3mm}
     \begin{lstlisting}[style=MyBash]
         # Finding the maximum of a list
         $ for index in {1..5}; do
@@ -845,7 +851,7 @@
         \item The exit status of a pipeline is the exit status of the last command in the pipeline
         \item Bash provides an array variable \bash|PIPESTATUS| containing a list of exit status values from the processes in the most-recently-executed foreground process
     \end{itemize}
-    \begin{lstlisting}[style=MyBash]
+    \begin{lstlisting}[style=MyBash, aboveskip=3mm]
         $ for index in {1..5}; do
         >     echo $((RANDOM/RANDOM)).${RANDOM}
         > done | sort -n | tail -n1 | grep 'x'
@@ -879,7 +885,7 @@
                   \begin{description}[\texttt{>(list)}]
                       \setlength{\itemsep}{2mm}
                       \item[\texttt{>(command\_list)}] ~\\[0.3em]
-                          \hspace{-1cm}writing to the file will provide input for \PB{\texttt{command\_list}}\, {\tiny\{~Rarely needed!~\}}
+                          \hspace{-1cm}writing to the file will provide input for \PB{\texttt{command\_list}} \Remark{Rarely needed!}
                       \item[\texttt{<(command\_list)}] ~\\[0.3em]
                           \hspace{-1cm}the file passed as an argument should be read to obtain the output of \PB{\texttt{command\_list}}
                   \end{description}
@@ -909,7 +915,7 @@
             # Why do you get a blank output here?
             $ sdiff -s <(head Day_1.tex) <(head Day_2.tex)
             |+\subtitle{Day 1}                        | \subtitle{Day 2}
-            \date{07.10.2019}                       | \date{08.10.2019}+|
+            \date{26.10.2019}                       | \date{27.10.2019}+|
         \end{lstlisting}
     \end{onlyenv}
     \FrameRemark[2]{$^\star$This is an incomplete statement, if taken as general rule: It is not \URL[PB]{https://unix.stackexchange.com/questions/403783/the-process-substitution-output-is-out-of-the-order}{the full story}.}

@@ -1,6 +1,6 @@
 %-------------------------------%
 %  Author: Alessandro Sciarra   %
-%    Date: 23 Aug 2019          %
+%    Date: 25 Sep 2020          %
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -46,7 +46,7 @@
         \item[\textbf{NAME:}] ~\\
             A \textbf{sane} function name should be an alphanumeric string, maybe containing underscore and not starting with a number.
             However, insane names are accepted in Bash and, in principle, names like \PB{\texttt{:}} or \PB{\texttt{[\}\{}} are allowed.
-            But please, avoid them! Really!! $\;${\tiny\URL[PB]{https://stackoverflow.com/a/44041384}{Exploring allowed names}}
+            But please, avoid them! Really!! \Remark{\URL[PB]{https://stackoverflow.com/a/44041384}{Exploring allowed names}}
         \item[\textbf{COMPOUND-COMMAND:}] ~\\
             The body of a function can be any compound command.
             \begin{itemize}
@@ -78,9 +78,11 @@
     \begin{varblock}{}[0.9\textwidth]{Note}
         This will do absolutely nothing when run. This is because it has only been stored in memory, much like a variable, but it has not yet been called.
     \end{varblock}
-    \begin{lstlisting}[style=MyBash, firstnumber=10, xrightmargin=1mm, xleftmargin=1mm]
-        CreateListOfFiles
-    \end{lstlisting}
+    \begin{uncoverenv}<2>
+        \begin{lstlisting}[style=MyBash, firstnumber=10, xrightmargin=1mm, xleftmargin=1mm]
+            CreateListOfFiles
+        \end{lstlisting}
+    \end{uncoverenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Variables in functions and their scopes}
@@ -151,7 +153,7 @@
     \begin{itemize}[<3->]
         \item Arguments to functions are meant to provide \textbf{input} to a function
         \item Bash strictly uses \PP{call-by-value} semantics
-        \item You can't pass arguments ``by reference''\\[-0.5ex] {\tiny\{~at least not until Bash 4.3 (and even there the \bash|declare -n| mechanism has serious security flaws)~\}}
+        \item You can't pass arguments ``by reference''\\[-0.5ex] \Remark{at least not until Bash 4.3 (and even there the \bash|declare -n| mechanism has serious security flaws)}
         \item \alert{Passing the name of a variable to a function}, which should use it, requires \bash|eval| acrobatics and it \alert{should be as far as possible avoided!}
     \end{itemize}
 \end{frame}
@@ -483,7 +485,12 @@
             \end{lstlisting}
             You might be thinking -- \PP{``It looks OK, isn't it? What's wrong man?''} \uncover<3->{-- Consider then:}
         \end{onlyenv}
-        \begin{onlyenv}<3->
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=MyBash, emph={[7]_fifth_array}, aboveskip=2mm, firstnumber=10]
+                $ FifthElementOf 'x}"; da@|\tikzmark{date}|@te; #'
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<4->
             \begin{lstlisting}[style=MyBash, emph={[7]_fifth_array}, aboveskip=2mm, firstnumber=10]
                 $ FifthElementOf 'x}"; da@|\tikzmark{date}|@te; #'
                 |+The fifth element is
@@ -491,10 +498,10 @@
             \end{lstlisting}
         \end{onlyenv}
     \end{overlayarea}
-    {\Large\begin{varblock}{alert}[\textwidth]{Take-home lesson}<3->
+    {\Large\begin{varblock}{alert}[\textwidth]{Take-home lesson}<4->
         An inappropriate use of \bash|eval| can lead to \alert{arbitrary code execution}!
     \end{varblock}}
-    \begin{tikzpicture}[remember picture, overlay, scope on=<4>]
+    \begin{tikzpicture}[remember picture, overlay, scope on=<5>]
         \path[from] (date) edge[out=270, in=180] node[pos=1, right] {\color{red}What about $\;$ \bash|rm -rf /| $\;$ here?} ++(15mm,-1mm);
     \end{tikzpicture}
     \FrameRemark{Advanced, but \URL[PB]{http://mywiki.wooledge.org/BashFAQ/048}{very informative article} which you should spend some time at some point on.}

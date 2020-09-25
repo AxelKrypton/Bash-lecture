@@ -1,6 +1,6 @@
 %-------------------------------%
 %  Author: Alessandro Sciarra   %
-%    Date: 21 Aug 2019          %
+%    Date: 25 Sep 2020          %
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -13,8 +13,8 @@
         \item \bash{case}, \bash{select} constructs\tikzmark{doneEnd}\pgfsetfillopacity{1}\medskip
         \item \tc<2>{PP}{Subshells}\tikzmark{nowStart}
         \item \tc<2>{PP}{Command grouping}
-        \item \tc<2>{PP}{Arithmetic evaluation}\tikzmark{nowEnd}\\[-0.5ex] {\tiny\{~Slightly different from the \PQ{Arithmetic expansion} we already discussed~\}}\medskip
-        \item \tc<2>{PB}{[Functions]\tikzmark{fcts}} {\tiny\{~Discussed in detail in a separate section~\}}
+        \item \tc<2>{PP}{Arithmetic evaluation}\tikzmark{nowEnd}\\[-0.5ex] \Remark{Slightly different from the \PQ{Arithmetic expansion} we already discussed}\medskip
+        \item \tc<2>{PB}{[Functions]\tikzmark{fcts}} \Remark{Discussed in detail in a separate section}
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay]
         \begin{scope}[scope on=<2>]
@@ -86,30 +86,49 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Command grouping}{We already said something about it, let us go through once again}
     \vspace{-4mm}
-    \begin{overlayarea}{\textwidth}{0.7\textheight}
-        \begin{itemize}
-            \item Commands may be grouped together using curly braces \PB{\texttt{\{\ldots\}}}
-            \item Command groups allow a collection of commands to be considered as a whole with regards to redirection and control flow
-            \item All compound commands such as \bash|if| statements and \bash|while| loops do this as well, but command groups do \textbf{only} this
-            \item Command groups are executed in the same shell as everything else, NOT in a new one!
-        \end{itemize}
-        \begin{lstlisting}[style=MyBash, numbers=none]
-            $ { echo "$(date)"
-            >   rsync -av |+.+| /backup; echo "$(date)";@|\tikzmark{sc}|@ } >backup.log 2>&1
-        \end{lstlisting}
-        \smallskip
-        \begin{varblock}{quote}[0.9\textwidth]{}<only@1>
-            The above example truncates and opens the file backup.log on stdout, then points stderr at where stdout is currently pointing (backup.log), then runs each command with those redirections applied.
-            The file descriptors remain open until all commands within the command group complete before they are automatically closed.
-            This means backup.log is only opened a single time, not opened and closed for each command.
-        \end{varblock}
-        \begin{tikzpicture}[remember picture, overlay]
-            \begin{scope}[scope on=<2->]
-                \path[from, PT] ($(sc)-(0.9mm,1.5mm)$) edge[out=270, in=90] node[pos=1, below, font=\large, text=PT] (q) {Why is this semicolon absolutely \textbf{mandatory}?} ++(0cm,-1cm);
-            \end{scope}
-            \node[visible on=<3->, text width=5.6cm, align=center, below = 1mm of q, font=\scriptsize] {Because otherwise the closing curly bracket would be a argument of the final \mbox{command} in the group, \bash|echo| in this case};
-        \end{tikzpicture}
+    \begin{overlayarea}{\textwidth}{0.5\textheight}
+        \begin{onlyenv}<1-4>
+            \begin{itemize}
+                \item Commands may be grouped together using curly braces \PB{\texttt{\{\ldots\}}}
+                \item Command groups allow a collection of commands to be considered as a whole with regards to redirection and control flow
+                \item All compound commands such as \bash|if| statements and \bash|while| loops do this as well, but command groups do \textbf{only} this
+                \item Command groups are executed in the same shell as everything else, NOT in a new one!
+            \end{itemize}
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm]
+                $ { echo "$(date)"
+                >   rsync -av |+.+| /backup; echo "$(date)";@|\tikzmark{sc}|@ } >backup.log 2>&1
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<5>
+            \begin{lstlisting}[style=myBash]
+                $ TIMEFORMAT='%3R seconds'
+                $ time for((i=0; i<10000; i++)); do
+                >   echo "Hello ${i}" >> FileInFor.dat
+                > done
+                |+11.451 seconds+|
+                $ time for((i=0; i<10000; i++)); do
+                >   echo "Hello ${i}"
+                > done >> FileOutFor.dat
+                |+0.054 seconds+|
+                # The above for-loops do the same thing
+                $ diff FileInFor.dat FileOutFor.dat; echo $?
+                |+0+|
+            \end{lstlisting}
+        \end{onlyenv}
     \end{overlayarea}
+    \vspace{1mm}
+    \begin{varblock}{quote}[0.9\textwidth]{}<only@4->
+        The above example truncates and opens the file backup.log on stdout, then points stderr at where stdout is currently pointing (backup.log), then runs each command with those redirections applied.
+        The file descriptors remain open until all commands within the command group complete before they are automatically closed.
+        This means backup.log is only opened a single time, not opened and closed for each command.
+    \end{varblock}
+    \begin{tikzpicture}[remember picture, overlay]
+        \begin{scope}[scope on=<2-3>]
+            \path[from, PT] ($(sc)-(0.9mm,1.5mm)$) edge[out=270, in=90] node[pos=1, below, font=\large, text=PT] (q) {Why is this semicolon absolutely \textbf{mandatory}?} ++(0cm,-1cm);
+        \end{scope}
+        \node[visible on=<3>, text width=5.6cm, align=center, below = 1mm of q, font=\scriptsize]
+            {Because otherwise the closing curly bracket would be a argument of the final \mbox{command} in the group, \bash|echo| in this case};
+    \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Arithmetic evaluation: The \bash|let| builtin}
@@ -123,7 +142,7 @@
                   $ let aVar=4+5; echo "${aVar}"; unset aVar
                   |+9+|
               \end{lstlisting}
-        \item However, it requires quotes to use arithmetic operators $\quad${\tiny\{~\bash|help let|~\}}
+        \item However, it requires quotes to use arithmetic operators \Remark[1em]{\bash|help let|}
               \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm, firstnumber=4]
                   $ let aVar=2<3
                   |+bash: 3: No such file or directory+|
@@ -151,7 +170,7 @@
                       $ (( aVar=7*3**2 )); echo "${aVar}"
                       |+63+|
                       $ (( aVar=1+${aVar}/20 )); echo "${aVar}"; unset aVar
-                      |+4+|        # '${}' not really needed@|$^\star$|@
+                      |+4+|        # '${    }' not really needed@|$^\star$|@
                   \end{lstlisting}
             \item<only@1> Although not a compound command, the arithmetic substitution uses the same syntax
                   \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm, firstnumber=4]
@@ -185,7 +204,7 @@
                   \end{lstlisting}
         \end{itemize}
     \end{overlayarea}
-    \FrameRemark[1]{$^\star$Using the \texttt{\$\{\}} makes Bash use \bash|''| for uninitialised variables and might trigger errors (\texttt{0} is used for uninitialised variables referenced without \texttt{\$\{\}} syntax).}
+    \FrameRemark[1]{$^\star$Using the \texttt{\$\{\}} makes Bash use \bash|''| for uninitialised variables and might trigger errors (without \texttt{\$\{\}} syntax, \texttt{0} is used for uninitialised referenced variables).}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
