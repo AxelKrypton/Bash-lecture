@@ -1,0 +1,105 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 28 Sep 2020          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{The GNU Readline Library}{\URL[PB]{https://tiswww.case.edu/php/chet/readline/rltop.html}{Official website}}
+    \vspace{-3mm}
+    \begin{varblock}{}[0.9\textwidth]{What is it for?}
+        The GNU Readline library provides a set of functions for use by applications that \alert{allow users to edit command lines as they are typed in}.
+        Both Emacs and vi editing modes are available.
+        The Readline library includes additional functions to maintain a list of previously-entered command lines, to recall and perhaps reedit those lines.
+    \end{varblock}
+    \vspace{2mm}
+    \begin{itemize}[<2>]
+        \setlength{\itemsep}{2mm}
+        \item Documentation can be also found in the \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 sections 8.1 to 8.5}.
+        \item It provide lots of functionality, some of which you might already be used to.
+        \item \PS{If you use bash in your terminal, take advantage of it, please!}
+        \item A great deal of run-time behaviour is changeable with \alert{45 variables}. \Remark{\PB{Section 8.3.1}}
+        \item There are \alert{\textasciitilde170 Readline commands} that may be bound to key sequences. \Remark{\PB{Section 8.4}}
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{The Readline init file}
+    \begin{itemize}
+        \item The Readline library comes with a set of Emacs-like keybindings installed by default.
+        \item It is possible to use a different set of keybindings, though.
+        \item Any user can customise programs that use Readline by putting commands in an inputrc file, conventionally in his home directory.
+        \item The name of this file is taken from the value of the shell variable \bash|INPUTRC|.
+              If that variable is unset, the default is \texttt{\textasciitilde/.inputrc}.
+              If that file does not exist or cannot be read, the ultimate default is \texttt{/etc/inputrc}.
+        \item When a program which uses the Readline library starts up, the init file is read, and the key bindings are set.
+        \item The \texttt{C-x C-r} command re-reads this init file, thus incorporating any changes that you might have made to it.
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The \bash|bind| builtin}{Interacting with the Readline library}
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[style=myBash, style=smaller, numbers=none]
+            $ help bind
+
+            |+bind: bind [-lpsvPSVX] [-m keymap] [-f filename] [-q name] [-u name]
+                       [-r keyseq] [-x keyseq:shell-command]
+                       [keyseq:readline-function or readline-command]
+
+                Set Readline key bindings and variables.
+
+                Bind a key sequence to a Readline function or a macro, or set a
+                Readline variable. The non-option argument syntax is equivalent to
+                that found in ~/.inputrc, but must be passed as a single argument:+|
+                e.g., bind '"\C-x\C-r": re-read-init-file'.
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=myBash, style=smaller, numbers=none]
+            $ help bind
+
+            [...]
+
+             |+Options:+|
+
+               |+-l                 List names of functions.
+               -P                 List function names and bindings.
+               -p                 List functions and bindings in a form that can be
+                                  reused as input.
+               -S                 List key sequences that invoke macros and their values
+               -s                 List key sequences that invoke macros and their values
+                                  in a form that can be reused as input.
+               -V                 List variable names and values
+               -v                 List variable names and values in a form that can
+                                  be reused as input.
+               -q  function-name  Query about which keys invoke the named function.
+               -u  function-name  Unbind all keys which are bound to the named function.
+               -r  keyseq         Remove the binding for KEYSEQ.
+               -f  filename       Read key bindings from FILENAME.+|
+               # Plus few more
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{An extremely useful example}
+    \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
+        \node[label={[text=PT, font=\LARGE, label distance=1mm]90:\textbf{Warning:} Once you try it, you'll never go back!}] at ($(current page.center)-(0,8mm)$) {\includegraphics[width=0.5\textwidth]{MatrixPills}};
+    \end{tikzpicture}
+    \begin{onlyenv}<3>
+        \begin{lstlisting}[style=myBash]
+            #If session is interactive do some useful binding
+            if [[ -t 1 ]]; then
+                #To bind page-up and page-down to search in history
+                # (command starting by what typed)
+                bind '"\e[5~": history-search-backward'
+                bind '"\e[6~": history-search-forward'
+                #To bind up and down arrow to search in history
+                # (anything containing what typed)
+                bind '"\e[A": history-substring-search-backward'
+                bind '"\e[B": history-substring-search-forward'
+                #Move right and left one word with CTRL+@|\,\tc{red}{\ding{222}}|@ and CTRL+@|\,\tc{red}{\reflectbox{\ding{222}}}|@
+                bind '"\e[1;5D": backward-word'
+                bind '"\e[1;5C": forward-word'
+            fi
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
