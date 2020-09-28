@@ -58,8 +58,8 @@
 \begin{frame}[fragile]{The standard pattern}
     \vspace{-3mm}
     \begin{enumerate}
-        \item Make the script for which you want to implement autocompletion executable
-        \item Create an autocompletion script \textbf{to be sourced} in your environment
+        \item Make the script for which you want to implement autocompletion executable.
+        \item Create an autocompletion script \textbf{to be sourced} in your environment.
         \item Associate a function to the command you want (your script's name) using.
               \begin{lstlisting}[style=myBash, numbers=none, aboveskip=3mm, belowskip=-5mm, xrightmargin=15mm]
                   complete -F _script_completion  script
@@ -75,5 +75,111 @@
             \item The array variable \PB{\texttt{COMPREPLY}} contains possible completions.
         \end{itemize}
     \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{A basic example as starting point}
+    \vspace{-1mm}
+    \begin{onlyenv}<1-2,8->
+        Suppose to have a \,\PS{\texttt{measure}}\, script that accepts the following options on the command line:
+        \begin{itemize}
+            \item \PB{\texttt{-{}-inputfile}} followed by a filename;
+            \item a series of other options, e.g. \PB{\texttt{-{}-verbose}} and \PB{\texttt{-{}-conservative}}.
+        \end{itemize}
+        How do I implement autocompletion for it?
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=myBash, numbers=none, aboveskip=4mm]
+                $ emacs -nw ~/.measure-completion.bash
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
+            #!/usr/bin/env bash
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<4>
+        \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
+            #!/usr/bin/env bash
+
+            if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+                printf "\n ERROR: File \"${BASH_SOURCE[0]}\" cannot be executed!\n\n"
+                exit 1
+            fi
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<5-6>
+        \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
+            #!/usr/bin/env bash
+
+            if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+                printf "\n ERROR: File \"${BASH_SOURCE[0]}\" cannot be executed!\n\n"
+                exit 1
+            fi
+
+            function _measure_completion() @|\tikzmark{bad}|@
+            {
+                case "$3" in
+                    --inputfile )
+                        COMPREPLY=( $(compgen -f -- "$2") )
+                        ;;
+                    * )
+                        COMPREPLY=(
+                            $(compgen -W "--inputfile --verbose --conservative" -- "$2")
+                        )
+                        ;;
+                esac
+            }
+
+            complete -F _measure_completion   measure
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<7>
+            \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
+            #!/usr/bin/env bash
+
+            if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+                printf "\n ERROR: File \"${BASH_SOURCE[0]}\" cannot be executed!\n\n"
+                exit 1
+            fi
+
+            function _measure_completion() @|\tikzmark{stillbad}|@
+            {
+                case "$3" in
+                    --inputfile )
+                        COMPREPLY=( $(compgen -f -- "$2") )
+                        ;;
+                    * )
+                        COMPREPLY=(
+                            $(compgen -W "--inputfile --verbose --conservative" -- "$2")
+                        )
+                        ;;
+                esac
+            }
+
+            #complete -F _measure_completion   measure
+            complete -o filenames -F _measure_completion   measure
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[visible on=<6>, anchor=west, text=red, font=\small] at ($(bad)+(5mm,0)$) {What is bad in this implementation?};
+        \node[visible on=<7>, anchor=west, text=red, font=\small] at ($(stillbad)+(5mm,0)$) {What is still bad in this implementation?};
+    \end{tikzpicture}
+    \begin{onlyenv}<8>
+        \begin{lstlisting}[style=myBash, numbers=none, aboveskip=4mm]
+            $ emacs -nw ~/.measure-completion.bash
+            $ . ~/.measure-completion.bash
+            $ ls
+            file01.dat   file02.dat   file03.dat   @|\tc{RoyalBlue}{backup}|@
+            $ ./measure <TAB>
+            $ ./measure --<TAB-TAB>
+            --conservative  --inputfile     --verbose
+            $ ./measure --inputfile <TAB-TAB>
+            backup/   file01.dat   file02.dat   file03.dat
+            # There is room for improvement!
+            $ ./measure --inputfile file02.dat <TAB-TAB>
+            --conservative  --inputfile     --verbose
+        \end{lstlisting}
+    \end{onlyenv}
+    \FrameRemark{Usually, you want to implement autocompletion for a script that you use very often. It is common to make it executable and remove the \,\texttt{.bash}\, extension.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
