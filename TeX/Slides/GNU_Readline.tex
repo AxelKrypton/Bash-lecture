@@ -24,6 +24,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{The Readline init file}
     \begin{itemize}
+        \setlength{\itemsep}{2mm}
         \item The Readline library comes with a set of Emacs-like keybindings installed by default.
         \item It is possible to use a different set of keybindings, though.
         \item Any user can customise programs that use Readline by putting commands in an inputrc file, conventionally in his home directory.
@@ -31,7 +32,7 @@
               If that variable is unset, the default is \texttt{\textasciitilde/.inputrc}.
               If that file does not exist or cannot be read, the ultimate default is \texttt{/etc/inputrc}.
         \item When a program which uses the Readline library starts up, the init file is read, and the key bindings are set.
-        \item The \texttt{C-x C-r} command re-reads this init file, thus incorporating any changes that you might have made to it.
+        \item The \texttt{CTRL-x CTRL-r} command re-reads this init file, thus incorporating any changes that you might have made to it.
     \end{itemize}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -80,11 +81,23 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{An extremely useful example}
+    \begin{overlayarea}{\textwidth}{0.16\textheight}
+        \vspace{-6mm}
+        \begin{varblock}{example}[0.6\textwidth]{If you want to affect bash only}<only@3>
+            You can put the following block in your \texttt{\textasciitilde/.bashrc} file and use then the \bash|bind| builtin.
+        \end{varblock}
+        \begin{varblock}{quote}[0.7\textwidth]{You can act globally instead}<only@4>
+            \textnormal{To affect all programs that use the GNU Readline library, you can put the following block in your \texttt{\textasciitilde/.inputrc} file and load it.}
+        \end{varblock}
+        \begin{varblock}{alert}[0.55\textwidth]{\textbf{No more need of} \texttt{CTRL-r}}<only@5>
+            You can try to type something and press the arrow up and see how it is.
+        \end{varblock}
+    \end{overlayarea}
     \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
         \node[label={[text=PT, font=\LARGE, label distance=1mm]90:\textbf{Warning:} Once you try it, you'll never go back!}] at ($(current page.center)-(0,8mm)$) {\includegraphics[width=0.5\textwidth]{MatrixPills}};
     \end{tikzpicture}
     \begin{onlyenv}<3>
-        \begin{lstlisting}[style=myBash]
+        \begin{lstlisting}[style=myBash, numbers=none]
             #If session is interactive do some useful binding
             if [[ -t 1 ]]; then
                 #To bind page-up and page-down to search in history
@@ -101,5 +114,24 @@
             fi
         \end{lstlisting}
     \end{onlyenv}
+    \begin{onlyenv}<4-5>
+        \begin{lstlisting}[style=myBash, numbers=none, commentstyle=\color{Gray}]
+            #To use global settings as well
+            $include /etc/inputrc
+
+            #To bind page-up and page-down to search in history
+            # (command starting by what typed)
+            |+"\e[5~": history-search-backward+|
+            |+"\e[6~": history-search-forward+|
+            #To bind up and down arrow to search in history
+            # (anything containing what typed)
+            |+"\e[A": history-substring-search-backward+|
+            |+"\e[B": history-substring-search-forward+|
+            #Move right and left one word with CTRL+@|\,\tc{Gray}{\ding{222}}|@ and CTRL+@|\,\tc{Gray}{\reflectbox{\ding{222}}}|@
+            |+"\e[1;5D": backward-word+|
+            |+"\e[1;5C": forward-word+|
+        \end{lstlisting}
+    \end{onlyenv}
+    \FrameRemark[4-5]{Remember, you can reload the Readline init file via \texttt{CTRL-x CTRL-r} or via \,\bash|bind -f| \texttt{\textasciitilde/.inputrc} (removed commands will not be cleaned).}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
