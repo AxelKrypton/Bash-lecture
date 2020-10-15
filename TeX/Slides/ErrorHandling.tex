@@ -1,0 +1,30 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 15 Oct 2020          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Error handling in the shell}
+    \vspace{-2mm}
+    \begin{varblock}{quote}[0.85\textwidth]{Naturally an extremely difficult task}[Greg's Wiki]
+        The goal of automatic error detection is a noble one, but it requires the ability to tell when an error actually occurred.
+        \PS{In modern high-level languages, most tasks are performed by using the language's builtin commands or features.}
+        The language knows whether (for example) you tried to divide by zero, or open a file that you can't open, and so on.
+        It can take action based on this knowledge.\\[2mm]
+        But in the shell, most of the tasks you actually care about are done by external programs.
+        \alert{The shell can't tell whether an external program encountered something that it considers an error} -- and even if it could, it wouldn't know whether the error is an important one, worthy of aborting the entire program, or whether it should carry on.
+    \end{varblock}
+    \begin{itemize}
+        \item If you come from a language like C, you might be used to it.
+        \item If you come from a language like Python or C++, do not be frustrated.
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Exit codes are the only ingredient}{\ldots{}the rest is basically up to you!}
+    
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Is the glass half full or half empty?}
+    
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

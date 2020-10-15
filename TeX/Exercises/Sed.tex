@@ -1,0 +1,22 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 15 Oct 2020          %
+%-------------------------------%
+
+\begin{exercise}[Instructive]{Some tasks for which Sed can provide good support}
+    Go through the few slides discussed in the lecture about \bash|sed|, focusing on the examples there.
+    Once prepared an input file via
+    \begin{lstlisting}[style=MyBash]
+        paste <(shuf -n 20 /usr/share/dict/ngerman) <(shuf -i 1-5000 -n 20)
+    \end{lstlisting}
+    achieve the following tasks using a \bash|sed| command.
+    You can assume that the file contains a word in the first column and an integer number in the second one.
+    \begin{enumerate}
+        \item Print the first 5 and last 10 lines.
+        \item Print every third line.
+        \item Print lines starting by a vowel.
+        \item Print lines for which the integer number is larger than 999.
+        \item Print the number of lines in the file.
+        \item Print lines for which the number in the second column is multiple of 5.
+    \end{enumerate}
+\end{exercise}
