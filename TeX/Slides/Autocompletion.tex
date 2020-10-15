@@ -94,12 +94,12 @@
     \end{onlyenv}
     \begin{onlyenv}<3>
         \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
-            #!/usr/bin/env bash
+            # You do not need a shebang here! This script will be sourced.
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<4>
         \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
-            #!/usr/bin/env bash
+            # You do not need a shebang here! This script will be sourced.
 
             if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
                 printf "\n ERROR: File \"${BASH_SOURCE[0]}\" cannot be executed!\n\n"
@@ -109,7 +109,7 @@
     \end{onlyenv}
     \begin{onlyenv}<5-6>
         \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
-            #!/usr/bin/env bash
+            # You do not need a shebang here! This script will be sourced.
 
             if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
                 printf "\n ERROR: File \"${BASH_SOURCE[0]}\" cannot be executed!\n\n"
@@ -135,7 +135,7 @@
     \end{onlyenv}
     \begin{onlyenv}<7>
             \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
-            #!/usr/bin/env bash
+            # You do not need a shebang here! This script will be sourced.
 
             if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
                 printf "\n ERROR: File \"${BASH_SOURCE[0]}\" cannot be executed!\n\n"

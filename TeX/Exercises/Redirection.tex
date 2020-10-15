@@ -1,0 +1,24 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 15 Oct 2020          %
+%-------------------------------%
+
+\begin{exercise}[Instructive]{Discovering the redirection mechanism}
+    From now on, you will bring your new bash scripts to a new level, e.g. always redirecting error messages to standard error.
+    
+    Suppose to have to have to produce at some point in a larger script an input file for some application.
+    This might require e.g. some logic to add different lines to a file.
+    A minimal example might be the following, although you have to imagine to have tens of printing statements and more complex structures.
+    \begin{lstlisting}[style=myBash]
+        echo "THERMALIZE=1"
+        if (($1 % 4 == 0)); then echo "USE_HMC"; else echo "USE_RHMC"; fi
+        echo "DO_BACKUP=0"
+    \end{lstlisting}
+    
+    Think of how redirecting the output of the block of code above to an external file
+    \begin{itemize}[nosep]
+        \item using a compound command;
+        \item using the \bash|exec| builtin;
+        \item using a here document (maybe not ideal).
+    \end{itemize}
+\end{exercise}
