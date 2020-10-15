@@ -17,7 +17,7 @@
                   [1] 25647    #    a process in background
               \end{lstlisting}
               indicating that this job is job number 1 and that the process ID of the last process in the pipeline associated with this job is 25647
-              \,{\tiny\{~We will come back to the process ID later~\}}
+              \Remark{We will come back to the process ID later}
         \item All of the processes in a single pipeline are members of the same job
         \item Bash uses the job abstraction as the basis for job control
     \end{itemize}
@@ -148,7 +148,7 @@
                   \end{tabular}}
             \item Jobs can be moved to background using the \bash|bg| builtin
             \item Jobs can be moved to foreground using the \bash|fg| builtin
-            \item Any signal can be sent to a process/job using the \bash|kill| builtin \,{\tiny\{~More on it in a moment~\}}
+            \item Any signal can be sent to a process/job using the \bash|kill| builtin \Remark{More on it in a moment}
             \item The \bash|disown| builtin make the shell ``forget'' a job
         \end{itemize}
         \begin{onlyenv}<7>
@@ -324,7 +324,7 @@
             \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
                 # In a Bash script
                 date; sleep 3 & pid=$!
-                echo "PID=$pid";  ps -p $pid;  wait $pid; date
+                echo "PID=${pid}";  ps -p ${pid};  wait ${pid}; date
             \end{lstlisting}
             \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=1mm]
                 $ ./script-above.bash
@@ -533,10 +533,10 @@
     \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Process Management: Conclusions\hfill\uncover<2>{\small\URL[PB]{https://www.quora.com/What-is-the-difference-between-the-SIGINT-and-SIGTERM-signals-in-Linux-What\%E2\%80\%99s-the-difference-between-the-SIGKILL-and-SIGSTOP-signals}{SIGTERM vs SIGKILL cartoon}}}
-    \vspace{-3mm}
-    \begin{itemize}
-        \setlength{\itemsep}{1mm}
+\begin{frame}{Process Management: Conclusions}
+    \vspace{-2mm}
+    \begin{itemize}[<only@1-2>]
+        %\setlength{\itemsep}{1mm}
         \item It is a potentially tough world: Be scared but not too much
         \item Bash might not be the most appropriate tool
         \item Be aware of the truth (what we just discussed)
@@ -548,7 +548,8 @@
             \item \bash|xargs -P| \,or\, \bash|parallel| (to run independent tasks in parallel)
         \end{enumerate}
     \end{itemize}
-    \begin{varblock}{quote}[\textwidth]{About using $\;$\bash|kill -9|}[Greg's Wiki]<2>
+    \vspace{2mm}
+    \begin{varblock}{quote}[\textwidth]{About using $\;$\bash|kill -9|}[Greg's Wiki]<only@2>
         Do not use kill -9, ever.
         For any reason.
         \textbf{Unless you wrote the program to which you're sending the SIGKILL, and know that you can clean up the mess it leaves.}
@@ -557,8 +558,9 @@
         If that's the case, you're probably looking at a dead hard drive, or a dead NFS server, or a kernel bug, or something else along those lines.\\
         And you won't be able to kill the process anyway, SIGKILL or not.
     \end{varblock}
-    \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=north east] at ($(current page.north east)-(8mm,3mm)$) {};
+    \begin{tikzpicture}[remember picture, overlay, scope on=<3>]
+        \node[left  = 1mm of current page.center] {\includegraphics[width=52mm, clip, trim=0 173mm 0 0]{Sigkill}};
+        \node[right = 1mm of current page.center] {\includegraphics[width=52mm, clip, trim=0 0 0 255mm]{Sigkill}};
     \end{tikzpicture}
 \end{frame}
 

@@ -41,9 +41,7 @@
             $ echo "I    am  Clark       Kent"
             |+I    am  Clark       Kent+|
         \end{lstlisting}
-        \centerline{\tiny }
-        \medskip
-        \begin{lstlisting}[style=MyBash, style=oddnumbers, firstnumber=10]
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, firstnumber=10, aboveskip=12mm]
             $ echo 'PATH contains ${PATH}'
             |+PATH contains ${PATH}+|
             $ echo "PATH contains ${PATH}"
@@ -99,7 +97,7 @@
                 \item<only@1>[\texttt{\textbackslash}] \alert{Escape symbol}\tikzmark{curlyEnd}
                 \item<only@1>[\texttt{\#}]
                     It introduced a \alert{comment} that extends to the end of the line. \\
-                    Text after it is ignored by the shell. {~\tiny\{In single and double quotes, \texttt{\#} is just a \texttt{\#}.\}}
+                    Text after it is ignored by the shell. \Remark{In single and double quotes, \texttt{\#} is just a \texttt{\#}.}
                 \item<only@2>[\texttt{=}]
                     The \alert{assignment} symbol is used to assign a value to a variable \\
                     Whitespace is not allowed on either side of the \texttt{=} character

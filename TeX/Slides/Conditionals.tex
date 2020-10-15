@@ -10,7 +10,7 @@
     \begin{description}
         \item[\texttt{\$?}]
             Shows the exit code of the last foreground process that terminated\\
-            It is a 8-bit integer $\;$\texttt{\$?}${}\in{}$\texttt{\{0,\dots,255\}} \hfill{\tiny\{~Indeed, only the least significant 8 bits count~\}}
+            It is a 8-bit integer $\;$\texttt{\$?}${}\in{}$\texttt{\{0,\dots,255\}} \hfill\Remark{Indeed, only the least significant 8 bits count}
         \item[\texttt{0}] Denotes success
         \item[$\neq$\texttt{0}] Denotes failure, in general the meaning is up to the command
         \item[\texttt{1}] Miscellaneous errors
@@ -18,7 +18,7 @@
         \item[\texttt{126}] Command invoked cannot execute
         \item[\texttt{127}] \PP{\texttt{"}command not found\texttt{"}} error
         \item[\texttt{128}] Invalid argument to exit
-        \item[\texttt{128 + n}] Fatal error signal \texttt{"n"} {\tiny\{~For example, \PB{\texttt{130}} means that the script terminated by Control-C~\}}
+        \item[\texttt{128 + n}] Fatal error signal \texttt{"n"} \Remark{For example, \PB{\texttt{130}} means that the script terminated by Control-C}
     \end{description}
     \begin{varblock}{alerted}[0.45\textwidth]{Which exit code should I use?}
         \PQ{Avoid reserved one, be consistent!}
@@ -167,8 +167,8 @@
               \begin{description}[\texttt{STRING =\textasciitilde\ REGEX}]
                 \item[\texttt{STRING =\textasciitilde\ REGEX}] True if the string matches the regex pattern
                 \item[\texttt{( EXPR )}] Parentheses can be used to change the evaluation precedence
-                \item[\texttt{EXPR \&\& EXPR}] True if both expressions are true (logical AND)\\[-0.5em] {\tiny\{~it does not evaluate the second expression if the first already turns out to be false~\}}
-                \item[\texttt{EXPR || EXPR}] True if either expression is true (logical OR) \\[-0.5em] {\tiny\{~it does not evaluate the second expression if the first already turns out to be true~\}} 
+                \item[\texttt{EXPR \&\& EXPR}] True if both expressions are true (logical AND)\\[-0.5em] \Remark[0pt]{it does not evaluate the second expression if the first already turns out to be false}
+                \item[\texttt{EXPR || EXPR}] True if either expression is true (logical OR) \\[-0.5em] \Remark[0pt]{it does not evaluate the second expression if the first already turns out to be true} 
               \end{description}
         \item The alphabetically sorted test operators (\texttt{<} and \texttt{>}) do not need to be escaped
     \end{itemize}

@@ -21,8 +21,8 @@
     \end{varblock}
     \vspace{-1mm}
     \begin{varblock*}{}[0.76\textwidth]{Some references}
-        \URL[PB]{https://www.gnu.org/software/sed/manual}{The official GNU manual} {\tiny\{~The PDF is 85 pages long\ldots~\}}\\
-        \URL[PS]{http://www.grymoire.com/Unix/Sed.html}{A very nice tutorial} {\tiny\{~Bash code there often uses deprecated features, but you should know it by now!~\}}\\
+        \URL[PB]{https://www.gnu.org/software/sed/manual}{The official GNU manual} \Remark{The PDF is 85 pages long\ldots}\\
+        \URL[PS]{http://www.grymoire.com/Unix/Sed.html}{A very nice tutorial} \Remark{Bash code there often uses deprecated features, but you should know it by now!}\\
         \URL[PT]{http://sed.sourceforge.net/sed1line.txt}{One-liners, with some comments}\\
         \URL[PQ]{https://catonmat.net/sed-one-liners-explained-part-one}{More one-liners, explained but advanced!}
     \end{varblock*}
@@ -119,7 +119,7 @@
         \vspace{-2mm}\textnormal{
             \begin{itemize}
                 \item A positive line number (use \texttt{\$} to refer to the last line)
-                \item A regular expression \PP{\texttt{/regex/}} or \PP{\texttt{\textbackslash$\bullet$regex$\bullet$}} where \PP{$\bullet$} is any character {\tiny\{~not to be matched!~\}}
+                \item A regular expression \PP{\texttt{/regex/}} or \PP{\texttt{\textbackslash$\bullet$regex$\bullet$}} where \PP{$\bullet$} is any character \Remark{not to be matched!}
                 \item Use an exclamation mark after the address to negate that address
                 \item A comma separated pair to specify a range of lines
             \end{itemize}

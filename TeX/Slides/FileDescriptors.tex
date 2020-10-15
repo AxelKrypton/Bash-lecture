@@ -559,7 +559,7 @@
             \item Two FDs that both point to the same file, independently of each other, is a \textbf{bad idea}
             \item The results of this are not well-defined
             \item Some information written via one FD may clobber information written through the other FD\\[-0.5em]
-                  {\tiny \{~Depending on how the operating system handles FDs~\}}
+                  \Remark{Depending on how the operating system handles FDs}
         \end{itemize}
         \begin{onlyenv}<2>
             \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=0pt]
@@ -789,7 +789,7 @@
         \item The former \bash{command}'s std output is connected to the latter \bash{command}'s std input
         \item This connection is performed before any redirection specified by the commands
         \item Pipes are widely used as a means of post-processing application output
-        \item \alert{The pipe operator creates a subshell environment for each command!} \,{\tiny\{~More on subshells tomorrow~\}}
+        \item \alert{The pipe operator creates a subshell environment for each command!} \Remark{More on subshells tomorrow}
     \end{itemize}
     \begin{onlyenv}<1>
         \begin{lstlisting}[style=MyBash, aboveskip=3mm]

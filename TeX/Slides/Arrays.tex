@@ -93,14 +93,14 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Accessing array's content (I)}{Definition, single elements and length}
     \vspace{-2mm}\centering
-    \PB{\texttt{declare -p array}}\, It prints the definition of the variable {\tiny\{~not so useful in scripts~\}}
+    \PB{\texttt{declare -p array}}\, It prints the definition of the variable \Remark{not so useful in scripts}
     \smallskip
     \begin{lstlisting}[style=MyBash, numbers=none]
         $ declare -p array
         |+declare -a array='([0]="one" [1]="two and four")'+|
     \end{lstlisting}
     \medskip
-    \PB{\texttt{\$\{array[n]\}}}\, It retrieves the n-th element {\tiny\{~no error if entry missing in array~\}}
+    \PB{\texttt{\$\{array[n]\}}}\, It retrieves the n-th element \Remark{no error if entry missing in array}
     \smallskip
     \begin{lstlisting}[style=MyBash, numbers=none]
         $ echo "${array[1]}"; echo "_${array[3156]}_"
@@ -110,7 +110,7 @@
         |+two and four+|
     \end{lstlisting}
     \medskip
-    \PB{\texttt{\$\{\#array[@]\}}}\, It retrieves the length of the array {\tiny\{~same as \PB{\texttt{\$\{\#array[*]\}}}~\}}
+    \PB{\texttt{\$\{\#array[@]\}}}\, It retrieves the length of the array \Remark{same as \PB{\texttt{\$\{\#array[*]\}}}}
     \smallskip
     \begin{lstlisting}[style=MyBash, numbers=none]
         $ echo "${#array[@]}"; array[7]=Hello; echo "${#array[@]}";
@@ -275,7 +275,7 @@
     \bigskip
     \begin{itemize}
         \item Don't assume that your indices are sequential
-        \item If the index values matter, always iterate over the indices {\tiny\{~instead of making assumptions about them\ldots~\}}
+        \item If the index values matter, always iterate over the indices \Remark{instead of making assumptions about them\ldots}
         \item If you loop over the values instead, don't assume anything about indices
         \item In particular, don't assume that just because you're currently in the first iteration of your loop, that you must be on index 0\ldots
     \end{itemize}
