@@ -20,11 +20,321 @@
     \end{itemize}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Exit codes are the only ingredient}{\ldots{}the rest is basically up to you!}
-    
+\begin{frame}[fragile]{What does Bash do when an error occurs?}{I.e. when a command has a non-zero exit code!}
+    \vspace{-6mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{varblock}{}[0.56\textwidth]{The default behaviour}
+            An error is printed and \alert{execution continues}.
+        \end{varblock}
+        \begin{onlyenv}<1>
+            \begin{lstlisting}[style=myBash, numbers=none, aboveskip=5mm]
+                #!/bin/bash
+
+                # A test.bash script
+                echo "Before error"
+                notExistingCommand
+                echo "After error"   # <-- This line is exectued!
+            \end{lstlisting}
+            \begin{lstlisting}[style=myBash, numbers=none, aboveskip=2mm]
+                $ ./test.bash
+                |+Before error
+                ./test.bash: line 5: notExistingCommand: command not found
+                After error+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{varblock}{alert}[0.8\textwidth]{Do not forget it!}<2->
+            Things that we consider an error are not necessarily an error for bash!
+        \end{varblock}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=myBash, numbers=none, aboveskip=5mm]
+                $ invisibleVariable="I am magic"
+                $ echo "_${invisibelVariable}_"
+                |+__+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{varblock}{example}[0.85\textwidth]{We clearly want more than this!}<3->
+            \begin{enumerate}
+                \item We often need to react on error and avoid execution to continue.
+                \item It might be crucial to prevent undefined variables to be used!
+            \end{enumerate}
+        \end{varblock}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=myBash, numbers=none, aboveskip=3mm]
+                # About 1: Somewhere in a script
+                cd NotExistingFolder
+                rm -r *   # AAAAAAARGH!
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<4>
+            \begin{lstlisting}[style=myBash, numbers=none, aboveskip=3mm]
+                #!/bin/bash
+                # About 2: And if you call this script without arguments!?
+                pathPrefix="$1"
+                rm -r "${pathPrefix}/bin"   # AAAAAAARGH!
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Exit codes are the only available ingredient}{\ldots{}the rest is basically up to you!}
+    \vspace{-3mm}
+    {
+        \large
+        \begin{varblock}{example}[0.78\textwidth]{Purist approach}
+            Check and handle errors properly testing exit codes \textbf{when needed}.
+        \end{varblock}
+    }
+    \begin{itemize}
+        \item \PB{\texttt{\$?}} holds the exit code of the last command executed before any given line.
+        \item Any executed command will terminate with an exit code that can be inspected.
+        \item You can expect external command exit codes to be well documented.
+    \end{itemize}
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[style=myBash, numbers=none, aboveskip=4mm]
+            # From 'man grep'
+            ...
+            |+EXIT STATUS
+               Normally the exit status is 0 if a line is selected,
+               1 if no lines were selected, and 2 if an error occurred.
+               However, if the -q or --quiet or --silent is used and a
+               line is selected, the exit status is 0 even if an
+               error occurred.+|
+            ...
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=myBash, numbers=none, aboveskip=4mm]
+            # In a script at some point
+            grep 'Hello' MyBook.txt
+            case $? in
+                0 ) echo 'Found' ;;
+                1 ) echo 'Not found' ;;
+                2 ) echo 'Error occurred in grep!'; exit 1 ;;
+                * ) echo 'Matrix changed something...'; exit 2 ;;
+            esac
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \begin{lstlisting}[style=myBash, numbers=none, aboveskip=4mm]
+            # Coming back to the previous example
+            cd NotExistingFolder || exit 1  # Exit on failure!
+            rm -r *                         # Now better!
+        \end{lstlisting}
+        \begin{lstlisting}[style=myBash, numbers=none, aboveskip=2mm, belowskip=-6mm]
+            # Alternatively not exiting
+            if cd NotExistingFolder; then
+                rm -r *
+            fi
+        \end{lstlisting}
+        \centerline{\tiny Of course, this is just an example, you would rather write \;\bash|rm NotExistingFolder/*|\;, right!?}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Do I have to add \;\PB{\texttt{|| exit 1}}\; everywhere in my scripts?}
+    \vspace{-3mm}
+    \begin{varblock}{example}[0.75\textwidth]{Purist approach}<2->
+        Check and handle errors properly testing exit codes \textbf{when needed}.
+    \end{varblock}
+    \begin{varblock}{quote}[0.9\textwidth]{}[Greg's Wiki]<3>
+        The developers of the original Bourne shell decided that they would create a feature that would allow the shell to check the exit status of every command that it runs, and abort if one of them returns non-zero.
+        Thus, \PB{\texttt{set -e}} was born.
+        But many commands return non-zero even when there wasn't an error.
+        [\ldots]
+        So the shell implementers made a bunch of special rules, like ``commands that are part of an if test are immune'', and ``commands in a pipeline, other than the last one, are immune''.
+    \end{varblock}
+    \begin{varblock}{alert}[0.9\textwidth]{}<3>
+        \alert{The \,\PQ{\texttt{set -o errexit}}\, is probably the most controversial feature of bash!}
+    \end{varblock}
+    \begin{itemize}[<3>]
+        \item Many articles are against using it, e.g. \URL[PQ]{http://mywiki.wooledge.org/BashFAQ/105}{Greg's Wiki}.
+        \item People encourage its use, e.g. \URL[PS]{https://www.davidpashley.com/articles/writing-robust-shell-scripts/}{David Pashley}.
+    \end{itemize}
+    \FrameRemark[3]{Both references are definitely worth reading, especially if you decide at the end to use \;\texttt{set -e}\; in your scripts.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Enabling the \;\texttt{-e}\; shell option: Let's read the manual}
+    \vspace{-3mm}
+    \begin{itemize}[<1>]
+        \item Exit immediately if a pipeline, which may consist of a single simple command, a list, or a compound command returns a non-zero status.
+        \item The shell does not exit if the command that fails
+              \begin{itemize}
+                  \item is part of the command list immediately following a \bash|while| or \bash|until| keyword,
+                  \item is part of the test in an \bash|if| statement,
+                  \item is part of any command executed in a \PB{\texttt{\&\&}} or \PB{\texttt{||}} list except the command following the final \PB{\texttt{\&\&}} or \PB{\texttt{||}},
+                  \item is any command in a pipeline but the last,
+              \end{itemize}
+              or if the command’s return status is being inverted with \PB{\texttt{!}}.
+        \item If a compound command other than a subshell returns a non-zero status because a command failed while \texttt{-e} was being ignored, the shell does not exit.
+        \item A trap on \texttt{ERR}, if set, is executed before the shell exits.
+        \item This option applies to the shell environment and each subshell environment separately, and may cause subshells to exit before executing all the commands in the subshell.
+    \end{itemize}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[visible on=<3>] (fig) at ($(current page.center)-(0,8mm)$) {\includegraphics[width=0.7\textwidth]{OMG}};
+        \node[above = 3mm of fig, visible on=<2->, font=\large, text=PB] {Your reaction might be like:};
+    \end{tikzpicture}
+    \FrameRemark[1]{And few more rules are there about when a compound command or shell function executes (or sets \texttt{-e}) in a context where \texttt{-e} is being ignored...}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{But what does it mean, in practice?}
+    \vspace{-4mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{itemize}
+            \setlength{\itemsep}{0pt}
+            \item \alert<2>{You need to \textbf{deeply} understand this shell option}
+            \item \alert<3>{Your way of programming has to adapt to all corner cases}
+            \item \alert<4>{Checking and storing error codes via \PB{\texttt{\$?}} is not possible as before}
+        \end{itemize}
+        \vspace{2mm}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=myBash]
+                #!/usr/bin/env bash
+                set -e
+                i=0
+                ((i++))          # ((...)) is a compound command!
+                echo "i is $i"   # This is NOT printed
+            \end{lstlisting}
+            \centerline{\tiny The postfix increment operator returns the old value of the variable.}
+            \begin{lstlisting}[style=myBash, aboveskip=2mm]
+                #!/usr/bin/env bash
+                set -e
+                i=1
+                ((i++))          # ((...)) is a compound command!
+                echo "i is $i"   # This is here printed
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=myBash]
+                #!/usr/bin/env bash
+                set -e
+                i=0
+                ((i++)) || true
+                echo "i is $i"   # This is ALWASY printed
+
+                i=$((i++))       # Simple command without command subst.
+                echo "i is $i"   # This is ALWASY printed
+
+                i=$(false)       # Simple command with command substitution
+                echo "i is $i"   # This is NOT printed
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<4>
+            \begin{lstlisting}[style=myBash]
+                #!/usr/bin/env bash
+                set -e
+                function simulation(){ return 1; }
+
+                if simulation; then
+                    echo 'Success!'
+                else
+                    echo 'Failure!'
+                fi
+
+                simulation               # Here the script exits!
+
+                if [[ $? -eq 0 ]]; then  # This if-clause is skipped!
+                    echo 'Success!'
+                else
+                    echo 'Failure!'
+                fi
+            \end{lstlisting}
+        \end{onlyenv}
+        \large
+        \begin{varblock}{example}[0.5\textwidth]{Spend some time on it}<5>
+            This afternoon you will deal again in detail with some corner cases!
+        \end{varblock}
+        \begin{varblock}{}[0.65\textwidth]{And if I do not want to use it?}<5>
+            \large \PB{Do I have other alternatives beyond the purist approach and enabling \texttt{errexit}?}
+        \end{varblock}
+        \vspace*{-1mm}
+        \begin{varblock}{alert}[0.25\textwidth]{}<5>
+            \PQ{Not really\ldots}
+        \end{varblock}
+    \end{overlayarea}
+    \FrameRemark[3]{See end of section 3.7.1 of \URL[PB]{https://www.gnu.org/software/bash/manual/}{bash manual v5.0} for more information about simple commands exit code.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Trap on ERR and the \PB{\texttt{errtrace}} shell option}
+    \vspace{-2mm}
+    \begin{onlyenv}<1>
+        \begin{varblock}{alert}[0.85\textwidth]{The ERR signal specification}
+            The trap on \texttt{ERR} is executed exactly when the bash would exit with the \texttt{errexit} option enabled.
+            Said differently, the same conditions obeyed by the \texttt{errexit} option apply to traps on \texttt{ERR}.
+        \end{varblock}
+        \begin{varblock}{quote}[0.9\textwidth]{The \;\texttt{errtrace}\; shell option}[Bash manual]
+            If set, any trap on \texttt{ERR} is inherited by shell functions, command substitutions, and commands executed in a subshell environment.
+            The \texttt{ERR} trap is normally not inherited in such cases.
+        \end{varblock}
+        \begin{varblock}{quote}[0.8\textwidth]{}[St\'ephane Chazelas]
+            \PB{\texttt{set -E}} in combination with \texttt{ERR} traps is a bit like an improved version of \PB{\texttt{set -e}} in that it allows you to define your own error handling.\\[-0.5em] ~
+        \end{varblock}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=myBash, aboveskip=2mm]
+            #!/usr/bin/env bash
+            set -E
+            trap '[ "$?" -ne 77 ] || exit 77' ERR
+            (
+              echo 'Here'
+              (
+                echo 'There'
+                ( exit 12 )      # not 77, exit only this subshell
+                echo 'Somewhere'
+                exit 77          # exit all subshells
+              )
+              echo 'Not here'
+            )
+            echo 'Not here either'
+        \end{lstlisting}
+        \begin{lstlisting}[style=myBash, aboveskip=2mm, numbers=none]
+            $ ./previous-script.bash
+            |+Here
+            There
+            Somewhere+|
+        \end{lstlisting}
+    \end{onlyenv}
+    \FrameRemark{Use the \;\PB{\texttt{functrace}}\; shell option to inherit any trap on DEBUG and RETURN in shell functions, command substitutions, and subshells.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Enabling the \;\texttt{-u}\; shell option}
+    \vspace{-3mm}
+    \begin{varblock}{quote}[0.9\textwidth]{\texttt{set -o nounset}}[Bash manual]
+        Treat unset variables and parameters other than the special parameters \PB{\texttt{@}} or \PB{\texttt{*}} as an error when performing parameter expansion.
+        An error message will be written to the standard error, and a non-interactive shell will exit.
+    \end{varblock}
+    \begin{lstlisting}[style=myBash, numbers=none, belowskip=-4mm]
+        $ echo "_${unsetVariable}_"
+        |+__+|
+        $ set -u; echo "_${unsetVariable}_"   # A script would
+        |+bash: unsetVariable: unbound variable+| # exit here!
+        $ echo "_${unsetVariable-}_"; set +u
+        |+__+|
+    \end{lstlisting}
+    \begin{varblock}{alert}[0.95\textwidth]{Few (minor) drawbacks exist}
+        \begin{enumerate}
+            \item Turning \PB{\texttt{nounset}} on in a correct existing script might still break it.
+            \item If some code is not executed, \PB{\texttt{set -u}} will have no effect on it either.
+            \item Not very recent versions of bash \URL[PP]{https://gist.github.com/dimo414/2fb052d230654cc0c25e9e41a9651ebe}{handles empty arrays differently}.
+        \end{enumerate}
+    \end{varblock}
+    \FrameRemark{On Greg's Wiki you can \URL[PB]{http://mywiki.wooledge.org/BashFAQ/112}{read more about \texttt{set -u}}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Is the glass half full or half empty?}
-    
+    \vspace{-1mm}
+    \begin{varblock}{quote}[0.8\textwidth]{A reasonable person might say:}
+        I don't want to rely on an unreliable feature.
+        I understood the behaviour of the shell when an error occurs and I can do error handling myself.
+    \end{varblock}
+    \begin{varblock}{quote}[0.8\textwidth]{Another reasonable person might say:}<2->
+        Yes, \texttt{errexit} is not a perfect feature of bash, but it has useful semantics, so I don't want to exclude it from the toolbox.
+        Still I have to work a bit to get acquainted with all corner cases, but I think it is worth the effort.
+        Especially because I do not want to be bitten by mistakes in doing error handling by hand.
+        Hopefully, future versions of bash will improve this aspect.
+    \end{varblock}
+    \begin{varblock}{example}[0.94\textwidth]{Choose your way}<3>
+        Probably consistency within a script is the most important aspect.
+        My recommendation is to \PS{explore this area of bash in all ways before taking your decision}.
+    \end{varblock}
+    \FrameRemark{\PB{\texttt{set -o pipefail}} is also another interesting feature \URL[PB]{http://mywiki.wooledge.org/BashPitfalls\#pipefail}{with minor drawbacks}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

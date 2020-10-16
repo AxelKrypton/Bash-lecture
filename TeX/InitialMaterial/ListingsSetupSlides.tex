@@ -10,6 +10,18 @@
 \colorlet{environment-color}{Gray}
 \colorlet{external-color}{SteelBlue}
 
+% https://tex.stackexchange.com/a/34000
+\makeatletter
+\lst@Key{countblanklines}{true}[t]%
+    {\lstKV@SetIf{#1}\lst@ifcountblanklines}
+
+\lst@AddToHook{OnEmptyLine}{%
+    \lst@ifnumberblanklines\else%
+       \lst@ifcountblanklines\else%
+         \advance\c@lstnumber-\@ne\relax%
+       \fi%
+    \fi}
+\makeatother
 
 %listings set
 \lstdefinestyle{MyBash}{
@@ -28,6 +40,8 @@ linewidth=\textwidth,               % defines the base line width for listings
 xleftmargin=6mm,                    % Margin left
 xrightmargin=6mm,                   % Margin right
 numbers=left,                       % where to put the line-numbers; possible values are (none, left, right)
+numberblanklines=false,             % suppress numbers on empty lines
+countblanklines=false,              % NOT standard! Avoid counting empty lines: https://tex.stackexchange.com/a/34000
 numbersep=8pt,                      % how far the line-numbers are from the code
 numberstyle=\tiny\color{black},     % the style that is used for the line-numbers
 rulecolor=\color{black},            % if not set, the frame-color may be changed on line-breaks within not-black text
