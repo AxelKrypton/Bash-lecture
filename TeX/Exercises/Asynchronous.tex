@@ -3,6 +3,41 @@
 %    Date: 16 Oct 2020          %
 %-------------------------------%
 
-\begin{exercise}[Instructive]{Two concurrent processes}
+\begin{exercise}[Inspirational]{Two concurrent processes}
+    In this exercise we will assume that we can trust the operating system kernel and, in particular, we will use bash to handle concurrent processes, although we learnt this morning that, strictly speaking, we do not have any guarantee that a PID will not be reused by a different process than that we have in mind.
     
+    Suppose to have a simulation that runs for a very long time and that you have to perform some operations from time to time to monitor it.
+    In your script, you can use the following two functions to mock the two tasks.
+    \begin{lstlisting}[style=myBash, numbers=none]
+        function Simulate()
+        {
+            local index
+            for((index=0; index<10; index++)); do
+                echo "In ${FUNCNAME}: index=${index}"
+                # ((index==7)) && return 1
+                sleep 3
+            done
+        }
+
+        function Monitor()
+        {
+            local simulationPid sleepTime
+            simulationPid="$1"
+            sleepTime="$2"
+            while kill -0 "${simulationPid}" 2>/dev/null; do
+                echo "Simulation still running, sleeping ${sleepTime}s..."
+                sleep "${sleepTime}"
+                # return 2
+            done
+        }
+    \end{lstlisting}
+    How would you let start them at the same time in a way that the \bash|Monitor| function is really \emph{monitoring} the \bash|Simulate| one?
+    Implement a mechanism to detect possible failures of either task.
+    In particular,
+    \begin{itemize}
+        \item if \bash|Simulate| fails, you should wait that \bash|Monitor| finishes, report the error and exit;
+        \item if \bash|Monitor| fails, you should make \bash|Simulate| abort, report the error and exit;
+        \item if some other relevant case can happen, be sure to cover it somehow in your script.
+    \end{itemize}
+    Uncomment and/or modify the commented-out lines to mimic failures.
 \end{exercise}

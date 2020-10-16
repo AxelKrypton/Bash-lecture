@@ -4,5 +4,48 @@
 %-------------------------------%
 
 \begin{exercise}[Instructive]{Exploring bash behaviour with \texttt{errexit} options enabled}
-    
+    You have learnt today that the \texttt{errexit} shell option of bash requires some effort in order to understand how it works.
+    Here you have the opportunity to deepen in.
+    Using the slides or the bash manual as guideline, try to predict the output of the following scripts.
+    The last three have been taken from the Greg's Wiki and you should try to understand why they behave differently.
+    \begin{enumerate}
+        \item ~
+        \begin{lstlisting}[style=myBash, numbers=none]
+            #!/usr/bin/env bash
+            ( set -e; ( echo 11; false; echo 22 ) ; echo 33 ); echo 44
+        \end{lstlisting}
+        \item ~
+        \begin{lstlisting}[style=myBash, numbers=none]
+            #!/usr/bin/env bash
+            function F1() ( set -e ; F2 ; F3 ) # Subshell!
+            function F2()  { echo 'In F2'; false ; }
+            function F3()  { echo 'In F3'; false ; }
+
+            echo 'Call: F1';             F1
+            echo 'Call: F1 || false';    F1 || false
+        \end{lstlisting}
+        \item ~
+        \begin{lstlisting}[style=myBash, numbers=none]
+            #!/usr/bin/env bash
+            set -e
+            [[ -d notExistingDir ]] && echo 'Dir found'
+            echo 'Survived'
+        \end{lstlisting}
+        \item ~
+        \begin{lstlisting}[style=myBash, numbers=none]
+            #!/usr/bin/env bash
+            set -e
+            function F1() { [[ -d notExistingDir ]] && echo 'Dir found'; }
+            F1
+            echo 'Survived'
+        \end{lstlisting}
+        \item ~
+        \begin{lstlisting}[style=myBash, numbers=none]
+            #!/usr/bin/env bash
+            set -e
+            function F1() { if [[ -d notExistingDir ]]; then echo 'Dir found'; fi; }
+            F1
+            echo 'Survived'
+        \end{lstlisting}
+    \end{enumerate}
 \end{exercise}
