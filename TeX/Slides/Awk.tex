@@ -1,6 +1,6 @@
 %-------------------------------%
 %  Author: Alessandro Sciarra   %
-%    Date: 12 Sep 2019          %
+%    Date: 19 Oct 2020          %
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -221,4 +221,70 @@
         \end{lstlisting}
     \end{onlyenv}
 \end{frame}
-
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{How do I modify files in place with awk?}
+    \vspace{-3mm}
+    \begin{onlyenv}<1>
+        \begin{itemize}
+            \item This feature has been missed by awk's users for a long time!
+            \item GNU awk introduced it in \PS{v4.1.0 in 2013}.
+            \item It is a bit longer to type than \;\bash|sed -i|\; option, but it is nice to have.
+            \item Use the \;\PB{\texttt{-i inplace}}\; option to modify file(s) in place.
+            \item If you want to keep a backup of the to-be-modified file,
+                  \begin{itemize}
+                      \item use the awk \texttt{INPLACE\_SUFFIX} variable prior to v5.0
+                      \item use the awk \texttt{inplace::suffix} variable after v5.0
+                  \end{itemize}
+                  to set a suffix for the copy of the file, e.g. \PB{\texttt{.bak}}.
+        \end{itemize}
+        \begin{varblock}{quote}[0.96\textwidth]{What happens underneath}[Awk's manual]
+            For each regular file that is processed, the extension redirects standard output to a temporary file configured to have the same owner and permissions as the original.
+            After the file has been processed, the extension restores standard output to its original destination.
+            If inplace::suffix is not an empty string, the original file is linked to a backup file name created by appending that suffix.
+            Finally, the temporary file is renamed to the original file name.
+            [\ldots]
+            If the program dies prematurely, as might happen if an unhandled signal is received, a temporary file may be left behind.
+        \end{varblock}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=myBash, numbers=none, aboveskip=2mm]
+            $ printf 'foo\nbar\nfoo\n' > file1
+            $ cp file1 file2
+            $ ls
+            |+file1   file2+|
+            $ gawk -i inplace '{ gsub(/foo/, "bar") }; { print }' file1
+            $ cat file1
+            |+bar
+            bar
+            bar+|
+            $ awk --version | head -n1
+            GNU Awk 5.0.1, API: 2.0 (GNU MPFR 4.0.2, GNU MP 6.2.0)
+            # gawk -i inplace -v INPLACE_SUFFIX='.bak' ...
+            $ gawk -i inplace -v inplace::suffix='.bak'\
+            >      '{ gsub(/foo/, "bar") }; { print }' file2
+            $ ls
+            |+file1   file2   file2.bak+|
+            $ paste file2 file2.bak
+            |+bar     foo
+            bar     bar
+            bar     foo+|
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Sed and Awk: Conclusions}
+    \vspace{-2mm}
+    \begin{itemize}
+        \item You should be convinced that \PB{they are very powerful tools}.
+        \item \PS{To have an idea how they work is not hard.}
+        \item Lots of documentation, examples and tutorials are available.
+        \item You do not have to study them, \alert{learn by \textbf{effective} doing!}
+        \item When you find examples online looking for a hint, understand them.
+    \end{itemize}
+    \vspace{2mm}
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{LearnByDoing}
+    \end{center}
+    
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

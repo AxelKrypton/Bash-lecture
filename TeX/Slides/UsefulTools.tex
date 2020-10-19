@@ -1,0 +1,74 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 19 Oct 2020          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begingroup
+\newcommand{\pyramidLayer}[5]{%
+    \pgfmathsetmacro{\thickness}{#2}
+    \pgfmathsetmacro{\long}{#3}
+    \pgfmathsetmacro{\short}{#3-0.5*#2}
+    \path coordinate (middleUpper) at ($(#1)+(0,\thickness)+(30:0.5*\short)$)
+          coordinate (middleLower) at ($(#1)+(30:0.5*\long)$);
+    \draw[fill=#4!50] ($(#1)+(0,\thickness)+(30:\short)$)  -- ++(210:\short) -- ++(270:\thickness) -- ++(30:\long) -- cycle;
+    \draw[fill=#4!20] ($(#1)+(0,\thickness)+(150:\short)$)  -- ++(330:\short) -- ++(270:\thickness) -- ++(150:\long) -- cycle;
+    \draw[fill=#4]    ($(#1)+(0,\thickness)$) -- ++(30:\short) -- ++(150:\short) -- ++(210:\short) -- cycle;
+    \node at ($(middleUpper)!0.5!(middleLower)$) {\rotatebox{30}{#5}};
+}
+\newsavebox{\shUnitLink}
+\begin{frame}{One slide about testing: The tests pyramid}
+    \savebox{\shUnitLink}{\URL[PB]{https://github.com/kward/shunit2}{Shell unit test framework}}
+    \begin{center}
+        \resizebox{!}{0.8\textheight}{
+            \begin{tikzpicture}
+                \path coordinate (A) at (0,0)
+                      coordinate (B) at (0,2)
+                      coordinate (C) at (0,4)
+                      coordinate (D) at (0,6)
+                      coordinate (O) at ($(A)+(150:5)-(0.5,0)$);
+                \draw (O) -- ++(30:2); %Just draw axis behind pyramid
+                \begin{scope}[scope on=<2>]
+                    \draw (A) ++(0,0.75) -- ++(30:5) -- ++(0.75,0) node[right] {\usebox{\shUnitLink}};
+                    \draw (D) ++(0,0.75) -- ++(30:2) -- ++(0.75,0) node[right, text=PP] {Usually not so tough to be written in bash};
+                \end{scope}
+                %Draw Pyramid
+                \pyramidLayer{A}{1.5}{5}{red}{Unit};
+                \pyramidLayer{B}{1.5}{4}{orange!80!yellow}{Integration};
+                \pyramidLayer{C}{1.5}{3}{PS}{System};
+                \pyramidLayer{D}{1.5}{2}{PP}{Functional};
+                \draw[to] (O) -- ++(0,6) node[right, anchor=north west] {\begin{tabular}{c} Time consuming \\ speed \end{tabular}};
+                \draw[to] (O) -- ++(330:6) node[right] {Number of tests};
+                
+            \end{tikzpicture}
+        }
+    \end{center}
+\end{frame}
+\endgroup
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{My script does not do what it should: What can I do?}
+    \vspace{-3mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{enumerate}
+            \item Trying to debug it by hand is always a possibility\ldots \Remark{if you do so, try to do it in a clever way}
+            \item<2-> \ldots{}alternatively you can run \URL[PB]{https://github.com/koalaman/shellcheck}{ShellCheck} on it or \URL[PB]{https://www.shellcheck.net}{use it online}!
+        \end{enumerate}
+        \begin{varblock}{}[\textwidth]{ShellCheck}<only@3>
+            ShellCheck is a GPLv3 tool that gives warnings and suggestions for bash/sh shell scripts:\\[0.3em]
+            \includegraphics{ShellCheckExample}
+        \end{varblock}
+        \begin{varblock*}{example}[0.9\textwidth]{The goals of ShellCheck are}<only@4>
+            \begin{itemize}
+                \item To point out and clarify \PP{typical beginner's syntax issues} that cause a shell to give cryptic error messages.
+                \item To point out and clarify \PB{typical intermediate level semantic problems} that cause a shell to behave strangely and counter-intuitively.
+                \item To point out \alert{subtle caveats, corner cases and pitfalls} that may cause an advanced user's otherwise working script to fail under future circumstances.
+            \end{itemize}
+        \end{varblock*}
+        \begin{itemize}[<only@4>]
+            \item You can enable it on the fly in your editor
+            \item You can ignore specific warnings/errors using directives
+            \item Every implemented rule has a dedicated Wiki-page
+                  \Remark{e.g. \URL[PB]{https://github.com/koalaman/shellcheck/wiki/SC1000}{https://github.com/koalaman/shellcheck/wiki/SC1000}}
+        \end{itemize}
+    \end{overlayarea}
+\end{frame}

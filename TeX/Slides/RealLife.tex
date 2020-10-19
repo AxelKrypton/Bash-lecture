@@ -1,0 +1,166 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 19 Oct 2020          %
+%-------------------------------%
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begingroup
+    \newcommand{\bahamas}{\texttt{BaHaMAS}}
+    \usebackgroundtemplate{\includegraphics[height=\paperheight]{BHMAS_Frontpage}}
+    \begin{frame}%[plain, noframenumbering, hideframenumber]
+        \begin{tikzpicture}[overlay, remember picture]
+            \node[text=PP, anchor=north, align=center, font=\LARGE] (title) at ([shift={(1cm,-3mm)}]current page.north) {\bahamas};
+            \node[text=PB, below = 0mm of title] (subtitle) {A \texttt{Ba}sh \texttt{Ha}ndler to \texttt{M}onitor and \texttt{A}dministrate \texttt{S}imulations};
+            \begin{scope}[scope on=<2>]
+                \draw(subtitle.south) +(0,-3mm) -- ++(0,-55mm) node[yshift=-1cm, xshift=-3mm, text=PB]
+                        {\ldots{}after all, \bahamas{} is a good name...};
+                \path coordinate (L) at ($(subtitle.south west)!0.4!(subtitle.south)$)
+                      coordinate (R) at ($(subtitle.south east)!0.4!(subtitle.south)$);
+                \node[below = 5mm of L] (L1) {\includegraphics[height=21mm]{BHMAS_Flag}};
+                \node[below = 5mm of R] (R1) {\includegraphics[height=21mm]{BHMAS_Logo}};
+                \node[below = 5mm of L1, xshift=3mm, font=\footnotesize] (L2) {
+                    \begin{minipage}{48mm}
+                        \begin{itemize}
+                            \item You can freely run on beaches
+                            \item You have a lot of free time
+                            \item Cocktails help in relaxing
+                        \end{itemize}
+                    \end{minipage}
+                };
+                \node[below = 5mm of R1, xshift=3mm, font=\footnotesize] (R2) {
+                    \begin{minipage}{48mm}
+                        \begin{itemize}
+                            \item You can \PB{\emph{effectively}} run on clusters
+                            \item You \PB{\emph{get}} a lot of free time
+                            \item Cocktails \PB{\emph{may}} help in developing
+                        \end{itemize}
+                    \end{minipage}
+                };
+            \end{scope}
+            \begin{scope}[scope on=<3>]
+                \node[below = 5mm of subtitle.south west, anchor=north west, xshift=-12mm] {
+                    \begin{minipage}{0.85\textwidth}
+                        \begin{itemize}
+                            \item It is a \URL[PS]{https://github.com/AG-Philipsen/BaHaMAS}{publicly available software} to support LQCD practitioners' work
+                            \item An example of huge bash project, $\mathcal{O}$(10$^\text{4}$) lines of code
+                            \item Actually, kind of many executables handled by the same main script
+                            \item Everything achieved via handy git-inspired command line options
+                            \item Interactive setup and command line autocompletion available
+                            \item Functional tests only (almost 100, though)
+                            \item Partial system requirements validation at start-up
+                            \item Manual pages for in terminal documentation
+                            \item Online Wiki documentation for general overview
+                        \end{itemize}
+                    \end{minipage}
+                };
+            \end{scope}
+        \end{tikzpicture}
+    \end{frame}
+\endgroup
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{A more generic project: \URL[PB]{https://github.com/AxelKrypton/GitHooks}{GitHooks}}
+    \begin{varblock}{quote}[0.9\textwidth]{What is it about?}
+        This small collection of bash script is an attempt to have a git-repository-independent hooks setup mechanism to comfortably use over and over again the own implemented hooks.
+        The basic idea is to have a general hooks implementation and a bash main script to set up them in any git repository with command line options to fine tune the setup.
+        All provided hooks and setup have a highly informative output.
+    \end{varblock}
+    \vspace{2mm}
+    \begin{itemize}
+        \item Giving it a try should be straightforward
+        \item It helps you keeping \PP{history of your repositories tidy} \Remark{via the \;\texttt{commit-msg}\; hook}
+        \item It helps you keeping \PS{the code in your repositories tidy}, optionally \Remark{via the \;\texttt{pre-commit}\; hook}
+              \begin{itemize}
+                  \item checking C++ code style using clang-format
+                  \item checking copyright statement
+                  \item checking license notice
+              \end{itemize}
+    \end{itemize}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begingroup
+\newcommand{\LoggerMsg}[3]{\tc{#1}{\texttt{\parbox[b]{16mm}{\hfill#2} #3}}}
+\begin{frame}[fragile]{A wide-audience support script: \URL[PB]{https://github.com/AxelKrypton/BashLogger}{A Bash Logger}}
+    \vspace{-3mm}
+    \begin{itemize}[<only@1-2,4->]
+        \item Extremely simple to use and/or to include in your project
+        \item It allows to unify the style of all your output messages
+        \item Errors are redirected to the standard output as it should be
+        \item Messages are classified in levels which can be easily switched on or off at run-time
+    \end{itemize}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=myBash, aboveskip=3mm]
+            $ git clone https://github.com/AxelKrypton/BashLogger
+            # ...
+            $ emacs -nw TestLogger.bash
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \vspace{3mm}
+        \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
+            #!/usr/bin/env bash
+            #
+            #  Copyright (c) 2019 Alessandro Sciarra <sciarra@itp.uni-frankfurt.de>
+            #
+            #  This file is part of BashLogger.
+            #
+            #  [...]
+            #
+            #  You should have received a copy of the GNU General Public License
+            #  along with BashLogger. If not, see <https://www.gnu.org/licenses/>.
+            #
+            
+            source Logger.bash
+            
+            PrintTrace            "Trace message"
+            PrintDebug            "Debug message"
+            PrintInfo             "Information message"
+            PrintAttention        "Attention message"
+            PrintWarning          "Warning message"
+            PrintError            "Error"
+            ( PrintFatalAndExit   "Fatal error, exit!" )
+            PrintInternalAndExit  "Internal, for developer error"
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<4>
+        \begin{lstlisting}[style=myBash, aboveskip=3mm]
+            $ git clone https://github.com/AxelKrypton/BashLogger
+            # ...
+            $ emacs -nw TestLogger.bash
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<5>
+        \begin{lstlisting}[style=myBash, aboveskip=3mm]
+            $ git clone https://github.com/AxelKrypton/BashLogger
+            # ...
+            $ emacs -nw TestLogger.bash
+            $ VERBOSE=TRACE ./TestLogger.bash
+            @|\LoggerMsg{Gray}{TRACE:}{Trace message}|@
+            @|\LoggerMsg{RoyalBlue}{DEBUG:}{Debug message}|@
+            @|\LoggerMsg{ForestGreen}{INFO:}{Information message}|@
+            @|\LoggerMsg{magenta}{ATTENTION:}{Attention message}|@
+            @|\LoggerMsg{Yellow!50!DarkOrange}{WARNING:}{Warning message}|@
+            @|\LoggerMsg{red}{ERROR:}{Error}|@
+            @|\LoggerMsg{red}{FATAL:}{Fatal error, exit!}|@
+            @|\LoggerMsg{DarkOrange}{INTERNAL:}{Internal, for developer error}|@
+            @|\LoggerMsg{DarkOrange}{}{Please, contact developers.}|@
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<6>
+        \begin{lstlisting}[style=myBash, firstnumber=14, aboveskip=3mm]
+            $ ./TestLogger.bash
+            @|\LoggerMsg{ForestGreen}{INFO:}{Information message}|@
+            @|\LoggerMsg{magenta}{ATTENTION:}{Attention message}|@
+            @|\LoggerMsg{Yellow!50!DarkOrange}{WARNING:}{Warning message}|@
+            @|\LoggerMsg{red}{ERROR:}{Error}|@
+            @|\LoggerMsg{red}{FATAL:}{Fatal error, exit!}|@
+            @|\LoggerMsg{DarkOrange}{INTERNAL:}{Internal, for developer error}|@
+            @|\LoggerMsg{DarkOrange}{}{Please, contact developers.}|@
+
+            $ VERBOSE=0 ./TestLogger.bash
+            @|\LoggerMsg{red}{FATAL:}{Fatal error, exit!}|@
+            @|\LoggerMsg{DarkOrange}{INTERNAL:}{Internal, for developer error}|@
+            @|\LoggerMsg{DarkOrange}{}{Please, contact developers.}|@
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
+

@@ -7,9 +7,10 @@
 \begin{frame}[fragile]{Require a minimum Bash version}
     \vspace{-3mm}
     \begin{varblock}{example}[0.6\textwidth]{}
-        Using modern Bash features is important, but be sure you can then use them where your scripts are needed!
+        \PS{Using modern Bash features is important}, but be sure you can then use them where your scripts are needed!
     \end{varblock}
-    \begin{varblock}{quote}[0.4\textwidth]{}
+    \vspace*{-1mm}
+    \begin{varblock*}{quote}[0.5\textwidth]{}
         \normalfont
         Bash \PQ{v2.0} $\;\longrightarrow\;$ Released in \PQ{1996}\\
         Bash \PT{v3.0} $\;\longrightarrow\;$ Released in \PT{2004}\\
@@ -18,16 +19,17 @@
         Bash \PP{v4.2} $\;\longrightarrow\;$ Released in \PP{2011}\\
         Bash \PP{v4.3} $\;\longrightarrow\;$ Released in \PP{2014}\\
         Bash \PS{v4.4} $\;\longrightarrow\;$ Released in \PS{2016}\\
-        Bash \PS{v5.0} $\;\longrightarrow\;$ Released in \PS{2019}
-    \end{varblock}
+        Bash \PS{v5.0} $\;\longrightarrow\;$ Released in \PS{2019}\\
+        Bash \PS{v5.1} $\;\longrightarrow\;$ In progress \Remark{$\alpha$-, $\beta$-versions already out}
+    \end{varblock*}
     \begin{lstlisting}[style=MyBash, numbers=none]
         $ echo "${BASH_VERSINFO[@]}"
-        |+4 4 20 1 release x86_64-pc-linux-gnu+|
-        $ echo "${BASH_VERSINFO[@]:0:3}" | tr ' ' '.'
-        |+4.4.20+|
+        |+5 0 17 1 release x86_64-pc-linux-gnu+|
+        $ tr ' ' '.' <<< "${BASH_VERSINFO[@]:0:3}"
+        |+5.0.17+|
         # You can use the 'hash' builtin to check command existence 
     \end{lstlisting}
-    \FrameRemark{Keep in mind that locally install a recent Bash version is pretty straightforward.}
+    \FrameRemark{Keep in mind that locally install a recent Bash version is pretty straightforward $\;\to\;$ \URL[PB]{https://ftp.gnu.org/gnu/bash/}{Download Bash}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Be sensible!}
@@ -54,10 +56,11 @@
         \begin{onlyenv}<2>
             \begin{enumerate}
                 \setcounter{enumi}{5}
-                \item Always use the correct shebang. If you're writing a Bash script, you need to put \bash|\#!/usr/bin/env bash|$\;$ at the top of your script.
+                \item Always use the correct shebang and script extension.
+                      If you're writing a Bash script, you need to put \bash|\#!/usr/bin/env bash|$\;$ at the top of your script.
                 \item Stay away from scripting examples you see on the Web!
                       If you want to get inspired, understand them \textbf{completely}.
-                      Mostly any scripts you will find on the Web are broken in some way.
+                      Any script you'll find on the Web is likely to be broken in some way.
                       \alert{Do not copy/paste from them!}
                 \item Almost as important as the result of your code is the \textbf{readability of your code}.
                       Chances are that you aren't just going to write a script once and then forget about it.
@@ -175,8 +178,9 @@
                           \item calling another C program to do some arithmetic for you and
                           \item returning the result as a string to Bash.
                       \end{itemize}
-                      Bash can do all this itself and so much faster, more reliably and in all, better!\\ {\scriptsize\{~no numbers $\to$ string $\to$ number conversions~\}}
+                      Bash can do all this itself and so much faster, more reliably and in all, better!
             \end{itemize}
+            \medskip
             \PS{In Bash you should use either $\;$\bash|let i++|$\;$ or $\;$\bash|((i++))|.}
     \end{enumerate}
     \begin{varblock}{}[0.75\textwidth]{Do not worry!}<only@5>
@@ -190,13 +194,13 @@
     \begin{itemize}
         \setlength{\itemsep}{1mm}
         \item Bash is a scripting language\\ $\to$ this does not mean at all that it has not to fulfil good coding practices
-        \item If you ignore what clean code is, have a look \URL[PB]{https://itp.uni-frankfurt.de/\~strongmatter/seminar_slides_GU/2019.06.03.sciarra.pdf}{here}!
+        \item If you ignore what clean code is, have a look \URL[PB]{https://itp.uni-frankfurt.de/\~strongmatter/seminar_slides_GU/2019.06.03.sciarra.pdf}{to this presentation}! \Remark{It is worth the read in any case!}
         \item Use meaningful names and strive for readability.
         \item If you do tricky stuff in your script, comment it!
         \item If you need to work on a larger script in Bash,
               \begin{itemize}
                   \item split your source code across files and
-                  \item test your code, for real, i.e. write unit tests!\\ \URL[PS]{https://github.com/kward/shunit2}{Shell unit test framework}
+                  \item test your code, for real! \Remark{More on this in a moment}
               \end{itemize}
         \item A good/clean code is
               \begin{itemize}
@@ -206,6 +210,7 @@
                   \item Easy to use
                   \item Hard to break
                   \item Testable/Tested
+                  \item \ldots
               \end{itemize}
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay]
