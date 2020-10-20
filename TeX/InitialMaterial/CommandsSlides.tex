@@ -92,3 +92,28 @@
 \renewcommand{\checkmark}[1][PS]{\tc{#1}{\ding{51}}}
 \newcommand{\crossmark}[1][PT]{\tc{#1}{\ding{55}}}
 
+\def\quizOverlay{1}
+\newcounter{QuizNumber}
+\resetcounteronoverlays{QuizNumber}% To avoid the counter being increased by overlays
+\newenvironment{quiz}[2][1]{%
+    \edef\tmpNumber{\numexpr #1 +1\relax}%
+    \gdef\quizOverlay{\the\tmpNumber}%
+    \stepcounter{QuizNumber}%
+    \medskip%
+    % mbox to avoid newline after hbox of enumerate
+    \mbox{\MakeEnumerateBox{\theQuizNumber}}\enspace #2%
+    \begin{itemize}%
+}{%
+    \end{itemize}%
+    \bigskip%
+}
+
+\newcommand{\wrongChoice}[1]%
+{%
+    \item[\alt<\quizOverlay->{\crossmark}{$\bullet$}] #1
+}
+
+\newcommand{\correctChoice}[1]%
+{%
+    \item[\alt<\quizOverlay->{\checkmark}{$\bullet$}] #1
+}
