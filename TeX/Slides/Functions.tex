@@ -260,27 +260,27 @@
         \begin{enumerate}
             \item<only@3-> Capturing standard output
                            \begin{itemize}[<only@{3,7}>]
-                               \item[\PT{\ding{55}}] the function is executed in a subshell, i.e. variable assignments not seen in the caller
-                               \item[\PT{\ding{55}}] \textbf{everything} printed by the function is captured (debug output!? $\to$ use stderr)
-                               \item[\PS{\ding{51}}] good solution if performance is not critical
+                               \item[\crossmark] the function is executed in a subshell, i.e. variable assignments not seen in the caller
+                               \item[\crossmark] \textbf{everything} printed by the function is captured (debug output!? $\to$ use stderr)
+                               \item[\checkmark] good solution if performance is not critical
                            \end{itemize}
             \item<only@4-> Global variables
                            \begin{itemize}[<only@{4,7}>]
-                               \item[\PS{\ding{51}}] the function is \textbf{not} executed in a subshell $\to$ potentially \PS{much faster}
-                               \item[\PT{\ding{55}}] if the function is executed in a subshell, the method fails!
-                               \item[\PT{\ding{55}}] the function cannot be used in a pipeline (as in any implicit subshell)
+                               \item[\checkmark] the function is \textbf{not} executed in a subshell $\to$ potentially \PS{much faster}
+                               \item[\crossmark] if the function is executed in a subshell, the method fails!
+                               \item[\crossmark] the function cannot be used in a pipeline (as in any implicit subshell)
                            \end{itemize}
             \item<only@5-> Writing to a file
                            \begin{itemize}[<only@{5,7}>]
-                               \item[\PT{\ding{55}}] you need to manage a temporary file, which is always inconvenient
-                               \item[\PT{\ding{55}}] there must be a writable directory somewhere and sufficient space to hold the data therein
-                               \item[\PS{\ding{51}}] it will work regardless of whether your function is executed in a subshell
+                               \item[\crossmark] you need to manage a temporary file, which is always inconvenient
+                               \item[\crossmark] there must be a writable directory somewhere and sufficient space to hold the data therein
+                               \item[\checkmark] it will work regardless of whether your function is executed in a subshell
                            \end{itemize}
             \item<only@6-> Dynamically scoped variables
                            \begin{itemize}
-                               \item[\PT{\ding{55}}] if the function is executed in a subshell, the method fails!
-                               \item[\PT{\ding{55}}] this technique doesn't work with recursive functions
-                               \item[\PS{\ding{51}}] global variable namespace isn't polluted by the function return variable
+                               \item[\crossmark] if the function is executed in a subshell, the method fails!
+                               \item[\crossmark] this technique doesn't work with recursive functions
+                               \item[\checkmark] global variable namespace isn't polluted by the function return variable
                            \end{itemize}
         \end{enumerate}
         \begin{onlyenv}<3>

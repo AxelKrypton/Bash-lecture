@@ -87,7 +87,7 @@
         \item Errors are redirected to the standard output as it should be
         \item Messages are classified in levels which can be easily switched on or off at run-time
     \end{itemize}
-    \begin{onlyenv}<2>
+    \begin{onlyenv}<2,4>
         \begin{lstlisting}[style=myBash, aboveskip=3mm]
             $ git clone https://github.com/AxelKrypton/BashLogger
             # ...
@@ -119,13 +119,6 @@
             PrintError            "Error"
             ( PrintFatalAndExit   "Fatal error, exit!" )
             PrintInternalAndExit  "Internal, for developer error"
-        \end{lstlisting}
-    \end{onlyenv}
-    \begin{onlyenv}<4>
-        \begin{lstlisting}[style=myBash, aboveskip=3mm]
-            $ git clone https://github.com/AxelKrypton/BashLogger
-            # ...
-            $ emacs -nw TestLogger.bash
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<5>
@@ -163,4 +156,4 @@
         \end{lstlisting}
     \end{onlyenv}
 \end{frame}
-
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
