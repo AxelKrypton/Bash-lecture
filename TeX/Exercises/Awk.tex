@@ -1,17 +1,17 @@
 %-------------------------------%
 %  Author: Alessandro Sciarra   %
-%    Date: 17 Sep 2019          %
+%    Date: 21 Oct 2020          %
 %-------------------------------%
 
-\begin{exercise}[Instructive]{Awk and sed warmup}
-    Go through the few slides discussed in the lecture about \bash|awk| and \bash|sed|, focusing on the examples there.
+\begin{exercise}[Instructive]{Some tasks for which Sed can provide good support}
+    Go through the few slides discussed in the lecture about \bash|awk|, focusing on the examples there.
     Once prepared an input file via
     \begin{lstlisting}[style=MyBash]
         paste <(shuf -n 20 /usr/share/dict/ngerman) <(shuf -i 1-5000 -n 20)
     \end{lstlisting}
-    achieve the following tasks in either of the tools.
+    achieve the following tasks using a \bash|awk| command.
+    You can assume that the file contains a word in the first column and an integer number in the second one.
     \begin{enumerate}
-        \item Print the first 5 and last 10 lines.
         \item Print every third line.
         \item Display only lines for which the number on the second column is smaller than 1000.
         \item Calculate the average of the second column.
@@ -20,36 +20,3 @@
     \end{enumerate}
 \end{exercise}
 
-\bigskip
-
-\begin{exercise}[Inspirational]{A taste of awk and sed}
-    Awk and sed are two incredible tools, but it is not automatically true that they are the \emph{best tools} to solve your problem.
-    In this exercise they can be used, but it might be you find your way without using them.
-    This is true in general, indeed.
-
-    \URL[Blue]{https://github.com/AxelKrypton/Bash_lecture_2019/blob/master/Bash/Exercise\_Sheet\_3/LQCD.dat}{Here} you can find a chunk of the standard output of a LQCD simulation, in particular measurements lines, only.
-    Each measure reports in square brackets the simulation step (the so-called trajectory) at which it has been carried out.
-    Unfortunately, there have been some I/O problems on the cluster where this file was generated and there are holes in the simulation.
-    Observables of interest for the purpose of the exercise are \texttt{PLAQUETTE}, \texttt{fRECTANGLE} and \texttt{POLYAKOV}.
-    Have a look to the file and then, playing in the terminal, figure out how to answer to the following questions.
-    \begin{enumerate}
-        \item How many times each observable has been measured?
-        \item Which is the first and last trajectory for each observable?
-        \item Where did the I/O problems occur for each observables?
-    \end{enumerate}
-    You could set up a (long) command which would print
-    \begin{lstlisting}[style=MyBash, xleftmargin=3mm, xrightmargin=1mm]
-        |+PLAQUETTE: Measures=2311 tr=[2000-4999] Holes=[2056-2287 3202-3433 4349-4579]
-        fRECTANGLE: Measures=2312 tr=[2000-4999] Holes=[2056-2286 3202-3433 4349-4579]
-        POLYAKOV: Measures=2311 tr=[2000-4998] Holes=[2056-2286 3202-3433 4349-4579]+|
-    \end{lstlisting}
-
-    Now that you understood the basic idea, write a Bash script in order to extract the observables in a file with 4 columns: the trajectory number and the three observables (\texttt{PLAQUETTE}, \texttt{fRECTANGLE} and \texttt{POLYAKOV}).
-    Pay attention to the trajectories for which you do not have all observables!
-    In such a cases, you should discard the whole trajectory (nothing to be added to the output data file) and print a warning to the user.
-    
-    \textbf{NOTE:} In the whole exercise, you might dislike having to process several time the file, since it might be slow.
-    Well, what does \emph{slow} mean?
-    How does the time you might save compare to the time you need to come up with a solution to avoid a file processing?
-    Do you remember Donald Knuth's words? \emph{``Premature Optimisation Is the Root of All Evil''}.
-\end{exercise}

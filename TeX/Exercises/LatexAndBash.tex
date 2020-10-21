@@ -1,0 +1,60 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 21 Oct 2020          %
+%-------------------------------%
+
+\begin{exercise}[Inspirational]{Plotting data in LaTeX from a bash script}
+    As final exercise of this course we would like to write a last script, which might let you discover some interesting feature for your work as physicist.
+    We assume you have a \LaTeX\ distribution installed on the machine where you'll work.
+    If this is not the case, just add the following \bash|pdflatex| function to your script to mimic it:
+    \begin{lstlisting}[style=myBash]
+        function @|\textcolor{functions-color}{\texttt{pdflatex}}|@()
+        {
+            echo "$@"; shift |+$(( $# - 1 ))+|
+            touch "${1/%.tex/}".{log,aux,pdf}
+        }
+    \end{lstlisting}
+    You will loose the graphical aspect of this exercise, but you will still be able to work on it.
+
+    As you might know, \LaTeX\ has a wonderful package, \texttt{PGF}, which is provided with a math engine and on which lots of packages are based (e.g. \texttt{TikZ}, \texttt{forest}, \texttt{genealogytree}).
+    Here we will use \texttt{pgfplots}, which allows to make nice-looking plots of e.g. data.
+    Our goal is to create a bash script which plots the data in a given file, using one column as $x$-values and another one for the $y$-values.
+    The minimal user requirements are the following, but with a bit of creativity you can implement much more.
+    \begin{enumerate}
+        \item The input data filename must be given on the command line.
+        \item It should be possible to specify the $x$ and $y$ columns to be plotted, using some default values.
+        \item The script should create the plot as pdf file and give informative output to the user.
+        \item An external \texttt{.tex} source file should be used, which could also be compiled by hand if needed.
+    \end{enumerate}
+
+    The flow should be clear.
+    The command line options are parsed, the \texttt{.tex} file is used according to the user directives and it is finally compiled.
+    \textbf{The first column in the data file is the number 0, the second is the number 1, etc.}
+
+    The way to hand over information from bash to \LaTeX\ world is not part of the exercise and the short story\footnote{%
+        \textbf{For the curious reader:}
+        In the \LaTeX\ code, the macro can be defined only \texttt{\textbackslash ifundefined} to provide a default value to compile the \texttt{.tex} file by hand.
+        Invoking the \bash|pdflatex| compiler as above, it is possible to define some macros in advance which are then handed-over to the \LaTeX\ source code from outside.
+        The \texttt{batchmode} of the \bash|pdflatex| compiler will suppress all but a handful of declarative lines, without stopping, even in the case of a syntax error.
+    } is that you should use this command
+    \begin{lstlisting}[style=myBash]
+        pdflatex -interaction=batchmode \
+        "\def\filename{...} \def\xColumn{...} \def\yColumn{...} \input{Plot.tex}"
+    \end{lstlisting}
+    in your bash script to compile the \texttt{.tex} file (the \texttt{...} should be the properly filled by your bash script).
+    \URL[Blue]{https://github.com/AxelKrypton/Bash\_lecture\_2020/blob/master/Bash/Exercise\_Sheet\_5/Plot.tex}{Here} you find the \LaTeX\ source code to be used (you can have a look to it, although not necessary).
+    
+    Now that you know how to hand over information to the \LaTeX\ compiler, you can focus on your bash script.
+    In particular, be sure to have examined and dealt with the following aspects.
+    \begin{itemize}
+        \item As you know, \LaTeX\ produces a bunch of additional files and it would be nice to remove them to leave the present folder in a tidy state.
+        \item The clean-up should be always done, unless you have some reason not to do it. For example, how does you script behave when pressing \texttt{CTRL-C} during execution?
+        \item Which strategy did you use to do error handling? What happens when the \LaTeX\ compilation fails? Trigger a failure by hand to test your code.
+    \end{itemize}
+    You can produce an input data file using \bash|awk| via
+    \begin{lstlisting}[style=myBash]
+        awk 'BEGIN{for(i=0; i<10; i++){print i"\t "rand()"\t"2*i"\t"10*rand()}}'
+    \end{lstlisting}
+    and try to plot e.g. the fourth column as function of the third one.
+    \vspace{1cm}
+\end{exercise}
