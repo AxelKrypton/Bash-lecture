@@ -1,0 +1,37 @@
+\documentclass{standalone}
+\usepackage[usenames, svgnames]{xcolor}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.14}
+
+\ifdefined\filename%
+\else%
+    \def\filename{data.dat}% Name of the file
+\fi%
+
+\ifdefined\xColumn%
+\else%
+    \def\xColumn{0}% column in file with x-values
+\fi%
+
+\ifdefined\yColumn%
+\else%
+    \def\yColumn{1}% column in file with y-values
+\fi%
+
+\ifdefined\xLabel%
+\else%
+    \def\xLabel{$x$}% label for x-axis
+\fi%
+
+\ifdefined\yLabel%
+\else%
+    \def\yLabel{$y$}% label for y-axis
+\fi%
+
+\begin{document}
+\begin{tikzpicture}
+    \begin{axis}[xlabel=\xLabel, ylabel=\yLabel]
+        \addplot table [x index=\xColumn, y index=\yColumn] {\filename};
+    \end{axis}
+\end{tikzpicture}
+\end{document}
