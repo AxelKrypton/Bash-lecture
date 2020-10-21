@@ -12,6 +12,23 @@
             \node[text=PP, anchor=north, align=center, font=\LARGE] (title) at ([shift={(1cm,-3mm)}]current page.north) {\bahamas};
             \node[text=PB, below = 0mm of title] (subtitle) {A \texttt{Ba}sh \texttt{Ha}ndler to \texttt{M}onitor and \texttt{A}dministrate \texttt{S}imulations};
             \begin{scope}[scope on=<2>]
+                \node[below = 5mm of subtitle.south west, anchor=north west, xshift=-12mm] {
+                    \begin{minipage}{0.85\textwidth}
+                        \begin{itemize}
+                            \item It is a \URL[PS]{https://github.com/AG-Philipsen/BaHaMAS}{publicly available software} to support LQCD practitioners' work
+                            \item An example of huge bash project, $\mathcal{O}$(10$^\text{4}$) lines of code
+                            \item Actually, kind of many executables handled by the same main script
+                            \item Everything achieved via handy git-inspired command line options
+                            \item Interactive setup and command line autocompletion available
+                            \item Functional tests only (almost 100, though)
+                            \item Partial system requirements validation at start-up
+                            \item Manual pages for in terminal documentation
+                            \item Online Wiki documentation for general overview
+                        \end{itemize}
+                    \end{minipage}
+                };
+            \end{scope}
+            \begin{scope}[scope on=<3>]
                 \draw(subtitle.south) +(0,-3mm) -- ++(0,-55mm) node[yshift=-1cm, xshift=-3mm, text=PB]
                         {\ldots{}after all, \bahamas{} is a good name...};
                 \path coordinate (L) at ($(subtitle.south west)!0.4!(subtitle.south)$)
@@ -33,23 +50,6 @@
                             \item You can \PB{\emph{effectively}} run on clusters
                             \item You \PB{\emph{get}} a lot of free time
                             \item Cocktails \PB{\emph{may}} help in developing
-                        \end{itemize}
-                    \end{minipage}
-                };
-            \end{scope}
-            \begin{scope}[scope on=<3>]
-                \node[below = 5mm of subtitle.south west, anchor=north west, xshift=-12mm] {
-                    \begin{minipage}{0.85\textwidth}
-                        \begin{itemize}
-                            \item It is a \URL[PS]{https://github.com/AG-Philipsen/BaHaMAS}{publicly available software} to support LQCD practitioners' work
-                            \item An example of huge bash project, $\mathcal{O}$(10$^\text{4}$) lines of code
-                            \item Actually, kind of many executables handled by the same main script
-                            \item Everything achieved via handy git-inspired command line options
-                            \item Interactive setup and command line autocompletion available
-                            \item Functional tests only (almost 100, though)
-                            \item Partial system requirements validation at start-up
-                            \item Manual pages for in terminal documentation
-                            \item Online Wiki documentation for general overview
                         \end{itemize}
                     \end{minipage}
                 };

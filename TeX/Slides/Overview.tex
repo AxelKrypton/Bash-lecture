@@ -27,8 +27,8 @@
             };
             \node[right = of A2] {
                 \begin{tabular}{@{}r@{\;}l}
-                    Morning:   & ITP, room 00.111 \\
-                    Afternoon: & ITP, room 00.111 \Remark{First together, then alone}
+                    Morning:   & ITP, room 00.111 \Remark{Lecture with slides} \\
+                    Afternoon: & ITP, room 00.111 \Remark{Exercise sheet -- I am here to help, use me}
                 \end{tabular}
             };
             \node[right = of A3] {Dr. Alessandro Sciarra};
@@ -175,8 +175,8 @@
     \begin{itemize}
         \item[] \URL{http://tldp.org/LDP/Bash-Beginners-Guide/html/}{Bash Beginners Guide}\PB{\Remark{A nice, from-zero tutorial}} \tikzmark{TutorialBegin}
         \item[] \URL{https://www.shellscript.sh/}{Shell scripting tutorial}\PB{\Remark{Nice tutorial, but not only Bash}}
-        \item[] \URL[PS]{http://mywiki.wooledge.org/BashGuide}{Bash Guide}\PB{\Remark{Very precise guide, not completely from zero, though}} \tikzmark{TutorialEnd}
-        \item[] \URL{https://github.com/AxelKrypton/Bash_lecture_2019}{All material \tikzmark{MeOnGitHub}of this lecture}
+        \item[] \URL[PS]{http://mywiki.wooledge.org/BashGuide}{Bash Guide}\PB{\Remark{Very precise guide, not completely from zero, though -- AKA Greg's Wiki}} \tikzmark{TutorialEnd}
+        \item[] \URL{https://github.com/AxelKrypton/Bash_lecture_2020}{All material \tikzmark{MeOnGitHub}of this lecture}
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay]
         \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (TutorialBegin -| TutorialEnd) ++(5mm,1mm) -- ($(TutorialEnd)+(5mm,-1mm)$) 
@@ -184,7 +184,7 @@
         \path[to] (MeOnGitHub) ++(0,-2mm) edge[out=270, in=180] node[pos=1, anchor=west] {My GitHub page \hspace{1mm}\raisebox{-1.3mm}{\includegraphics[width=5mm]{AxelKrypton}}} ++(20mm, -6mm);
         \node[anchor=north, inner ysep=3mm] (book) at ($(current page.north)!0.5!(current page.north east)$) {\includegraphics[width=16mm]{Cookbook}};
         \node[right = 1mm of book, inner ysep=3mm] {\includegraphics[width=16mm]{LearningBash}};
-        \path[from] (TutorialEnd) ++(-0mm,-1mm) edge[out=330, in=180] node[pos=1, right=2pt, font=\scriptsize, text=PS] {Main reference for preparing this lecture} ++(12mm, -6mm);
+        \path[from] (TutorialEnd) ++(-0mm,-1mm) edge[out=330, in=180] node[pos=1, right=2pt, font=\scriptsize, text=PS, text width=20mm, align=center] {Main reference for preparing this course} ++(12mm, -6mm);
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -204,24 +204,24 @@
             \item \tc<2>{Monday}{Variables and special parameters}
             \item \tc<2>{Monday}{Shell expansion and word splitting}
             \item \tc<2>{Monday}{Patterns}
-            \item \tc<2>{Tuesday}{Shell options and flow control}
+            \item \tc<2>{Tuesday}{Flow control}
             \item \tc<2>{Tuesday}{Colours and terminal commands}
             \item \tc<2>{Tuesday}{Namerefs and indirect expansion}
             \item \tc<2>{Tuesday}{Arrays and associative arrays}
-            \item \tc<2>{Tuesday}{GNU Coreutils}
             \item \tc<2>{Tuesday}{Input and output}
+            \item \tc<2>{Tuesday}{Shell options and GNU Coreutils}
             \item \tc<2>{Wednesday}{File descriptors and redirection}
             \item \tc<2>{Wednesday}{Compound commands}
             \item \tc<2>{Wednesday}{Functions}
-            \item \tc<2>{Wednesday}{Built-in VS external programs}
+            \item \tc<2>{Wednesday}{Script autocompletion and GNU Redline}
             \item \tc<2>{Thursday}{Asynchronous commands}
             \item \tc<2>{Thursday}{Traps}
+            \item \tc<2>{Thursday}{Error handling}
             \item \tc<2>{Thursday}{Sed}
-            \item \tc<2>{Thursday}{The GNU Readline library}
             \item \tc<2>{Friday}{Awk}
-            \item \tc<2>{Friday}{An interactive summary}
-            \item \tc<2>{Friday}{Some good practices}
+            \item \tc<2>{Friday}{Some good practices and useful tools}
             \item \tc<2>{Friday}{Bash in real life}
+            \item \tc<2>{Friday}{An interactive summary}
             \item \tc<2>{Friday}{What to do now?}
         \end{enumerate}
     \end{multicols}

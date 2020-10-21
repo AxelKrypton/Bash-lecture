@@ -534,30 +534,31 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Process Management: Conclusions}
-    \vspace{-2mm}
-    \begin{itemize}[<only@1-2>]
-        %\setlength{\itemsep}{1mm}
-        \item It is a potentially tough world: Be scared but not too much
-        \item Bash might not be the most appropriate tool
-        \item Be aware of the truth (what we just discussed)
-        \item If you want to have something running in background, why do you want so?
-        \item There are tools which you might consider:\\[0.3ex]
-        \begin{enumerate}
-            \item \bash|systemd| (system manager)
-            \item \bash|timeout| (run a command with a time limit)
-            \item \bash|xargs -P| \,or\, \bash|parallel| (to run independent tasks in parallel)
-        \end{enumerate}
-    \end{itemize}
-    \vspace{2mm}
-    \begin{varblock}{quote}[\textwidth]{About using $\;$\bash|kill -9|}[Greg's Wiki]<only@2>
-        Do not use kill -9, ever.
-        For any reason.
-        \textbf{Unless you wrote the program to which you're sending the SIGKILL, and know that you can clean up the mess it leaves.}
-        Because you're debugging it.
-        If a process is not responding to normal signals, it's probably in ``state D'' (as shown on \textnormal{\bash|ps u|}), which means it's currently executing a system call.
-        If that's the case, you're probably looking at a dead hard drive, or a dead NFS server, or a kernel bug, or something else along those lines.\\
-        And you won't be able to kill the process anyway, SIGKILL or not.
-    \end{varblock}
+    \vspace{-5mm}
+    \begin{overlayarea}{\textwidth}{0.7\textheight}
+        \begin{itemize}[<only@1-2>]
+            \setlength{\itemsep}{0mm}
+            \item It is a potentially tough world: Be scared but not too much
+            \item Bash might not be the most appropriate tool
+            \item Be aware of the truth (what we just discussed)
+            \item If you want to have something running in background, why do you want so?
+            \item There are tools which you might consider:\\[0.3ex]
+            \begin{enumerate}
+                \item \bash|systemd| (system manager)
+                \item \bash|timeout| (run a command with a time limit)
+                \item \bash|xargs -P| \,or\, \bash|parallel| (to run independent tasks in parallel)
+            \end{enumerate}
+        \end{itemize}
+        \begin{varblock}{quote}[\textwidth]{About using $\;$\bash|kill -9|}[Greg's Wiki]<only@2>
+            Do not use kill -9, ever.
+            For any reason.
+            \textbf{Unless you wrote the program to which you're sending the SIGKILL, and know that you can clean up the mess it leaves.}
+            Because you're debugging it.
+            If a process is not responding to normal signals, it's probably in ``state D'' (as shown on \textnormal{\bash|ps u|}), which means it's currently executing a system call.
+            If that's the case, you're probably looking at a dead hard drive, or a dead NFS server, or a kernel bug, or something else along those lines.\\
+            And you won't be able to kill the process anyway, SIGKILL or not.
+        \end{varblock}
+    \end{overlayarea}
     \begin{tikzpicture}[remember picture, overlay, scope on=<3>]
         \node[left  = 1mm of current page.center] {\includegraphics[width=52mm, clip, trim=0 173mm 0 0]{Sigkill}};
         \node[right = 1mm of current page.center] {\includegraphics[width=52mm, clip, trim=0 0 0 255mm]{Sigkill}};

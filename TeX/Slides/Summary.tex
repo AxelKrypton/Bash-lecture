@@ -16,191 +16,254 @@
     \end{uncoverenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Day 1}
+\begin{frame}[fragile]{Quiz time (I) -- Day 1}
     \vspace{-3mm}
-    \begin{onlyenv}<1-4>
+    \begin{lstlisting}[style=myBash, numbers=none]
+        if [[ -f 'File with spaces.dat' ]]; then
+            rm File with spaces.dat
+        fi
+    \end{lstlisting}
+    \begin{quiz}[1]{Is the above snippet correct? Why?}
+        \wrongChoice{Yes, if the file exists, it gets removed.}
+        \correctChoice{No, One file should be removed, but three are potentially deleted!}
+        \wrongChoice{Yes, if the file does not exist, the code works fine.}
+    \end{quiz}
+    \begin{uncoverenv}<3-4>
         \begin{lstlisting}[style=myBash, numbers=none]
-            if [[ -f 'File with spaces.dat' ]]; then
-                rm File with spaces.dat
-            fi
+            function echo() {
+                echo "A clever echo implementation"
+                # ...
+            }
         \end{lstlisting}
-        \begin{quiz}[1]{Is the above snippet correct? Why?}
-            \wrongChoice{Yes, if the file exists, it gets removed.}
-            \correctChoice{No, One file should be removed, but three are potentially deleted!}
-            \wrongChoice{Yes, if the file does not exist, the code works fine.}
+        \begin{quiz}[3]{Sourcing the snippet above in a terminal, what will it happen?}
+            \wrongChoice{An error will occur, no function can take the name of a builtin.}
+            \wrongChoice{Nothing, the echo builtin will continue to be used by the shell.}
+            \correctChoice{Functions have higher priority than builtins. The \bash|echo| builtin will be shadowed.}
         \end{quiz}
-        \begin{uncoverenv}<3-4>
-            \begin{lstlisting}[style=myBash, numbers=none]
-                function echo() {
-                    echo "A clever echo implementation"
-                    # ...
-                }
-            \end{lstlisting}
-            \begin{quiz}[3]{Sourcing the snippet above in a terminal, what will it happen?}
-                \wrongChoice{An error will occur, no function can take the name of a builtin.}
-                \wrongChoice{Nothing, the echo builtin will continue to be used by the shell.}
-                \correctChoice{Functions have higher priority than builtins. The \bash|echo| builtin will be shadowed.}
-            \end{quiz}
-        \end{uncoverenv}
-    \end{onlyenv}
-    \begin{onlyenv}<5-8>
-        \begin{lstlisting}[style=myBash, numbers=none]
-            $ IFS='_'; echo ${IFS}; unset -v 'IFS'
-        \end{lstlisting}
-        \begin{quiz}[5]{What does the above command print?}
-            \wrongChoice{Nothing, the internal field separator cannot be printed.}
-            \correctChoice{Nothing, the shell performs world splitting after the variable is expanded.}
-            \wrongChoice{Since the \bash|IFS| is reset to a visible character, an underscore is here printed.}
-        \end{quiz}
-        \begin{uncoverenv}<7-8>
-            \begin{lstlisting}[style=myBash, numbers=none]
-                function join() {
-                    IFS='_'; echo $*
-                }
-            \end{lstlisting}
-            \begin{quiz}[7]{What does the above function does? Is it good code?}
-                \wrongChoice{The function prints a underscore-separated list of its arguments. To change the \bash|IFS| globally should be avoided, though.}
-                \wrongChoice{This is a clever way to concatenate strings with a symbol as separator. Good code.}
-                \correctChoice{The function prints its arguments and on top it changes the \bash|IFS| globally. Wrong code!}
-            \end{quiz}
-        \end{uncoverenv}
-    \end{onlyenv}
-    \begin{onlyenv}<9-12>
-        \begin{lstlisting}[style=myBash, numbers=none]
-            $ echo {1..$(date +'%d')|+}+|  # %d is the day of the month
-        \end{lstlisting}
-        \begin{quiz}[9]{What does the above command print?}
-            \wrongChoice{It prints the numbers from 1 to the present day of the month.}
-            \correctChoice{\texttt{\{1..20\}} gets printed since brace expansion happens before command substitution.}
-            \wrongChoice{An error is printed, command substitution cannot be used in brace expansion.}
-        \end{quiz}
-        \begin{uncoverenv}<11-12>
-            \begin{lstlisting}[style=myBash, numbers=none]
-                echo 3.2*4 | bc -l
-            \end{lstlisting}
-            \begin{quiz}[11]{Does the above good code do the required multiplication?}
-                \wrongChoice{Yes. Bash does not support floating point operations and \bash|bc| can be used in this case.}
-                \wrongChoice{Yes, the code above always works. However, a here-string construct would be better to avoid to use \bash|echo| and the pipeline.}
-                \correctChoice{This code is wrong! \uncover<12>{Shell automatically does filename extension. Often it might work, but only if the filename extension fails and \texttt{nullglob} is not set!}}
-            \end{quiz}
-        \end{uncoverenv}
-    \end{onlyenv}
+    \end{uncoverenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Day 2}
-    \vspace{-3mm}
-    \begin{onlyenv}<1-4>
-            \begin{lstlisting}[style=myBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm]
-                if [ ! $1 =~ ^([0-9]+-)?[0-9]{1,2}:[0-9]{2}:[0-9]{2}$ ]; then
-                    echo "Error: Walltime specified in a wrong format!"
-                fi
-            \end{lstlisting}
-            \begin{quiz}[1]{Is there anything wrong in the above snippet of code?}
-                \wrongChoice{No, a regular expression test is done to check the format of \bash|$1|.}
-                \correctChoice{The \bash|[| command does not support the \bash|=~| comparison. With \bash|[[| keyword the code works.}
-                \wrongChoice{Even with \bash|[[|, the code is wrong, because the regex pattern must be quoted!}
-            \end{quiz}
-        \begin{uncoverenv}<3-4>
-            \begin{lstlisting}[style=myBash, numbers=none]
-                for file in ${array[@]}; do
-                    # do something with file
-                done
-            \end{lstlisting}
-            \begin{quiz}[3]{Does the above for loop always work?}
-                \wrongChoice{Yes, using arrays is the best way to iterate over files.}
-                \wrongChoice{the snippet above works, but it is better to use globbing directly in the for construct.}
-                \correctChoice{Although the code above might works, it is in general wrong!\\
-                               \uncover<4->{Use \tc{strings-color}{\texttt{"\$\{array[@]\}"}} to avoid word splitting!}}
-            \end{quiz}
-            \end{uncoverenv}
-    \end{onlyenv}
-    \begin{onlyenv}<5-8>
+\begin{frame}[fragile]{Quiz time (II) -- Day 1}
+    \begin{lstlisting}[style=myBash, numbers=none]
+        $ IFS='_'; echo ${IFS}; unset -v 'IFS'
+    \end{lstlisting}
+    \begin{quiz}[1]{What does the above command print?}
+        \wrongChoice{Nothing, the internal field separator cannot be printed.}
+        \correctChoice{Nothing, the shell performs world splitting after the variable is expanded.}
+        \wrongChoice{Since the \bash|IFS| is reset to a visible character, an underscore is here printed.}
+    \end{quiz}
+    \begin{uncoverenv}<3-4>
         \begin{lstlisting}[style=myBash, numbers=none]
-            for((index = 0; index < |+${#array[@]}+|; index ++)); do
-                # Do something with ${array[index]}
+            function join() {
+                IFS='_'; echo $*
+            }
+        \end{lstlisting}
+        \begin{quiz}[3]{What does the above function does? Is it good code?}
+            \wrongChoice{The function prints a underscore-separated list of its arguments. To change the \bash|IFS| globally should be avoided, though.}
+            \wrongChoice{This is a clever way to concatenate strings with a symbol as separator. Good code.}
+            \correctChoice{The function prints its arguments and on top it changes the \bash|IFS| globally. Wrong code!}
+        \end{quiz}
+    \end{uncoverenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Quiz time (III) -- Day 1}
+    \begin{lstlisting}[style=myBash, numbers=none]
+        $ echo {1..$(date +'%d')|+}+|  # %d is the day of the month
+    \end{lstlisting}
+    \begin{quiz}[1]{What does the above command print?}
+        \wrongChoice{It prints the numbers from 1 to the present day of the month.}
+        \correctChoice{\texttt{\{1..20\}} gets printed since brace expansion happens before command substitution.}
+        \wrongChoice{An error is printed, command substitution cannot be used in brace expansion.}
+    \end{quiz}
+    \begin{uncoverenv}<3-4>
+        \begin{lstlisting}[style=myBash, numbers=none]
+            echo 3.2*4 | bc -l
+        \end{lstlisting}
+        \begin{quiz}[3]{Does the above good code do the required multiplication?}
+            \wrongChoice{Yes. Bash does not support floating point operations and \bash|bc| can be used in this case.}
+            \wrongChoice{Yes, the code above always works. However, a here-string construct would be better to avoid to use \bash|echo| and the pipeline.}
+            \correctChoice{This code is wrong! \uncover<4>{Shell automatically does filename extension. Often it might work, but only if the filename extension fails and \texttt{nullglob} is not set!}}
+        \end{quiz}
+    \end{uncoverenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Quiz time (IV) -- Day 2}
+    \vspace{-3mm}
+    \begin{lstlisting}[style=myBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm]
+        if [ ! $1 =~ ^([0-9]+-)?[0-9]{1,2}:[0-9]{2}:[0-9]{2}$ ]; then
+            echo "Error: Walltime specified in a wrong format!"
+        fi
+    \end{lstlisting}
+    \begin{quiz}[1]{Is there anything wrong in the above snippet of code?}
+        \wrongChoice{No, a regular expression test is done to check the format of \bash|$1|.}
+        \correctChoice{The \bash|[| command does not support the \bash|=~| comparison. With \bash|[[| keyword the code works.}
+        \wrongChoice{Even with \bash|[[|, the code is wrong, because the regex pattern must be quoted!}
+    \end{quiz}
+    \begin{uncoverenv}<3-4>
+        \begin{lstlisting}[style=myBash, numbers=none]
+            for file in ${array[@]}; do
+                # do something with file
             done
         \end{lstlisting}
-        \begin{quiz}[5]{What would you say about the for loop above?}
-            \wrongChoice{Nothing, it uses the C-like for loop to iterate over an array.}
-            \correctChoice{It is advisable to iterate over the indices via \tc{strings-color}{\texttt{"\$\{!array[@]\}"}}. If the array is sparse, the code above will fail.}
-            \wrongChoice{The code will fail. Spaces in assignments and in the index increment are wrong in bash.}
+        \begin{quiz}[3]{Does the above for loop always work?}
+            \wrongChoice{Yes, using arrays is the best way to iterate over files.}
+            \wrongChoice{the snippet above works, but it is better to use globbing directly in the for construct.}
+            \correctChoice{Although the code above might works, it is in general wrong!\\
+                           \uncover<4->{Use \tc{strings-color}{\texttt{"\$\{array[@]\}"}} to avoid word splitting!}}
         \end{quiz}
-        \begin{uncoverenv}<7-8>
-            \begin{lstlisting}[style=myBash, numbers=none]
-                $ index=1; array=(one two three)
-                $ unset -v 'array[${index}]'; printf '%s\n' "${array[@]}"
-            \end{lstlisting}
-            \begin{quiz}[7]{Is the above usage of \bash|unset| correct?}
-                \correctChoice{Yes, it is. The \bash|index| variable is accessed in arithmetic context when the array element is being unset.}
-                \wrongChoice{No, it isn't. Single quotes prevent parameter expansion and \bash|unset| will then fail.}
-                \wrongChoice{No, it isn't. No quotes should be used around \texttt{array[\$\{index\}]}.}
-            \end{quiz}
-        \end{uncoverenv}
-    \end{onlyenv}
-    \begin{onlyenv}<9-12>
-        \begin{quiz}[9]{Which of the following statements ist correct?}
-            \wrongChoice{A bash script can change the shell environment when executed.}
-            \wrongChoice{Using \bash|export| builtin it is possible to change environment variables for the parent process.}
-            \correctChoice{Sourcing a script is a way to affect the environment where it is sourced.}
-            \correctChoice{It is possible to specifying a temporary environment change which only takes effect for the duration of that command.}
-        \end{quiz}
-        \begin{uncoverenv}<11-12>
-            \begin{lstlisting}[style=myBash, numbers=none]
-                for file in *; do
-                    # Do something with files
-                done
-            \end{lstlisting}
-            \begin{quiz}[11]{Do you have any comment about the for-loop above?}
-                \wrongChoice{Yes, the code above does not work. Filenames should be stored in an array first.}
-                \wrongChoice{No. Using globbing is the write way to iterate over files in the present folder.}
-                \correctChoice{The code might do something unexpected! \uncover<12>{Be sure to handle the no-file-scenario correctly (or set \texttt{nullglob})!}}
-            \end{quiz}
-        \end{uncoverenv}
-    \end{onlyenv}
+    \end{uncoverenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Day 3}
-    \vspace{-3mm}
-    \begin{onlyenv}<1-4>
-            \begin{lstlisting}[style=myBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm]
-                # Keep only first three lines of a file
-                $ head -n3 filename > filename
-            \end{lstlisting}
-            \begin{quiz}[1]{Does the code above work?}
-                \wrongChoice{Yes, provided that the file \bash|filename| exists.}
-                \wrongChoice{No, the \bash|head| command must run in a subshell to access the file content before it gets overwritten.}
-                \correctChoice{No, because redirection is the first thing that bash does. The content of the file is lost before running \bash|head|!}
-            \end{quiz}
-        \begin{uncoverenv}<3-4>
-            \begin{lstlisting}[style=myBash, numbers=none]
-                $ wc -c <<< Hello
-            \end{lstlisting}
-            \begin{quiz}[3]{Which number is printed by the above command?}
-                \correctChoice{6. In the here-string construct Bash appends an endline to the string.}
-                \wrongChoice{5. Although an endline is appended to the string before passing it on to \bash|wc| standard input, this is not counted.}
-                \wrongChoice{The command above gives an error since the string is not quoted.}
-            \end{quiz}
-            \end{uncoverenv}
-    \end{onlyenv}
-    \begin{onlyenv}<5-8>
+\begin{frame}[fragile]{Quiz time (V) -- Day 2}
+    \begin{lstlisting}[style=myBash, numbers=none]
+        for((index = 0; index < |+${#array[@]}+|; index ++)); do
+            # Do something with ${array[index]}
+        done
+    \end{lstlisting}
+    \begin{quiz}[1]{What would you say about the for loop above?}
+        \wrongChoice{Nothing, it uses the C-like for loop to iterate over an array.}
+        \correctChoice{It is advisable to iterate over the indices via \tc{strings-color}{\texttt{"\$\{!array[@]\}"}}. If the array is sparse, the code above will fail.}
+        \wrongChoice{The code will fail. Spaces in assignments and in the index increment are wrong in bash.}
+    \end{quiz}
+    \begin{uncoverenv}<3-4>
         \begin{lstlisting}[style=myBash, numbers=none]
-            #
+            $ index=1; array=(one two three)
+            $ unset -v 'array[${index}]'; printf '%s\n' "${array[@]}"
         \end{lstlisting}
-        \begin{quiz}[5]{What would you say about the for loop above?}
-            \wrongChoice{}
-            \correctChoice{}
-            \wrongChoice{}
+        \begin{quiz}[3]{Is the above usage of \bash|unset| correct?}
+            \correctChoice{Yes, it is. The \bash|index| variable is accessed in arithmetic context when the array element is being unset.}
+            \wrongChoice{No, it isn't. Single quotes prevent parameter expansion and \bash|unset| will then fail.}
+            \wrongChoice{No, it isn't. No quotes should be used around \texttt{array[\$\{index\}]}.}
         \end{quiz}
-        \begin{uncoverenv}<7-8>
-            \begin{lstlisting}[style=myBash, numbers=none]
-                #
-            \end{lstlisting}
-            \begin{quiz}[7]{Is the above usage of \bash|unset| correct?}
-                \correctChoice{}
-                \wrongChoice{}
-                \wrongChoice{}
-            \end{quiz}
-        \end{uncoverenv}
-    \end{onlyenv}
+    \end{uncoverenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Quiz time (VI) -- Day 2}
+    \begin{quiz}[1]{Which of the following statements ist correct?}
+        \wrongChoice{A bash script can change the shell environment when executed.}
+        \wrongChoice{Using \bash|export| builtin environment variables for the parent process can be changed.}
+        \correctChoice{Sourcing a script is a way to affect the environment where it is sourced.}
+        \correctChoice{It is possible to specifying a temporary environment change which only takes effect for the duration of that command.}
+    \end{quiz}
+    \begin{uncoverenv}<3-4>
+        \begin{lstlisting}[style=myBash, numbers=none]
+            for file in *; do
+                # Do something with files
+            done
+        \end{lstlisting}
+        \begin{quiz}[3]{Do you have any comment about the for-loop above?}
+            \wrongChoice{Yes, the code above does not work. Filenames should be stored in an array first.}
+            \wrongChoice{No. Using globbing is the write way to iterate over files in the present folder.}
+            \correctChoice{The code might do something unexpected! \uncover<4>{Be sure to handle the no-file-scenario correctly (or set \texttt{nullglob})!}}
+        \end{quiz}
+    \end{uncoverenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Quiz time (VII) -- Day 3}
+    \vspace{-3mm}
+    \begin{lstlisting}[style=myBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm]
+        # Keep only first three lines of a file
+        $ head -n3 filename > filename
+    \end{lstlisting}
+    \begin{quiz}[1]{Does the code above work?}
+        \wrongChoice{Yes, provided that the file \bash|filename| exists.}
+        \wrongChoice{No, the \bash|head| command must run in a subshell to access the file content before it gets overwritten.}
+        \correctChoice{No, because redirection is the first thing that bash does. The content of the file is lost before running \bash|head|!}
+    \end{quiz}
+    \begin{uncoverenv}<3-4>
+        \begin{lstlisting}[style=myBash, numbers=none]
+            $ wc -c <<< Hello
+        \end{lstlisting}
+        \begin{quiz}[3]{Which number is printed by the above command?}
+            \correctChoice{6. In the here-string construct Bash appends an endline to the string.}
+            \wrongChoice{5. Although an endline is appended to the string before passing it on to \bash|wc| standard input, this is not counted.}
+            \wrongChoice{The command above gives an error since the string is not quoted.}
+        \end{quiz}
+    \end{uncoverenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Quiz time (VIII) -- Day 3}
+    \begin{lstlisting}[style=myBash, numbers=none]
+        $ counter=0
+        $ grep -o '[aeiou]' <<< "Hello world" | wc -l | read counter; echo "${counter}"
+    \end{lstlisting}
+    \begin{quiz}[1]{What does the command above print?}
+        \wrongChoice{4. The vowels in the string are counted and the number stored in \bash|counter|.}
+        \correctChoice{0. The variable \bash|counter| is set in a subshell and hence its change is not seen after the pipeline. \uncover<2->{Use command substitution to initialise \bash|counter| and avoid read.}}
+        \wrongChoice{The command above gives an error, since \bash|read| does not reads from the standard input.}
+    \end{quiz}
+    \begin{uncoverenv}<3-4>
+        \begin{quiz}[3]{Which of the following statements about functions is correct?}
+            \wrongChoice{The \bash|return| builtin is meant to return values from functions.}
+            \correctChoice{Variable in functions are by default global. Use the \bash|local| builtin to declare local ones.}
+            \wrongChoice{Syntactical errors in unused function still make the script fail.}
+            \wrongChoice{In order to preserve the OS, Bash limits by default the number of recursive calls.}
+            \correctChoice{Arguments to a function should preferably be passed by value.}
+        \end{quiz}
+    \end{uncoverenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Quiz time (IX) -- Day 4}
+    \begin{lstlisting}[style=myBash, numbers=none]
+        $ for index in 1 3 5; do sleep ${index} &; done
+    \end{lstlisting}
+    \begin{quiz}[1]{What does the command above do?}
+        \wrongChoice{It runs three \bash|sleep| commands in background.}
+        \wrongChoice{Using \texttt{\&;} the shell will queue the \bash|sleep| commands and execute after each other in background.}
+        \correctChoice{The command above will fail. The \texttt{\&} is a command terminator as well as \texttt{;} is. Hence, bash will complain bacause an empty command is terminated (between \texttt{\&} and \texttt{;}).}
+    \end{quiz}
+    \begin{uncoverenv}<3-4>
+        \begin{quiz}[3]{Which of the following statements about \bash|kill| is correct?}
+            \wrongChoice{It is used to exclusively terminate processes.}
+            \correctChoice{If no signal is specified, SIGTERM (15) is sent.}
+            \correctChoice{The SIGKILL signal should be almost always avoided.}
+            \correctChoice{The signal specification via name should be preferred, because the name-to-number mapping can vary between UNIX variants.}
+        \end{quiz}
+    \end{uncoverenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Quiz time (X) -- Day 4}
+    \begin{lstlisting}[style=myBash, numbers=none]
+        trap 'CleanAuxiliaryFiles; exit 1' INT
+    \end{lstlisting}
+    \begin{quiz}[1]{Would you consider the code above good practice?}
+        \wrongChoice{Yes, a clean-up is done if the script gets interrupted.}
+        \wrongChoice{No, a clean-up should be done also in other cases, e.g. if an error occur.}
+        \correctChoice{No. Any script that set up a trap on INT is highly encouraged to kill itself in the trap to avoid troubles to the caller. \uncover<2->{Trap on EXIT instead.}}
+    \end{quiz}
+    \begin{uncoverenv}<3-4>
+        \begin{lstlisting}[style=myBash, numbers=none]
+            cd temporaryFolder
+            touch file{01..1000000}.dat # Code to create many files
+        \end{lstlisting}
+        \begin{quiz}[3]{What would you say about the code above?}
+            \wrongChoice{Indeed, before creating many files it is wise to move into a temporary folder.}
+            % Here escape braces because external macro deals with it, https://tex.stackexchange.com/a/42266/128737
+            \wrongChoice{The code is fine, but the commands could be merged as \bash|touch temporaryFolder/file\{01..1000000\}.dat|.}
+            \correctChoice{Error handling is missing! \uncover<4>{If the \bash|cd| fails we mess up the folder where we are!}}
+        \end{quiz}
+    \end{uncoverenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Quiz time (XI) -- Day 5}
+    \begin{lstlisting}[style=myBash, numbers=none]
+        $ permissions=$(ls -l file | awk '{print $1}')
+    \end{lstlisting}
+    \begin{quiz}[1]{Does the code above work?}
+        \wrongChoice{It always does. It extracts the permissions of \bash|file| storing them in a variable.}
+        \wrongChoice{It always does, because the filename does contains only letters. The output of \bash|ls| should not be parsed, though.}
+        \correctChoice{In general, it does not! \uncover<2->{The output format of \bash|ls -l| is not guaranteed consistent across platforms!}}
+    \end{quiz}
+    \begin{uncoverenv}<3-4>
+        \begin{lstlisting}[style=myBash, numbers=none]
+            $ filename='data.dat'
+            $ extension="(awk -F '.' '{print $2}' <<< "@|\tc{strings-color}{\texttt{\$\{filename\}}}|@")"
+        \end{lstlisting}
+        \begin{quiz}[3]{What would you say about the code above?}
+            \wrongChoice{It fails. Bash cannot handle nested double quotes in the second line.}
+            \correctChoice{It works but it is bad practice! \uncover<4>{Parameter expansion should be used here!}}
+            \wrongChoice{It works and it is a clever way of using \bash|awk| with a customised field separator.}
+        \end{quiz}
+    \end{uncoverenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

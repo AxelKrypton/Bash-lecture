@@ -5,17 +5,6 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begingroup
-\newcommand{\pyramidLayer}[5]{%
-    \pgfmathsetmacro{\thickness}{#2}
-    \pgfmathsetmacro{\long}{#3}
-    \pgfmathsetmacro{\short}{#3-0.5*#2}
-    \path coordinate (middleUpper) at ($(#1)+(0,\thickness)+(30:0.5*\short)$)
-          coordinate (middleLower) at ($(#1)+(30:0.5*\long)$);
-    \draw[fill=#4!50] ($(#1)+(0,\thickness)+(30:\short)$)  -- ++(210:\short) -- ++(270:\thickness) -- ++(30:\long) -- cycle;
-    \draw[fill=#4!20] ($(#1)+(0,\thickness)+(150:\short)$)  -- ++(330:\short) -- ++(270:\thickness) -- ++(150:\long) -- cycle;
-    \draw[fill=#4]    ($(#1)+(0,\thickness)$) -- ++(30:\short) -- ++(150:\short) -- ++(210:\short) -- cycle;
-    \node at ($(middleUpper)!0.5!(middleLower)$) {\rotatebox{30}{#5}};
-}
 \newsavebox{\shUnitLink}
 \begin{frame}{One slide about testing: The tests pyramid}
     \savebox{\shUnitLink}{\URL[PB]{https://github.com/kward/shunit2}{Shell unit test framework}}

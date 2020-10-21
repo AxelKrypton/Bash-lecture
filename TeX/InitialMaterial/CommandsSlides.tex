@@ -89,6 +89,22 @@
     }%
 }
 
+%Tikz group of commands to make a pyramid layer
+\newcommand{\pyramidLayer}[6][]{%
+    \pgfmathsetmacro{\Thickness}{#3}
+    \pgfmathsetmacro{\Long}{#4}
+    \pgfmathsetmacro{\Short}{#4-0.5*#3}
+    \path coordinate (middleUpperRight) at ($(#2)+(0,\Thickness)+(30:0.5*\Short)$)
+          coordinate (middleLowerRight) at ($(#2)+(30:0.5*\Long)$)
+          coordinate (upperRight) at ($(#2)+(0,\Thickness)+(30:\Short)$)
+          coordinate (lowerRight) at ($(#2)+(30:\Long)$);
+    \draw[fill=#5!50] ($(#2)+(0,\Thickness)+(30:\Short)$)  -- ++(210:\Short) -- ++(270:\Thickness) -- ++(30:\Long) -- cycle;
+    \draw[fill=#5!20] ($(#2)+(0,\Thickness)+(150:\Short)$)  -- ++(330:\Short) -- ++(270:\Thickness) -- ++(150:\Long) -- cycle;
+    \draw[fill=#5]    ($(#2)+(0,\Thickness)$) -- ++(30:\Short) -- ++(150:\Short) -- ++(210:\Short) -- cycle;
+    \node at ($(middleUpperRight)!0.5!(middleLowerRight)$) {\rotatebox{30}{#6}};
+    \node[text=#5, anchor=west] at ($(upperRight)!0.5!(lowerRight)+(0.5,0)$) {#1};
+}
+
 \renewcommand{\checkmark}[1][PS]{\tc{#1}{\ding{51}}}
 \newcommand{\crossmark}[1][PT]{\tc{#1}{\ding{55}}}
 
