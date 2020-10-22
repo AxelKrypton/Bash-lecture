@@ -181,8 +181,8 @@
         \begin{itemize}
             \setlength{\itemsep}{0pt}
             \item \alert<2>{You need to \textbf{deeply} understand this shell option}
-            \item \alert<3>{Your way of programming has to adapt to all corner cases}
-            \item \alert<4>{Checking and storing error codes via \PB{\texttt{\$?}} is not possible as before}
+            \item \alert<3-4>{Your way of programming has to adapt to all corner cases}
+            \item \alert<5>{Checking and storing error codes via \PB{\texttt{\$?}} is not possible as before}
         \end{itemize}
         \vspace{2mm}
         \begin{onlyenv}<2>
@@ -213,11 +213,37 @@
                 i=$((i++))       # Simple command without command subst.
                 echo "i is $i"   # This is ALWASY printed
 
-                i=$(false)       # Simple command with command substitution
+                i=$(false)       # Simple command with failing $(...)
                 echo "i is $i"   # This is NOT printed
             \end{lstlisting}
+            \footnotesize
+            \begin{varblock}{quote}[0.9\textwidth]{Simple command expansion}[Bash manual]
+                \scriptsize[\ldots]
+                If one of the expansions contained a command substitution, the exit status of the command is the exit status of the last command substitution performed.
+                If there were no command substitutions, the command exits with a status of zero.
+            \end{varblock}
         \end{onlyenv}
         \begin{onlyenv}<4>
+            \begin{lstlisting}[style=myBash]
+                #!/usr/bin/env bash
+                set -e
+
+                function Failure() { false; }
+                function FailureMsg() {
+                    false
+                    echo "Failed!" >&2
+                }
+
+                ( false )          # Subshell -> new environment, -e unset
+
+                echo 'Begin'
+                aVar=$(FailureMsg) # No failure because of echo in function
+                echo 'Middle'
+                aVar=$(Failure)    # Function fails
+                echo "End"         # This is NOT printed
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<5>
             \begin{lstlisting}[style=myBash]
                 #!/usr/bin/env bash
                 set -e
@@ -238,19 +264,45 @@
                 fi
             \end{lstlisting}
         \end{onlyenv}
-        \large
-        \begin{varblock}{example}[0.5\textwidth]{Spend some time on it}<5>
-            This afternoon you will deal again in detail with some corner cases!
-        \end{varblock}
-        \begin{varblock}{}[0.65\textwidth]{And if I do not want to use it?}<5>
-            \large \PB{Do I have other alternatives beyond the purist approach and enabling \texttt{errexit}?}
-        \end{varblock}
-        \vspace*{-1mm}
-        \begin{varblock}{alert}[0.25\textwidth]{}<5>
-            \PQ{Not really\ldots}
-        \end{varblock}
+        \begin{onlyenv}<6>
+            \large
+            \begin{varblock}{example}[0.5\textwidth]{Spend some time on it}
+                This afternoon you will deal again in detail with some corner cases!
+            \end{varblock}
+            \begin{varblock}{}[0.65\textwidth]{And if I do not want to use it?}
+                \large \PB{Do I have other alternatives beyond the purist approach and enabling \texttt{errexit}?}
+            \end{varblock}
+            \vspace*{-1mm}
+            \begin{varblock}{alert}[0.25\textwidth]{}
+                \PQ{Not really\ldots}
+            \end{varblock}
+        \end{onlyenv}
     \end{overlayarea}
-    \FrameRemark[3]{See end of section 3.7.1 of \URL[PB]{https://www.gnu.org/software/bash/manual/}{bash manual v5.0} for more information about simple commands exit code.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Consider to enable \;\PB{\texttt{inherit\_errexit}}\; shell option}{It was introduced in Bash v4.4}
+    \vspace{-3mm}
+    \begin{varblock}{quote}[0.95\textwidth]{}[Bash manual]
+        If set, command substitution inherits the value of the errexit option, instead of unsetting it in the subshell environment.
+        This option is enabled when POSIX mode is enabled.
+    \end{varblock}
+    \begin{lstlisting}[style=myBash]
+        #!/usr/bin/env bash
+        set -e
+        shopt -s inherit_errexit
+
+        function Failure() { false; }
+        function FailureMsg() {
+            false
+            echo "Failed!" >&2
+        }
+
+        echo 'Begin'
+        aVar=$(FailureMsg) # Now the script exits here before echo
+        echo 'Middle'
+        aVar=$(Failure)    # Function fails
+        echo "End"         # This is NOT printed
+    \end{lstlisting}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Trap on ERR and the \PB{\texttt{errtrace}} shell option}
@@ -309,11 +361,12 @@
         $ echo "_${unsetVariable-}_"; set +u
         |+__+|
     \end{lstlisting}
-    \begin{varblock}{alert}[0.95\textwidth]{Few (minor) drawbacks exist}
+    \begin{varblock}{alert}[0.96\textwidth]{Few (minor) drawbacks exist}
         \begin{enumerate}
+            \small
             \item Turning \PB{\texttt{nounset}} on in a correct existing script might still break it.
             \item If some code is not executed, \PB{\texttt{set -u}} will have no effect on it either.
-            \item Not very recent versions of bash \URL[PP]{https://gist.github.com/dimo414/2fb052d230654cc0c25e9e41a9651ebe}{handles empty arrays differently}.
+            \item Versions of bash \alert{prior to v4.4} \URL[PP]{https://gist.github.com/dimo414/2fb052d230654cc0c25e9e41a9651ebe}{handle the \texttt{[@]}-expansion of empty arrays differently}.
         \end{enumerate}
     \end{varblock}
     \FrameRemark{On Greg's Wiki you can \URL[PB]{http://mywiki.wooledge.org/BashFAQ/112}{read more about \texttt{set -u}}.}

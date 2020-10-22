@@ -29,6 +29,10 @@
         |+5.0.17+|
         # You can use the 'hash' builtin to check command existence 
     \end{lstlisting}
+    \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
+        \path[from] (current page.center) ++(1.3,-0.88) edge[out=0, in=270]
+            node[pos=1, above, PB, draw, rounded corners=3pt, text width=26mm, align=center, font=\small] {Best for empty arrays and \texttt{-u} shell option} ++(3.3,1);
+    \end{tikzpicture}
     \FrameRemark{Keep in mind that locally install a recent Bash version is pretty straightforward $\;\to\;$ \URL[PB]{https://ftp.gnu.org/gnu/bash/}{Download Bash}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
