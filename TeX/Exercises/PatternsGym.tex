@@ -6,20 +6,29 @@
 \begin{exercise}[Inspirational]{Patterns gym}
     Create a new directory, move into it and run the command
     \begin{lstlisting}[style=MyBash]
-        touch file{01..20}{.{dat,png,txt},\ backup.dat,_bkp.png}
+        touch file{1..20}{.{dat,png,txt},\ backup.dat,_bkp.png}
     \end{lstlisting}
-    checking afterwards what happens using \bash|ls|.
+    checking afterwards what happened using \bash|ls|.
 
     Think about how to achieve the following tasks, just using what you learnt today.
     \begin{itemize}
         \item List only files with the \bash|.dat| extension.
-        \item List only files with number \bash|13| in the name.
+        \item List only files with number 13 in the name.
         \item List only backup files and then all but backup files.
         \item List only files containing a space in the name.
         \item List all but files containing a space in the name.
-        \item List files with a number that is multiple of 5.
+        \item List files with a number that is multiple of 5 before the dot.
     \end{itemize}
 
+    Now that you practised a bit with patterns, let us improve names of the files in this folder.
+    \begin{enumerate}
+        \item Rename the files containing a space replacing it by an underscore.
+        \item Change the \bash|_bkp.png| suffix into \bash|_backup.png|.
+        \item Add a leading 0 to numbers in files whose name contains a number smaller than 10.
+    \end{enumerate}
+    Note, that you might be tempted to iterate over files, but the tasks above in this particular exercise can be achieved without using flow constructs, which will be discussed in detail tomorrow.
+
+    \vspace{5mm}
     \textbf{Bonus problem:} Can you think of an easy way to print all bit strings that can build up 1 byte (8 bits)?
     The output of your command should look like the following.
     \begin{lstlisting}[style=MyBash]
@@ -28,6 +37,8 @@
         00000010
         00000011
           ....
+        11111100
+        11111101
         11111110
         11111111
     \end{lstlisting}

@@ -74,7 +74,7 @@
             \end{lstlisting}
             \alert{By default, you get no warnings or errors!}
         \end{varblock}
-        \FrameRemark[4]{There is a way to activate a different behaviour of Bash when performing parameter expansion on unset variables: $\;$\URL[PB]{https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html}{\texttt{set -u}}}
+        \FrameRemark[4]{There is a way to activate a different behaviour of Bash when performing parameter expansion on unset variables: $\;$\URL[PB]{https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html}{\texttt{set -u}}$\;\to\;$ More on this next days.}
     \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -111,20 +111,20 @@
         \end{columns}
     \end{onlyenv}
     \begin{onlyenv}<2>
-        \begin{lstlisting}[style=MyBash, style=oddnumbers, belowskip=-5mm]
-            $ aVar=5; aVar+=2; echo "$aVar"; unset aVar
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, belowskip=-5mm, xrightmargin=5mm, xleftmargin=5mm]
+            $ aVar=5; aVar+=2; echo "${aVar}"; unset aVar
             52
-            $ aVar=5; let aVar+=2; echo "$aVar"; unset aVar
+            $ aVar=5; let aVar+=2; echo "${aVar}"; unset aVar
             7
-            $ declare -i aVar=5; aVar+=2; echo "$aVar"; unset aVar
+            $ declare -i aVar=5; aVar+=2; echo "${aVar}"; unset aVar
             7
-            $ aVar=5+2; echo "$aVar"; unset aVar
+            $ aVar=5+2; echo "${aVar}"; unset aVar
             5+2
-            $ declare -i aVar=5+2; echo "$aVar"; unset aVar
+            $ declare -i aVar=5+2; echo "${aVar}"; unset aVar
             7
-            $ declare -i aVar=5; aVar+=aVar; echo "$aVar"; unset aVar
+            $ declare -i aVar=5; aVar+=aVar; echo "${aVar}"; unset aVar
             10
-            $ declare -i aVar=5; aVar+='foo'; echo "$aVar"; unset aVar
+            $ declare -i aVar=5; aVar+='foo'; echo "${aVar}"; unset aVar
             5
             # "foo" refers to the variable foo in arithmetic evaluation
         \end{lstlisting}

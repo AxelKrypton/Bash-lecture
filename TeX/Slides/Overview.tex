@@ -160,14 +160,15 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{References for future use}
-    \vspace{-3mm}
+    \vspace{-4mm}
     \PB{\underline{About Bash world}:}
     \begin{itemize}
         \item[] \URL{https://www.gnu.org/software/bash/manual/}{Bash official manual}
         \item[] \URL{http://manpages.ubuntu.com/manpages/bionic/man7/bash-builtins.7.html}{List of Bash builtins with descriptions}
         \item[] \URL{http://mywiki.wooledge.org/BashFAQ/061}{Notable changes in released bash versions}\PB{\Remark{More extensive list \URL[PB]{http://wiki.bash-hackers.org/scripting/bashchanges}{also available}}}
         \item[] \URL{https://devhints.io/bash}{A nice Bash cheatsheet}
-        \item[] \URL{https://github.com/mietek/bashmenot}{An incredible (sadly not maintained) Bash library}\PB{\Remark{Clone from Github to use it, reference website is down}}
+        \item[] \URL{https://google.github.io/styleguide/shellguide.html}{Google Shell Style Guide}
+        \item[] \URL{https://github.com/mietek/bashmenot}{A (sadly not maintained) Bash library}\PB{\Remark{Clone from Github to use it, reference website is unfortunately down}}
         \item[] \URL{https://explainshell.com/}{An online help to get relevant manual pages of a given command}
     \end{itemize}
     \vspace{1mm}
@@ -181,7 +182,7 @@
     \begin{tikzpicture}[remember picture, overlay]
         \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (TutorialBegin -| TutorialEnd) ++(5mm,1mm) -- ($(TutorialEnd)+(5mm,-1mm)$) 
               node[midway, right=3mm, text width=25mm, font=\small, align=center, text=PP] {Material used to prepare this lecture};
-        \path[to] (MeOnGitHub) ++(0,-2mm) edge[out=270, in=180] node[pos=1, anchor=west] {My GitHub page \hspace{1mm}\raisebox{-1.3mm}{\includegraphics[width=5mm]{AxelKrypton}}} ++(20mm, -6mm);
+        \path[to] (MeOnGitHub) ++(0,-2mm) edge[out=270, in=180] node[pos=1, anchor=west] {My GitHub page \hspace{1mm}\raisebox{-1.3mm}{\includegraphics[width=5mm]{AxelKrypton}}} ++(20mm, -4mm);
         \node[anchor=north, inner ysep=3mm] (book) at ($(current page.north)!0.5!(current page.north east)$) {\includegraphics[width=16mm]{Cookbook}};
         \node[right = 1mm of book, inner ysep=3mm] {\includegraphics[width=16mm]{LearningBash}};
         \path[from] (TutorialEnd) ++(-0mm,-1mm) edge[out=330, in=180] node[pos=1, right=2pt, font=\scriptsize, text=PS, text width=20mm, align=center] {Main reference for preparing this course} ++(12mm, -6mm);
