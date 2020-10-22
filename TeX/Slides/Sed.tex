@@ -163,19 +163,19 @@
     \end{onlyenv}
     \begin{onlyenv}<2>
         \begin{lstlisting}[style=MyBash]
-            $ seq 11 12 | sed 's/12/twelve/'
+            $ printf '11\n12\n' | sed 's/12/twelve/'
             |+11
             twelve+|
-            $ seq 11 12 | sed 's/1/X/'
+            $ printf '11\n12\n' | sed 's/1/X/'
             |+X1
             X2+|
-            $ seq 11 12 | sed 's/1/X/g'
+            $ printf '11\n12\n' | sed 's/1/X/g'
             |+XX
             X2+|
-            $ seq 11 12 | sed 's/1/X/2'
+            $ printf '11\n12\n' | sed 's/1/X/2'
             |+1X
             12+|
-            $ seq 11 12 | sed 's/2/Y/p'
+            $ printf '11\n12\n' | sed 's/2/Y/p'
             |+11
             1Y
             1Y+|
@@ -189,7 +189,7 @@
     \end{onlyenv}
     \begin{onlyenv}<3>
         \begin{lstlisting}[style=MyBash, firstnumber=23, xrightmargin=2mm]
-            $ seq 11 12 | sed 's/1/&&/'
+            $ printf '11\n12\n' | sed 's/1/&&/'
             |+111
             112+|
             $ sed 's/\([a-z]\+\) \([a-z]\+\)/\2 \1/' <<< 'hello world'
@@ -229,12 +229,12 @@
         Echo me+|
         $ sed -n 'p' <<< 'Only once'
         |+Only once+|
-        $ seq 1 9 | sed -n '5 p'
+        $ printf '%d\n' {1..9} | sed -n '5 p'
         |+5+|
-        $ seq 1 9 | sed -n '7,$ p'
+        $ printf '%d\n' {1..9} | sed -n '7,$ p'
         |+7
         8
-        9+|    # Try out: seq 10 | sed -n '1~3 p'
+        9+|    # Try out: printf '%d\n' {1..10} | sed -n '1~3 p'
     \end{lstlisting}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -247,7 +247,7 @@
     \end{itemize}
     \medskip
     \begin{lstlisting}[style=MyBash]
-        $ seq 10 | sed '3,$ d'
+        $ printf '%d\n' {1..10} | sed '3,$ d'
         |+1
         2+|
         $ sed '2 d' <<< $'A\n nice but\n cold place'
@@ -272,7 +272,7 @@
               This is particularly useful when you want a group of commands to be triggered by a single address (or address-range) match. 
     \end{itemize}
     \begin{lstlisting}[style=MyBash]
-        $ seq 15 | sed '2q'
+        $ printf '%d\n' {1..15} | sed '2q'
         |+1
         2+|
         $ sed '=' <<< $'aaa\nbbb'
@@ -281,7 +281,7 @@
         2
         bbb+|
         $ sed -n '$=' filename  # Equivalent to 'wc -l < filename'
-        $ seq 3 | sed -n '2{s/2/X/ ; p}'
+        $ printf '%d\n' {1..3} | sed -n '2{s/2/X/ ; p}'
         |+X+|
     \end{lstlisting}
 \end{frame}

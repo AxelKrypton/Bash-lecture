@@ -153,7 +153,8 @@
     \vspace{-1mm}
     \begin{onlyenv}<1>
         \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm]
-            $ seq 100 | awk '{sum+=$1}END{print "Gauss answered " sum}'
+            $ printf '%d\n' {1..100} |\
+            > awk '{sum+=$1}END{print "Gauss answered " sum}'
             |+Gauss answered 5050+|
 
             $ shuf -i 1-20 -n 100 -r |
