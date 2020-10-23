@@ -86,6 +86,15 @@
             \fi
         \end{tikzpicture}
     }
+    %Add a link to table of content on frames with a footline
+    \addtobeamertemplate{footline}{}{%
+        \begin{tikzpicture}[remember picture,overlay]
+            %xelatex needs \XeTeXLinkBox, won't create a link unless it
+            %finds text --- rules don't work without \XeTeXLinkBox.
+            %Still builds correctly with pdflatex and lualatex
+            \node[anchor=south east, inner sep=2pt] at (current page.south east) {\hyperlink{toc}{\XeTeXLinkBox{\includegraphics[width=3mm]{TOC}}}};
+        \end{tikzpicture}%
+    }%
 }
 
 \makeatletter

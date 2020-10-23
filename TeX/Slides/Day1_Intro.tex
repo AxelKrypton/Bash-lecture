@@ -14,13 +14,15 @@
     \beamer@tocsectionnumber=-1\relax\space
 \makeatother
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[plain,noframenumbering]{Topics of the day}
+\begin{frame}[label=toc,plain,noframenumbering]{Topics of the day}
     \medskip
     \begin{columns}[t]
         \begin{column}{.45\textwidth}
             \hspace*{4mm}
             \begin{minipage}[t][0.6\textheight]{\textwidth}
-                \tableofcontents[currentsection,sections={0}]
+                \begin{NoHyper}
+                    \tableofcontents[currentsection,sections={0}]
+                \end{NoHyper}
                 \vspace{-7.7mm}
                 \tableofcontents[sections={1-3}]
             \end{minipage}
