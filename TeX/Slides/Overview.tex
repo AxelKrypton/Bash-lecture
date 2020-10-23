@@ -275,7 +275,7 @@
     \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
         \node[inner sep=0pt] (plan) at ($(current page.center)-(0,6mm)$) {\includegraphics[width=0.8\textwidth, clip, trim=1mm 0 0 0]{Map2}};
         \begin{scope}[x={($ (plan.south east) - (plan.south west) $ )},y={( $ (plan.north west) - (plan.south west)$ )}, shift={(plan.south west)}]
-            \draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+            %\draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
             \node[anchor=south, inner sep=0] at (0.175,0.280) {\includegraphics[width=3mm]{Pin}};
             \node[anchor=south, inner sep=0] at (0.180,0.238) {\includegraphics[width=3mm]{Pin}};
             \node[anchor=south, inner sep=0] at (0.255,0.260) {\includegraphics[width=3mm]{Pin}};
