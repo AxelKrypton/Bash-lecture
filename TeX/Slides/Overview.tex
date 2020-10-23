@@ -3,6 +3,7 @@
 %    Date: 17 September 2020    %
 %-------------------------------%
 
+\AddLinkToTOCfalse
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[plain,noframenumbering]
     \titlepage
@@ -79,7 +80,7 @@
                   \PT{Interactive lecture: ask, ask, ask!}
     \end{enumerate}
     \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=south east, visible on=<2->] (fig) at (current page.south east) {\includegraphics[width=42mm]{Relax}};
+        \node[anchor=south east, visible on=<2->] (fig) at ([xshift=-5mm]current page.south east) {\includegraphics[width=42mm]{Relax}};
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -233,6 +234,7 @@
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\AddLinkToTOCtrue
 \begin{frame}[fragile]{A slide about notation}
     \vspace{-5mm}
     \begin{varblock*}{quote}[0.72\textwidth]{Slides notation}
@@ -262,14 +264,18 @@
             \item \tc{Technical}{Technical}
         \end{itemize}
     \end{varblock*}
+    \begin{tikzpicture}[remember picture, overlay]
+        \path[from] (current page.south east) ++(-0.5,0.2) edge[out=180, in=270] node[pos=1, above, rounded corners=3pt, draw, PS, text width=18mm, align=center, font=\footnotesize] {Clickable link to clickable ToC} ++(-1,1.5);
+    \end{tikzpicture}
     \FrameRemark{This note usually provides further (advanced) information. Links here are worth the read.}
 \end{frame}
+\AddLinkToTOCfalse
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Bonus track\uncover<2>{: Iceland}}{\uncover<2>{The magic of an incredible island}}
     \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
         \node[inner sep=0pt] (plan) at ($(current page.center)-(0,6mm)$) {\includegraphics[width=0.8\textwidth, clip, trim=1mm 0 0 0]{Map2}};
         \begin{scope}[x={($ (plan.south east) - (plan.south west) $ )},y={( $ (plan.north west) - (plan.south west)$ )}, shift={(plan.south west)}]
-            %\draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+            \draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
             \node[anchor=south, inner sep=0] at (0.175,0.280) {\includegraphics[width=3mm]{Pin}};
             \node[anchor=south, inner sep=0] at (0.180,0.238) {\includegraphics[width=3mm]{Pin}};
             \node[anchor=south, inner sep=0] at (0.255,0.260) {\includegraphics[width=3mm]{Pin}};
