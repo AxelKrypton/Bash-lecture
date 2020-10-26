@@ -50,6 +50,10 @@ function PrintHelperAndExitIfNeeded()
 
 function ParseCommandLineOptions()
 {
+    if [[ $# -eq 0 ]]; then
+        return
+    fi
+
     local mutuallyExclusiveSpecifiedOptions mutuallyExclusiveOptions commandLineOptions
     mutuallyExclusiveSpecifiedOptions=()
     mutuallyExclusiveOptions=( "-s | --sizes" "-a | --aspectRatios")
@@ -134,7 +138,7 @@ function ParseCommandLineOptions()
                 break
                 ;;
             * )
-                echo -e "\e[91mUnrecognised option \[1m${1}\e[22m."
+                echo -e "\e[91mUnrecognised option \"\e[1m${1}\"\e[22m.\e[0m\n\n"
                 exit 1
                 ;;
         esac

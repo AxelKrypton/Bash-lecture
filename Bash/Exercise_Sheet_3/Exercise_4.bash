@@ -1,96 +1,166 @@
 #!/usr/bin/env bash
 
-# Use Logger
-source Exercise_2.bash || exit 2
-
-function ParseCommandLineParameters()
+function PrintInfo()
 {
-    while [[ $# -gt 0 ]]; do
-        case $1 in
-            -h | --help )
-                printf '\e[92m Available options to the present script:\n\n'
-                printf '    \e[96m%-20s\e[0m  ->  \e[95m%s\e[0m\n'\
-                       '-f | --file' 'Existing input file name'\
-                       '-t | --task' 'Exercise task number, 1 to 6'
-                printf '\n'
-                exit 0
-                ;;
-            -f | --file )
-                if [[ $2 =~ ^(-|$) ]]; then
-                    PrintFatal "The value of the option \e[1m${1}\e[22m was not correctly specified (either forgotten or invalid)!"
-                elif [[ ! -f $2 ]]; then
-                    PrintFatal "The value of the option \"${1}\" does not refer to an existing, regular file!"
-                else
-                    inputFile="$2"
-                fi
-                shift 2
-                ;;
-            -t | --task )
-                if [[ ! $2 =~ ^[1-6]$ ]]; then
-                    PrintFatal "The value of the option \e[1m${1}\e[22m was not correctly specified (either forgotten or invalid)!"
-                else
-                    task="$2"
-                fi
-                shift 2
-                ;;
-            * )
-                PrintFatal "Unrecognised option \[1m${1}\e[22m."
-                ;;
-        esac
-    done
+    # TASK 1:
+    #  printf "\e[1;4;92mINFO\e[24m:\e[22m $@\e[0m\n"
+    #
+    # TASK 2:
+    #  local string label; label='INFO'
+    #  printf "\e[1;4;92m${label}\e[24m:\e[22m $1\n"
+    #  shift
+    #  for string; do
+    #      printf "${label//?/ }  $1\n"
+    #      shift
+    #  done
+    #  printf '\e[0m'
+    #
+    # TASK 3:
+    Logger 'INFO' "$@"
 }
 
+function PrintError()
+{
+    # TASK 1:
+    #  printf "\e[1;4;91mERROR\e[24m:\e[22m $@\e[0m\n" 1>&2
+    #
+    # TASK 2:
+    #
+    #  local string label; label='ERROR'
+    #  printf "\e[1;4;91m${label}\e[24m:\e[22m $1\n" 1>&2
+    #  shift
+    #  for string; do
+    #      printf "${label//?/ }  $1\n" 1>&2
+    #      shift
+    #  done
+    #  printf '\e[0m' 1>&2
+    #
+    # TASK 3:
+    Logger 'ERROR' "$@"
+}
+
+# TASK 3,4,5:
+function Logger()
+{
+    local label color
+    label="$1"; shift
+    IsLevelOn "${label}" || return 0
+    case "${label}" in
+        ERROR|FATAL )
+            color='\e[91m'
+            exec 3>&1 1>&2 ;;
+        INTERNAL )
+            color='\e[38;5;202m' ;;
+        INFO )
+            color='\e[92m' ;;
+        WARNING )
+            color='\e[93m' ;;
+        DEBUG )
+            color='\e[96m' ;;
+        TRACE )
+            color='\e[38;5;247m' ;;
+        * )
+            printf "\e[1;4;38;5;202mINTERNAL\e[24m:\e[22m Logger called without unknown label '${label}'!\n\n\e[0m"; exit 1 ;;
+    esac
+    if [[ $# -eq 0 ]]; then
+        printf "\e[1;4;38;5;202mINTERNAL\e[24m:\e[22m Logger called without arguments!\n\n\e[0m"; exit 1
+    fi
+    printf "\e[1;4m${color}${label}\e[24m:\e[22m ${1//%/%%}\n"
+    shift
+    for string; do
+        printf "${label//?/ }  ${1//%/%%}\n"
+        shift
+    done
+    if [[ ${label} = 'INTERNAL' ]]; then
+        printf "${label//?/ }  Please, contact developers.\n"
+    fi
+    printf '\n\e[0m'
+    if [[ ${label} =~ ^(ERROR|FATAL)$ ]]; then
+        exec 1>&3-
+    fi
+    if [[ ${label} = 'FATAL' ]]; then
+        exit 1 # <- Here for FATAL you could pass the error code as second argument!
+    fi
+}
+
+# TASK 4:
+function PrintWarning()
+{
+    Logger 'WARNING' "$@"
+}
+
+# TASK 5:
+function PrintFatal()
+{
+    Logger 'FATAL' "$@"
+}
+
+function PrintInternal()
+{
+    Logger 'INTERNAL' "$@"
+}
+
+function PrintDebug()
+{
+    Logger 'DEBUG' "$@"
+}
+
+function PrintTrace()
+{
+    Logger 'TRACE' "$@"
+}
+
+function IsLevelOn()
+{
+    local label
+    label="$1"
+    # FATAL and INTERNAL always on
+    if [[ ${label} =~ ^(FATAL|INTERNAL)$ ]]; then
+        return 0
+    fi
+    # VERBOSE environment variable defines how verbose the output shouold be:
+    #  - unset or empty -> till INFO (no DEBUG TRACE)
+    #  - numeric -> till that level (1=ERROR, 2=WARNING, ...)
+    #  - string  -> till that level
+    local loggerLevels loggerLevelsOn level index
+    loggerLevels=( [1]='ERROR' [2]='WARNING' [3]='INFO' [4]='DEBUG' [5]='TRACE' )
+    loggerLevelsOn=()
+    if [[ ${VERBOSE} =~ ^[0-9]+$ ]]; then
+        loggerLevelsOn=( "${loggerLevels[@]:1:VERBOSE}" )
+    elif [[ ${VERBOSE} =~ ^(ERROR|WARNING|INFO|DEBUG|TRACE)$ ]]; then
+        for level in "${loggerLevels[@]}"; do
+            loggerLevelsOn+=( "${level}" )
+            if [[ ${VERBOSE} = "${level}" ]]; then
+                break
+            fi
+        done
+    else
+        loggerLevelsOn=( 'FATAL' 'ERROR' 'WARNING' 'INFO' )
+    fi
+    for  level in "${loggerLevelsOn[@]}"; do
+        if [[ ${label} = "${level}" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
 
 #-----------------------------------------------
-# NOTE: Many stuff here hard-coded -> not the best code!
-echo
-task=''
-inputFile=''
-ParseCommandLineParameters "$@"
 
-if [[ ${inputFile} = '' ]]; then
-    PrintFatal "Input file not specified!"
-fi
+# TASK 1:
+#  PrintInfo 'An informational message'
+#  PrintError 'An error message'
 
-case "${task}" in
-    1 )
-        PrintInfo "Print the first 5 and last 10 lines:"\
-                  "  sed -n '1,5p ; '\"\$(( \$(wc -l < ${inputFile}) - 10))\"',\$p' \"${inputFile}\""
-        sed -n '1,5p ; '"$(( $(wc -l < ${inputFile}) - 10))"',$p' "${inputFile}"
-        ;;
-    2 )
-        PrintInfo "Print every third line:"\
-                  "  sed -n '1~3p'  \"${inputFile}\""\
-                  "  awk '(NR-1)%3==0' \"${inputFile}\""
-        sed -n '1~3p' "${inputFile}"
-        echo
-        awk '(NR-1)%3==0' "${inputFile}"
-        ;;
-    3 )
-        PrintInfo "Display only lines for which the number on the second column is smaller than 1000:"\
-                  "  awk '\$2<1000' \"${inputFile}\""
-        awk '$2<1000' "${inputFile}"
-        ;;
-    4 )
-        PrintInfo "Calculate the average of the second column:"\
-                  "  awk '{sum+=\$2}END{printf \"The average of the second column is %.2f\\\\n\", sum/NR}' \"${inputFile}\""
-        awk '{sum+=$2}END{printf "The average of the second column is %.2f\n", sum/NR}' "${inputFile}"
-        ;;
-    5 )
-        PrintInfo "Print lines starting by a vowel:"\
-                  "  sed -n '/^[aeiou]/p' \"${inputFile}\""\
-                  "  awk '\$1 ~ /^[aeiou]/' \"${inputFile}\""
-        sed -n '/^[aeiou]/p' "${inputFile}"
-        echo
-        awk '$1 ~ /^[aeiou]/' "${inputFile}"
-        ;;
-    6 )
-        PrintInfo "Print the first column word if the second column contains a number larger than 3000:"\
-                  "  awk '\$2>3000{print \$1}' \"${inputFile}\""
-        awk '$2>3000{print $1}' "${inputFile}"
-        ;;
-    * )
-        PrintWarning "Task not specified!"
-        ;;
-esac
-echo
+# TASK 2,3:
+#  PrintError 'An error message' 'which spans two lines' 'or three'
+#  PrintInfo 'A multiple line' 'info message'
+
+# TASK 4:
+#  PrintWarning 'A warning message' 'quite long'
+
+# TASK 5:
+#  PrintInternal 'Test an internal message'
+#  PrintDebug 'A debug message'
+#  PrintTrace 'A trace message' 'for example entering or' 'exiting any function'
+#  PrintFatal 'A fatal error occurred! Exiting...'
+#  echo 'This is not printed!'

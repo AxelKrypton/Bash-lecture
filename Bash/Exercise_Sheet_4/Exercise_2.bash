@@ -3,7 +3,7 @@
 shopt -s extglob nullglob
 
 # Use logger
-source Exercise_2.bash || exit 2
+source ../Exercise_Sheet_3/Exercise_4.bash || exit 2
 
 function ParseCommandLineParameters()
 {

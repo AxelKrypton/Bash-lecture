@@ -2,7 +2,7 @@
 
 # Source the functions
 for index in {1..3}; do
-    source Exercise_1.${index}.bash
+    source Exercise_3.${index}.bash
 done
 
 #--------------------------------------
