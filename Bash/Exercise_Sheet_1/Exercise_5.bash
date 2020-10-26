@@ -22,11 +22,13 @@ printf '%35s  %s\n'\
 #stringToParse="beta6.0000_seed1111_continueWithNewChain"
 stringToParse="beta6.1234_s1234_thermalizeFromConf"
 
-if [[ ${stringToParse} =~ ^([^_]+)_([^_]+)_([^_]+)$ ]]; then
-    firstField="${BASH_REMATCH[1]}"   # or firstField="${stringToParse%%_*}"
-    secondField="${BASH_REMATCH[2]}"
-    postfix="${BASH_REMATCH[3]}"      # or postfix="${stringToParse##*_}"
-fi
+#To avoid the temportary variable you need more knowledge, e.g. arrays
+# NOTE: Parameter expansion cannot be nested!
+temporaryString=${stringToParse%_*}
+firstField=${temporaryString%_*}
+secondField=${temporaryString#*_}
+postfix=${stringToParse##*_}
+
 betaValue=${firstField: -6}
 seedValue=${secondField: -4}
 betaPrefix=${firstField/${betaValue}}
