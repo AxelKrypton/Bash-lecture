@@ -59,7 +59,7 @@
             # An example of countdown...
             $ deadline=$(date -d "8 seconds" +'%s'); \
             > now=$(date +'%s'); \
-            > while (( deadline - now > 0 )); do
+            > while [[ $((deadline - now)) -gt 0 ]]; do
             >   echo "$((deadline - now)) seconds to BOOM!"
             >   sleep 3
             >   now=$(date +'%s')
@@ -70,6 +70,7 @@
             BOOOOOM!!+|
         \end{lstlisting}
     \end{onlyenv}
+    \FrameRemark[2]{The condition of the second \;\bash|while|\; condition should rather be written using arithmetic evaluation, which we discuss tomorrow.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \,\bash|for|\, keywords}

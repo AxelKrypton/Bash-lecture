@@ -180,7 +180,7 @@
             |+YES+|
             $ if [[ ${aVar} = "*.tex" ]]; then echo 'YES'; else echo 'NO'; fi
             |+NO+|
-            $ if [[ ${aVar} = *.tex && ${aVar} = Day_?.tex ]]; then echo 'YES'; else echo 'NO'; fi
+            $ if [[ ${aVar} = Day_?.tex && ${bVar} = [hH]* ]]; then echo 'YES'; else echo 'NO'; fi
             |+YES+|
             # Simple strings still have to be quoted properly!
             $ if [[ ${bVar} = Hello world ]]; then echo 'YES'; else echo 'NO'; fi
@@ -225,18 +225,18 @@
         \begin{onlyenv}<2-3>
             \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm]
                 # The use of control operators is handy in simple cases
-                [[ $PATH ]] && echo 'PATH variable set and non empty!'
+                [[ ${PATH} ]] && echo 'PATH variable set and non empty!'
                 # Mostly they are used in script
                 rm file || echo 'Could not delete file!'
                 mkdir TeX && cd TeX
                 source AuxiliaryOps.bash || exit 1
                 # Avoid complicated one-liners which might easily be wrong!
-                grep -q goodword "$file" && ! grep -q badword "$file" && rm "$file" || echo "Couldn't delete: $file"
+                grep -q goodword "${file}" && ! grep -q badword "${file}" && rm "${file}" || echo "Couldn't delete: ${file}"
             \end{lstlisting}
             \centerline{\small\PQ{What happens if the first \bash{grep} fails (sets the exit status to 1)?}}
             \begin{uncoverenv}<3>
                 \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
-                    grep -q goodword "$file" && ! grep -q badword "$file" && { rm "$file" || echo "Couldn't delete: $file"; }
+                    grep -q goodword "${file}" && ! grep -q badword "${file}" && { rm "${file}" || echo "Couldn't delete: ${file}"; }
                 \end{lstlisting}
             \end{uncoverenv}
         \end{onlyenv}
