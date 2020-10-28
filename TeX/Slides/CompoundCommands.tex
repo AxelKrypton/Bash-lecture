@@ -117,10 +117,13 @@
         \end{onlyenv}
     \end{overlayarea}
     \vspace{1mm}
-    \begin{varblock}{quote}[0.9\textwidth]{}<only@4->
+    \begin{varblock}{quote}[0.9\textwidth]{}<only@4>
         The above example truncates and opens the file backup.log on stdout, then points stderr at where stdout is currently pointing (backup.log), then runs each command with those redirections applied.
         The file descriptors remain open until all commands within the command group complete before they are automatically closed.
         This means backup.log is only opened a single time, not opened and closed for each command.
+    \end{varblock}
+    \begin{varblock}{alert}[0.5\textwidth]{}<only@5>
+        Take advantage of command grouping!
     \end{varblock}
     \begin{tikzpicture}[remember picture, overlay]
         \begin{scope}[scope on=<2-3>]

@@ -60,7 +60,7 @@
     \medskip
     In the following we will learn how to
     \begin{itemize}
-        \item redirect standard \{input, error, output\} of \{single,multiple\} commands;
+        \item redirect standard \{input,error,output\} of \{single,multiple\} commands;
         \item open and close new file descriptors;
         \item use and not abuse the pipeline.
     \end{itemize}
@@ -144,7 +144,7 @@
 \begin{frame}{Input/Output Redirection: The theory}
     \vspace{-3mm}
     \begin{itemize}
-        \item I/O redirection is done \alert{\textbf{before}} the command is executed!
+        \item I/O redirection is done \alert{\textbf{before}} the command is executed
         \item Redirections are processed in the order they appear, \textbf{from left to right}
         \item In the following slides \PB{\texttt{[n]}} refers to an optional integer, whose default is
               \begin{itemize}
@@ -158,11 +158,11 @@
                   \item parameter expansion
                   \item command substitution
                   \item arithmetic expansion
-                  \item quote removal
-                  \item filename expansion
                   \item word splitting
+                  \item filename expansion
+                  \item quote removal
               \end{itemize}
-              If it expands to more than one word, Bash reports an error.
+              \alert{If it expands to more than one word, Bash reports an error}
     \end{itemize}
     \FrameRemark{$^\star$ For \PB{heredocs} and \PB{herestrings} a different rule applies: Refer to the Bash manual for more details.}
 \end{frame}
@@ -564,7 +564,7 @@
         \begin{onlyenv}<2>
             \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=0pt]
                 $ echo "I am a very proud sentence with a lot of words in it, all for you." > File
-                $ grep proud File 'not a file' > proud.log 2> proud.log
+                $ grep 'proud' File 'not a file' > proud.log 2> proud.log
                 $ cat proud.log
                 |+grep: not a file: No such file or directory
                 f words in it, all for you.+|
@@ -757,12 +757,12 @@
             |+2+|
             $ bc -l <<< "10/4"
             |+2.50000000000000000000+|
-            $ bc <<< "obase=16; ibase=$(date +'%w'); 11000000"
-            |+C0+|
+            $ bc <<< "obase=16; ibase=2; 11000000"
+            |+B64+|
             $ bc <<< "ibase=2; obase=10000; 11000000"
             |+C0+|
-            $ wc -c <<< "Hello"
-            |+6+|
+            $ wc -w <<< "Day of the week as number: $(date +'%w')"
+            |+7+|
             $ ls
             |+Day_1.pdf   Day_2.pdf+|
             $ echo *
@@ -789,18 +789,18 @@
         \item The former \bash{command}'s std output is connected to the latter \bash{command}'s std input
         \item This connection is performed before any redirection specified by the commands
         \item Pipes are widely used as a means of post-processing application output
-        \item \alert{The pipe operator creates a subshell environment for each command!} \Remark{More on subshells tomorrow}
+        \item \alert{The pipe operator creates a subshell environment for each command!} \Remark{More on subshells later}
     \end{itemize}
     \begin{onlyenv}<1>
         \begin{lstlisting}[style=MyBash, aboveskip=3mm]
             $ message='Test'
             $ echo 'Salut, le monde!' | read message
-            $ echo "The message is: $message"
+            $ echo "The message is: ${message}"
             |+The message is: Test+|
             $ echo 'Salut, le monde!' | { read message;
-            > echo "The message is: $message"; }
+            > echo "The message is: ${message}"; }
             |+The message is: Salut, le monde!+|
-            $ echo "The message is: $message"
+            $ echo "The message is: ${message}"
             |+The message is: Test+|
         \end{lstlisting}
     \end{onlyenv}
