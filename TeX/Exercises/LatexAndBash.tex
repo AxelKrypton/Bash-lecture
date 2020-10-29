@@ -10,8 +10,8 @@
     \begin{lstlisting}[style=myBash]
         function @|\textcolor{functions-color}{\texttt{pdflatex}}|@()
         {
-            echo "$@"; shift |+$(( $# - 1 ))+|
-            touch "${1/%.tex/}".{log,aux,pdf}
+            echo "$@"; sleep 5
+            touch 'Plot.'{log,aux,pdf}
         }
     \end{lstlisting}
     You will loose the graphical aspect of this exercise, but you will still be able to work on it.
@@ -48,7 +48,9 @@
     In particular, be sure to have examined and dealt with the following aspects.
     \begin{itemize}
         \item As you know, \LaTeX\ produces a bunch of additional files and it would be nice to remove them to leave the present folder in a tidy state.
-        \item The clean-up should be always done, unless you have some reason not to do it. For example, how does you script behave when pressing \texttt{CTRL-C} during execution?
+        \item The clean-up should be always done, unless you have some reason not to do it.
+              For example, how does you script behave when pressing \texttt{CTRL-C} during execution?
+              It might be interesting to use the \texttt{-halt-on-error} of {pdflatex} to make it better handle an interruption.
         \item Which strategy did you use to do error handling? What happens when the \LaTeX\ compilation fails? Trigger a failure by hand to test your code.
     \end{itemize}
     You can produce an input data file using \bash|awk| via
