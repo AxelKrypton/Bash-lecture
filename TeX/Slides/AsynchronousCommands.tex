@@ -418,7 +418,7 @@
                                             #  EXAMPLE 1: wait
                 ( exit 12 ) &
                 pid=$!
-                while { sleep 0 & [ "$pid" != "$!" ]; }; do
+                while { sleep 0 & [[ "${pid}" |+!=+| "$!" ]]; }; do
                     :
                 done
                 wait "$pid"
@@ -508,11 +508,11 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<2-3>
-            \begin{lstlisting}[style=MyBash, emph={[7]sleep_pid, exitCode, waitCode}, firstnumber=12]
+            \begin{lstlisting}[style=MyBash, emph={[7]sleep_pid, exitCode, waitCode}, firstnumber=12, xrightmargin=2mm]
                 #!/bin/bash
                 {
                     sleep_pid=$!
-                    while { ( exit 12 ) & [ "${sleep_pid}" != "$!" ]; }; do
+                    while { ( exit 12 ) & [[ "${sleep_pid}" |+!=+| "$!" ]]; }; do
                         :
                     done
                     wait "${sleep_pid}"
@@ -523,7 +523,7 @@
                 } 3< <(sleep 1; echo "$?")
             \end{lstlisting}
             \begin{uncoverenv}<3>
-                \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=1mm]
+                \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=1mm, xrightmargin=2mm]
                     $ ./script-above.bash
                     |+Command in process substitution: 0
                     Command in           while loop: 12+|

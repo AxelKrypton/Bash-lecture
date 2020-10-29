@@ -247,15 +247,15 @@
             \begin{lstlisting}[style=myBash]
                 #!/usr/bin/env bash
                 set -e
-                function simulation(){ return 1; }
+                function Simulation(){ return 1; }
 
-                if simulation; then
+                if Simulation; then
                     echo 'Success!'
                 else
                     echo 'Failure!'
                 fi
 
-                simulation               # Here the script exits!
+                Simulation               # Here the script exits!
 
                 if [[ $? -eq 0 ]]; then  # This if-clause is skipped!
                     echo 'Success!'
