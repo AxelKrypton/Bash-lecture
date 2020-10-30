@@ -25,13 +25,13 @@
     \end{lstlisting}
     \begin{quiz}[1]{Is the above snippet correct? Why?}
         \wrongChoice{Yes, if the file exists, it gets removed.}
-        \correctChoice{No, One file should be removed, but three are potentially deleted!}
-        \wrongChoice{Yes, if the file does not exist, the code works fine.}
+        \correctChoice{No, one file should be removed, but three different ones are potentially deleted!}
+        \wrongChoice{Yes, if the file does not exist, nothing is removed.}
     \end{quiz}
     \begin{uncoverenv}<3-4>
         \begin{lstlisting}[style=myBash, numbers=none]
             function echo() {
-                echo "A clever echo implementation"
+                # A clever echo implementation
                 # ...
             }
         \end{lstlisting}
@@ -50,7 +50,7 @@
     \begin{quiz}[1]{What does the above command print?}
         \wrongChoice{Nothing, the internal field separator cannot be printed.}
         \correctChoice{Nothing, the shell performs world splitting after the variable is expanded.}
-        \wrongChoice{Since the \bash|IFS| is reset to a visible character, an underscore is here printed.}
+        \wrongChoice{Since the \bash|IFS| is set to a visible character, an underscore is here printed.}
     \end{quiz}
     \begin{uncoverenv}<3-4>
         \begin{lstlisting}[style=myBash, numbers=none]
@@ -79,7 +79,7 @@
         \begin{lstlisting}[style=myBash, numbers=none]
             echo 3.2*4 | bc -l
         \end{lstlisting}
-        \begin{quiz}[3]{Does the above good code do the required multiplication?}
+        \begin{quiz}[3]{Does the above code do the required multiplication?}
             \wrongChoice{Yes. Bash does not support floating point operations and \bash|bc| can be used in this case.}
             \wrongChoice{Yes, the code above always works. However, a here-string construct would be better to avoid to use \bash|echo| and the pipeline.}
             \correctChoice{This code is wrong! \uncover<4>{Shell automatically does filename extension. Often it might work, but only if the filename extension fails and \texttt{nullglob} is not set!}}
@@ -107,7 +107,7 @@
         \end{lstlisting}
         \begin{quiz}[3]{Does the above for loop always work?}
             \wrongChoice{Yes, using arrays is the best way to iterate over files.}
-            \wrongChoice{the snippet above works, but it is better to use globbing directly in the for construct.}
+            \wrongChoice{The snippet above works, but it is better to use globbing directly in the for construct.}
             \correctChoice{Although the code above might works, it is in general wrong!\\
                            \uncover<4->{Use \tc{strings-color}{\texttt{"\$\{array[@]\}"}} to avoid word splitting!}}
         \end{quiz}
@@ -149,11 +149,12 @@
         \begin{lstlisting}[style=myBash, numbers=none]
             for file in *; do
                 # Do something with files
+                stat "${file}" | head -n2
             done
         \end{lstlisting}
         \begin{quiz}[3]{Do you have any comment about the for-loop above?}
             \wrongChoice{Yes, the code above does not work. Filenames should be stored in an array first.}
-            \wrongChoice{No. Using globbing is the write way to iterate over files in the present folder.}
+            \wrongChoice{No. Using globbing is the right way to iterate over files in the present folder.}
             \correctChoice{The code might do something unexpected! \uncover<4>{Be sure to handle the no-file-scenario correctly (or set \texttt{nullglob})!}}
         \end{quiz}
     \end{uncoverenv}
@@ -163,7 +164,7 @@
     \vspace{-3mm}
     \begin{lstlisting}[style=myBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm]
         # Keep only first three lines of a file
-        $ head -n3 filename > filename
+        $ head -n3 |+filename > filename+|
     \end{lstlisting}
     \begin{quiz}[1]{Does the code above work?}
         \wrongChoice{Yes, provided that the file \bash|filename| exists.}
@@ -189,14 +190,14 @@
     \end{lstlisting}
     \begin{quiz}[1]{What does the command above print?}
         \wrongChoice{4. The vowels in the string are counted and the number stored in \bash|counter|.}
-        \correctChoice{0. The variable \bash|counter| is set in a subshell and hence its change is not seen after the pipeline. \uncover<2->{Use command substitution to initialise \bash|counter| and avoid read.}}
+        \correctChoice{0. The variable \bash|counter| is set in a subshell and hence its change is not seen after the pipeline. \uncover<2->{Use command substitution to initialise \bash|counter| and avoid \bash|read|.}}
         \wrongChoice{The command above gives an error, since \bash|read| does not reads from the standard input.}
     \end{quiz}
     \begin{uncoverenv}<3-4>
         \begin{quiz}[3]{Which of the following statements about functions is correct?}
             \wrongChoice{The \bash|return| builtin is meant to return values from functions.}
             \correctChoice{Variable in functions are by default global. Use the \bash|local| builtin to declare local ones.}
-            \wrongChoice{Syntactical errors in unused function still make the script fail.}
+            \wrongChoice{Syntactical errors in unused functions still make the script fail.}
             \wrongChoice{In order to preserve the OS, Bash limits by default the number of recursive calls.}
             \correctChoice{Arguments to a function should preferably be passed by value.}
         \end{quiz}
@@ -209,7 +210,7 @@
     \end{lstlisting}
     \begin{quiz}[1]{What does the command above do?}
         \wrongChoice{It runs three \bash|sleep| commands in background.}
-        \wrongChoice{Using \texttt{\&;} the shell will queue the \bash|sleep| commands and execute after each other in background.}
+        \wrongChoice{Using \texttt{\&;} the shell will queue the \bash|sleep| commands and execute them after each other in background.}
         \correctChoice{The command above will fail. The \texttt{\&} is a command terminator as well as \texttt{;} is. Hence, bash will complain bacause an empty command is terminated (between \texttt{\&} and \texttt{;}).}
     \end{quiz}
     \begin{uncoverenv}<3-4>

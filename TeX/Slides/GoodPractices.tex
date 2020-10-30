@@ -148,6 +148,7 @@
                 \item command substitutions remove any trailing newlines!
             \end{itemize}
             \PS{Use a \bash|while read| loop instead.}
+            \FrameRemark[3]{\guillemotleft The command substitution \;\PB{\texttt{\$(cat file)}}\; can be replaced by the equivalent but faster \;\PB{\texttt{\$(< file)}}\guillemotright. $\;\to\;$ \URL[PB]{https://www.gnu.org/software/bash/manual/html\_node/Command-Substitution.html}{Bash manual section 3.5.4}}
         \item<only@4>
             \alert{\large\textbf{For the love of god and all that is holy, do not use \bash|seq| to count!}}
             \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=35mm]

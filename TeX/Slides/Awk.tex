@@ -144,7 +144,7 @@
         $ aVar='Hello'
         $ awk -v hi="${aVar}" -v sum=1 'BEGIN{sum++; print hi " " sum}'
         |+Hello 2+|
-        $ awk -v index=1 'BEGIN{print index}'
+        $ awk -v |+index=1+| 'BEGIN{print index}'
         |+awk: fatal: cannot use gawk builtin `index' as variable name+|
     \end{lstlisting}
 \end{frame}
@@ -162,17 +162,17 @@
             |+Drawn 52 numbers >10.+|
 
             # Print every line that is longer than 80 characters
-            awk 'length($0) > 80' filename
+            awk 'length($0) > 80' |+filename+|
 
             # Print the length of the longest input line
             awk '    { if (length($0) > max) {max = length($0)} }
-                 END { print max }' filename
+                 END { print max }' |+filename+|
 
             # Print every line that has at least one field
-            awk 'NF > 0' filename
+            awk 'NF > 0' |+filename+|
 
             # Count the lines in a file
-            awk 'END { print NR }' filename
+            awk 'END { print NR }' |+filename+|
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<2>
@@ -253,15 +253,15 @@
             $ cp file1 file2
             $ ls
             |+file1   file2+|
-            $ gawk -i inplace '{ gsub(/foo/, "bar") }; { print }' file1
+            $ awk -i inplace '{ gsub(/foo/, "bar") }; { print }' file1
             $ cat file1
             |+bar
             bar
             bar+|
             $ awk --version | head -n1
             GNU Awk 5.0.1, API: 2.0 (GNU MPFR 4.0.2, GNU MP 6.2.0)
-            # gawk -i inplace -v INPLACE_SUFFIX='.bak' ...
-            $ gawk -i inplace -v inplace::suffix='.bak'\
+            # awk -i inplace -v INPLACE_SUFFIX='.bak' ...
+            $ awk -i inplace -v inplace::suffix='.bak'\
             >      '{ gsub(/foo/, "bar") }; { print }' file2
             $ ls
             |+file1   file2   file2.bak+|
