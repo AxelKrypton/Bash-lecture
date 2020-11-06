@@ -44,7 +44,7 @@ Of course, its files have to be put in the correct place, e.g. in `~/texmf/tex/l
 
 - [ ] Sample solutions
   - [X] Day 1
-  - [ ] Day 2
+  - [X] Day 2
   - [ ] Day 3
   - [ ] Day 4
   - [ ] Day 5

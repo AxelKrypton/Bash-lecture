@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [[ ! "$1 $2" =~ ^-t\ [12w]$ ]]; then
     printf '\n  Give "-t N" (N=w, N=1 or N=2) as option to select the exercise task.\n\n' >&2
