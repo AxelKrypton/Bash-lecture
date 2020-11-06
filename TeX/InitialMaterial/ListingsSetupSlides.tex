@@ -73,7 +73,7 @@ alsoletter=0123456789![]/\{\}.:+, % This to mark the symbols in keyword/emph[5] 
 morekeywords={if, then, else, elif, fi, case, esac, for, select, while, until, do, done, in, function, time, [[, ]], \{, \}, !, coproc}, %https://askubuntu.com/a/513712
 emph=[1]{CreateListOfFiles, LevelOne, LevelTwo, LevelThree, Test, SecondsToTimeStringWithDays, ExampleFunction,
          ExampleFunction_implementation, ExtractColumnFromFile, CalculateSizeOfFiles, ReportOnLargestDirectories,
-         CountTill5From, FifthElementOf, CreateAuxiliaryFiles, CleanAuxiliaryFiles, Failure, FailureMsg, Simulation},
+         CountTill5From, FifthElementOf, CreateAuxiliaryFiles, CleanAuxiliaryFiles, Failure, FailureMsg, Simulation, Bomb, Join},
 emphstyle=[1]{\color{functions-color}}, %Functions
 emph=[2]{variableName, invisibleVariable, prefix, day, today, song, aVar, bVar, langRegex, deadline, now,
          index, file, fgbg, color, reference, files, array, message, entry, index, dict, key, flag, line, inputTime,
@@ -89,7 +89,7 @@ emph=[5]{alias, bg, bind, break, builtin, cd, command, compgen, complete, contin
          % case, if, until, while  % <--- these built-in are keywords and I leave them highlighted as such
          unalias, unset, wait, :, ., [, ]},
 emphstyle=[5]{\color{builtins-color}}, %Shell built-in
-emph=[6]{man, apropos, ls, rm, g++, chmod, cp, awk, sed, cut, perl, args, date, grep, sleep, tput, seq, cat, wc, sort, tail,
+emph=[6]{man, apropos, ls, rm, g++, chmod, cp, awk, sed, cut, perl, args, date, grep, sleep, tput, seq, cat, wc, sort, uniq, tail,
          head, sdiff, tar, mktemp, mkdir, ps, emacs, systemd, timeout, parallel, xargs, gnuplot, pdflatex, vi, ping, bash,
          egrep, shuf, stat, find, fgrep, bc, tr, paste, expr, diff, touch},
 emphstyle=[6]{\color{external-color}}, %(External) commands

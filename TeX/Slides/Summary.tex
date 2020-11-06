@@ -54,7 +54,7 @@
     \end{quiz}
     \begin{uncoverenv}<3-4>
         \begin{lstlisting}[style=myBash, numbers=none]
-            function join() {
+            function Join() {
                 IFS='_'; echo $*
             }
         \end{lstlisting}
@@ -72,7 +72,7 @@
     \end{lstlisting}
     \begin{quiz}[1]{What does the above command print?}
         \wrongChoice{It prints the numbers from 1 to the present day of the month.}
-        \correctChoice{\texttt{\{1..20\}} gets printed since brace expansion happens before command substitution.}
+        \correctChoice{\texttt{\{1..30\}} gets printed since brace expansion happens before command substitution.}
         \wrongChoice{An error is printed, command substitution cannot be used in brace expansion.}
     \end{quiz}
     \begin{uncoverenv}<3-4>
@@ -258,7 +258,7 @@
     \begin{uncoverenv}<3-4>
         \begin{lstlisting}[style=myBash, numbers=none]
             $ filename='data.dat'
-            $ extension="(awk -F '.' '{print $2}' <<< "@|\tc{strings-color}{\texttt{\$\{filename\}}}|@")"
+            $ extension="$(awk -F '.' '{print $2}' <<< "@|\tc{strings-color}{\texttt{\$\{filename\}}}|@")"
         \end{lstlisting}
         \begin{quiz}[3]{What would you say about the code above?}
             \wrongChoice{It fails. Bash cannot handle nested double quotes in the second line.}

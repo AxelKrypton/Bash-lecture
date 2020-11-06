@@ -758,7 +758,7 @@
             $ bc -l <<< "10/4"
             |+2.50000000000000000000+|
             $ bc <<< "obase=16; ibase=2; 11000000"
-            |+B64+|
+            |+C0+|
             $ bc <<< "ibase=2; obase=10000; 11000000"
             |+C0+|
             $ wc -w <<< "Day of the week as number: $(date +'%w')"
@@ -915,7 +915,7 @@
             # Why do you get a blank output here?
             $ sdiff -s <(head Day_1.tex) <(head Day_2.tex)
             |+\subtitle{Day 1}                        | \subtitle{Day 2}
-            \date{26.10.2019}                       | \date{27.10.2019}+|
+            \date{26.10.2020}                       | \date{27.10.2020}+|
         \end{lstlisting}
     \end{onlyenv}
     \FrameRemark[2]{$^\star$This is an incomplete statement, if taken as general rule: It is not \URL[PB]{https://unix.stackexchange.com/questions/403783/the-process-substitution-output-is-out-of-the-order}{the full story}.}
