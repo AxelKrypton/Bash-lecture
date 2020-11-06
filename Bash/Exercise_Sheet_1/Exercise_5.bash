@@ -22,7 +22,7 @@ printf '%35s  %s\n'\
 #stringToParse="beta6.0000_seed1111_continueWithNewChain"
 stringToParse="beta6.1234_s1234_thermalizeFromConf"
 
-#To avoid the temportary variable you need more knowledge, e.g. arrays
+#To avoid the temporary variable you need more knowledge, e.g. arrays
 # NOTE: Parameter expansion cannot be nested!
 temporaryString=${stringToParse%_*}
 firstField=${temporaryString%_*}
