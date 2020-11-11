@@ -125,7 +125,7 @@ while [[ $# -gt 0 ]]; do
             break
             ;;
         * )
-            echo -e "\e[91mUnrecognised option \[1m${1}\e[22m." >&2
+            echo -e "\e[91mUnrecognised option \e[1m${1}\e[22m." >&2
             exit 1
             ;;
     esac

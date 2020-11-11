@@ -27,7 +27,7 @@ function ParseCommandLineParameters()
                 shift 2
                 ;;
             * )
-                PrintFatal "Unrecognised option \[1m${1}\e[22m."
+                PrintFatal "Unrecognised option \e[1m${1}\e[22m."
                 ;;
         esac
     done
@@ -35,18 +35,30 @@ function ParseCommandLineParameters()
 
 function SplitInputInSeveralFiles()
 {
-    awk 'NR==1{
-             numCols=NF
-         }
-         {
-             if(NF!=numCols) {
-                 print "Line" NR "has not " numCols "fields" > "/dev/stderr"
-                 exit 1
-             }
-             for(i=1; i<=numCols; i++){
-                 print $i >> "column_" i ".dat"
-             }
-         }' "${inputFile}"
+    # Assume all lines contain same amount of fields and split
+    # on spaces using word splitting on the first line of the file
+    #  -> the size of array is then the number of columns
+    local tmpArray index
+    tmpArray=( $(head -n1 "${inputFile}") )
+    # In the following "tr -s" is meant to replace repeated spaces in the input file
+    # with a single space in order to ensure the cut command to work (see 'man tr' and 'man cut').
+    for((index=1; index<=${#tmpArray[@]}; index++)); do
+        tr -s ' ' < <(cat "${inputFile}")  | cut -d' ' -f${index}  > "column_${index}.dat"
+    done
+
+    # From tomorrow on, you'll rather use awk
+    #awk 'NR==1{
+    #         numCols=NF
+    #     }
+    #     {
+    #         if(NF!=numCols) {
+    #             print "Line" NR "has not " numCols "fields" > "/dev/stderr"
+    #             exit 1
+    #         }
+    #         for(i=1; i<=numCols; i++){
+    #             print $i >> "column_" i ".dat"
+    #         }
+    #     }' "${inputFile}"
 }
 
 function RemoveAllAuxFiles()
