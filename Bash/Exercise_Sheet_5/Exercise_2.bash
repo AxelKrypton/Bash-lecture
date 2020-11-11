@@ -94,7 +94,7 @@ holesProcessed="$(awk 'NR==1{tr=$1; next} NR>1 && $1!=tr+1{printf "%d-%d ", tr, 
 PrintInfo "Processed file: Holes=[${holesProcessed%?}]"
 
 # BONUS: Find out all incomplete trajectories
-PrintInfo "List of all incomplete trajectories"; printf '\e[1A'
+PrintInfo "List of all incomplete trajectories"
 min_max=( $(grep 'MEASURE\[[0-9]\+\]' "${inputfile}" | sed -n -e 's/.*MEASURE\[\([0-9]\+\)\].*/\1/' -e '1p' -e '$p' | tr '\n' ' ') )
 for ((index=min_max[0]; index<=min_max[1]; index++)); do
     if [[ ${plaquette[index]} != '' ]] && [[ ${rectangle[index]} != '' ]] && [[ ${polyakov[index]} != '' ]]; then

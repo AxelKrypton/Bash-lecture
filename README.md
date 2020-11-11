@@ -42,9 +42,9 @@ Of course, its files have to be put in the correct place, e.g. in `~/texmf/tex/l
   - [X] Day 4
   - [X] Day 5
 
-- [ ] Sample solutions
+- [X] Sample solutions
   - [X] Day 1
   - [X] Day 2
   - [X] Day 3
   - [X] Day 4
-  - [ ] Day 5
+  - [X] Day 5
