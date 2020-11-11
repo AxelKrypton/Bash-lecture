@@ -13,6 +13,7 @@
         \begin{lstlisting}[style=myBash, numbers=none]
             #!/usr/bin/env bash
             ( set -e; ( echo 11; false; echo 22 ) ; echo 33 ); echo 44
+            ( set -e; ( echo 55; false; echo 66 ) ; echo 77 ) && echo 88
         \end{lstlisting}
         \item ~
         \begin{lstlisting}[style=myBash, numbers=none]
