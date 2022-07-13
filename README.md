@@ -1,6 +1,6 @@
 # Introduction to Bash scripting language
 
-Material relative to a 3-days crash lecture about `Bash` scripting language given at Goethe University in Frakfurt am Main in October 2019.
+Material relative to a 5-days lecture about `Bash` scripting language given several times at Goethe University in Frakfurt am Main in the context of the CRC-TR 211 collaboration as well as part of the PUNCH4NFDI young academy.
 
 #### Slides, exercises and sample solution:
 
@@ -18,7 +18,7 @@ Feel free to contact me if you wish to make use of any of them.
 ## The beamer theme
 
 The beamer theme used for this lecture has been developed for this purpose in order to have a simple, but at the same time relaxing and appealing theme.
-It was inspired by the [Code Course](https://github.com/Irubataru/beamer-themes) theme of Jonas, but adapted to the need of having versatile blocks (see `varblock` environment).
+It was inspired by the [Code Course](https://github.com/Irubataru/beamer-themes) theme of a friend, but adapted to the need of having versatile blocks (see `varblock` environment).
 Also handy commands to use the four palette colours in the presentation have been added to the theme.
 The theme has been included in the repository to allow compilation.
 Of course, its files have to be put in the correct place, e.g. in `~/texmf/tex/latex/beamer/theme/` on Linux OS in the **`color`**, **`font`**, **`inner`**, **`outer`** and **`theme`** folders.
