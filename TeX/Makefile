@@ -4,7 +4,7 @@ TEXCOMPILER = latexmk
 TEXOPTIONS = -xelatex --synctex=1 -interaction=batchmode
 TEXSOURCESLIDES = Day_
 TEXSOURCEEXERCISE = Exercise_
-CLEANUP_FILES = .bbl .bcf .blg .out .synctex.gz .tex.backup '~' .log  .toc .aux .tdo .ps .dvi .xml frn.tex blx.bib vrb snm nav
+CLEANUP_FILES = .bbl .bcf .blg .out .synctex.gz .tex.backup '~' .log  .toc .aux .tdo .ps .dvi .xml frn.tex blx.bib .vrb .snm .nav .xdv .fls .fdb_latexmk
 DAYS = 1 2 3 4 5
 LIVEDATE = `date +'on %y.%m.%d at %H:%M:%S'`
 
