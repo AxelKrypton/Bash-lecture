@@ -4,6 +4,7 @@
 %-------------------------------%
 
 \AddLinkToTOCfalse
+\PrepareURLsymbol[black]
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[plain,noframenumbering]
     \titlepage
@@ -18,18 +19,17 @@
                     \node (A\n) at (0,-1.5*\n) {\includegraphics[width=10mm]{\f}};
                 \end{scope}
             }
-            \node[right = of A0] {\{26..30\}.10.2019};
+            \node[right = of A0] {\{25..29\}.09.2023};
             \node[right = of A1] {
                 \begin{tabular}{@{}r@{\;}l}
-                    Morning:   & 09:15 to 12:00 \\
-                    Afternoon: & 14:15 to 17:00 \Remark[2.5mm]{I can stay more, if you wish}
+                    Morning:   & 09:15 to 12:30 \Remark{Lecture with slides}\\
+                    Afternoon: & 14:15 to 17:30 \Remark{Exercise sheet -- I am here to help, use me}\\
                 \end{tabular}
-                %Morning: 09:15 to 12:00$\quad$ Afternoon: 14:15 to 17:00
             };
             \node[right = of A2] {
                 \begin{tabular}{@{}r@{\;}l}
-                    Morning:   & Otto-Stern-Zentrum, room H6 \Remark{Lecture with slides} \\
-                    Afternoon: & Otto-Stern-Zentrum, room H6 \Remark{Exercise sheet -- I am here to help, use me}
+                    Monday to Wednesday:   & FIAS, room 0.101 \\
+                    Thursday and Friday:   & FIAS, room 0.200
                 \end{tabular}
             };
             \node[right = of A3] {Dr. Alessandro Sciarra};
@@ -45,7 +45,7 @@
     \vspace{5mm}
     \begin{itemize}
         \item Member of the Software Development Center \\ $\to\;$ Z02 project of the CRC-TR211 collaboration
-        \item A ``lattice practitioner''
+        \item A used-to-be ``lattice practitioner''
         \item A dreamer who flatters himself that
               \begin{itemize}
                   \item physicists will one day \PB{properly} use the IT tools they use
@@ -69,12 +69,12 @@
         \setcounter{enumi}{1}
         \item<3-> The amount of information given in this lecture is \textbf{huge}, I am aware of it
         \item<3-> You will not receive all the details (I tried to pass on the important information, though)\\
-                  $\;\to\;$ be active, ask, use manuals, go beyond this lecture!
+                  \then be active, ask, use manuals, go beyond this lecture!
         \item<4-> Often it is hard (very hard) to clarify all details of and exceptions to rules \\
-                  $\;\to\;$ experience and practice will fill the gap
+                  \then experience and practice will fill the gap
         \item<4-> From rules/practical examples to abstract ideas/good practices
         \item<5-> 100\% Bash, no focus on portability or differences among \\ various shell languages \Remark{I am not at that level}\\
-                  $\;\to\;$ sh, ksh, csh, tcsh, dash, zsh, fish, \ldots
+                  \then sh, ksh, csh, tcsh, dash, zsh, fish, \ldots
         \setcounter{enumi}{0}
         \item<2-> \PS{\textbf{Relaxed atmosphere!}}\\
                   \PT{Interactive lecture: ask, ask, ask!}
@@ -87,13 +87,13 @@
 \begin{frame}{What is \URL[PP]{https://www.gnu.org/software/bash/}{Bash}?}
     \begin{tikzpicture}[remember picture, overlay]
         \node[anchor=north east] (logo) at ($(current page.north east)-(3mm,3mm)$) {\includegraphics[width=25mm]{BashLogo}};
-        \node[below = 1mm of logo.north east, anchor=east, font=\tiny] {\URL{https://commons.wikimedia.org/w/index.php?curid=53428398}{Bash logo}};
+        \node[below = 1mm of logo.north east, anchor=east, font=\tiny] {\URL*{https://commons.wikimedia.org/w/index.php?curid=53428398}{Bash logo}};
     \end{tikzpicture}
     \vspace{-3mm}
     \begin{itemize}
         \item Scripting/command language
         \item Unix shell $\;\leftrightarrow\;$ command processor
-        \item First release in 1989, current version v5.0 (Jan 2019) $\quad\to\;$ \URL[PS]{http://ftp.gnu.org/gnu/bash/}{download Bash}
+        \item First release in 1989, current version v5.2 (Sep 2022) $\quad\to\;$ \URL[PS]{http://ftp.gnu.org/gnu/bash/}{download Bash}
     \end{itemize}
     \begin{varblock}{quote}[0.9\textwidth]{GNU Bash}
         Bash is the GNU Project's shell.
@@ -117,13 +117,13 @@
     \begin{itemize}
         \item It is probably the shell you use (Bash is everywhere)
         \item Knowing Bash a bit more allows for better problem handling \\
-              $\to\;$ e.g. delegate to Bash tasks that maybe you currently do in C/C++
+              \then e.g. delegate to Bash tasks that maybe you currently do in C/C++ or Python
         \item It is a scripting language very close to the (Unix) operative system
         \item Opportunity to make your daily work-flow more comfortable
     \end{itemize}
-    %\vspace{1mm}
+    \PrepareURLsymbol[ALERT]
     \begin{varblock}{alerted}[0.64\textwidth]{}<2>
-        However, \URL[PT]{http://mywiki.wooledge.org/BashWeaknesses}{Bash weaknesses} are known:\hfill
+        However, \URL*{http://mywiki.wooledge.org/BashWeaknesses}{Bash weaknesses} are known:\hfill
         \begin{itemize}
             \item Floating point math
             \item Lack of data structures
@@ -149,15 +149,15 @@
     \begin{itemize}
         \item This is especially important as physicist
         \item Knowing all details and tweaks of Bash is probably not your goal \\
-              $\;\to\;$ nor is it probably needed in your daily work
-        \item \PT{Having an overview} is, instead, very important (e.g.\ to \PT{decide when to use Bash})
-        \item As soon as something smells odd, it is important \PT{to be able to have a detailed look}
+              \then nor is it probably needed in your daily work
+        \item \alert{Having an overview} is, instead, very important (e.g.\ to \alert{decide when to use Bash})
+        \item As soon as something smells odd, it is important \alert{to be able to have a detailed look}
     \end{itemize}
     \begin{varblock}{}[0.8\textwidth]{}%Can I switch this integral with this sum?}
         %Usually a physicist assumes it is possible and goes back as soon as something starts looking odd\ldots
         \PB{$\displaystyle\sum\int(\ldots)=\int\sum(\ldots)$ until something starts looking odd}
     \end{varblock}
-    
+
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{References for future use}
@@ -166,7 +166,7 @@
     \begin{itemize}
         \item[] \URL{https://www.gnu.org/software/bash/manual/}{Bash official manual}
         \item[] \URL{http://manpages.ubuntu.com/manpages/bionic/man7/bash-builtins.7.html}{List of Bash builtins with descriptions}
-        \item[] \URL{http://mywiki.wooledge.org/BashFAQ/061}{Notable changes in released bash versions}\PB{\Remark{More extensive list \URL[PB]{http://wiki.bash-hackers.org/scripting/bashchanges}{also available}}}
+        \item[] \URL{http://mywiki.wooledge.org/BashFAQ/061}{Notable changes in released bash versions}\PB{\Remark{More extensive list \URL[PB]{https://bash-hackers.gabe565.com/scripting/bashchanges/}{also available}}}
         \item[] \URL{https://devhints.io/bash}{A nice Bash cheatsheet}
         \item[] \URL{https://google.github.io/styleguide/shellguide.html}{Google Shell Style Guide}
         \item[] \URL{https://github.com/mietek/bashmenot}{A (sadly not maintained) Bash library}\PB{\Remark{Clone from Github to use it, reference website is unfortunately down}}
@@ -181,7 +181,7 @@
         \item[] \URL{https://github.com/AxelKrypton/Bash_lecture_2020}{All material \tikzmark{MeOnGitHub}of this lecture}
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay]
-        \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (TutorialBegin -| TutorialEnd) ++(5mm,1mm) -- ($(TutorialEnd)+(5mm,-1mm)$) 
+        \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (TutorialBegin -| TutorialEnd) ++(5mm,1mm) -- ($(TutorialEnd)+(5mm,-1mm)$)
               node[midway, right=3mm, text width=25mm, font=\small, align=center, text=PP] {Material used to prepare this lecture};
         \path[to] (MeOnGitHub) ++(0,-2mm) edge[out=270, in=180] node[pos=1, anchor=west] {My GitHub page \hspace{1mm}\raisebox{-1.3mm}{\includegraphics[width=5mm]{AxelKrypton}}} ++(20mm, -4mm);
         \node[anchor=north, inner ysep=3mm] (book) at ($(current page.north)!0.5!(current page.north east)$) {\includegraphics[width=16mm]{Cookbook}};
@@ -228,7 +228,7 @@
         \end{enumerate}
     \end{multicols}
     \begin{tikzpicture}[remember picture, overlay, every label/.append style={label distance=-2pt, font=\tiny}, scope on=<2>]
-        \foreach \d/\n [count=\i] in {Monday/26, Tuesday/27, Wednesday/28, Thursday/29, Friday/30}{
+        \foreach \d/\n [count=\i] in {Monday/25, Tuesday/26, Wednesday/27, Thursday/28, Friday/29}{
             \node[anchor=north, draw, rounded corners=1pt, label={[\d]90:\d}, inner ysep=1mm, inner xsep=2mm, text=\d, draw=\d, fill=\d!5] (Mon) at ($(current page.north)+(\i cm,-5mm)$) {\n\vphantom{2367890}};
         }
     \end{tikzpicture}
@@ -244,7 +244,7 @@
             \item Slides are (too) full of text for a later reading!
             \item Many examples to immediately show you how rules apply
             \item In Bash code, syntax highlighted to help recognise the elements
-            \item Prompt commands are always preceded by a dollar sign 
+            \item Prompt commands are always preceded by a dollar sign
                   \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xleftmargin=1mm, xrightmargin=12mm]
                       $ ls
                   \end{lstlisting}
@@ -299,7 +299,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{A short but intense journey}{A few more recommendations}
-    \vspace{-3mm}
     \begin{itemize}
         \item I am aware that you will receive a lot (really a lot) of information
         \item Do not hesitate to ask!
@@ -310,10 +309,14 @@
     {\large\PP{What do I expect?}}
     \begin{itemize}[<2->]
         \item You will also learn general coding principles, which are independent of the language \\
-              {\small$\;\to\;$ \URL[PP]{https://crc-tr211.org/seminar_slides_GU/2019.06.03.sciarra.pdf}{Clean code talk given on 03.06.2019}}
+              {\small\then Check out \URL[PP]{https://github.com/AxelKrypton/Clean-code-good-practices}{«Clean code» and «Clean testing»}  talks!}
+        \item You use the \textbf{Q\&A} functionality if you do not want to orally ask
         \item You enjoy the journey! \Remark{\ldots{}at least discovering Iceland\ldots}
         \item \PS{You give me feedback at the end of the lecture!}
     \end{itemize}
-    \vfill\hfill\uncover<3>{\LARGE\PT{Are you ready?}\hspace{3mm}}
+    \begin{tikzpicture}[remember picture, overlay, scope on=<3>]
+        \node (H) at ([yshift=5mm]current page.center) {\includegraphics[height=0.6\textheight]{Excited}};
+        \node[below = 1mm of H, font=\Huge\bfseries, text=PT, fill=BGLIGHT, inner sep=1mm] {Are you ready?};
+    \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

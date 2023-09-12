@@ -9,17 +9,6 @@
 }
 
 \tikzset{
-    %Displaying keys
-    onslide/.code args={<#1>#2}{\only<#1>{\pgfkeysalso{#2}}}, % \pgfkeysalso doesn't change the path
-    scope on/.style={
-        every node/.append style={visible on=#1},
-        every path/.append style={visible on=#1}
-    },
-    %Path ending shapes
-    to/.style={->,>=stealth},
-    from/.style={<-,>=stealth},
-    fromto/.style={<->,>=stealth},
-    shorter/.style 2 args={shorten <= #1, shorten >= #2},
     %Hexagons
     hexagon/.style n args={3}{double arrow, double arrow head extend=0cm, inner sep=3pt, draw=#1, fill=#2, text=#3, thick},
     hexagon/.default={black}{gray!20}{black},

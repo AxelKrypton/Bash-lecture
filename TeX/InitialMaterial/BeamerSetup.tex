@@ -53,12 +53,12 @@
             {\global\graphicexistfalse}%
             {}%
         \fi
-        \ifx\Gin@ext\relax 
+        \ifx\Gin@ext\relax
             \gdef\imageextension{unknown}%
         \else
             \xdef\imageextension{\Gin@ext}%
-        \fi 
-    \endgroup 
+        \fi
+    \endgroup
     \ifgraphicexist
         \expandafter \@firstoftwo
     \else
@@ -78,7 +78,7 @@
 
 \mode<presentation>
 {
-    \usetheme{Relax}
+    \usetheme{Z02}
     \defbeamertemplate{footline}{Empty}{}
     \setbeamersize{text margin left=8mm,text margin right=8mm}
     %\setbeamerfont{section title}{size=\Huge}
@@ -140,17 +140,20 @@
 }
 \makeatother
 
-%Append code to put third CSC logo on titlepage
+%Append code to put license and GitHub profile to titlepage
 \appto\titlepage{%
     \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=south] at (current page.south) {\includegraphics[width=25mm]{LogoCSC}};
+        \node[anchor=south, inner ysep=0pt] (license) at ($(current page.south)+(0mm,3mm)$)
+            {\includegraphics[width=10mm]{CC-BY}};
+        \node[anchor=south, font=\small, text=BGLIGHT] (Axel) at (license.north)
+            {\href{https://github.com/AxelKrypton}{\faGithub\,AxelKrypton}};
     \end{tikzpicture}
 }
 
 %===============================================================%
 \title{Introduction to Bash scripting language}
-\author{Alessandro Sciarra \texorpdfstring{\\}{} {\tiny Z02~--~Software Development Center}}
-\institute{Organised by the CSC Frankfurt}
-\titlegraphic{\includegraphics[width=20mm]{LogoCRC}}
-\titlepagelogo{\includegraphics[width=20mm]{LogoGoethe}}
+\author{Alessandro Sciarra}
+\institute{Z02~--~Software Development Center}
+\titlegraphic{\includegraphics[width=24mm]{LogoCRC}}
+\titlepagelogo{\includegraphics[width=24mm]{LogoGoethe}}
 %===============================================================%
