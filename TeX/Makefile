@@ -1,11 +1,14 @@
 # Does only work on Unix/Linux-like enviroments
 
-TEXCOMPILER = xelatex -interaction=batchmode -halt-on-error
+TEXCOMPILER = latexmk
+TEXOPTIONS = -xelatex --synctex=1 -interaction=batchmode
 TEXSOURCESLIDES = Day_
 TEXSOURCEEXERCISE = Exercise_
 CLEANUP_FILES = .bbl .bcf .blg .out .synctex.gz .tex.backup '~' .log  .toc .aux .tdo .ps .dvi .xml frn.tex blx.bib vrb snm nav
 DAYS = 1 2 3 4 5
 LIVEDATE = `date +'on %y.%m.%d at %H:%M:%S'`
+
+.PHONY: slides
 
 default : slides clean
 
@@ -26,9 +29,7 @@ clean :
 slides :
 ifdef DAY
 	@printf '\e[92m ==> Compiling \e[1m$(TEXSOURCESLIDES)$(DAY).tex\e[22;96m %s\e[0m\n' "$(LIVEDATE)"
-	$(TEXCOMPILER) $(TEXSOURCESLIDES)$(DAY).tex
-	@printf '\e[92m ==> Re-compiling \e[1m$(TEXSOURCESLIDES)$(DAY).tex\e[22;96m %s\e[0m\n' "$(LIVEDATE)"
-	$(TEXCOMPILER) $(TEXSOURCESLIDES)$(DAY).tex
+	$(TEXCOMPILER) $(TEXOPTIONS) $(TEXSOURCESLIDES)$(DAY).tex
 	mv $(TEXSOURCESLIDES)$(DAY).pdf ..
 	@printf '\e[92m ==> File \e[1m$(TEXSOURCESLIDES)$(DAY).pdf\e[22m sucessfully produced %s\e[0m\n' "$(LIVEDATE)"
 else
@@ -38,9 +39,7 @@ endif
 exercise :
 ifdef DAY
 	@printf '\e[92m ==> Compiling \e[1m$(TEXSOURCEEXERCISE)$(DAY).tex\e[22;96m %s\e[0m\n' "$(LIVEDATE)"
-	$(TEXCOMPILER) $(TEXSOURCEEXERCISE)$(DAY).tex
-	@printf '\e[92m ==> Re-compiling \e[1m$(TEXSOURCEEXERCISE)$(DAY).tex\e[22;96m %s\e[0m\n' "$(LIVEDATE)"
-	$(TEXCOMPILER) $(TEXSOURCEEXERCISE)$(DAY).tex
+	$(TEXCOMPILER) $(TEXOPTIONS) $(TEXSOURCEEXERCISE)$(DAY).tex
 	mv $(TEXSOURCEEXERCISE)$(DAY).pdf ..
 	@printf '\e[92m ==> File \e[1m$(TEXSOURCEEXERCISE)$(DAY).pdf\e[22m sucessfully produced %s\e[0m\n' "$(LIVEDATE)"
 else
