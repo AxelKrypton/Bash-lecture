@@ -381,16 +381,112 @@
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Parameter expansion: String manipulation (V)}{Since Bash v4.4 (2016)}
-    % ${var@a}, ${var@A}, ${var@E}, ${var@P}, ${var@Q}
+\begin{frame}[fragile]{Parameter expansion: String manipulation (V) and reflection (I)}{Since Bash v4.4 (2016)}
+    \vspace{-2mm}
+    \setbeamerfont{description item}{series=\bfseries}
+    \setbeamercolor{description item}{fg=PP}
+    \begin{varblock*}{}[\textwidth]{}
+        \begin{description}[Syntax:]
+            \item[Syntax:] \PB{\texttt{\$\{parameter@operator\}}}\\
+            {\small
+                The expansion is either a transformation of the value of \texttt{parameter} or information about \texttt{parameter} itself, depending on the value of \texttt{operator}.\\
+            }
+        \end{description}
+    \end{varblock*}
+    \vspace{3mm}
+    \begin{overlayarea}{\textwidth}{0.5\textheight}
+        \begin{onlyenv}<1>
+            \textbf{Each operator is a single letter:}
+            \begin{description}[X:]
+                \item[a]
+                {\small
+                    The expansion is a string consisting of flag values representing \texttt{parameter}’s attributes.
+                }
+                \item[A]
+                {\small
+                    The expansion is a string in the form of an assignment statement or \bash|declare| command that, if evaluated, will recreate parameter with its attributes and value.
+                }
+                \item[E]
+                {\small
+                    The expansion is a string that is the value of parameter with backslash escape sequences expanded as with the \texttt{\PS{\$'...'}} quoting mechanism.
+                }
+                \item[P]
+                {\small
+                    The result of expanding the value of parameter as if it were a prompt string.
+                }
+                \item[Q]
+                {\small
+                    The value of parameter quoted in a format that can be reused as input.
+                }
+            \end{description}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm]
+                $ declare -i aVar=5
+                # Retrieve information about the variable
+                $ echo "${aVar@a}"
+                |+i+|
+                $ echo "${aVar@A}"; unset aVar
+                |+declare -i aVar='5'+|
+                $ aVar='Hello\tworld!'; echo "${aVar@E}"
+                |+Hello   world!+|
+                $ aVar='\d \t'; echo "${aVar@P}"
+                |+Wed Sep 13 16:04:11+|
+                $ echo "${IFS@Q}"
+                |+$' \t\n'+|
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Parameter expansion: String manipulation (VI)}{Since Bash v5.1 (2020)}
-    % ${var@U}, ${var@u}, ${var@L}, ${var@K}
-    % from v5.2 ${var@k}
+\begin{frame}[fragile]{Parameter expansion: String manipulation (VI) and reflection (II)}{Since Bash v5.1 (2020)}
+    \setbeamerfont{description item}{series=\bfseries}
+    \setbeamercolor{description item}{fg=PP}
+    \begin{overlayarea}{\textwidth}{0.5\textheight}
+        \textbf{Further operators introduced more recently:}
+        \begin{description}[X:]
+            \item[U]
+            {\small
+                The expansion is a string that is the value of \texttt{parameter} with lowercase alphabetic characters converted to uppercase.
+            }
+            \item[u]
+            {\small
+                The expansion is a string that is the value of \texttt{parameter} with the first character converted to uppercase, if it is alphabetic.
+            }
+            \item[L]
+            {\small
+                The expansion is a string that is the value of \texttt{parameter} with uppercase alphabetic characters converted to lowercase.
+            }
+            \item<only@1>[K]
+            {\small
+                Produces a possibly-quoted version of the value of \texttt{parameter}, except that it prints the values of indexed and associative arrays as a sequence of quoted key-value pairs
+            }
+            \item<only@1>[k]
+            {\small
+                Like the \texttt{K} transformation, but expands the keys and values of indexed and associative arrays to separate words after word splitting. \Remark{Since Bash v5.2}
+            }
+        \end{description}
+        \begin{onlyenv}<1>
+            \begin{center}
+                \alert{We will see examples of \texttt{@k} and \texttt{@K} expansions when discussing arrays}
+            \end{center}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm]
+                $ aVar="hello WoRLd!"
+                # Let us demonstrate
+                $ echo "${aVar@U}"   # Equivalent to ${aVar^^}
+                |+HELLO WORLD!+|
+                $ echo "${aVar@u}"   # Equivalent to ${aVar^}
+                |+Hello WoRLd!+|
+                $ echo "${aVar@L}"   # Equivalent to ${aVar,,}
+                |+hello world!+|
+            \end{lstlisting}
+        \end{onlyenv}
+    \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Parameter expansion: String manipulation summary}
+\begin{frame}{Parameter expansion: Summary}
     \vspace{-3mm}
     \begin{varblock}{alerted}[0.88\textwidth]{\textbf{Good practice:}}
         You may be tempted to use external applications such as \bash|sed|, \bash|awk|, \bash|cut|, \bash|perl| or others to modify your strings.
@@ -593,7 +689,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Word splitting}{\ldots{}the evil of Bash!}
-    \vspace{-6mm}
+    \vspace{-4mm}
     \begin{onlyenv}<1>
         \begin{varblock}{}[0.9\textwidth]{When does it occur?}
             The shell scans the results of parameter expansion, command substitution, and arithmetic expansion that did not occur within double quotes for word splitting!
@@ -610,7 +706,7 @@
         \end{itemize}
     \end{onlyenv}
     \begin{onlyenv}<2>
-        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm]
+        \begin{lstlisting}[style=MyBash, style=oddnumbers]
             # The args command puts the arguments it gets in <...>
             # NOT standard, I implemented it!
             $ args Hello world "I am Alessandro"
@@ -636,7 +732,7 @@
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<3>
-        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm, firstnumber=22]
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, firstnumber=22]
             # Let us have a look to more complex situations
             $ aVar="   /home/sciarra/Documents/Seminars   "
             $ IFS='/'; args ${aVar}; unset IFS
