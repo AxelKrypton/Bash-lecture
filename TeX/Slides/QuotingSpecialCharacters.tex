@@ -5,7 +5,7 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[label={Quotes}]{Types of quoting}
-    \vspace{-4mm}
+    \vspace{-3mm}
     \begin{description}
         \item[Single quotes] Everything inside single quotes becomes a literal string\\[-0.3em]
                              \Remark{The only character that you can't safely enclose in single quotes is a single quote.}
@@ -21,10 +21,11 @@
         \item[Backslash] Putting \texttt{\textbackslash} in front of a metacharacter removes its special meaning\\[-0.3em]
                          \Remark{This works inside double quotes, or in the absence of quotes. It does not work inside single quotes.}
         \item[\texttt{\$'\ldots'}] A Bash extension that prevents everything except backslash escaping\\
-                                   It also allows special backslash escape sequences like \texttt{\textbackslash{}n} for newline%, \t for tab, and \xnn for bytes specified in hexadecimal. 
+                                   It also allows special backslash escape sequences like \texttt{\textbackslash{}n} for newline%, \t for tab, and \xnn for bytes specified in hexadecimal.
         \item[\texttt{\$"\ldots"}] Bash extension used for \URL[PP]{http://mywiki.wooledge.org/BashFAQ/098}{localisation support}, not covered here
     \end{description}
-    \FrameRemark{This is the short story. The verbose version is available at the end of \URL[PB]{http://mywiki.wooledge.org/Quotes}{this page}.}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{This is the short story. The verbose version is available at the end of \URL*{http://mywiki.wooledge.org/Quotes}{this page}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Examples about quoting}
@@ -77,7 +78,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Special characters}{Just a brief overview}
-    \vspace{-6mm}
+    \vspace{-5mm}
     \begin{columns}
         \begin{column}{\dimexpr\paperwidth-10mm}
             \begin{description}[\texttt{>  >>  <}]
@@ -98,20 +99,20 @@
                 \item<only@1>[\texttt{\#}]
                     It introduced a \alert{comment} that extends to the end of the line. \\
                     Text after it is ignored by the shell. \Remark{In single and double quotes, \texttt{\#} is just a \texttt{\#}.}
+                \item<only@1>[\texttt{!}]
+                    The \alert{negate keyword} reverses a test or an exit status
                 \item<only@2>[\texttt{=}]
                     The \alert{assignment} symbol is used to assign a value to a variable \\
                     Whitespace is not allowed on either side of the \texttt{=} character
                 \item<only@2>[\texttt{[[ ]]}]
                     This \alert{testing keyword} allows to evaluate a conditional expression \\
                     to determine whether it is ``true'' or ``false''
-                \item<only@2>[\texttt{!}]
-                    The \alert{negate keyword} reverses a test or an exit status
                 \item<only@2>[\texttt{>  >>  <}]
                     \alert{Redirection} of a command's output or input to a file
                 \item<only@2>[\texttt{|}]
                     The \alert{pipeline} sends the output from one command to the input of another command
                 \item<only@2>[\texttt{;}]
-                    \alert{Command separator} of multiple commands that are on the same line 
+                    \alert{Command separator} of multiple commands that are on the same line
                 \item<only@2>[\texttt{\{ \}}]
                     An \alert{inline group} allows to treat multiple commands as if they were one command
                     Convenient to be uses when Bash syntax requires only one command
@@ -141,13 +142,13 @@
         \end{column}
     \end{columns}
     \begin{varblock}{}[0.9\textwidth]{More details later}<only@4>
-        \PB{We will come back to these special instructions with details and examples} 
+        \PB{We will come back to these special instructions with details and examples}
     \end{varblock}
     \begin{tikzpicture}[remember picture, overlay]
         \begin{scope}[scope on=<1>]
             \node[font=\ssmall, above = 4mm of whitespace, anchor=west, xshift=1cm] (ws) {\{a space, tab, newline, carriage return, vertical tab or form feed\}};
             \path[to] (ws.west) edge[out=180, in=90] ([yshift=2mm]whitespace);
-            \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (curlyStart -| curlyEnd) ++(5mm,1mm) -- ($(curlyEnd)+(5mm,-1mm)$) 
+            \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (curlyStart -| curlyEnd) ++(5mm,1mm) -- ($(curlyEnd)+(5mm,-1mm)$)
                   node[midway, right=3mm, text width=25mm, align=center] {Already discussed on slide~\ref{Quotes}};
         \end{scope}
         \begin{scope}[scope on=<3-4>]
@@ -179,11 +180,13 @@
     \begin{varblock}{}[0.9\textwidth]{Legacy code and portability}
         Unless you have very special requirement, try to stick to modern Bash features!
     \end{varblock}
+    \PrepareURLsymbol[PB]
     \begin{tikzpicture}[remember picture, overlay, every node/.style={anchor=east, xshift=-1cm, font=\ssmall}]
-        \node at (current page.east |- backticks) (A) {\URL[PB]{http://mywiki.wooledge.org/BashFAQ/082}{Advance reading}};
-        \node at (current page.east |- test) (B) {\URL[PB]{http://mywiki.wooledge.org/BashFAQ/031}{Advanced reading}};
+        \node at (current page.east |- backticks) (A) {\URL*[PB]{http://mywiki.wooledge.org/BashFAQ/082}{Advanced reading}};
+        \node at (current page.east |- test) (B) {\URL*[PB]{http://mywiki.wooledge.org/BashFAQ/031}{Advanced reading}};
         \path[from, shorter={5mm}{5mm}, thin, Gray!30] (backticks) edge (A) (test) edge (B);
     \end{tikzpicture}
-    \FrameRemark{At the end of the lecture, you might come back to \URL[PP]{https://wiki.bash-hackers.org/scripting/obsolete}{this page} and read about obsolete features!}
+    \PrepareURLsymbol[PP]
+    \FrameRemark{At the end of the lecture, you might come back to \URL*[PP]{https://wiki.bash-hackers.org/scripting/obsolete}{this page} and read about obsolete features!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

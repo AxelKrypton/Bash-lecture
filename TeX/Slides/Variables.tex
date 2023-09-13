@@ -5,6 +5,7 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The first building block}
+    \vspace{-3mm}
     Parameters come in two flavours:
     \begin{itemize}
         \item Variables (i.e. parameters with a name)\\[0.1em]
@@ -34,7 +35,7 @@
         };
     \end{tikzpicture}
     \begin{overlayarea}{\textwidth}{0.3\textheight}
-        \vspace{-6mm}
+        \vspace{-4mm}
         \begin{varblock*}{}[0.6\textwidth]{The variable name (also referred to as an \textbf{identifier})}<only@1>
             A word consisting only of
             \begin{itemize}
@@ -43,7 +44,7 @@
             \end{itemize}
         \end{varblock*}
         \begin{varblock*}{}[0.98\textwidth]{\textbf{Assignment}}<only@2>
-            \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=26mm, xleftmargin=26mm]
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm, xrightmargin=26mm, xleftmargin=26mm]
                 $ variableName=variableContent
             \end{lstlisting}
             \begin{itemize}
@@ -54,7 +55,7 @@
         \end{varblock*}
         \begin{varblock}{}[0.96\textwidth]{Accessing the content: the \textbf{parameter expansion}}<only@3>
             Use the \texttt{\$} special character to tell Bash that you want to use the content of a variable
-            \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm]
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-4mm]
                 $ prefix='Day_'
                 $ day='Monday'
                 $ echo "$prefix1.pdf are the slides for ${day}"
@@ -67,14 +68,15 @@
         \begin{varblock}{alerted}[0.9\textwidth]{Expanding undeclared variable}<only@4>
             Variables in Bash do not have to be declared, as they do in languages like C!\\
             If you try to read an undeclared variable, the result is the empty string.\\
-            \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm, xleftmargin=20mm, xrightmargin=20mm]
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-4mm, xleftmargin=20mm, xrightmargin=20mm]
                 $ invisibleVariable='Hello'
                 $ echo _${invisibelVariable}_
                 |+__+| # Is this magic?! Well, no...
             \end{lstlisting}
             \alert{By default, you get no warnings or errors!}
         \end{varblock}
-        \FrameRemark[4]{There is a way to activate a different behaviour of Bash when performing parameter expansion on unset variables: $\;$\URL[PB]{https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html}{\texttt{set -u}}$\;\to\;$ More on this next days.}
+        \PrepareURLsymbol[PB]
+        \FrameRemark<4>{There is a way to activate a different behaviour of Bash when performing parameter expansion on unset variables: $\;$\URL*{https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html}{\texttt{set -u}}$\;\to\;$ More on this next days.}
     \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -136,7 +138,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Crucial to know (I)}{\ldots{}and not to forget!}
     \begin{lstlisting}[style=MyBash, numbers=none]
-        #This is WRONG
+        # This is WRONG
         $ variableName@|\textvisiblespace|@=@|\textvisiblespace|@variableContent   # spaces around = sign!
         |+bash: variableName: command not found+|
     \end{lstlisting}
@@ -150,15 +152,15 @@
     \begin{varblock}{}[0.72\textwidth]{}
         \Large\PB{If you think about it for a moment, it makes sense!}
     \end{varblock}
-    
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Crucial to know (II)}{\ldots{}and not to forget!}
     \begin{overlayarea}{\textwidth}{0.5\textheight}
-        \vspace{-9mm}
+        \vspace{-5mm}
         \begin{varblock}{alerted}[0.98\textwidth]{\textbf{Attention!}}
             \PQ{After parameter expansion, Bash may still perform additional manipulations on the result!}
         \end{varblock}
+        \vspace{1mm}
         \begin{onlyenv}<1-2>
             \begin{lstlisting}[style=MyBash, belowskip=-4mm]
                 $ today=Monday
@@ -180,12 +182,12 @@
                 \item Word splitting occurred before the command was executed!
                 \item \bash|rm| was run with 2 arguments (there is white space between them and it is not quoted!)
             \end{enumerate}
-            \begin{lstlisting}[style=MyBash, numbers=none]
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm]
                 $ rm My song.mp3
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<5->
-            \begin{lstlisting}[style=MyBash]
+            \begin{lstlisting}[style=MyBash, aboveskip=2mm]
                 # Please, do not try to put quotes in variables!
                 $ song="\"My song.mp3\""
                 $ rm ${song}
@@ -212,13 +214,13 @@
             |+rm: song.mp3: No such file or directory+|
         \end{lstlisting}
     \end{onlyenv}
-    \medskip
+    \vspace{6mm}
     \begin{varblock}{alerted}[0.75\textwidth]{How do we fix this?}<only@5->
         \uncover<6>{\PQ{Remember to put double quotes around every parameter expansion!}}
     \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Available variables}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 pages 73-84}}
+\begin{frame}[fragile]{Available variables}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 5}}
     \vspace{-5mm}
     \begin{center}
         \begin{lstlisting}[style=MyBash, numbers=none, basicstyle={\ttfamily\tiny\color{basic-color}}]
@@ -267,12 +269,12 @@
         \item Therefore, you can use any of these forms of white space to delimit words
         \item The \bash|IFS| variable comes into play also in special parameter \texttt{\$*} expansion!
     \end{itemize}
-    \vspace{-5mm}
     \begin{overlayarea}{\textwidth}{0.35\textheight}
         \begin{varblock}{alerted}[0.8\textwidth]{\Large \textbf{Attention}}<only@1>
             \PQ{\large It is crucial to understand the role of the \bash|IFS| variable!}
         \end{varblock}
-        \begin{varblock}{quote}[0.9\textwidth]{\URL[PB]{http://mywiki.wooledge.org/Arguments}{When and why not to use a custom IFS}}[Greg's wiki]<only@2>
+        \PrepareURLsymbol[PB]
+        \begin{varblock}{quote}[0.9\textwidth]{\URL*{http://mywiki.wooledge.org/Arguments}{When and why not to use a custom IFS}}[Greg's wiki]<only@2>
             It is important that you understand the danger of changing the way the shell behaves.
             If you modify \textnormal{\bash|IFS|}, word splitting will happen in a non-default manner henceforth.
             Some will recommend you save \textnormal{\bash|IFS|} and reset it to the default later on.

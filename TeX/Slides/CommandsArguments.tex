@@ -10,15 +10,15 @@
         \item \alert{The first word} of the line is the name of \alert{the command} to be executed.
         \item \PP{All the remaining words} become \PP{arguments} to that command (options, filenames, etc.).
     \end{itemize}
-    \begin{lstlisting}[style=MyBash, showspaces=true, aboveskip=1mm]
+    \begin{lstlisting}[style=MyBash, showspaces=true, aboveskip=3mm]
          $@|~|@command arg1 arg2   arg3       arg4
          $@|~|@command arg1 arg2 arg3 arg4
     \end{lstlisting}
-    \vspace{2mm}
+    \vspace{3mm}
     \begin{varblock}{alerted}[0.75\textwidth]{}
         \PQ{The amount of whitespace between arguments does not matter!}
     \end{varblock}
-    \begin{lstlisting}[style=MyBash, aboveskip=2mm]
+    \begin{lstlisting}[style=MyBash, aboveskip=3mm]
         $ echo I am Clark Kent
         |+I am Clark Kent+|                        # <- Same output
         $ echo I    am  Clark         Kent
@@ -32,7 +32,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The first hurdle: spaces}{How can such an innocent, invisible character hurt me? ...well...}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{itemize}
         \item To a shell, whitespace is incredibly important
         \item Don't be fooled into thinking a space or tab more or less won't make much of a difference
@@ -49,7 +49,6 @@
         |+The secret voice.mp3+|       # Where's your file 'secret'!?
     \end{lstlisting}
     \centerline{\ssmall \bash|ls| and \bash|rm| are commands to list the present working directory content and to remove files, respectively.}
-    \vspace{-3mm}
     \begin{overlayarea}{\textwidth}{0.3\textheight}
         \begin{varblock}{example}[0.55\textwidth]{}<only@1>
             We will go more deeply into \PS{Word splitting} later!

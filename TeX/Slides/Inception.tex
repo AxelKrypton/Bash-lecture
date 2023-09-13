@@ -5,7 +5,6 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{An often mistreated language}
-    \vspace{-3mm}
     \begin{itemize}
         \item Everybody uses Bash
         \item It is easy to know a bit of many commands\tikzmark{arrowfrom}
@@ -26,7 +25,7 @@
             \path[to, visible on=<2>, PS] (arrival)   ++(-53mm,-18mm) edge[out=200, in=150, looseness=2] ++(0mm, -13mm);
         \end{tikzpicture}
         \begin{varblock}{quote}[0.9\textwidth]{Before you get too excited}[Greg's Wiki]<only@3>
-            It is key that you remember, bash is a tool, a single tool in a huge toolbox of programs. 
+            It is key that you remember, bash is a tool, a single tool in a huge toolbox of programs.
             Bash alone will only let you do basic things with files and other programs.
             You will need to understand all the other tools in the toolbox of your system.
             This knowledge is vast and will come slowly, it is important that you take the time to learn them well rather than try to get the basic idea of most and break a leg tomorrow (or more likely, your music archive or collection of family pictures).
@@ -35,7 +34,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Using Bash}
-    \vspace{-3mm}
+    \vspace{-2mm}
     \begin{description}
         \item[Bash in interactive mode:] A prompt and a command line
         \item[Bash in non-interactive mode:] Executing scripts
@@ -95,6 +94,6 @@
         \node[below = 25mm of cloud, text=PP, rounded corners=3pt, draw=PB, thick, inner sep=2mm] (learn) {Take your time and learn them well!};
         \draw[to, shorter={2mm}{1mm}] (cloud.south) -- (learn);
     \end{tikzpicture}
-    \FrameRemark[2]{\PQ{\textbf{Disclaimer:}} \alert{Some slides will unavoidably refer to later material. Hopefully, everything will be clarified at the end of the day and, for sure, by Friday!}}
+    \FrameRemark<2>{\PQ{\textbf{Disclaimer:}} \alert{Some slides will unavoidably refer to later material. Hopefully, everything will be clarified at the end of the day and, for sure, by Friday!}}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

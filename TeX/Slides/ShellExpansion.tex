@@ -4,14 +4,14 @@
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Several kind of expansions}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5}}
+\begin{frame}{Several kind of expansions}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 3.5}}
     Expansion is performed on the command line after it has been split into tok\tikzmark{tokens}ens:\\[0.5em]
     \begin{itemize}
         \item Brace expansion\tikzmark{ExpA}
         \item Parameter and variable expansion\tikzmark{ExpB}
         \item Tilde expansion
         \item Arithmetic expansion
-        \item Process substitution \tc{Gray!80}{\Remark{Not available if \URL[Gray]{https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html}{Bash in POSIX Mode (item 30)}}}
+        \item Process substitution \tc{Gray!80}{\Remark{Done only from v5.1 when \URL[Gray]{https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html}{Bash in POSIX Mode (item 30)}}}
         \item Command substitution\tikzmark{ExpC}
         \item Word splitting\tikzmark{ExpD}
         \item Filename expansion\tikzmark{ExpE}
@@ -22,14 +22,14 @@
         that did not result from one of the above expansions are removed.
     \end{varblock}
     \begin{tikzpicture}[remember picture, overlay]
-        \coordinate (xPos) at ($(current page.north)!0.3!(current page.north east)$);
+        \coordinate (xPos) at ($(current page.north)!0.4!(current page.north east)$);
         \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (ExpB -| xPos) ++(-5mm,1mm) -- ($(ExpC -| xPos)+(-5mm,-1mm)$)
               coordinate[midway] (second);
         \node[anchor=west] at (second -| xPos) {\MakeEnumerateBox{2}$\quad$\alert{At the same time!}};
         \draw[from, shorter={0mm}{3mm}] (ExpA) -- (xPos |- ExpA) node[anchor=west] {\MakeEnumerateBox{1}};
         \draw[from, shorter={0mm}{3mm}] (ExpD) -- (xPos |- ExpD) node[anchor=west] {\MakeEnumerateBox{3}};
         \draw[from, shorter={0mm}{3mm}] (ExpE) -- (xPos |- ExpE) node[anchor=west] {\MakeEnumerateBox{4}};
-        \node[anchor=north east, font=\scriptsize, above = of tokens] (metacharacters){
+        \node[anchor=north east, font=\scriptsize, above = 8mm of tokens] (metacharacters){
             \begin{tabular}{c}
                 A line is split into tokens using unquoted metacharacters:\\[0.2em]
                 \PP{\texttt{\textvisiblespace\ \textbackslash t \textbackslash n | \& ; ( ) < >}}
@@ -40,7 +40,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Brace expansion}
-    \vspace{-6mm}
+    \vspace{-3mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item It comes in two forms:
@@ -48,22 +48,20 @@
                     \item \bash|[prefix]{comma separated list}[postfix]|
                     \item \bash|[prefix]{X..Y[..increment]}[postfix]|
                 \end{enumerate}
-            \item<only@1> \bash|[prefix]| and \bash|[postfix]| are optional 
-            \item<only@1> \bash|[prefix]| and \bash|[postfix]| might contain other brace expansions
+            \item<only@1> \bash|[prefix]| and \bash|[postfix]| are optional and might contain other brace expansions
             \item<only@1> Brace expansions can be nested and, if so, they work from the outside in
             \item<only@1> \bash|X| and \bash|Y| are either characters or numbers
             \item<only@1> \bash|increment| is an optional integer (if omitted, it is +1 or -1 as appropriate)
             \item<only@1> If \bash|X| and \bash|Y| are numbers, leading 0 are respected to force each term to have the same width
             \item<only@1> If the brace expansion syntax is not respected, then brace expansion is not performed!
         \end{itemize}
-        \vspace{-3mm}
         \begin{varblock}{}[\textwidth]{Result of the expansion}<only@1>
             A space separated list of all combinations of \bash|[prefix]| and \bash|[postfix]| with the elements in the brace.
             In \MakeEnumerateBox{2}, the sequence in braces is at first completed going back to \MakeEnumerateBox{1}.
             Order is respected left to right. Multiple non-nested braces expand to all combinations.
         \end{varblock}
         \begin{onlyenv}<2>
-            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=5mm]
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm]
                 $ echo {a,b,c}
                 |+a b c+|
                 $ echo {a,b,c}.tex
@@ -85,7 +83,7 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<3>
-            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=5mm, firstnumber=18]
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, firstnumber=18]
                 $ echo {A..C}{0..2}
                 |+A0 A1 A2 B0 B1 B2 C0 C1 C2+|
                 $ echo {A..C}@|\textvisiblespace|@{0..2} # Here two independent expansions!
@@ -110,7 +108,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Parameter expansion: Overview}
-    \vspace{-3mm}
     \begin{itemize}
         \item It is the most used form of expansion!
         \item Its basic syntax consists of a single dollar sign alone
@@ -127,7 +124,8 @@
                   \item[$\to$] arrays and associative arrays
               \end{itemize}
     \end{itemize}
-    \FrameRemark{Everything can be found in the \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5.3}}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{Everything can be found in the \URL*{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 3.5.3}}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Parameter expansion: Checking variables state}
@@ -286,7 +284,7 @@
             }
     \end{description}
     \begin{uncoverenv}<2>
-        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm]
+        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=3mm]
             $ aVar='b1.2345_s0000_s1111'
             # Let us demonstrate a bit (* matches any characters)
             $ echo "${aVar#*_} and ${aVar##*_}"
@@ -362,7 +360,6 @@
             }
     \end{description}
     \begin{overlayarea}{\textwidth}{0.4\textheight}
-        \vspace{-3mm}
         \begin{varblock}{}[0.905\textwidth]{Pattern matching}<only@1>
             \small
             The pattern is expanded to produce a pattern just as in filename expansion.
@@ -382,6 +379,15 @@
         \end{onlyenv}
     \end{overlayarea}
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Parameter expansion: String manipulation (V)}{Since Bash v4.4 (2016)}
+    % ${var@a}, ${var@A}, ${var@E}, ${var@P}, ${var@Q}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Parameter expansion: String manipulation (VI)}{Since Bash v5.1 (2020)}
+    % ${var@U}, ${var@u}, ${var@L}, ${var@K}
+    % from v5.2 ${var@k}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Parameter expansion: String manipulation summary}
@@ -424,7 +430,7 @@
     \FrameRemark{Each variable assignment is also checked for unquoted tilde-prefixes immediately following a \bash|':'| or the first \bash|'='|.  In these cases, tilde expansion is also performed.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{The Directory Stack}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 6.8}}
+\begin{frame}{The Directory Stack}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 6.8}}
     \vspace{-3mm}
     \begin{columns}[c]
         \begin{column}{0.1\textwidth}
@@ -488,8 +494,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Tilde expansion and its advanced usage}
-    \vspace*{-3mm}
-    \begin{overlayarea}{\textwidth}{0.65\textheight}
+    \begin{overlayarea}{\textwidth}{0.63\textheight}
         \begin{onlyenv}<1-2>
             \PB{If the tilde-prefix matches the following forms, a special expansion is done:}
             \vspace{-4mm}
@@ -517,7 +522,7 @@
             \end{varblock}
         \end{onlyenv}
         \begin{onlyenv}<3->
-            \begin{lstlisting}[style=MyBash]
+            \begin{lstlisting}[style=MyBash, aboveskip=3mm]
                 $ dirs -v
                 |+ 0  ~+|
                 |+ 1  /scratch/latticeqcd/sciarra+|
@@ -543,7 +548,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Arithmetic expansion}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{itemize}[<only@1>]
         \item Arithmetic expansion syntax is \PP{\texttt{\$((\ldots))}} and it can be nested
         \item \alert{Bash is only capable of integer arithmetic}
@@ -557,7 +562,7 @@
                   \item[$\circ$] \PP{\texttt{''}} when referenced by name \PP{\textbf{using}} the parameter expansion syntax
               \end{itemize}
         \item Overflow is not checked but division by 0 gives an error
-        \item Operators and their precedence are the same as in the \texttt{C} language\\ $\to\,$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 6.5}
+        \item Operators and their precedence are the same as in the \texttt{C} language\\ $\to\,$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 6.5}
     \end{itemize}
     \begin{onlyenv}<2>
         \begin{lstlisting}[style=MyBash, style=oddnumbers, style=smaller]
@@ -667,7 +672,7 @@
             \item on expansions in assignments. \\[0.3em] Thus, one does not need to quote anything in a command like these:
                   \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=45mm, belowskip=-5mm, aboveskip=2mm]
                       aVar=${bVar}; aVar=$(date)
-                      PATH=/usr/local/bin:${PATH} 
+                      PATH=/usr/local/bin:${PATH}
                   \end{lstlisting}
                   Quoting anyway will not break anything, so \PP{if in doubt, quote!}
         \end{itemize}
@@ -691,10 +696,10 @@
                 \item[Command substitution:]
                     It occurs when a command is enclosed as \alert{\texttt{\$(\ldots)}}\\
                     Do not use the deprecated syntax \tc{Gray!30}{\texttt{\textasciigrave\ldots\textasciigrave}}\\
-                    Still to early to be discussed $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5.4}\\
+                    Still to early to be discussed $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 3.5.4}\\
                     \Remark[0pt]{\alert{\texttt{\$(\ldots)}} is substituted by the standard output of the command (executed in a subshell), with any trailing newlines deleted.}
                 \item[Process substitution:]
-                    Useful, but not discussed here $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 3.5.6}\\
+                    Useful, but not discussed here $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 3.5.6}\\
                     It takes the form \alert{\texttt{<(\ldots)}} or \alert{\texttt{>(\ldots)}}\\
                     It will discussed in the section about redirection
             \end{description}
