@@ -28,22 +28,24 @@ clean :
 
 slides :
 ifdef DAY
-	@printf '\e[92m ==> Compiling \e[1m$(TEXSOURCESLIDES)$(DAY).tex\e[22;96m %s\e[0m\n' "$(LIVEDATE)"
-	$(TEXCOMPILER) $(TEXOPTIONS) $(TEXSOURCESLIDES)$(DAY).tex
-	mv $(TEXSOURCESLIDES)$(DAY).pdf ..
-	@printf '\e[92m ==> File \e[1m$(TEXSOURCESLIDES)$(DAY).pdf\e[22m sucessfully produced %s\e[0m\n' "$(LIVEDATE)"
+	@printf '\n\e[92m==> Compiling \e[1m$(TEXSOURCESLIDES)$(DAY).tex\e[22;96m %s\e[0m\n\n' "$(LIVEDATE)"\
+	; timestamp_start=$$(date +%s)\
+	; $(TEXCOMPILER) $(TEXOPTIONS) $(TEXSOURCESLIDES)$(DAY).tex\
+	&& mv $(TEXSOURCESLIDES)$(DAY).pdf ..\
+	&& printf '\n\e[92m==> File \e[1m$(TEXSOURCESLIDES)$(DAY).pdf\e[22m sucessfully produced in \e[93m%d seconds.\e[0m\n\n' "$$(($$(date +%s)-timestamp_start))"
 else
-	@printf '\e[91m ==> No day specified, use e.g. "make DAY=1 slides"\e[0m\n'
+	@printf '\n\e[91m==> No day specified, use e.g. "make DAY=1 slides"\e[0m\n\n'
 endif
 
 exercise :
 ifdef DAY
-	@printf '\e[92m ==> Compiling \e[1m$(TEXSOURCEEXERCISE)$(DAY).tex\e[22;96m %s\e[0m\n' "$(LIVEDATE)"
-	$(TEXCOMPILER) $(TEXOPTIONS) $(TEXSOURCEEXERCISE)$(DAY).tex
-	mv $(TEXSOURCEEXERCISE)$(DAY).pdf ..
-	@printf '\e[92m ==> File \e[1m$(TEXSOURCEEXERCISE)$(DAY).pdf\e[22m sucessfully produced %s\e[0m\n' "$(LIVEDATE)"
+	@printf '\n\e[92m==> Compiling \e[1m$(TEXSOURCEEXERCISE)$(DAY).tex\e[22;96m %s\e[0m\n\n' "$(LIVEDATE)"\
+	; timestamp_start=$$(date +%s)\
+	; $(TEXCOMPILER) $(TEXOPTIONS) $(TEXSOURCEEXERCISE)$(DAY).tex\
+	&& mv $(TEXSOURCEEXERCISE)$(DAY).pdf ..\
+	&& printf '\n\e[92m==> File \e[1m$(TEXSOURCEEXERCISE)$(DAY).pdf\e[22m sucessfully produced in \e[93m%d seconds.\e[0m\n\n' "$$(($$(date +%s)-timestamp_start))"
 else
-	@printf '\e[91m ==> No day specified, use e.g. "make DAY=1 exercise"\e[0m\n'
+	@printf '\n\e[91m==> No day specified, use e.g. "make DAY=1 exercise"\e[0m\n\n'
 endif
 
 all:
