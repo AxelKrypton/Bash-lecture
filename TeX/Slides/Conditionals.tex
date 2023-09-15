@@ -32,7 +32,7 @@
         \item It executes a command (or a set of commands) and checks that command's exit code to see whether it was successful
         \item Different layouts possible, choose a readable one!
     \end{itemize}
-    
+
     \begin{lstlisting}[style=MyBash, numbers=none]
         if@|\textvisiblespace|@COMMAND
         then
@@ -40,7 +40,7 @@
         else
             # COMMAND's exit code was different from 0
         fi
-        
+
         if@|\textvisiblespace|@COMMAND; then
             # COMMAND's exit code was 0
         elif@|\textvisiblespace|@ANOTHER_COMMAND; then
@@ -52,7 +52,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The command in a conditional block}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{itemize}
         \setlength{\itemsep}{2mm}
         \item In principle it can be any command
@@ -61,7 +61,7 @@
                     \makecell[rt]{test \\ \tc{fg}{\sffamily or} [} &
                     \makecell[lt]{A normal command that reads its arguments and does \\
                                   some checks with them. The \texttt{[} variant requires a \texttt{]} as last argument.}\\[2em]
-                    \makecell[rt]{\tc{keywords-color}{[[}} & 
+                    \makecell[rt]{\tc{keywords-color}{[[}} &
                     \makecell[lt]{A special shell keyword that offers more versatility\\
                                   like \PP{pattern matching} and \PP{regex support}} \\
                 \end{tabular}
@@ -74,7 +74,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \bash|test| command and its friend \bash{[}}
-    \vspace{-5mm}
+    \vspace{-4mm}
     \begin{center}
         \begin{minipage}{0.85\textwidth}
             \begin{description}[<only@1>][\texttt{-v VARIABLE}]
@@ -153,14 +153,17 @@
     \begin{tikzpicture}[remember picture, overlay]
         \node[anchor=north east, font=\scriptsize, visible on=<1>] at ($(current page.north east)-(1mm,1mm)$) {$^\star$\PB{Since Bash v4.2}};
     \end{tikzpicture}
-    \FrameRemark{Many more tests are supported $\to$ for a complete list refer to the Bash manual (v5.0 \S6.4).}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{Many more tests are supported $\to$ for a complete list refer to the \URL*{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 (section 6.4).}}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \bash{[[} keyword}
-    \vspace{-3mm}
+    \vspace{-2mm}
     \begin{itemize}[<only@1>]
         \item It supports the tests supported by the \bash{test} and \bash{[} commands$^{\star}$
-        \item String equality (\texttt{=} or \texttt{==}) and inequality (\texttt{!=}) comparison is changed to \alert{pattern matching} by default; use quotes either on l.h.s. or on r.h.s. to perform a string comparison
+        \item String equality (\texttt{=} or \texttt{==}) and inequality (\texttt{!=}) comparison is changed to \alert{pattern matching} by default.
+              \PQ{\textbf{Patterns bust be on the right hand side of the (in)equality.}}
+              Each quoted part of the pattern is matched literally.
         \item \alert{It does not allow word-splitting} of its arguments!
         \item However, be aware that simple strings still have to be quoted properly
         \item Few more additional tests supported:
@@ -168,16 +171,18 @@
                 \item[\texttt{STRING =\textasciitilde\ REGEX}] True if the string matches the regex pattern
                 \item[\texttt{( EXPR )}] Parentheses can be used to change the evaluation precedence
                 \item[\texttt{EXPR \&\& EXPR}] True if both expressions are true (logical AND)\\[-0.5em] \Remark[0pt]{it does not evaluate the second expression if the first already turns out to be false}
-                \item[\texttt{EXPR || EXPR}] True if either expression is true (logical OR) \\[-0.5em] \Remark[0pt]{it does not evaluate the second expression if the first already turns out to be true} 
+                \item[\texttt{EXPR || EXPR}] True if either expression is true (logical OR) \\[-0.5em] \Remark[0pt]{it does not evaluate the second expression if the first already turns out to be true}
               \end{description}
         \item The alphabetically sorted test operators (\texttt{<} and \texttt{>}) do not need to be escaped
     \end{itemize}
     \begin{onlyenv}<2>
-        \begin{lstlisting}[style=MyBash, style=oddnumbers, style=smaller, xleftmargin=1mm, xrightmargin=1mm]
+        \begin{lstlisting}[style=MyBash, aboveskip=-1mm, style=oddnumbers, style=smaller, xleftmargin=1mm, xrightmargin=1mm]
             $ aVar="Day_1.tex"; bVar='Hello world'
             # Pattern matching VS string comparison
             $ if [[ ${aVar} = *.tex ]]; then echo 'YES'; else echo 'NO'; fi
             |+YES+|
+            $ if [[ *.tex = ${aVar} ]]; then echo 'YES'; else echo 'NO'; fi
+            |+NO+|
             $ if [[ ${aVar} = "*.tex" ]]; then echo 'YES'; else echo 'NO'; fi
             |+NO+|
             $ if [[ ${aVar} = Day_?.tex && ${bVar} = [hH]* ]]; then echo 'YES'; else echo 'NO'; fi
@@ -203,8 +208,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Control operators}
-    \vspace{-3mm}
-    \begin{overlayarea}{\textwidth}{0.625\textheight}
+    \begin{overlayarea}{\textwidth}{0.56\textheight}
         \begin{description}[<only@1>][\texttt{\&\&}]
             \setlength{\itemsep}{5mm}
             \item[\texttt{\&\&}]
@@ -247,7 +251,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Regular expressions in Bash}
-    \vspace{-3mm}
     \begin{itemize}[<only@1>]
         \item Regular expressions are similar to Glob Patterns, but not for filename matching
         \item Since v3.0, Bash supports the \texttt{=\textasciitilde} operator to the \bash{[[} keyword
@@ -286,7 +289,7 @@
             \end{itemize}
         \end{varblock*}
     \end{onlyenv}
-    \FrameRemark[2]{The syntax \bash{"\$\{BASH\_REMATCH[1]\}"}, e.g.\ how to use an array variable, will be discussed in detail at a later point.}
+    \FrameRemark<2>{The syntax \bash{"\$\{BASH\_REMATCH[1]\}"}, e.g.\ how to use an array variable, will be discussed in detail at a later point.}
 \end{frame}
 
 

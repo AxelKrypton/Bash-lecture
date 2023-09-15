@@ -7,6 +7,7 @@
 \begin{frame}[fragile]{The \textbf{nameref} attribute}{Introduced in 2014, Bash v4.3.0}
     \vspace{-2mm}
     \begin{onlyenv}<1>
+        \vspace{-2mm}
         \begin{varblock}{}[0.63\textwidth]{}
         \begin{description}[\textbf{Reference:}]
             \item[\textbf{Reference:}]
@@ -53,14 +54,14 @@
 \begin{frame}[fragile]{Indirect expansion}{An alternative to use the \textbf{nameref} attribute}
     \vspace{-3mm}
     \begin{itemize}
-        \item It is about using the content of a variable as name of a different variable
+        \item It is about using the content of a variable as name of a different variable\\[1.5mm]
         \item It is a particular case of parameter expansion: \PB{\texttt{\$\{!parameter\}}}
               \begin{itemize}
                   \item Bash uses the value formed by expanding \PB{\texttt{parameter}} as the new parameter
                   \item this is then expanded and that value is used in the rest of the expansion
               \end{itemize}
     \end{itemize}
-    \begin{lstlisting}[style=MyBash, xrightmargin=1mm, belowskip=-4mm]
+    \begin{lstlisting}[style=MyBash, xrightmargin=1mm, aboveskip=2.5mm, belowskip=-4mm]
         $ aVar='Hello'; bVar='aVar'
         $ echo "bVar contains \"${bVar}\" which contains \"${!bVar}\""
         |+bVar contains "aVar" which contains "Hello"+|
@@ -85,7 +86,7 @@
             \draw[to,] (alone) -- (L.west |- alone) node[pos=1, right, font=\footnotesize] {As above, but words are separated by the first character of the \bash|IFS|};
         \end{scope}
         \begin{scope}[scope on=<3>]
-            \draw[PT, rounded corners=3mm] ($(current page.south west)+(8mm,8mm)$) rectangle ($(current page.east)-(8mm,6mm)$);
+            \draw[PT, rounded corners=3mm] ($(current page.south west)+(8mm,5mm)$) rectangle ($(current page.east)-(8mm,9mm)$);
         \end{scope}
     \end{tikzpicture}
 \end{frame}

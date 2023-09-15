@@ -7,7 +7,7 @@
 \begin{frame}{Colours and formatting in the terminal}{\URL[PB]{https://misc.flogisoft.com/bash/tip\_colors\_and\_formatting}{A good reference}}
     \vspace{-4mm}
     \begin{itemize}
-        \item Most terminals are able to display colours and formatted texts thanks to \PP{escape sequences}
+        \item Most terminals are able to display colours and formatted texts using \PP{escape sequences}
         \item Your script can benefit from using colours (e.g.\ \PQ{errors}, \alert{warnings}, \PS{info})
         \item You might run into compatibility problems (not really) {\scriptsize $\;$ \URL[PB]{https://misc.flogisoft.com/bash/tip\_colors\_and\_formatting\#terminals\_compatibility}{Compatibility list}}
         \item The \bash|echo| command has a \texttt{\alert{-e}} option to enable the parsing of the escape sequences
@@ -79,7 +79,7 @@
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<3>
-        \begin{lstlisting}[style=MyBash, xleftmargin=0mm, xrightmargin=0mm]
+        \begin{lstlisting}[style=MyBash, aboveskip=3mm, xleftmargin=0mm, xrightmargin=0mm]
             $ for fgbg in 38; do  # 38 48 to get also background
             >     for color in {0..255}; do
             >         printf "\e[${fgbg};5;%sm  %3s  \e[0m" ${color} ${color}
@@ -103,7 +103,8 @@
             \node[anchor=north east, font=\ttfamily\large, rounded corners=1mm, draw=PP] at ($(current page.north east)-(8mm,4.5mm)$) {<Esc>[\tc{red}{FormatCode}m};
         \end{scope}
     \end{tikzpicture}
-    \FrameRemark{$^\star$ GNOME Terminal 3.28 (VTE 0.52), debuting in Ubuntu 18.04 LTS, adds support for a \URL[PB]{https://askubuntu.com/a/985386}{few more styles}. Use code \PB{22} to unbold since \PB{21} is double underline!}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{$^\star$ GNOME Terminal 3.28 (VTE 0.52), debuting in Ubuntu 18.04 LTS, adds support for a \URL*{https://askubuntu.com/a/985386}{few more styles}. Use code \PB{22} to unbold since \PB{21} is double underline!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Defining variables for colour codes}
@@ -160,7 +161,7 @@
              >     sleep 1
              > done
              |+^C   Thu 11 Jul 18:07:26 CEST 2019+| # Stop it with CTRL-C
-             
+
              # Here a crazy progress bar:
              $ while true; do
              >     printf '\e[s'
@@ -169,11 +170,12 @@
              >     printf '\e[u\e[K'  # Use \r instead of saving cursor
              > done
              |+======================^C+| # Stop it with CTRL-C
-             
+
              $ printf 'You will never see my ${password}... MUAHAHA!\r\e[K'
              $
         \end{lstlisting}
     \end{onlyenv}
-    \FrameRemark{The \bash|tput| command is a kind of wrapper for everything we learnt in this section \,$\to$\,\URL[PB]{https://stackoverflow.com/a/20983251}{Starting point}. It is the way to go when portability matters!}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{The \bash|tput| command is a kind of wrapper for everything we learnt in this section \,$\to$\,\URL*{https://stackoverflow.com/a/20983251}{Starting point}. It is the way to go when portability matters!}
 \end{frame}
 

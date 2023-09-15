@@ -7,7 +7,7 @@
 \againframe<1-2>{IOflow}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Command-line parameters}
-    \vspace{-5mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.8\textheight}
         \begin{itemize}
             \item They are accessible via \PB{\texttt{\$1}}, \PB{\texttt{\$2}}, etc.
@@ -64,7 +64,7 @@
     \begin{lstlisting}[style=MyBash]
         $ ls /tpm
         |+ls: cannot access '/tpm': No such file or directory+|
-        $ LANGUAGE=de_DE.utf-8 ls /tpm  # @|\URL[red]{https://askubuntu.com/a/544728}{Read more about LANGUAGE}[background-color]|@
+        $ LANGUAGE=de_DE.utf-8 ls /tpm  # @|\URL[red]{https://askubuntu.com/a/544728}{Read more about LANGUAGE}|@
         |+ls: Zugriff auf '/tpm' nicht möglich: Datei oder Verzeichnis nicht gefunden+|
         $ VERBOSE=1 make
     \end{lstlisting}
@@ -92,9 +92,10 @@
     \end{itemize}
     \begin{varblock}{alerted}[0.9\textwidth]{Remember!}
         The tricky part here is that your environment changes are \alert{\textbf{only inherited by your descendants}}.
-        You can't change the environment of a program that is already running, or of a program that you don't run. 
+        You can't change the environment of a program that is already running, or of a program that you don't run.
     \end{varblock}
     \PP{\centerline{\ldots{}mmmh, and if I needed it?}}
+    \FrameRemark{Side remark: The first snippet is a verbose way of the simpler \;\bash|$\{EDITOR:-emacs\}|\; expansion.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Environment variables (III)}

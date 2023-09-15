@@ -4,7 +4,7 @@
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{Conditial loops}{Often we need to repeat things: Copy and paste is not the solution!}
+\begin{frame}{Conditional loops}{Often we need to repeat things: Copy and paste is not the solution!}
     \vspace{-3mm}
     \begin{description}[\texttt{while}xxx]
         \item[\texttt{while}] Repeat as long as a command is executed successfully (exit code is 0)
@@ -30,7 +30,7 @@
             while COMMAND; do
                 # Body of the loop: entered if COMMAND's exit code = 0
             done
-            
+
             until COMMAND; do
                 # Body of the loop: entered if COMMAND's exit code @|\color{comment-color}$\neq$|@0
             done
@@ -46,7 +46,7 @@
     \end{onlyenv}
     \begin{onlyenv}<2>
         \begin{lstlisting}[style=MyBash]
-            $ while true; do   # while :; do
+            $ until false; do   # while true; do   # while :; do
             >   echo "Infinite loop"
             >   sleep 3
             > done
@@ -70,7 +70,31 @@
             BOOOOOM!!+|
         \end{lstlisting}
     \end{onlyenv}
-    \FrameRemark[2]{The condition of the second \;\bash|while|\; loop should rather be written using arithmetic evaluation \;\bash|((...))|\;, which we discuss tomorrow.}
+    \begin{onlyenv}<3>
+        \begin{lstlisting}[style=MyBash]
+            $ i=0; \
+            > while [[ ${i} -lt 5 ]]; do
+            >   j=0
+            >   while [[ ${j} -le 5 ]]; do
+            >     if [[ ${j} -le ${i} ]]; then
+            >       printf "$((i+j)) "
+            >       j=$((j+1))
+            >     else
+            >       printf '\n'
+            >       i=$((i+1))
+            >       continue 2
+            >     fi
+            >   done
+            > done
+            |+0
+            1 2
+            2 3 4
+            3 4 5 6
+            4 5 6 7 8+|
+        \end{lstlisting}
+    \end{onlyenv}
+    \FrameRemark<2>{The condition of the \;\bash|while|\; loop should rather be written using arithmetic evaluation \;\bash|((...))|\;, which we discuss tomorrow.}
+    \FrameRemark<3>{In the snippet above arithmetic evaluation \;\bash|((...))|\;, which we discuss tomorrow, should be used instead of \;\bash|[[ ... ]]|\; and to increment variables.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \,\bash|for|\, keywords}
@@ -79,7 +103,7 @@
             for VARIABLE in WORDS; do
                 # Body of the loop: VARIABLE set to WORD
             done
-            
+
             for (( EXPR1; EXPR2; EXPR3 )) # Expressions can be empty
                 # Body of the loop
             done
@@ -92,7 +116,7 @@
                       \item it repeats as long as the second arithmetic expression is successful;
                       \item at the end of each loop evaluates the third arithmetic expression.
                   \end{enumerate}
-            \item Bash takes the characters between \bash|in| and the end of the line and 
+            \item Bash takes the characters between \bash|in| and the end of the line and
                   \begin{itemize}
                       \item[$\circ$] it splits them up into words;
                       \item[$\circ$] this splitting is done on spaces and tabs, just like argument splitting;
@@ -120,13 +144,16 @@
         \medskip
         \begin{lstlisting}[style=MyBash, xrightmargin=4mm]
             # BAD code!
-            
+
             $ for file in $(ls *.mp3); do   # AAAARGH!
             >   rm "$file"
             > done; unset file
         \end{lstlisting}
     \end{onlyenv}
-    \begin{onlyenv}<3>
+    \begin{onlyenv}<3-4>
+        \vspace{-3mm}
+        Bad code:
+        \medskip
         \begin{lstlisting}[style=MyBash, xrightmargin=4mm]
             $ ls
             Happy birthday.mp3
@@ -139,18 +166,21 @@
         \medskip
         You want to quote it, you say?
         \medskip
-        \begin{lstlisting}[style=MyBash, xrightmargin=4mm]
-            $ ls
-            Happy birthday.mp3   Hello.mp3
-            $ for file in "$(ls *.mp3)"; do   # AAAARGH!
-            >   rm "$file"
-            > done; unset file
-            |+rm: cannot remove `Happy birthday.mp3   Hello.mp3': No such file or directory+|
-        \end{lstlisting}
-        \medskip
-        So, what do we do?
+        \begin{onlyenv}<4>
+            \begin{lstlisting}[style=MyBash, xrightmargin=4mm]
+                $ ls
+                Happy birthday.mp3   Hello.mp3
+                $ for file in "$(ls *.mp3)"; do   # AAAARGH!
+                >   rm "$file"
+                > done; unset file
+                |+rm: cannot remove `Happy birthday.mp3   Hello.mp3': No such file or directory+|
+            \end{lstlisting}
+            \medskip
+            So, what do we do?
+        \end{onlyenv}
     \end{onlyenv}
-    \begin{onlyenv}<4>
+    \begin{onlyenv}<5>
+        \vspace{-2mm}
         \begin{varblock}{alerted}[0.9\textwidth]{\textbf{Use globs!}}
             Bash \textbf{does} know that it is dealing with filenames, and it \textbf{does} know what the filenames are, and as such it can split them up nicely!
         \end{varblock}

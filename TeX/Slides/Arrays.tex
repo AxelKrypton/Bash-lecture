@@ -7,8 +7,8 @@
 \begin{frame}[fragile]{Motivation}
     \vspace{-3mm}
     \begin{itemize}
-        \item \textbf{Strings} are without any doubt the most used parameter type
-        \item They are also the most \textbf{misused} parameter type, though!
+        \item \textbf{Strings} are without any doubt the most used parameter ``type''
+        \item They are also the most \textbf{misused} parameter ``type'', though!
         \item Strings hold \alert{\textbf{just one}} element!
         \item Capturing a list in a string is very often \PP{plain wrong}, even if it might work\ldots
         \item A parameter contains just one string of characters, no matter the meaning of them
@@ -20,7 +20,7 @@
         $ files=$(ls ~/*.jpg); cp ${files} /backups/    # BAD code!
     \end{lstlisting}
     \begin{varblock}{}[0.75\textwidth]{Array}
-        An array is a numbered list of strings: It maps integers to strings. 
+        An array is a numbered list of strings: It maps integers to strings.
     \end{varblock}
     \FrameRemark{For filenames in Linux, there are usually almost no restrictions, apart from \texttt{/} and \texttt{\textbackslash{}0}, you are allowed to use anything.}
 \end{frame}
@@ -49,7 +49,7 @@
     \begin{lstlisting}[style=MyBash, numbers=none]
         declare -a array  # Because of declare,
         array=One         # equivalent to array[0]=One, AVOID!
-        array[1]=Two 
+        array[1]=Two
     \end{lstlisting}
     \bigskip
     \PB{\texttt{array+=(\ldots)}}\, Concatenate r.h.s. array to l.h.s. array\par
@@ -76,12 +76,12 @@
     \begin{onlyenv}<2>
         \begin{lstlisting}[style=MyBash, numbers=none]
             # Please, really, use globs instead of commands!
-            
+
             $ files=$(ls)      # BAD, BAD, BAD!
             $ files=($(ls))    # STILL BAD!
-            
+
             # So, how should you do?
-            
+
             $ files=(*)        # GOOD!
         \end{lstlisting}
         \medskip
@@ -174,7 +174,7 @@
     \begin{varblock}{}[0.9\textwidth]{In any case, prefer quoted versions!}
         Unquoted \PB{\texttt{\$\{!array[@]\}}} and \PB{\texttt{\$\{!array[*]\}}} let \alert{word splitting} kick in.
         This, for \textbf{normal} arrays, is harmless, since indices are just integers.
-    \end{varblock}    
+    \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Iterating over array elements}
@@ -194,8 +194,8 @@
         |+two and four+|
         $ for index in "${!array[@]}"; do
         >     echo "array[${index}]=${array[index]}"
-        > done
-        |+array[0]=one+|
+        > done                           # @|\raisebox{-1pt}{\tc{red}{\then}\;}|@ arithmetic context,
+        |+array[0]=one+|                     #     no ${} needed
         |+array[1]=two and four+|
         $ unset entry index
         # Coming back to motivation: GOOD code!
@@ -204,61 +204,61 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Deleting arrays or array elements}
+    \vspace{-4mm}
+    \begin{itemize}
+        \item To delete an element of an array, pass it to the \bash{unset} builtin
+    \end{itemize}
+    \begin{lstlisting}[style=MyBash, belowskip=-5mm]
+        $ array=({a..e}); unset 'array[2]' 'array[3]'
+        $ for index in "${!array[@]}"; do
+        >     echo "array[${index}]=${array[index]}"
+        > done; unset 'index'
+        |+array[0]=a
+        array[1]=b
+        array[4]=e+|
+    \end{lstlisting}
+    \begin{itemize}
+        \item If you pass the name of an array to \bash|unset|, the whole array will be unset!
+    \end{itemize}
+    \begin{lstlisting}[style=MyBash]
+        $ array=({a..c})
+        $ for index in "${!array[@]}"; do
+        >     echo "array[${index}]=${array[index]}"
+        > done; unset 'index'
+        |+array[0]=a
+        array[1]=b
+        array[2]=c+|
+        $ unset 'array'
+        $ echo "_${array[@]}_ -> ${#array[@]} entries"
+        |+__ -> 0 entries+|
+    \end{lstlisting}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Deleting arrays or array elements: A sneaky trap}
     \vspace{-3mm}
-    \begin{onlyenv}<1>
-        \begin{itemize}
-            \item To delete an element of an array, pass it to the \bash{unset} builtin
-        \end{itemize}
-        \begin{lstlisting}[style=MyBash, belowskip=-5mm]
-            $ array=({a..e}); unset 'array[2]' 'array[3]'
-            $ for index in "${!array[@]}"; do
-            >     echo "array[${index}]=${array[index]}"
-            > done; unset 'index'
-            |+array[0]=a
-            array[1]=b
-            array[4]=e+|
-        \end{lstlisting}
-        \begin{itemize}
-            \item If you pass the name of an array to \bash|unset|, the whole array will be unset!
-        \end{itemize}
-        \begin{lstlisting}[style=MyBash]
-            $ array=({a..c})
-            $ for index in "${!array[@]}"; do
-            >     echo "array[${index}]=${array[index]}"
-            > done; unset 'index'
-            |+array[0]=a
-            array[1]=b
-            array[2]=c+|
-            $ unset array
-            $ echo "_${array[@]}_ -> ${#array[@]} entries"
-            |+__ -> 0 entries+|
-        \end{lstlisting}
-    \end{onlyenv}
-    \begin{onlyenv}<2>
-        \begin{varblock}{alerted}[0.8\textwidth]{}
-            \large \PQ{Do not forget to \textbf{quote your variable} to avoid file pattern matching!}
-        \end{varblock}
-        \begin{lstlisting}[style=MyBash, emph={[7]a, a0}]
-            $ a=(file{1..3})
-            $ ls
-            |+a0   Day_1.tex   Day_1.pdf+|
-            $ a0='Hello'
-            $ printf '%s\n' "${a[@]}"
-            |+file1
-            file2
-            file3+|
-            $ echo "${a0}"
-            |+Hello+|
-            $ unset a[0] # <--- BAD, BAD, BAD CODE!
-            $ printf '%s\n' "${a[@]}"
-            |+file1+|   # Wait! I unset the first element, didn't I?
-            |+file2
-            file3+|
-            $ echo "_${a0}_"
-            |+__+|                 # Is it clear what happened?
-        \end{lstlisting}
-    \end{onlyenv}
-    \FrameRemark[2]{In doubt, always quote the variable passed to \bash|unset|. Using either the \texttt{-v} or \texttt{-f} option is also encouraged!}
+    \begin{varblock}{alerted}[0.8\textwidth]{}
+        \large \PQ{Do not forget to \textbf{quote your variable} to avoid file pattern matching!}
+    \end{varblock}
+    \begin{lstlisting}[style=MyBash, emph={[7]a, a0}]
+        $ a=(file{1..3})
+        $ ls
+        |+a0   Day_1.tex   Day_1.pdf+|
+        $ a0='Hello'
+        $ printf '%s\n' "${a[@]}"
+        |+file1
+        file2
+        file3+|
+        $ echo "${a0}"
+        |+Hello+|
+        $ unset a[0] # <--- BAD, BAD, BAD CODE!
+        $ printf '%s\n' "${a[@]}"
+        |+file1+|   # Wait! I unset the first element, didn't I?
+        |+file2
+        file3+|
+        $ echo "_${a0}_"
+        |+__+|                 # Is it clear what happened?
+    \end{lstlisting}
+    \FrameRemark{In doubt, always quote the variable passed to \bash|unset|. Using either the \texttt{-v} or \texttt{-f} option is also encouraged!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Sparse arrays}
@@ -290,7 +290,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Associative arrays}{Since Bash v4.0 (2009)}
-    \vspace{-5mm}
+    \vspace{-2mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item An associative array is \PP{a map of strings to strings}
@@ -338,7 +338,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Associative arrays: Remarks}{Since Bash v4.0 (2009)}
-    \vspace{-5mm}
+    \vspace{-2mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item \alert{The order of both keys and elements} of an associative array is \alert{unpredictable}\\
@@ -356,7 +356,7 @@
                 |+4 1 5 6 2 3+|
                 $ echo "${!array[@]}"
                 |+four one five six two three+|
-                $ unset array entry index
+                $ unset 'array' 'entry' 'index'
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<2>
@@ -375,14 +375,14 @@
                 |+__+|
                 $ echo "_${associative[key + 1]}_"
                 |+__+|
-                $ unset indexed associative index key
+                $ unset 'indexed' 'associative' 'index' 'key'
             \end{lstlisting}
         \end{onlyenv}
     \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{The power of parameter expansion on arrays}
-    \vspace{-5mm}
+\begin{frame}[fragile]{The power of parameter expansion on arrays (I)}
+    \vspace{-2mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
          \begin{itemize}
              \item Arrays are very flexible, because they are well integrated with the other shell expansions
@@ -392,7 +392,7 @@
              \item It is critical that these special expansions are properly quoted
          \end{itemize}
         \begin{onlyenv}<1>
-            \begin{lstlisting}[style=MyBash, xrightmargin=3mm]
+            \begin{lstlisting}[style=MyBash, aboveskip=2mm, xrightmargin=3mm]
                 $ array=(alpha beta gamma)
                 $ echo "${array[-1]:2:2}"   # Substring of last entry
                 |+mm+|
@@ -409,7 +409,7 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<2>
-            \begin{lstlisting}[style=MyBash, xrightmargin=3mm, firstnumber=14]
+            \begin{lstlisting}[style=MyBash, aboveskip=2mm, xrightmargin=3mm, firstnumber=14]
                 $ echo "${array[@]/#/prefix_}"  # Add prefix to all entries
                 |+prefix_alpha prefix_beta prefix_gamma+|
                 $ echo "${array[@]/%/_suffix}"  # Add suffix to all entries
@@ -422,12 +422,39 @@
                 |+delta+|
                 $ echo "${array[@]^}"
                 |+Alpha Beta Gamma Delta+|
-                $ unset array
+                $ unset 'array'
             \end{lstlisting}
         \end{onlyenv}
     \end{overlayarea}
 \end{frame}
-
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{The power of parameter expansion on arrays (II)}
+    \vspace{-3mm}
+    Since Bash v5.1 and v5.2 a couple of new expansions offer more flexibility with arrays:
+    \begin{lstlisting}[style=MyBash, aboveskip=3mm, xrightmargin=2mm]
+        # ${var@K} introduced in v5.1 -- ${var@k} introduced in v5.2
+        $ array=(alpha "beta gamma" delta)
+        $ echo "${array[@]@K}"  # Possibly quoted key-value pairs
+        |+0 "alpha" 1 "beta gamma" 2 "delta"+|
+        $ echo "${array[@]@k}"  # Separate words after word splitting
+        |+0 alpha 1 beta gamma 2 delta+|
+        $ unset 'array'
+    \end{lstlisting}
+    \begin{lstlisting}[style=MyBash, aboveskip=3mm, xrightmargin=2mm, firstnumber=8]
+        $ declare -A array=([Hi]="Ciao" [Bye Bye]="Ciao")
+        $ echo "${array[@]@K}"
+        |+"Bye Bye" "Ciao" Hi "Ciao"+|
+        $ echo "${array[@]@k}"
+        |+Bye Bye Ciao Hi Ciao+|
+        # Also other v5.1 operators can be used on array values
+        $ echo "${array[@]@U}"  # All lowercase letters capitalised
+        |+CIAO CIAO+|
+        # Acting directly on indeces is not possible in one statement
+        $ echo "${!array[@]@U}"
+        |+-bash: Ciao Ciao: invalid variable name+|
+        $ unset 'array'
+    \end{lstlisting}
+\end{frame}
 
 
 

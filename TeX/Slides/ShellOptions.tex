@@ -44,7 +44,7 @@
     \end{onlyenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{The \bash|set| builtin}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 4.3.1}}
+\begin{frame}[fragile]{The \bash|set| builtin}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 4.3.1}}
     \vspace{-4mm}
     \begin{itemize}
         \item Without arguments, \,\bash|set|\, displays the names and values of all shell variables/functions.
@@ -62,7 +62,7 @@
             |+himBHs+|
             |+himuBHs+|
             |+himBHs+|
-            $ echo $|+#+|; set -- -s --long; echo $|+#+|; echo $@
+            $ echo $|+#+|; set -- -s --long; echo $|+#+|; echo "$@"
             |+0+|
             |+2+|
             |+-s --long+|
@@ -123,7 +123,7 @@
     \FrameRemark{For debug purposes you might also be interested in the \PB{\texttt{xtrace}} option, equivalent to \PB{\texttt{-x}}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{The \bash|shopt| builtin}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 section 4.3.2}}
+\begin{frame}[fragile]{The \bash|shopt| builtin}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 4.3.2}}
     \vspace{-2mm}
     \begin{lstlisting}[style=myBash, numbers=none]
         |+shopt [-pqsu] [-o] [optname ...]+|
@@ -178,7 +178,7 @@
         \end{columns}
     \end{onlyenv}
     \begin{onlyenv}<2>
-        \begin{lstlisting}[style=myBash, style=smaller]
+        \begin{lstlisting}[style=myBash]
             $ ls -a
             @|\tc{RoyalBlue}{.}|@  @|\tc{RoyalBlue}{..}|@  .hiddenFile  @|\tc{RoyalBlue}{dir1}|@  file1.c  file2.dat  file3.txt
             # Example of dotglob
@@ -187,7 +187,7 @@
             $ shopt -u dotglob; echo *
             |+dir1 file1.c file2.dat file3.txt+|
             # Example of failglob
-            $ shopt -s failglob; echo *.pdf  # echo command not executed!
+            $ shopt -s failglob; echo *.pdf  # echo is not executed!
             |+bash: no match: *.pdf+|
             $ shopt -u failglob; echo *.pdf
             |+*.pdf+|
@@ -196,14 +196,10 @@
             |++|
             $ shopt -u nullglob; echo *.pdf
             |+*.pdf+|
-            $ shopt -s extglob  # We saw it yesterday!
-            $ echo |+!(*.c|*.dat)+|
-            |+dir1 file3.txt+|
-            $ shopt -u extglob
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<3>
-        \begin{lstlisting}[style=myBash, style=smaller, firstnumber=22]
+        \begin{lstlisting}[style=myBash, firstnumber=18]
             $ ls -a
             @|\tc{RoyalBlue}{.}|@  @|\tc{RoyalBlue}{..}|@  .hiddenFile  @|\tc{RoyalBlue}{dir1}|@  file1.c  file2.dat  file3.txt
             $ ls -a dir1/
@@ -214,7 +210,8 @@
             $ shopt -u globstar; echo **
             |+dir1 file1.c file2.dat file3.txt+|
             $ shopt -s globstar; echo **
-            |+dir1 dir1/dir2 dir1/dir2/file5.c dir1/file4.c file1.c file2.dat file3.txt+|
+            |+dir1     dir1/dir2  dir1/dir2/file5.c  dir1/file4.c+|
+            |+file1.c  file2.dat  file3.txt+|
             $ echo **/
             |+dir1/ dir1/dir2/+|
             $ echo **/*.c
@@ -223,31 +220,47 @@
             |+file1.c+|
         \end{lstlisting}
     \end{onlyenv}
-    \begin{onlyenv}<4->
-        \vspace{-2mm}
-        \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
-            # In a script to be sourced remember whether extglob was originally set
-            shopt -q extglob; extglobSet=$?
-            # set extglob if it wasn't originally set
-            [[ ${extglobSet} -ne 0 ]] && shopt -s extglob
-            # ...
-            # unset extglob if it wasn't originally set
-            [[ ${extglobSet} -ne 0 ]] && shopt -u extglob
+    \begin{onlyenv}<4-5>
+        \begin{lstlisting}[style=myBash, belowskip=-5mm, firstnumber=36]
+            # Example of extglob -> We saw it already yesterday!
+            $ shopt -s extglob
+            $ echo |+!(*.c|*.dat)+|
+            |+dir1 file3.txt+|
+            $ shopt -u extglob
         \end{lstlisting}
-        \begin{varblock}{alert}[0.95\textwidth]{Some options affect the parser behaviour!}<uncover@5>
-            \footnotesize Some options changes the way certain characters are parsed.
-            It is necessary to have a newline (not just a semicolon) between e.g. \bash|shopt -s extglob| and any subsequent commands to use it.
-            \alert{You cannot enable such options inside a compound command that uses them}, because the entire block is parsed before the \bash|shopt| is evaluated.
-            Note that the typical function body (or an \bash|if|-clause) is a compound command.
-        \end{varblock}
-        \vspace{-2mm}
-        \begin{varblock*}{alert}[0.95\textwidth]{}<uncover@5>
-            \footnotesize This is also why \alert{\textbf{you cannot run}}
-            \begin{lstlisting}[style=myBash, numbers=none, belowskip=-6mm,aboveskip=2mm]
-                shopt -s extglob; ls |+!(*.txt)+|  # WRONG as one-liner
+        \begin{uncoverenv}<5>
+            In a script to be sourced it is good practice remember whether extglob was originally set:
+            \begin{lstlisting}[style=myBash, aboveskip=3mm, belowskip=-5mm, numbers=none]
+                shopt -q extglob; extglobSet=$?
+                # set extglob if it wasn't originally set
+                [[ ${extglobSet} -ne 0 ]] && shopt -s extglob
+                # ...
+                # unset extglob if it wasn't originally set
+                [[ ${extglobSet} -ne 0 ]] && shopt -u extglob
             \end{lstlisting}
-            (when \bash|extglob| is previously unset), but must have a newline between the two commands.
-        \end{varblock*}
+            \begin{varblock}{alert}[0.6\textwidth]{}
+                \alert{If you do not do so, you might change the shell behaviour where your script will be sourced!}
+            \end{varblock}
+        \end{uncoverenv}
     \end{onlyenv}
-    \FrameRemark[5]{Which options affect the parser behaviour is \URL[PB]{https://unix.stackexchange.com/q/573589/370049}{unfortunately not documented}, but \,\texttt{extglob}\, is for sure the most relevant one.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{An important remark about options affecting the parser}
+    \begin{varblock*}{alert}[0.85\textwidth]{\large Some options affect the parser behaviour!}
+        Some options changes the way certain characters are parsed.
+        It is necessary to have a newline (not just a semicolon) between e.g. \bash|shopt -s extglob| and any subsequent commands to use it.
+        \alert{You cannot enable such options inside a compound command that uses them}, because the entire block is parsed before the \bash|shopt| is evaluated.
+        Note that the typical function body (or an \bash|if|-clause) is a compound command.
+    \end{varblock*}
+    \vspace{-2mm}
+    \begin{varblock*}{alert}[0.85\textwidth]{}
+        This is also why \alert{\textbf{you cannot run}} (when \bash|extglob| is previously unset)
+        \begin{lstlisting}[style=myBash, numbers=none, belowskip=-6mm, aboveskip=2mm]
+            # WRONG as one-liner
+            shopt -s extglob; ls |+!(*.txt)+|
+        \end{lstlisting}
+        but must have a newline between the two commands.
+    \end{varblock*}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{Which options affect the parser behaviour is \URL*{https://unix.stackexchange.com/q/573589/370049}{unfortunately not documented}, but \,\texttt{extglob}\, is for sure the most relevant one.}
 \end{frame}
