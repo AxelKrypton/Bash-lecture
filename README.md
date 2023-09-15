@@ -17,11 +17,11 @@ Feel free to contact me if you wish to make use of any of them.
 
 ## The beamer theme
 
-The beamer theme used for this lecture has been developed for this purpose in order to have a simple, but at the same time relaxing and appealing theme.
+The beamer theme used for this lecture has been developed in order to have a simple, but at the same time relaxing and appealing theme.
 It was inspired by the [Code Course](https://github.com/Irubataru/beamer-themes) theme of a friend, but adapted to the need of having versatile blocks (see `varblock` environment).
 Also handy commands to use the four palette colours in the presentation have been added to the theme.
-The theme has been included in the repository to allow compilation.
-Of course, its files have to be put in the correct place, e.g. in `~/texmf/tex/latex/beamer/theme/` on Linux OS in the **`color`**, **`font`**, **`inner`**, **`outer`** and **`theme`** folders.
+The theme has been in the past included in the repository but later moved to an own repository.
+If you wish to compile LaTeX source code, the `TeXnicalities` package and the used beamer theme are needed and can be found [here](https://github.com/AxelKrypton/TeXnicalities).
 
 ---
 
@@ -31,20 +31,20 @@ Of course, its files have to be put in the correct place, e.g. in `~/texmf/tex/l
   - [X] Overview
   - [X] Day 1
   - [X] Day 2
-  - [X] Day 3
-  - [X] Day 4
-  - [X] Day 5
+  - [ ] Day 3
+  - [ ] Day 4
+  - [ ] Day 5
 
-- [X] Exercises
-  - [X] Day 1
-  - [X] Day 2
-  - [X] Day 3
-  - [X] Day 4
-  - [X] Day 5
+- [ ] Exercises
+  - [ ] Day 1
+  - [ ] Day 2
+  - [ ] Day 3
+  - [ ] Day 4
+  - [ ] Day 5
 
-- [X] Sample solutions
-  - [X] Day 1
-  - [X] Day 2
-  - [X] Day 3
-  - [X] Day 4
-  - [X] Day 5
+- [ ] Sample solutions
+  - [ ] Day 1
+  - [ ] Day 2
+  - [ ] Day 3
+  - [ ] Day 4
+  - [ ] Day 5
