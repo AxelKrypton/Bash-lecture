@@ -9,7 +9,7 @@
     Consider the following script (\alert{not nice code}):
     \begin{lstlisting}[style=MyBash, aboveskip=3mm, belowskip=-5mm]
         #!/bin/bash
-        
+
         function CreateAuxiliaryFiles(){
             # ...
         }
@@ -47,6 +47,7 @@
                 \begin{scope}[scope on=<2>]
                     \path[to] (a) edge[out=0, in=90] node[midway, right=2mm, font=\small, text=PS] {Signal} (b);
                     \path[to] (b) edge[out=270, in=180] node[pos=1, right=1mm] {Do the action associated to the signal} ++(1cm, -15mm);
+                    \node[right = 0mm of b] {\Remark{Process B traps the signal}};
                 \end{scope}
             \end{tikzpicture}
         \end{center}
@@ -100,14 +101,14 @@
     \end{varblock}
     \begin{lstlisting}[style=MyBash, emph={[7]temporaryFile}, belowskip=-5mm]
         #!/bin/bash
-        
+
         temporaryFile=$(mktemp) || exit
         trap 'rm -f "${temporaryFile}"' EXIT
     \end{lstlisting}
     Use a function whenever you need to achieve a more complex task
     \begin{lstlisting}[style=MyBash, emph={[7]temporaryFile}, aboveskip=2mm, belowskip=-5mm, xleftmargin=2mm, xrightmargin=3mm, firstnumber=5]
         #!/bin/bash
-        
+
         function CleanAuxiliaryFiles(){ # If you trap INT (CTRL-C)
             # ...                       # do not forget to exit unless
         }                               # you have reasons not to do so
@@ -125,11 +126,12 @@
     \begin{varblock}{alert}[0.9\textwidth]{A subtle but important feature}
         When Bash is executing an external command in the foreground, it does not handle any signals received until the foreground process terminates.
     \end{varblock}
-    \begin{overlayarea}{\textwidth}{0.33\textheight}
+    \vspace{2mm}
+    \begin{overlayarea}{\textwidth}{0.28\textheight}
         \begin{onlyenv}<1>
             \begin{lstlisting}[style=MyBash]
                 #!/bin/bash
-                
+
                 echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
                 trap 'echo "Doing some cleaning before exiting!"' EXIT
                 echo "Wait 1h"
@@ -139,7 +141,7 @@
         \begin{onlyenv}<2>
             \begin{lstlisting}[style=MyBash, firstnumber=7]
                 #!/bin/bash
-                
+
                 echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
                 trap 'echo "Doing some cleaning before exiting!"' EXIT
                 echo "Wait 1h"; sleep 3600 & wait $!
@@ -150,7 +152,7 @@
         \begin{onlyenv}<3>
             \begin{lstlisting}[style=MyBash, firstnumber=14]
                 #!/bin/bash
-                
+
                 echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
                 unset -v pid
                 trap 'echo "Cleaning!"; [[ $pid ]] && kill "${pid}"' EXIT
@@ -159,6 +161,7 @@
             \end{lstlisting}
         \end{onlyenv}
     \end{overlayarea}
+    \vspace{-1.5mm}
     \begin{itemize}
         \item If you kill the script using $\;$\bash|kill -s INT|$\;$ from another terminal (not with CTRL-C), bash will wait for \bash|sleep| to exit before calling the trap\\
               $\;\to\;$\alert{\textbf{That's probably not what you expect!}}
@@ -171,7 +174,7 @@
 \begin{frame}[fragile]{What indeed is CTRL-C doing?}
     \vspace{-3mm}
     Let us consider again the previous example
-    \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm]
+    \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-4mm]
         #!/bin/bash
 
         echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
@@ -200,7 +203,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Trapping SIGINT and SIGQUIT: Be careful!}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item Bash is among a few shells that implement a \textbf{wait and cooperative exit} approach at handling SIGINT/SIGQUIT delivery
@@ -220,7 +223,7 @@
             \begin{varblock}{}[0.95\textwidth]{}
                 \small The \bash|ping| command returns with 0 when host is reachable (the ping has been answered) and non-zero otherwise when interrupted (which is the only way for ping to return in that case).
             \end{varblock}
-            \begin{lstlisting}[style=MyBash, belowskip=-5mm]
+            \begin{lstlisting}[style=MyBash, aboveskip=0mm, belowskip=-6mm]
                 #!/bin/bash
                 for index in {1..254}; do
                     ping -c 2 "192.168.1.${index}"
@@ -245,7 +248,7 @@
         \end{onlyenv}
         \begin{onlyenv}<4>
             \medskip
-            \begin{varblock}{alert}[\textwidth]{Take-home lesson}
+            \begin{varblock}{alert}[\textwidth]{\large Take-home lesson}
                 If you choose to set up a handler for SIGINT (rather than using the EXIT trap), you should be aware that \alert{\textbf{a process that exits in response to SIGINT should kill itself with SIGINT rather than simply exiting}}, to avoid causing problems for its caller.
                 The same goes for SIGQUIT.
             \end{varblock}

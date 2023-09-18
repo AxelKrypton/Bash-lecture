@@ -21,7 +21,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{What does Bash do when an error occurs?}{I.e. when a command has a non-zero exit code!}
-    \vspace{-6mm}
+    \vspace{-3mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{varblock}{}[0.56\textwidth]{The default behaviour}
             An error is printed and \alert{execution continues}.
@@ -126,13 +126,13 @@
                 rm -r *
             fi
         \end{lstlisting}
-        \centerline{\tiny Of course, this is just an example, you would rather write \;\bash|rm NotExistingFolder/*|\;, right!?}
+        \centerline{\scriptsize Of course, this is just an example, you would rather write \;\bash|rm NotExistingFolder/*|\;, right!?}
     \end{onlyenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Do I have to add \;\PB{\texttt{|| exit 1}}\; everywhere in my scripts?}
     \vspace{-3mm}
-    \begin{varblock}{example}[0.75\textwidth]{Purist approach}<2->
+    \begin{varblock}{example}[0.75\textwidth]{Purist approach (again)}<2->
         Check and handle errors properly testing exit codes \textbf{when needed}.
     \end{varblock}
     \begin{varblock}{quote}[0.9\textwidth]{}[Greg's Wiki]<3>
@@ -149,7 +149,7 @@
         \item Many articles are against using it, e.g. \URL[PQ]{http://mywiki.wooledge.org/BashFAQ/105}{Greg's Wiki}.
         \item People encourage its use, e.g. \URL[PS]{https://www.davidpashley.com/articles/writing-robust-shell-scripts/}{David Pashley}.
     \end{itemize}
-    \FrameRemark[3]{Both references are definitely worth reading, especially if you decide at the end to use \;\texttt{set -e}\; in your scripts.}
+    \FrameRemark<3>{Both references are definitely worth reading, especially if you decide at the end to use \;\texttt{set -e}\; in your scripts.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Enabling the \;\texttt{-e}\; shell option: Let's read the manual}
@@ -172,11 +172,11 @@
         \node[visible on=<3>] (fig) at ($(current page.center)-(0,8mm)$) {\includegraphics[width=0.7\textwidth]{OMG}};
         \node[above = 3mm of fig, visible on=<2->, font=\large, text=PB] {Your reaction might be like:};
     \end{tikzpicture}
-    \FrameRemark[1]{And few more rules are there about when a compound command or shell function executes (or sets \texttt{-e}) in a context where \texttt{-e} is being ignored...}
+    \FrameRemark<1>{And few more rules are there about when a compound command or shell function executes (or sets \texttt{-e}) in a context where \texttt{-e} is being ignored...}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{But what does it mean, in practice?}
-    \vspace{-4mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \setlength{\itemsep}{0pt}
@@ -210,14 +210,14 @@
                 ((i++)) || true
                 echo "i is $i"   # This is ALWASY printed
 
-                i=$((i++))       # Simple command without command subst.
+                i=$((i-1))       # Simple command without command subst.
                 echo "i is $i"   # This is ALWASY printed
 
                 i=$(false)       # Simple command with failing $(...)
                 echo "i is $i"   # This is NOT printed
             \end{lstlisting}
             \footnotesize
-            \begin{varblock}{quote}[0.9\textwidth]{Simple command expansion}[Bash manual]
+            \begin{varblock}{quote}[0.9\textwidth]{Simple command expansion}[\footnotesize Bash manual v5.2 section 3.7.1]
                 \scriptsize[\ldots]
                 If one of the expansions contained a command substitution, the exit status of the command is the exit status of the last command substitution performed.
                 If there were no command substitutions, the command exits with a status of zero.
@@ -234,14 +234,17 @@
                     echo "Failed!" >&2
                 }
 
-                ( false )          # Subshell -> new environment, -e unset
+                # Command substitution does not inherit errexit!
+                echo "$(Failure; echo 'A')" # This prints 'A'
 
                 echo 'Begin'
                 aVar=$(FailureMsg) # No failure because of echo in function
                 echo 'Middle'
-                aVar=$(Failure)    # Function fails
+                aVar=$(Failure)    # Function returns non zero exit code
                 echo "End"         # This is NOT printed
             \end{lstlisting}
+            \PrepareURLsymbol[PB]
+            \FrameRemark<4>{Assignments to \;\bash|aVar|\; are simple commands and the simple commands expansions rules apply, \URL*{https://www.gnu.org/software/bash/manual/}{bash manual v5.2 section 3.7.1}.}
         \end{onlyenv}
         \begin{onlyenv}<5>
             \begin{lstlisting}[style=myBash]
@@ -249,7 +252,7 @@
                 set -e
                 function Simulation(){ return 1; }
 
-                if Simulation; then
+                if Simulation; then      # No errexit in if-clauses
                     echo 'Success!'
                 else
                     echo 'Failure!'
@@ -297,8 +300,10 @@
             echo "Failed!" >&2
         }
 
+        echo "$(Failure; echo 'A')" # Now this does NOT print 'A'
+
         echo 'Begin'
-        aVar=$(FailureMsg) # Now the script exits here before echo
+        aVar=$(FailureMsg) # Now the script exits HERE!
         echo 'Middle'
         aVar=$(Failure)    # Function fails
         echo "End"         # This is NOT printed
@@ -306,7 +311,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Trap on ERR and the \PB{\texttt{errtrace}} shell option}
-    \vspace{-2mm}
+    \vspace{-1mm}
     \begin{onlyenv}<1>
         \begin{varblock}{alert}[0.85\textwidth]{The ERR signal specification}
             The trap on \texttt{ERR} is executed exactly when the bash would exit with the \texttt{errexit} option enabled.
@@ -361,15 +366,17 @@
         $ echo "_${unsetVariable-}_"; set +u
         |+__+|
     \end{lstlisting}
+    \PrepareURLsymbol[PP]
     \begin{varblock}{alert}[0.96\textwidth]{Few (minor) drawbacks exist}
         \begin{enumerate}
             \small
             \item Turning \PB{\texttt{nounset}} on in a correct existing script might still break it.
             \item If some code is not executed, \PB{\texttt{set -u}} will have no effect on it either.
-            \item Versions of bash \alert{prior to v4.4} \URL[PP]{https://gist.github.com/dimo414/2fb052d230654cc0c25e9e41a9651ebe}{handle the \texttt{[@]}-expansion of empty arrays differently}.
+            \item Versions of bash \alert{prior to v4.4} \URL*{https://gist.github.com/dimo414/2fb052d230654cc0c25e9e41a9651ebe}{handle the \texttt{[@]}-expansion of empty arrays differently}.
         \end{enumerate}
     \end{varblock}
-    \FrameRemark{On Greg's Wiki you can \URL[PB]{http://mywiki.wooledge.org/BashFAQ/112}{read more about \texttt{set -u}}.}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{On Greg's Wiki you can \URL*{http://mywiki.wooledge.org/BashFAQ/112}{read more about \texttt{set -u}}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Is the glass half full or half empty?}
@@ -388,6 +395,7 @@
         Probably consistency within a script is the most important aspect.
         My recommendation is to \PS{explore this area of bash in all ways before taking your decision}.
     \end{varblock}
-    \FrameRemark{\PB{\texttt{set -o pipefail}} is also another interesting feature \URL[PB]{http://mywiki.wooledge.org/BashPitfalls\#pipefail}{with minor drawbacks}.}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{\PB{\texttt{set -o pipefail}} is also another interesting feature \URL*{http://mywiki.wooledge.org/BashPitfalls\#pipefail}{with minor drawbacks}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

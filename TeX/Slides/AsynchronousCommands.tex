@@ -4,7 +4,7 @@
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Processes in the terminal}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 pages 104-107}}
+\begin{frame}[fragile]{Processes in the terminal}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 7}}
     \vspace{-3mm}
     \begin{itemize}
         \item The \bash|ps| command displays information about (a selection of) the active processes
@@ -161,7 +161,7 @@
             \begin{lstlisting}[style=MyBash, xrightmargin=2mm, xleftmargin=2mm, firstnumber=26]
                 $ emacs Loops.tex
                 # Process in foreground, shell not usable
-                # -> suspend via CTRL-Z 
+                # -> suspend via CTRL-Z
                 # You get your shell back, but emacs is blocked
                 |+[1]+  Stopped                 emacs Loops.tex+|
             \end{lstlisting}
@@ -170,10 +170,10 @@
             \begin{lstlisting}[style=MyBash, xrightmargin=2mm, xleftmargin=2mm, firstnumber=26]
                 $ emacs Loops.tex
                 # Process in foreground, shell not usable
-                # -> suspend via CTRL-Z 
+                # -> suspend via CTRL-Z
                 # You get your shell back, but emacs is blocked
                 |+[1]+  Stopped                 emacs Loops.tex+|
-                $ bg 
+                $ bg
                 # Alternative syntax:
                 #   bg %1     <- Using the jobnumber
                 #   bg %+     <- The last started in bg, or suspended from fg
@@ -193,7 +193,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Handling processes in a script\uncover<5->{: PIDs and parents}}
-    \vspace{-6mm}
+    \vspace{-2mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{onlyenv}<2>
             \vspace{-5mm}
@@ -218,7 +218,7 @@
                           \item what is the \bash|wait| builtin meant for
                           \item how to handle processes within a script $\,\to\,$ use of \PB{\texttt{\$!}}
                       \end{itemize}
-                \item<4> Even \textbf{more important}, you have to understand \alert{\textbf{the parent-child relationship}}!\\[1ex]
+                \item<4> Even \textbf{more important}, you have to understand \alert{\textbf{the parent-child relationship}}!\\[4mm]
                          \centerline{\includegraphics[width=0.4\textwidth]{ParentChild}}
             \end{itemize}
         \end{onlyenv}
@@ -229,7 +229,7 @@
             \item Each UNIX process also has a parent process which is the process that started it.
             \item The parent process can change to the \texttt{init} process if the parent process ends before the new process does \,$\to$\, i.e. \texttt{init} will pick up orphaned processes
         \end{itemize}
-        \vspace{-3mm}
+        \vspace{-2mm}
         \begin{varblock}{quote}[\textwidth]{System processes}[Greg's Wiki]<only@6-7>
             A process PID will \textbf{never} be freed up for use after the process dies until the parent process waits for the PID to see whether it ended and retrieve its exit code.
             If the parent ends, the process is returned to \textnormal{\texttt{init}}, which does this for you.
@@ -258,7 +258,8 @@
             \end{columns}
         \end{onlyenv}
     \end{overlayarea}
-    \FrameRemark[2-]{This article on \URL[PB]{http://mywiki.wooledge.org/ProcessManagement}{Process Management} is good (long and advanced in its second part, though). Refer to it to discover more.}
+    \PrepareURLsymbol[PB]
+    \FrameRemark<2->{This article on \URL*{http://mywiki.wooledge.org/ProcessManagement}{Process Management} is good (long and advanced in its second part, though). Refer to it to discover more.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A bit of syntax: Retrieving a process PID}
@@ -285,9 +286,9 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A bit of syntax: The \bash|wait| builtin}
-    \vspace{-4mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
-        \begin{lstlisting}[style=MyBash, numbers=none]
+        \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-6mm]
             wait |+[-fn] [jobspec or pid ...]+|
         \end{lstlisting}
         \begin{itemize}
@@ -363,9 +364,9 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A bit of syntax: The \bash|kill| builtin}
-    \vspace{-4mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
-        \begin{lstlisting}[style=MyBash, numbers=none]
+        \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-6mm]
             kill |+[-s sigspec] [-n signum] [-sigspec] jobspec or pid+|
         \end{lstlisting}
         \begin{itemize}
@@ -486,14 +487,14 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A work-around for exit codes}
-    \vspace{-4mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{\textheight}
         \begin{itemize}
             \item If you have several (maybe long) processes in background during the execution of a script and you are interested in their exit code, you can write them to a file
             \item Alternatively, a possible idea is to use redirection faking a file and taking advantage of the fact that \PP{\textbf{in Bash the processes inside the process substitution are not waited for}}
         \end{itemize}
         \begin{onlyenv}<1>
-            \begin{lstlisting}[style=MyBash, emph={[7]command_pid, exitCode}, emph={[8]another_command}]
+            \begin{lstlisting}[style=MyBash, aboveskip=3mm, emph={[7]command_pid, exitCode}, emph={[8]another_command}]
                 #!/bin/bash
                 {
                     command_pid=$!
@@ -508,7 +509,7 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<2-3>
-            \begin{lstlisting}[style=MyBash, emph={[7]sleep_pid, exitCode, waitCode}, firstnumber=12, xrightmargin=2mm]
+            \begin{lstlisting}[style=MyBash, aboveskip=3mm, emph={[7]sleep_pid, exitCode, waitCode}, firstnumber=12, xrightmargin=2mm]
                 #!/bin/bash
                 {
                     sleep_pid=$!
@@ -534,7 +535,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Process Management: Conclusions}
-    \vspace{-5mm}
+    \vspace{-2mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}[<only@1-2>]
             \setlength{\itemsep}{0mm}
@@ -559,9 +560,9 @@
             And you won't be able to kill the process anyway, SIGKILL or not.
         \end{varblock}
     \end{overlayarea}
-    \begin{tikzpicture}[remember picture, overlay, scope on=<3>]
-        \node[left  = 1mm of current page.center] {\includegraphics[width=52mm, clip, trim=0 173mm 0 0]{Sigkill}};
-        \node[right = 1mm of current page.center] {\includegraphics[width=52mm, clip, trim=0 0 0 255mm]{Sigkill}};
+    \begin{tikzpicture}[remember picture, overlay, scope on=<3>, every node/.style={inner sep=0mm}]
+        \node[left  = 1mm of current page.center, yshift=-2mm] {\includegraphics[width=56mm, clip, trim=0 173mm 0 0]{Sigkill}};
+        \node[right = 1mm of current page.center, yshift=-2mm] {\includegraphics[width=56mm, clip, trim=0 0 0 255mm]{Sigkill}};
     \end{tikzpicture}
 \end{frame}
 

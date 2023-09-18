@@ -5,7 +5,7 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Why do we need them?}
-    \vspace{-3mm}
+    \vspace{-2mm}
     \begin{itemize}
         \item In science, most of our time in the terminal is spent acting on files
         \item Mastering file handling in general can allow us to simplify the data analysis software
@@ -18,6 +18,7 @@
                   \item \ldots
               \end{itemize}
     \end{itemize}
+    \vspace{3mm}
     \begin{varblock}{}[0.95\textwidth]{GNU Core Utilities}
         \begin{tabular}{*{7}{>{\ttfamily\color{external-color}}c}}
             head    &  cat    &  sum     &  column  &  sort   &  join  &  expand   \\
@@ -28,12 +29,13 @@
     \begin{tikzpicture}[remember picture, overlay]
         \coordinate (C) at ($(current page.center)!0.5!(current page.south)$);
         \begin{scope}[every node/.style={starburst, starburst point height=6mm, fill=yellow, draw=red, ultra thick, text=red, font=\Huge\ttfamily, visible on=<2>, rotate=10}]
-            \node[left  = of C, yshift=5mm] {sed};
-            \node[right = of C, yshift=1mm] {awk};
+            \node[left  = of C, yshift=3mm] {sed};
+            \node[right = of C, yshift=-1mm] {awk};
         \end{scope}
         \node[anchor=east, visible on=<2>] at ($(current page.east)+(-6mm,6mm)$) {\includegraphics[width=32mm, clip, trim=1mm 3mm 1mm 48mm]{InfinitePower}};
     \end{tikzpicture}
-    \FrameRemark{A complete \URL[PB]{https://en.wikipedia.org/wiki/List\_of\_GNU\_Core\_Utilities\_commands}{GNU coreutils list} is available on Wikipedia.}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{A complete \URL*{https://en.wikipedia.org/wiki/List\_of\_GNU\_Core\_Utilities\_commands}{GNU coreutils list} is available on Wikipedia.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 

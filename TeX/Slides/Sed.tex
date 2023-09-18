@@ -4,6 +4,12 @@
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\makeatletter
+\@ifundefined{mybox}{%
+    \newsavebox{\tmpbox}%
+}{}
+\makeatother
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Sed: A marvellous utility}
     \vspace{-3mm}
     \begin{varblock}{quote}[\textwidth]{The awful truth about \bash|sed|}
@@ -14,17 +20,23 @@
         And the GNU manual begins exactly with examples about the \texttt{'s'} command.}
     \end{varblock}
     \vspace{-1mm}
+    \PrepareURLsymbol[PB]
     \begin{varblock}{example}[\textwidth]{Not bad!}
         The substitute command is just one command.
         Sed has at least 20 different commands for you.
-        You can even write \URL[PB]{https://catonmat.net/wp-content/uploads/2008/09/sedtris.sed}{Tetris} in it (not to mention that \PS{it's Turing complete}).
+        You can even write \URL*{https://catonmat.net/wp-content/uploads/2008/09/sedtris.sed}{Tetris} in it (not to mention that \PS{it's Turing complete}).
     \end{varblock}
     \vspace{-1mm}
+    \begin{lrbox}{\tmpbox}
+        \begin{minipage}{0.75\textwidth}
+            \URL[PB]{https://www.gnu.org/software/sed/manual}{The official GNU manual} \Remark{The PDF is 85 pages long\ldots}\\
+            \URL[PS]{http://www.grymoire.com/Unix/Sed.html}{A very nice tutorial} \Remark{Bash code there often uses deprecated features, but you should know it by now!}\\
+            \URL[PT]{http://sed.sourceforge.net/sed1line.txt}{One-liners, with some comments}\\
+            \URL[PQ]{https://catonmat.net/sed-one-liners-explained-part-one}{More one-liners, explained but advanced!}
+        \end{minipage}
+    \end{lrbox}
     \begin{varblock*}{}[0.76\textwidth]{Some references}
-        \URL[PB]{https://www.gnu.org/software/sed/manual}{The official GNU manual} \Remark{The PDF is 85 pages long\ldots}\\
-        \URL[PS]{http://www.grymoire.com/Unix/Sed.html}{A very nice tutorial} \Remark{Bash code there often uses deprecated features, but you should know it by now!}\\
-        \URL[PT]{http://sed.sourceforge.net/sed1line.txt}{One-liners, with some comments}\\
-        \URL[PQ]{https://catonmat.net/sed-one-liners-explained-part-one}{More one-liners, explained but advanced!}
+        \usebox{\tmpbox}
     \end{varblock*}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -75,7 +87,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{A \bash|sed| cycle: Being line oriented}
-    \vspace{-4mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.26\textheight}
         \begin{enumerate}
             \setcounter{enumi}{-1}
@@ -137,7 +149,8 @@
         |+/begin/,/end/+|   #  - from the first line matching 'begin'
                         #    to the first matching 'end' (included)
     \end{lstlisting}
-    \FrameRemark{\URL[PB]{https://www.gnu.org/software/sed/manual/sed.html\#BRE-syntax}{Basic Regular Expression (BRE)} VS \URL[PB]{https://www.gnu.org/software/sed/manual/sed.html\#ERE-syntax}{Extended Regular Expression (ERE)}}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{\URL*{https://www.gnu.org/software/sed/manual/sed.html\#BRE-syntax}{Basic Regular Expression (BRE)} VS \URL*{https://www.gnu.org/software/sed/manual/sed.html\#ERE-syntax}{Extended Regular Expression (ERE)}}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The main commands: Substitute}
@@ -269,7 +282,7 @@
               This command exits at the end of the cycle, i.e. it prints the current pattern space.
         \item The \texttt{'='} command prints out the current input line number (with a trailing newline).
         \item A group of commands may be enclosed between \texttt{\{} and \texttt{\}} characters.
-              This is particularly useful when you want a group of commands to be triggered by a single address (or address-range) match. 
+              This is particularly useful when you want a group of commands to be triggered by a single address (or address-range) match.
     \end{itemize}
     \begin{lstlisting}[style=MyBash]
         $ printf '%d\n' {1..15} | sed '2q'
