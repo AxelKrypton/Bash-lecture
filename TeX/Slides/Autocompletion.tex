@@ -4,7 +4,7 @@
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Programmable completion}{A complex world plenty of opportunities: \enspace\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 sections 8.6 and 8.7}}
+\begin{frame}[fragile]{Programmable completion}{A complex world plenty of opportunities: \enspace\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 sections 8.6 and 8.7}}
     \vspace{-3mm}
     \begin{itemize}
         \item Whenever you press \texttt{TAB} while typing in your terminal,\\ \PS{you trigger a series of operations that the shell executes underneath}.
@@ -52,7 +52,8 @@
             \end{onlyenv}
         \end{column}
     \end{columns}
-    \FrameRemark{There are further relevant variables --- \bash|COMP_WORDBREAKS|, \bash|COMP_LINE|, \bash|COMP_POINT|, etc. --- refer to the \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.0 sections 5.2}.}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{There are further relevant variables --- \bash|COMP_WORDBREAKS|, \bash|COMP_LINE|, \bash|COMP_POINT|, etc. --- refer to the \URL*{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 sections 5.2}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The standard pattern}
@@ -60,7 +61,7 @@
     \begin{enumerate}
         \item Make the script for which you want to implement autocompletion executable.
         \item Create an autocompletion script \textbf{to be sourced} in your environment.
-        \item Associate a function to the command you want (your script's name) using.
+        \item Associate a function to the command (your script's name) you want to be provided with autocompletion.
               \begin{lstlisting}[style=myBash, numbers=none, aboveskip=3mm, belowskip=-5mm, xrightmargin=15mm]
                   complete -F _script_completion  script
               \end{lstlisting}
@@ -79,7 +80,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A basic example as starting point}
     \vspace{-1mm}
-    \begin{onlyenv}<1-2,8->
+    \begin{onlyenv}<1-2,9->
         Suppose to have a \,\PS{\texttt{measure}}\, script that accepts the following options on the command line:
         \begin{itemize}
             \item \PB{\texttt{-{}-inputfile}} followed by a filename;
@@ -133,7 +134,7 @@
             complete -F _measure_completion   measure
         \end{lstlisting}
     \end{onlyenv}
-    \begin{onlyenv}<7>
+    \begin{onlyenv}<7-8>
             \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
             # You do not need a shebang here! This script will be sourced.
 
@@ -158,13 +159,23 @@
 
             #complete -F _measure_completion   measure
             complete -o filenames -F _measure_completion   measure
+            #            @|\tc{red}{\then}|@ handles directories as such and not as files
         \end{lstlisting}
     \end{onlyenv}
     \begin{tikzpicture}[remember picture, overlay]
-        \node[visible on=<6>, anchor=west, text=red, font=\small] at ($(bad)+(5mm,0)$) {What is bad in this implementation?};
-        \node[visible on=<7>, anchor=west, text=red, font=\small] at ($(stillbad)+(5mm,0)$) {What is still bad in this implementation?};
+        \begin{scope}[every node/.style={anchor=north west, text=ALERT, font=\small}]
+            \node[visible on=<6>] at ($(bad)+(5mm,3mm)$) {
+                    What is bad in this implementation?
+            };
+            \node[visible on=<7>] (whystillbad) at ($(stillbad)+(5mm,3mm)$) {
+                What is still bad in this implementation?
+            };
+        \end{scope}
+        \node[visible on=<8>, font=\small, text=PB] at (whystillbad) {
+            Valid options are proposed also if already given!
+        };
     \end{tikzpicture}
-    \begin{onlyenv}<8>
+    \begin{onlyenv}<9>
         \begin{lstlisting}[style=myBash, numbers=none, aboveskip=4mm]
             $ emacs -nw ~/.measure-completion.bash
             $ . ~/.measure-completion.bash

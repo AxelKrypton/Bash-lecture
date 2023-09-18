@@ -18,9 +18,9 @@
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay]
         \begin{scope}[scope on=<2>]
-            \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (doneStart -| doneEnd) ++(8mm,1mm) -- ($(doneEnd)+(8mm,-1mm)$) 
+            \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (doneStart -| doneEnd) ++(8mm,1mm) -- ($(doneEnd)+(8mm,-1mm)$)
                       node[midway, right=3mm, text width=40mm, align=center] {Already discussed in detail};
-            \draw[very thick, decorate, decoration={brace,amplitude=6pt}, PP] (nowStart -| nowEnd) ++(8mm,1mm) -- ($(nowEnd)+(8mm,-1mm)$) 
+            \draw[very thick, decorate, decoration={brace,amplitude=6pt}, PP] (nowStart -| nowEnd) ++(8mm,1mm) -- ($(nowEnd)+(8mm,-1mm)$)
                       node[midway, right=3mm, text width=40mm, align=center, text=PP] {What we are going to discuss};
             \path[from, PB] ($(fcts)-(6.8mm,3mm)$) edge[out=270, in=180] node[pos=1, right, font=\footnotesize, text=PB] {Strictly speaking not a compound command, but they work in a similar way} ++(2cm,-1cm);
         \end{scope}
@@ -28,7 +28,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Subshells}
-    \vspace{-8mm}
+    \vspace{-5mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{varblock}{}[0.8\textwidth]{Definition}
             A subshell is \textbf{a child process} but it is one \textbf{that inherits more than a normal external command} does.
@@ -55,11 +55,11 @@
                   \end{itemize}
         \end{itemize}
     \end{overlayarea}
-    \FrameRemark[2]{From Bash v4.2 the shell option \texttt{lastpipe} can be enabled so that the last command in a pipeline is not run in a subshell.}
+    \FrameRemark<2>{From Bash v4.2 the shell option \texttt{lastpipe} can be enabled so that the last command in a pipeline is not run in a subshell.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Subshells: Examples}
-    \begin{lstlisting}[style=MyBash]
+    \begin{lstlisting}[style=MyBash, aboveskip=0mm]
         # Changes in a subshell do not propagate back
         $ aVar="Hello"; pwd
         /home/sciarra/Documents
@@ -81,11 +81,12 @@
         $ read aVar <<< "Goodbye"; echo "${aVar}"; unset aVar
         |+Goodbye+|
     \end{lstlisting}
-    \FrameRemark{\URL[PB]{http://mywiki.wooledge.org/BashFAQ/024}{Advanced reading} about pipelines and subshells: Why can't I pipe data to read?}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{\URL*{http://mywiki.wooledge.org/BashFAQ/024}{Advanced reading} about pipelines and subshells: Why can't I pipe data to \;\bash|read|?}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Command grouping}{We already said something about it, let us go through once again}
-    \vspace{-4mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.5\textheight}
         \begin{onlyenv}<1-4>
             \begin{itemize}
@@ -100,7 +101,7 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<5>
-            \begin{lstlisting}[style=myBash]
+            \begin{lstlisting}[style=myBash, aboveskip=3mm]
                 $ TIMEFORMAT='%3R seconds'
                 $ time for((i=0; i<10000; i++)); do
                 >   echo "Hello ${i}" >> FileInFor.dat
@@ -116,7 +117,7 @@
             \end{lstlisting}
         \end{onlyenv}
     \end{overlayarea}
-    \vspace{1mm}
+    \vspace{-1mm}
     \begin{varblock}{quote}[0.9\textwidth]{}<only@4>
         The above example truncates and opens the file backup.log on stdout, then points stderr at where stdout is currently pointing (backup.log), then runs each command with those redirections applied.
         The file descriptors remain open until all commands within the command group complete before they are automatically closed.
@@ -163,7 +164,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Arithmetic evaluation: The command grouping \PB{\texttt{((\ldots))}}}
-    \vspace{-4mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item<only@1> \PB{\texttt{(( expression ))}} $\;$is  equivalent to$\;$ \bash|let "expression"|
@@ -189,14 +190,14 @@
                   \end{lstlisting}
             \item<only@2> Arithmetic evaluation is very helpful in combination with conditionals
                   \begin{lstlisting}[style=MyBash, aboveskip=2mm, belowskip=-6mm, firstnumber=11]
-                      $ ((aVar=(5+2)*3))
+                      $ aVar=$(( (5+2)*3 ))
                       $ if ((aVar == 21)); then
                       >   echo 'Blackjack!'
                       > fi
                       |+Blackjack!+|
                   \end{lstlisting}
-            \item<only@2> Because the inside of \PB{\texttt{((\ldots))}} is C-like, a variable (or expression) that \PP{evaluates to zero} will be considered \PP{false} for the purposes of the arithmetic evaluation.
-                  Then, because the evaluation is false, it will \PP{exit with a status of 1}.
+            \item<only@2> Because the inside of \PB{\texttt{((\ldots))}} is C-like, a variable (or expression) that \PQ{evaluates to zero} will be considered \PQ{false} for the purposes of the arithmetic evaluation.
+                  Then, because the evaluation is false, it will \PQ{exit with a status of 1}.
                   Likewise, if the expression inside \PB{\texttt{((\ldots))}} \PS{is non-zero}, it will be considered \PS{true}; and since the evaluation is true, it will \PS{exit with status 0}.
                   \begin{lstlisting}[style=MyBash, aboveskip=2mm, belowskip=-6mm, firstnumber=16]
                       $ flag=0  # no error
@@ -207,7 +208,7 @@
                   \end{lstlisting}
         \end{itemize}
     \end{overlayarea}
-    \FrameRemark[1]{$^\star$Using the \texttt{\$\{\}} makes Bash use \bash|''| for uninitialised variables and might trigger errors (without \texttt{\$\{\}} syntax, \texttt{0} is used for uninitialised referenced variables).}
+    \FrameRemark<1>{$^\star$Using the \texttt{\$\{\}} makes Bash use \bash|''| for uninitialised variables and might trigger errors (without \texttt{\$\{\}} syntax, \texttt{0} is used for uninitialised referenced variables).}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 

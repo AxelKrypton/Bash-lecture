@@ -31,7 +31,7 @@ If you wish to compile LaTeX source code, the `TeXnicalities` package and the us
   - [X] Overview
   - [X] Day 1
   - [X] Day 2
-  - [ ] Day 3
+  - [X] Day 3
   - [ ] Day 4
   - [ ] Day 5
 

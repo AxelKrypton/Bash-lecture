@@ -66,11 +66,11 @@
     \end{varblock}
     \begin{lstlisting}[style=MyBash, xrightmargin=1mm, xleftmargin=1mm]
         #!/bin/bash
-        
+
         function CreateListOfFiles()
         {
             printf "#%19s %20s %15s %20s %20s %6s     %s\n" \
-                   "user" "group" "permissions"               \
+                   "user" "group" "permissions"             \
                    "size(KB)" "permissions" "type" "path"
             find "${PWD}" |+-printf+| "%20u %20g %15m %20k %20M %6y     %p\n"
         }
@@ -79,55 +79,57 @@
         This will do absolutely nothing when run. This is because it has only been stored in memory, much like a variable, but it has not yet been called.
     \end{varblock}
     \begin{uncoverenv}<2>
-        \begin{lstlisting}[style=MyBash, firstnumber=10, xrightmargin=1mm, xleftmargin=1mm]
+        \begin{lstlisting}[style=MyBash, firstnumber=9, xrightmargin=1mm, xleftmargin=1mm]
             CreateListOfFiles
         \end{lstlisting}
     \end{uncoverenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Variables in functions and their scopes}
-    \vspace{-4mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
-            \item Variable in Bash are by definition \alert{\textbf{global}}!
-            \item Variables declared using the \bash|local| builtin have a lifetime limited to the function scope
-            \item Bash uses \textbf{dynamic scoping} to control a variable's visibility within functions
+            \item<only@-5> Variable in Bash are by definition \alert{\textbf{global}}
+            \item<only@-5> Variables declared using the \bash|local| builtin have a lifetime limited to the function scope
+            \item<only@1,4-5> Bash uses \textbf{dynamic scoping} to control a variable's visibility within functions
                   \begin{itemize}
                       \item In a function all variables visible in the caller are visible and might be changed
                       \item Declaring a local variable with the same name of an already existing variable shadows the variable from the caller, whose value cannot be retrieved from within the function.
                   \end{itemize}
-            \item<only@3-> Unless you have a reason not to do so, declare all variables in functions as \bash|local|
-            \item<only@3-> Do not assign a value to a local variable at declaration, because you might obfuscate/loose an exit code!
-            \item<only@4-> \PP{If a variable at the current local scope is unset, it will remain so until it is reset in that scope or until the function returns.
+            \item<only@4-5> Unless you have a reason not to do so, declare all variables in functions as \bash|local|
+            \item<only@4-5> Do not assign a value to a local variable at declaration, because you might obfuscate/loose an exit code!
+            \item<only@5    > \PP{If a variable at the current local scope is unset, it will remain so until it is reset in that scope or until the function returns.
                            Once the function returns, any instance of the variable at a previous scope will become visible.}\\
                            \textbf{However,} \PB{if the unset acts on a variable at a previous scope, any instance of a variable with that name that had been shadowed will become visible!}
         \end{itemize}
-        \begin{onlyenv}<1>
-            \begin{lstlisting}[style=MyBash]
+        \begin{onlyenv}<2-3>
+            \begin{lstlisting}[style=MyBash, aboveskip=2mm]
                 #!/bin/bash
 
-                LevelOne() {
+                function LevelOne() {
                     LevelTwo
                     echo "In ${FUNCNAME}, aVar = ${aVar}"
                 }
-                LevelTwo() {
+                function LevelTwo() {
                     local aVar; aVar="${FUNCNAME} local"
                     LevelThree
                 }
-                LevelThree() { echo "In ${FUNCNAME}, aVar = ${aVar}"; }
+                function LevelThree() {
+                    echo "In ${FUNCNAME}, aVar = ${aVar}"
+                }
 
                 aVar='global'; LevelOne
             \end{lstlisting}
         \end{onlyenv}
-        \begin{onlyenv}<2>
-            \begin{lstlisting}[style=MyBash, firstnumber=14]
+        \begin{onlyenv}<3>
+            \begin{lstlisting}[style=MyBash, aboveskip=4pt, numbers=none]
                 $ ./script.bash
                 |+In LevelThree, aVar = LevelTwo local
                 In LevelOne, aVar = global+|
             \end{lstlisting}
         \end{onlyenv}
-        \begin{onlyenv}<3>
-            \begin{lstlisting}[style=MyBash, style=oddnumbers, xleftmargin=1mm, xrightmargin=1mm, firstnumber=16]
+        \begin{onlyenv}<4>
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, xleftmargin=1mm, xrightmargin=1mm]
                 $ function Test { aVar="$(exit 1)"; echo $?; }; Test
                 1  # Fine, but we pollute caller with 'aVar' variable
                 $ function Test { local aVar="$(exit 1)"; echo $?; }; Test
@@ -135,6 +137,63 @@
                 $ function Test { local aVar; aVar="$(exit 1)"; echo $?; }; Test
                 1  # GOOD CODE
             \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<6-7>
+            \begin{lstlisting}[style=MyBash, aboveskip=2mm]
+                #!/bin/bash
+
+                function LevelOne() {
+                    local aVar='shadows global'
+                    echo "In ${FUNCNAME}, aVar = ${aVar}"
+                    LevelTwo
+                }
+                function LevelTwo() {
+                    local aVar='shadows LevelOne'
+                    echo "In ${FUNCNAME}, aVar = ${aVar}"
+                    unset -v 'aVar'
+                    echo "After unset: ${aVar}"
+                }
+
+                aVar='global'; LevelOne
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<7>
+            \begin{lstlisting}[style=MyBash, aboveskip=4pt, numbers=none]
+                $ ./script.bash
+                |+In LevelOne, aVar = shadows global
+                In LevelTwo, aVar = shadows LevelOne
+                After unset:+|
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<8-9>
+            \begin{lstlisting}[style=MyBash, aboveskip=2mm]
+                #!/bin/bash
+
+                function LevelOne() {
+                    local aVar='shadows global'
+                    echo "In ${FUNCNAME}, aVar = ${aVar}"
+                    LevelTwo
+                }
+                function LevelTwo() {
+                    # local aVar='shadows LevelOne'
+                    echo "In ${FUNCNAME}, aVar = ${aVar}"
+                    unset -v 'aVar'
+                    echo "After unset: ${aVar}"
+                }
+
+                aVar='global'; LevelOne
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<9>
+            \begin{lstlisting}[style=MyBash, aboveskip=4pt, numbers=none]
+                $ ./script.bash
+                |+In LevelOne, aVar = shadows global
+                In LevelTwo, aVar = shadows global
+                After unset: global+|
+            \end{lstlisting}
+            \begin{center}
+                \PB{I never needed such a technicality in real life!}
+            \end{center}
         \end{onlyenv}
     \end{overlayarea}
 \end{frame}
@@ -154,7 +213,7 @@
         \item Arguments to functions are meant to provide \textbf{input} to a function
         \item Bash strictly uses \PP{call-by-value} semantics
         \item You can't pass arguments ``by reference''\\[-0.5ex] \Remark{at least not until Bash 4.3 (and even there the \bash|declare -n| mechanism has serious security flaws)}
-        \item \alert{Passing the name of a variable to a function}, which should use it, requires \bash|eval| acrobatics and it \alert{should be as far as possible avoided!}
+        \item \alert{Passing the name of a variable to a function}, which should use it, often requires \bash|eval| acrobatics and it \alert{should be as far as possible avoided!}
     \end{itemize}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -177,7 +236,7 @@
             }
 
             for example in 31536000 86400 3600; do
-                SecondsToTimeStringWithDays ${example}
+                SecondsToTimeStringWithDays "${example}"
             done
         \end{lstlisting}
         \begin{lstlisting}[style=MyBash, aboveskip=2mm, firstnumber=18]
@@ -208,7 +267,7 @@
             }
 
             for example in 31536000 86400 3600 ''; do
-                SecondsToTimeStringWithDays ${example}
+                SecondsToTimeStringWithDays "${example}"
             done
         \end{lstlisting}
     \end{onlyenv}
@@ -244,7 +303,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{How do I return something from a function?}
-    \vspace{-18.2mm}
+    \vspace{-15.2mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{columns}[c]
             \begin{column}{0.55\textwidth}
@@ -307,13 +366,13 @@
                 ExampleFunction() {
                     echo "this is my data" > "$1"
                 }
-                # This is NOT solid code to handle temp files! @|\URL[comment-color]{http://mywiki.wooledge.org/BashFAQ/062}{Solid way}[background-color]|@
+                # This is NOT solid code to handle temp files! @|\URL[comment-color]{http://mywiki.wooledge.org/BashFAQ/062}{Solid way}|@
                 tmpfile=$(mktemp)   # GNU/Linux
                 ExampleFunction "${tmpfile}"
                 echo "ExampleFunction returned '$(cat < "@|\tc{strings-color}{\$\{tmpfile\}}|@" )'"
                 rm "${tmpfile}"
             \end{lstlisting}
-            \FrameRemark[5]{If this were a real program, there would have been error checking, and a trap.}
+            \FrameRemark<5>{If this were a real program, there would have been error checking, and a trap.}
         \end{onlyenv}
         \begin{onlyenv}<6>
             \begin{lstlisting}[style=MyBash, numbers=none, emph={[7]notGlobalVar},]
@@ -330,7 +389,7 @@
                 echo "ExampleFunction returned '${notGlobalVar}'"
             \end{lstlisting}
         \end{onlyenv}
-        \vspace{-3mm}
+        \vspace{-1mm}
         \begin{varblock}{}[0.7\textwidth]{Choose with care}<only@7>
             Use the approach you prefer depending on the situation!
         \end{varblock}
@@ -363,7 +422,7 @@
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<2>
-        \begin{lstlisting}[style=MyBash, numbers=none]
+        \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-6mm]
             #!/bin/bash
 
             source /home/sciarra/Script/UtilityFunctions.bash
@@ -381,7 +440,7 @@
             \item The shebang can/should be included in the main file only!
             \item Prevent auxiliary files from being run, only sourced!
         \end{itemize}
-        \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=1mm, xrightmargin=1mm]
+        \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xleftmargin=1mm, xrightmargin=1mm]
             if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
               echo "Script \"${BASH_SOURCE[0]}\" can only been sourced!" 2>&1
               exit -1
@@ -391,17 +450,17 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Functions: Miscellaneous}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{onlyenv}<1>
-            \vspace{-3mm}
             \begin{itemize}
-                \item Functions can be marked as read-only using the \bash|readonly| builtin
-                \item Functions can be unset via \,\bash|unset -f|
+                \item Functions can be unset via \;\bash|unset -f|\; or defined again
+                \item Functions can be marked as read-only using the \;\bash|readonly|\; builtin
                 \item Functions can be recursive
                       \begin{lstlisting}[style=MyBash, xrightmargin=12mm, aboveskip=2mm, belowskip=-6mm]
                           function CountTill5From()
                           {
-                              if [[ $1 < 5 ]]; then
+                              if (( $1 < 5 )); then
                                   echo $1; CountTill5From $(($1 + 1))
                               fi
                           }
@@ -409,8 +468,8 @@
                 \item The \bash|FUNCNEST| variable may be used to limit the depth of the function call stack and restrict the number of function invocations
                       \Remark{By default, no limit is placed on the number of recursive calls}
             \end{itemize}
-            \begin{lstlisting}[style=MyBash, xrightmargin=-2mm, xleftmargin=2mm, aboveskip=0mm, numbers=none]
-                $ FUNCNEST=2; CountTill5From()
+            \begin{lstlisting}[style=MyBash, xrightmargin=-2mm, xleftmargin=2mm, numbers=none]
+                $ FUNCNEST=2; CountTill5From 1
                 |+1
                 2
                 bash: CountTill5From: maximum function nesting level exceeded (2)+|
@@ -418,7 +477,7 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<2->
-            \vspace{-9mm}
+            \vspace{-5mm}
             \begin{varblock}{alert}[0.9\textwidth]{About recursion}
                 \begin{itemize}
                     \item \emph{\guillemotleft To iterate is human, to recur, divine.\guillemotright} -- L. Peter Deutsch
@@ -448,8 +507,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A last big warning: The \bash|eval| builtin}
-    \vspace{-3mm}
-    \begin{overlayarea}{\textwidth}{0.64\textheight}
+    \begin{overlayarea}{\textwidth}{0.6\textheight}
         \begin{onlyenv}<1>
             \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=2mm, xrightmargin=2mm]
                 $ help eval
@@ -463,7 +521,7 @@
                 Returns exit status of command or success if command is null.+|
             \end{lstlisting}
             \begin{itemize}
-                \item \emph{\guillemotleft\textnormal{\bash|eval|} is a common misspelling of \textbf{evil}\guillemotright} -- Greg's Wiki
+                \item \emph{\guillemotleft\textnormal{\,\bash|eval|} is a common misspelling of \alert{evil}\guillemotright} -- Greg's Wiki
                 \item It causes your code to be parsed twice instead of once; this means that, for example, if your code has variable references in it, the shell's parser will evaluate the contents of that variable.
                       This can lead to unexpected results!
             \end{itemize}
@@ -504,7 +562,8 @@
     \begin{tikzpicture}[remember picture, overlay, scope on=<5>]
         \path[from] (date) edge[out=270, in=180] node[pos=1, right] {\color{red}What about $\;$ \bash|rm -rf /| $\;$ here?} ++(15mm,-1mm);
     \end{tikzpicture}
-    \FrameRemark{Advanced, but \URL[PB]{http://mywiki.wooledge.org/BashFAQ/048}{very informative article} which you should spend some time at some point on.}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{Advanced, but \URL*{http://mywiki.wooledge.org/BashFAQ/048}{very informative article} on which you should spend some time at some point.}
 \end{frame}
 
 
