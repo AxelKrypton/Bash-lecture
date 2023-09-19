@@ -10,7 +10,7 @@ LIVEDATE = `date +'on %y.%m.%d at %H:%M:%S'`
 
 .PHONY: slides
 
-default : slides clean
+default : all clean
 
 help	:
 	# This Makefile provides :
@@ -18,7 +18,7 @@ help	:
 	# slides   - generates the slides of one day
 	# exercise - generates the exercise sheet of one day
 	# count    - counts number of words
-	# default: - compile slides and clean
+	# default  - compile all slides and exercises and clean
 
 clean :
 	@for f in $(CLEANUP_FILES); do \
