@@ -17,15 +17,15 @@
                       coordinate (F) at (0,7.0)
                       coordinate (G) at (0,8.4)
                       coordinate (O) at ($(A)+(150:5.5)-(0.5,0)$);
-                \draw (O) -- ++(30:2); %Just draw axis behind pyramid
+                \draw (O) -- ++(30:5); %Just draw axis behind pyramid
                 %Draw Pyramid -> new long edge is previous layer long edge minus half vertical distance (e.g. distance between A and B)
-                \pyramidLayer[Teach others]{A}{1.2}{5.5}{red}{90\%};
-                \pyramidLayer[Practice doing]{B}{1.2}{4.8}{PB}{75\%};
-                \pyramidLayer[Discussion]{C}{1.2}{4.1}{orange!30!yellow}{50\%};
-                \pyramidLayer[Demonstration]{D}{1.2}{3.4}{PS}{30\%};
-                \pyramidLayer[Audiovisual]{E}{1.2}{2.7}{PP}{20\%};
-                \pyramidLayer[Reading]{F}{1.2}{2.0}{PT}{10\%};
-                \pyramidLayer[Lecture]{G}{1.2}{1.3}{magenta}{5\%};
+                \uncover<7->{\pyramidLayer[Teach others]{A}{1.2}{5.5}{red}{90\%};}
+                \uncover<6->{\pyramidLayer[Practice doing]{B}{1.2}{4.8}{PB}{75\%};}
+                \uncover<5->{\pyramidLayer[Discussion]{C}{1.2}{4.1}{orange!30!yellow}{50\%};}
+                \uncover<4->{\pyramidLayer[Demonstration]{D}{1.2}{3.4}{PS}{30\%};}
+                \uncover<3->{\pyramidLayer[Audiovisual]{E}{1.2}{2.7}{PP}{20\%};}
+                \uncover<2->{\pyramidLayer[Reading]{F}{1.2}{2.0}{PT}{10\%};}
+                \uncover<1->{\pyramidLayer[Lecture]{G}{1.2}{1.3}{magenta}{5\%};}
                 \draw[from] (O) ++(0,-0.5) -- ++(0,8) node[right, anchor=north west] {Retention rate};
                 \draw[to]   (O) -- ++(330:6.2) node[right] {Passive to active learning};
             \end{tikzpicture}
@@ -52,7 +52,7 @@
                 \node[inner sep=0mm] (fig) {\includegraphics[width=35mm, clip, trim=8mm 5mm 8mm 0]{KnowBash.jpg}};
                 \begin{scope}[scope on=<2>]
                     \draw[red, line width=2mm] (fig.south west) -- (fig.north east);
-                    \path[overlay, from] (fig.north east) ++(2pt,2pt) edge[out=45, in=180] node[pos=1, right=2pt, font=\scriptsize, text=PS] {Well, not yet, I would say!} ++(6mm,4pt);
+                    \path[overlay, from] (fig.north east) ++(2pt,2pt) edge[out=45, in=180] node[pos=1, right=2pt, font=\scriptsize, text=PS] {Well, probably not yet, I would say!} ++(6mm,4pt);
                 \end{scope}
             \end{tikzpicture}
         \end{column}
@@ -83,12 +83,13 @@
                       \item I would love to get feedback from each of you
                       \item Feel free to send me an email \,\PS{\href{mailto:sciarra@itp.uni-frankfurt.de}{{\small\Letter}}}
                             \begin{itemize}
+                                \item Did you feel at ease during the lecture?
                                 \item Did I meet your expectation? If no, why?
                                 \item Was the lecture \textbf{prohibitively} dense? \Remark{Dense it had to be\ldots}
                                 \item What would you change--add--remove?
                             \end{itemize}
                   \end{itemize}
-        \item<3-> Last but not least, \PP{\textbf{haven't you already planned your trip to Iceland?}} $\;$\raisebox{-1pt}{\includegraphics[height=12pt]{Wink}}
+        \item<3-> Last but not least, \PP{\textbf{haven't you already planned your trip to Iceland?}} $\;$\raisebox{-1pt}{\includegraphics[height=12pt]{Yum}}
     \end{enumerate}
     \begin{tikzpicture}[remember picture, overlay]
         \node[anchor=south, cloud, cloud puffs=19, aspect=4, draw=PB, fill=PP!20, text=PB, font=\large\bfseries, visible on=<3>] at ($(current page.south)+(0mm,8mm)$) {Thank you for attending!};

@@ -16,27 +16,32 @@
                       coordinate (C) at (0,4)
                       coordinate (D) at (0,6)
                       coordinate (O) at ($(A)+(150:5)-(0.5,0)$);
-                \draw (O) -- ++(30:2); %Just draw axis behind pyramid
-                \begin{scope}[scope on=<2>]
+                \draw (O) -- ++(30:5); %Just draw axis behind pyramid
+                \begin{scope}[scope on=<6>]
                     \draw (A) ++(0,0.75) -- ++(30:5) -- ++(0.75,0) node[right] {\usebox{\shUnitLink}};
                     \draw (D) ++(0,0.75) -- ++(30:2) -- ++(0.75,0) node[right, text=PP] {Usually not so tough to be written in bash};
                 \end{scope}
                 %Draw Pyramid
-                \pyramidLayer{A}{1.5}{5}{red}{Unit};
-                \pyramidLayer{B}{1.5}{4}{orange!80!yellow}{Integration};
-                \pyramidLayer{C}{1.5}{3}{PS}{System};
-                \pyramidLayer{D}{1.5}{2}{PP}{Functional};
-                \draw[to] (O) -- ++(0,6) node[right, anchor=north west] {\begin{tabular}{c} Time consuming \\ speed \end{tabular}};
+                \uncover<2->{\pyramidLayer{A}{1.5}{5}{red}{Unit};}
+                \uncover<3->{\pyramidLayer{B}{1.5}{4}{orange!80!yellow}{Integration};}
+                \uncover<4->{\pyramidLayer{C}{1.5}{3}{PS}{System};}
+                \uncover<5->{\pyramidLayer{D}{1.5}{2}{PP}{Acceptance};}
+                \draw[to] (O) -- ++(0,6) node[right, anchor=north west] {
+                    \begin{tabular}{l}
+                        Development cost\\
+                        Execution time
+                    \end{tabular}};
                 \draw[to] (O) -- ++(330:6) node[right] {Number of tests};
-                
+
             \end{tikzpicture}
         }
     \end{center}
+    \PrepareURLsymbol[PB]
+    \FrameRemark<5-6>{If you want to know more about this subject, also more in general, refer \URL*{https://github.com/AxelKrypton/Clean-code-good-practices}{to the second of these presentations}.}
 \end{frame}
 \endgroup
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{My script does not do what it should: What can I do?}
-    \vspace{-3mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{enumerate}
             \item Trying to debug it by hand is always a possibility\ldots \Remark{if you do so, try to do it in a clever way}

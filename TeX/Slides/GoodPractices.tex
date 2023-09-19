@@ -4,36 +4,53 @@
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\makeatletter
+\@ifundefined{tmpbox}{%
+    \newsavebox{\tmpbox}%
+}{}
+\makeatother
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Require a minimum Bash version}
     \vspace{-3mm}
     \begin{varblock}{example}[0.6\textwidth]{}
         \PS{Using modern Bash features is important}, but be sure you can then use them where your scripts are needed!
     \end{varblock}
     \vspace*{-1mm}
-    \begin{varblock*}{quote}[0.5\textwidth]{}
+    \begin{varblock*}{quote}[0.88\textwidth]{}
         \normalfont
-        Bash \PQ{v2.0} $\;\longrightarrow\;$ Released in \PQ{1996}\\
-        Bash \PT{v3.0} $\;\longrightarrow\;$ Released in \PT{2004}\\
-        Bash \PP{v4.0} $\;\longrightarrow\;$ Released in \PP{2009}\\
-        Bash \PP{v4.1} $\;\longrightarrow\;$ Released in \PP{2009}\\
-        Bash \PP{v4.2} $\;\longrightarrow\;$ Released in \PP{2011}\\
-        Bash \PP{v4.3} $\;\longrightarrow\;$ Released in \PP{2014}\\
-        Bash \PS{v4.4} $\;\longrightarrow\;$ Released in \PS{2016}\\
-        Bash \PS{v5.0} $\;\longrightarrow\;$ Released in \PS{2019}\\
-        Bash \PS{v5.1} $\;\longrightarrow\;$ In progress \Remark{$\alpha$-, $\beta$-versions already out}
+        \begin{columns}[c]
+            \hfill
+            \begin{column}{0.46\textwidth}
+                \centering
+                Bash \PQ{v2.0} $\;\longrightarrow\;$ Released in \PQ{12.1996}\\
+                Bash \PT{v3.0} $\;\longrightarrow\;$ Released in \PT{08.2004}\\
+                Bash \PT{v3.1} $\;\longrightarrow\;$ Released in \PT{12.2005}\\
+                Bash \PT{v3.2} $\;\longrightarrow\;$ Released in \PT{10.2006}\\
+                Bash \PP{v4.0} $\;\longrightarrow\;$ Released in \PP{02.2009}\\
+                Bash \PP{v4.1} $\;\longrightarrow\;$ Released in \PP{12.2009}\\
+                Bash \PP{v4.2} $\;\longrightarrow\;$ Released in \PP{02.2011}\\
+                Bash \PP{v4.3} $\;\longrightarrow\;$ Released in \PP{02.2014}
+            \end{column}
+            \begin{column}{0.46\textwidth}
+                \centering
+                \PB{\scriptsize Best for empty arrays and \texttt{-u} shell option:\\[1mm]}
+                Bash \PS{v4.4} $\;\longrightarrow\;$ Released in \PS{09.2016}\\
+                Bash \PS{v5.0} $\;\longrightarrow\;$ Released in \PS{01.2019}\\
+                Bash \PS{v5.1} $\;\longrightarrow\;$ Released in \PS{12.2020}\\
+                Bash \PS{v5.2} $\;\longrightarrow\;$ Released in \PS{09.2022}
+            \end{column}
+            \qquad
+        \end{columns}
     \end{varblock*}
     \begin{lstlisting}[style=MyBash, numbers=none]
         $ echo "${BASH_VERSINFO[@]}"
-        |+5 0 17 1 release x86_64-pc-linux-gnu+|
+        |+5 2 15 1 release aarch64-apple-darwin21.6.0+|
         $ tr ' ' '.' <<< "${BASH_VERSINFO[@]:0:3}"
-        |+5.0.17+|
-        # You can use the 'hash' builtin to check command existence 
+        |+5.2.15+|
+        # You can use the 'hash' builtin to check command existence
     \end{lstlisting}
-    \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
-        \path[from] (current page.center) ++(1.3,-0.88) edge[out=0, in=270]
-            node[pos=1, above, PB, draw, rounded corners=3pt, text width=26mm, align=center, font=\small] {Best for empty arrays and \texttt{-u} shell option} ++(3.3,1);
-    \end{tikzpicture}
-    \FrameRemark{Keep in mind that locally install a recent Bash version is pretty straightforward $\;\to\;$ \URL[PB]{https://ftp.gnu.org/gnu/bash/}{Download Bash}.}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{Keep in mind that locally install a recent Bash version is pretty straightforward $\;\to\;$ \URL*{https://ftp.gnu.org/gnu/bash/}{Download Bash}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Be sensible!}
@@ -69,6 +86,7 @@
                 \item Almost as important as the result of your code is the \textbf{readability of your code}.
                       Chances are that you aren't just going to write a script once and then forget about it.
             \end{enumerate}
+            \vspace{3mm}
             \begin{varblock}{quote}[0.85\textwidth]{}[Greg's Wiki]
                 Trust me when I say, no piece of code is ever 100\% finished, with the exception of some very short and useless chunks of nothingness.
             \end{varblock}
@@ -84,10 +102,15 @@
         \item Many awful and dangerous scripts end up in production or even in Linux distributions!!
         \item The result of these, and also your very own scripts written in a time of neglect, can often be \textbf{disastrous}
     \end{itemize}
+    \begin{lrbox}{\tmpbox}
+        \begin{minipage}{0.85\textwidth}
+            \URL[PT]{http://mywiki.wooledge.org/BashPitfalls}{Bash Pitfalls}\Remark[1em]{64 discussed items}\\
+            \URL[PB]{https://bash-hackers.gabe565.com/scripting/obsolete/}{Obsolete and deprecated syntax}\\
+            \URL[PP]{http://mywiki.wooledge.org/ShellHallOfShame}{Shell Hall of Shame}
+        \end{minipage}
+    \end{lrbox}
     \begin{varblock*}{example}[0.45\textwidth]{Important reading}
-        \URL[PT]{http://mywiki.wooledge.org/BashPitfalls}{Bash Pitfalls}\Remark[1em]{59 discussed items}\\
-        \URL[PB]{https://wiki.bash-hackers.org/scripting/obsolete}{Obsolete and deprecated syntax}\\
-        \URL[PP]{http://mywiki.wooledge.org/ShellHallOfShame}{Shell Hall of Shame}
+        \usebox{\tmpbox}
     \end{varblock*}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -148,7 +171,8 @@
                 \item command substitutions remove any trailing newlines!
             \end{itemize}
             \PS{Use a \bash|while read| loop instead.}
-            \FrameRemark[3]{\guillemotleft The command substitution \;\PB{\texttt{\$(cat file)}}\; can be replaced by the equivalent but faster \;\PB{\texttt{\$(< file)}}\guillemotright. $\;\to\;$ \URL[PB]{https://www.gnu.org/software/bash/manual/html\_node/Command-Substitution.html}{Bash manual section 3.5.4}}
+            \PrepareURLsymbol[PB]
+            \FrameRemark<3>{\guillemotleft The command substitution \;\PB{\texttt{\$(cat file)}}\; can be replaced by the equivalent but faster \;\PB{\texttt{\$(< file)}}\guillemotright. $\;\to\;$ \URL*{https://www.gnu.org/software/bash/manual/html\_node/Command-Substitution.html}{Bash manual section 3.5.4}}
         \item<only@4>
             \alert{\large\textbf{For the love of god and all that is holy, do not use \bash|seq| to count!}}
             \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=35mm]
@@ -199,7 +223,7 @@
     \begin{itemize}
         \setlength{\itemsep}{1mm}
         \item Bash is a scripting language\\ $\to$ this does not mean at all that it has not to fulfil good coding practices
-        \item If you ignore what clean code is, have a look \URL[PB]{https://itp.uni-frankfurt.de/\~strongmatter/seminar_slides_GU/2019.06.03.sciarra.pdf}{to this presentation}! \Remark{It is worth the read in any case!}
+        \item Have a look \URL[PB]{https://github.com/AxelKrypton/Clean-code-good-practices}{to the first of these presentations}! \Remark{Also the second one is worth the read!}
         \item Use meaningful names and strive for readability.
         \item If you do tricky stuff in your script, comment it!
         \item If you need to work on a larger script in Bash,

@@ -4,31 +4,42 @@
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\makeatletter
+\@ifundefined{tmpbox}{%
+    \newsavebox{\tmpbox}%
+}{}
+\makeatother
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Awk: Another marvellous utility}
     \begin{varblock}{quote}[\textwidth]{A bit of history}[Awk manual]
-        \textnormal{
-            \fbox{\parbox{\dimexpr\columnwidth-1cm}{\centering\footnotesize
+            \parbox{\dimexpr\columnwidth-6mm}{\centering\footnotesize
                 \begin{tabular}{l@{\hspace{15mm}}l}
-                    1 part \texttt{egrep} & 1 part \texttt{snobol}\\
-                    2 parts \texttt{ed}   & 3 parts \texttt{C} \\
+                    1 part \;\textnormal{\texttt{egrep}} & 1 part \;\textnormal{\texttt{snobol}}\\
+                    2 parts \;\textnormal{\texttt{ed}}   & 3 parts \;\textnormal{\texttt{C}} \\
                 \end{tabular}\\
-                Blend all parts well using \texttt{lex} and \texttt{yacc}.
+                Blend all parts well using \:\textnormal{\texttt{lex}}\: and \:\textnormal{\texttt{yacc}}.
                 Document minimally and release.\\
-                After eight years, add another part \texttt{egrep} and two more parts \texttt{C}.
+                After eight years, add another part \:\textnormal{\texttt{egrep}}\: and two more parts \:\textnormal{\texttt{C}}.
                 Document very well and release.
-            }}\\[1.5ex]
+            }\\[1.5ex]
+        \textnormal{
             The name \bash|awk| comes from the initials of its designers: Alfred V. Aho, Peter J. Wein-berger, and Brian W. Kernighan.
             The original version of \bash|awk| was written in \alert{1977} at AT\&T Bell Laboratories.
         }\\[-1ex] ~
     \end{varblock}
-    \begin{varblock*}{}[0.85\textwidth]{Some references}
-        Awk can be considered for all intents and purposes as a programming language!\\
-        $\quad$\URL[PB]{https://www.gnu.org/software/gawk/manual/}{The official GNU manual} \Remark{The PDF is \alert{570} pages long\ldots}\\
-        $\quad$\URL[PS]{http://www.grymoire.com/Unix/Awk.html}{A base tutorial}
+    \begin{lrbox}{\tmpbox}
+        \begin{minipage}{0.85\textwidth}
+            Awk can be considered for all intents and purposes as a programming language!\\
+            $\quad$\URL[PB]{https://www.gnu.org/software/gawk/manual/}{The official GNU manual} \Remark{The PDF is \alert{581} pages long\ldots}\\
+            $\quad$\URL[PS]{http://www.grymoire.com/Unix/Awk.html}{A base tutorial}
+        \end{minipage}
+    \end{lrbox}
+    \begin{varblock*}{}[0.87\textwidth]{Some references}
+        \usebox{\tmpbox}
     \end{varblock*}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{The PDF manual is 570 pages long!! What should I learn here?}
+\begin{frame}[fragile]{The PDF manual is 581 pages long!! What should I learn here?}
     \vspace{-4mm}
     \begin{itemize}
         \item We will focus on the abstract idea of \textbf{how} \bash|awk| processes a file
@@ -79,17 +90,17 @@
     \FrameRemark{There are exceptions to the flow above (e.g. the \texttt{exit} keyword). \alert{Use this slide as approximated overview.}}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}{8 powerful \bash|awk| builtin variables}
-    \begin{varblock}{quote}[0.7\textwidth]{You can change this to a string or regular expression}
-        \normalfont
+\begin{frame}[fragile]{8 powerful \bash|awk| builtin variables}
+    \vspace{-4mm}
+    \begin{varblock}{}[0.7\textwidth]{You can change this to a string or regular expression}
         \begin{description}[XXXXXX]
-            \item[\textbf{FS}] \textbf{F}ield \textbf{S}eparator. \PP{White-space} by default.
-            \item[\textbf{OFS}] \textbf{O}utput \textbf{F}ield \textbf{S}eparator. \PP{Single white-space} by default.
-            \item[\textbf{RS}] \textbf{R}ecord \textbf{S}eparator. \PP{End of line} by default.
-            \item[\textbf{ORS}] \textbf{O}utput \textbf{R}ecord \textbf{S}eparator. \PP{End of line} by default.
+            \item[\textbf{FS}] \textbf{F}ield \textbf{S}eparator. \alert{White-space} by default.
+            \item[\textbf{OFS}] \textbf{O}utput \textbf{F}ield \textbf{S}eparator. \alert{Single white-space} by default.
+            \item[\textbf{RS}] \textbf{R}ecord \textbf{S}eparator. \alert{End of line} by default.
+            \item[\textbf{ORS}] \textbf{O}utput \textbf{R}ecord \textbf{S}eparator. \alert{End of line} by default.
         \end{description}
     \end{varblock}
-    \begin{varblock}{}[0.68\textwidth]{Variable automatically set}
+    \begin{varblock}{}[0.7\textwidth]{Variables automatically set}
         \begin{description}[\textbf{FILENAME}]
             \item[\textbf{NR}] \textbf{N}umber of \textbf{R}ecord.
             \item[\textbf{NF}] \textbf{N}umber of \textbf{F}ield.
@@ -97,6 +108,12 @@
             \item[\textbf{FNR}] \textbf{N}umber of \textbf{R}ecord within the \textbf{F}ile being processed.
         \end{description}
     \end{varblock}
+    \begin{center}
+        The field and record separators can be specified as regular expression:
+        \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xleftmargin=9mm, xrightmargin=9mm]
+            FS="[:, ]" # Colon, comma or space as field separator
+        \end{lstlisting}
+    \end{center}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The field placeholders}
@@ -107,7 +124,7 @@
             \item[\$0] This special placeholder can be used to access the full record
         \end{description}
     \end{varblock}
-    \begin{lstlisting}[style=MyBash]
+    \begin{lstlisting}[style=MyBash, xleftmargin=3mm, xrightmargin=3mm]
         $ awk '{print $1}' <<< $'A 1 \n B 2 \n C 3'
         |+A
         B
@@ -120,8 +137,8 @@
         |+A|B C+|
         $ awk 'BEGIN{FS="::"}{print $1 "|" $2}' <<< "A:B C::D"
         |+A:B C|D+|
-        $ awk 'BEGIN{FS=":"; OFS="|"}{print $1, $2}' <<< "A:B C::D"
-        |+A|B C+|
+        $ awk 'BEGIN{FS="[: ]"; OFS="|"}{print $1, $2}' <<< "A:B C::D"
+        |+A|B+|
         $ awk 'BEGIN{ORS="|"}{print $1}' <<< $'A 1 \n B 2 \n C 3'
         |+A|B|C+|  # without final new line
     \end{lstlisting}
@@ -130,13 +147,14 @@
 \begin{frame}[fragile]{Variables in \bash|awk| and passing Bash variables to \bash|awk|}
     \vspace{-3mm}
     \begin{itemize}
-        \item Strings that do not refer to keyword or to builtin variables/functions in \bash|awk| programs are treated as variables
-        \item \alert{Numeric variables in \bash|awk| are implicitly initialised to 0, use them without worries!}
-        \item The \bash|awk| command-line option \PP{\texttt{-v var=val} sets the \bash|awk| variable} \texttt{var} to the value \texttt{val} \PP{before execution of the program begins}
-        \item The \texttt{-v} option can only set one variable, but it can be used more than once, setting another variable each time
+        \item Strings that do not refer to keyword or to builtin variables/functions in \bash|awk| programs are treated as variables.
+        \item \alert{Variables are either strings or numbers depending on what is assigned to them!}
+        \item \textbf{By default, variables are initialized to the empty string, which is 0 if converted to a number.}
+        \item The \bash|awk| command-line option \;\PB{\texttt{-v var=val}\; sets the \bash|awk| variable} \texttt{var} to the value \texttt{val} \PB{before execution of the program begins}.
+        \item The \texttt{-v} option can only set one variable, but it can be used more than once, setting another variable each time.
               \alert{Avoid setting \bash|awk| builtin variables!}
     \end{itemize}
-    \begin{lstlisting}[style=MyBash, xleftmargin=2mm, xrightmargin=2mm]
+    \begin{lstlisting}[style=MyBash, aboveskip=2mm, xleftmargin=2mm, xrightmargin=2mm]
         $ awk 'BEGIN{print uninitialisedVariable}'
         |++|
         $ awk 'BEGIN{var++; print var}'
@@ -147,6 +165,8 @@
         $ awk -v |+index=1+| 'BEGIN{print index}'
         |+awk: fatal: cannot use gawk builtin `index' as variable name+|
     \end{lstlisting}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{The conversion mechanism between strings and numbers can be found in detail \URL*{https://www.gnu.org/software/gawk/manual/gawk.html\#Strings-And-Numbers}{in the documentation}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A (very limited) taste of \bash|awk| by examples}
@@ -234,7 +254,7 @@
             \item If you want to keep a backup of the to-be-modified file,
                   \begin{itemize}
                       \item use the awk \texttt{INPLACE\_SUFFIX} variable prior to v5.0
-                      \item use the awk \texttt{inplace::suffix} variable after v5.0
+                      \item use the awk \texttt{inplace::suffix} variable from v5.0 on
                   \end{itemize}
                   to set a suffix for the copy of the file, e.g. \PB{\texttt{.bak}}.
         \end{itemize}
@@ -286,6 +306,6 @@
     \begin{center}
         \includegraphics[width=0.6\textwidth]{LearnByDoing}
     \end{center}
-    
+
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

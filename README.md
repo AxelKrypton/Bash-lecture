@@ -33,7 +33,7 @@ If you wish to compile LaTeX source code, the `TeXnicalities` package and the us
   - [X] Day 2
   - [X] Day 3
   - [X] Day 4
-  - [ ] Day 5
+  - [X] Day 5
 
 - [ ] Exercises
   - [ ] Day 1
