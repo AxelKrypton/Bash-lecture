@@ -29,13 +29,13 @@ ls *[05].*
 printf '\n'
 
 # Rename the files containing a space replacing it by an underscore:
-rename ' ' '_' *\ *
+rename -s ' ' '_' *\ *
 
 # Change the _bkp.png suffix into _backup.png
-rename '_bkp.png' '_backup.png' *_bkp.png
+rename -s '_bkp.png' '_backup.png' *_bkp.png
 
 # Add a leading 0 to numbers in files whose name contains a number smaller than 10
-rename 'file' 'file0' file?.*
+rename -s 'file' 'file0' file[1-9].*
 
 printf '\nBonus problem:\n\n'
 printf '%s\n' {0,1}{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}

@@ -28,7 +28,20 @@
     \end{enumerate}
 
     Note, that you might be tempted to iterate over files~--~and often it is necessary to do so~--~but the tasks above in this particular exercise can be achieved without using flow constructs, which will be discussed in detail tomorrow.
-    For the renaming part, use the \bash|rename| command.
+    For the renaming part, use the
+    \begin{lstlisting}[style=MyBash]
+        rename -s 'from' 'to' [file]...
+    \end{lstlisting}
+    command.
+    You might need to install the \bash|rename| command via e.g.
+    \begin{lstlisting}[style=MyBash, emph={[6]{brew}}]
+        brew install rename
+    \end{lstlisting}
+    or
+    \begin{lstlisting}[style=MyBash, emph={[6]{apt-get}}, alsoletter={-}]
+        apt-get install rename
+    \end{lstlisting}
+    depending on your OS\footnote{In Fedora and RedHat-derived Linux distributions you need to use \bash|prename| and in other less common distributions the name might be even different.}.
 
     \vspace{5mm}
     \textbf{Bonus problem:} Can you think of an easy way to print all bit strings that can build up 1 byte (8 bits)?
@@ -44,4 +57,5 @@
         11111110
         11111111
     \end{lstlisting}
+    \vspace{5mm}
 \end{exercise}

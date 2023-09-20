@@ -36,14 +36,14 @@ If you wish to compile LaTeX source code, the `TeXnicalities` package and the us
   - [X] Day 5
 
 - [ ] Exercises
-  - [ ] Day 1
+  - [X] Day 1
   - [ ] Day 2
   - [ ] Day 3
   - [ ] Day 4
   - [ ] Day 5
 
 - [ ] Sample solutions
-  - [ ] Day 1
+  - [X] Day 1
   - [ ] Day 2
   - [ ] Day 3
   - [ ] Day 4
