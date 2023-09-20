@@ -6,13 +6,20 @@
 \begin{exercise}[Instructive]{The power of arrays}
     Arrays play a very important role in Bash scripting and they are too often forgotten.
     To warm up and also explore the array notation think about
-    \begin{itemize}
+    \begin{itemize}[nosep]
         \item how to find the longest entry of an array?
         \item how to find the maximum of an array with \emph{numeric} entries?
         \item how to find only common entries in two arrays?
         \item how to sort an array?
         \item how to check if an array is sparse?
     \end{itemize}
+    Test your code with the following variables:
+    \begin{lstlisting}[style=MyBash, emph={[2]stringArray, numberArray, sparseArray}]
+        stringArray=( $'   Hello\nworld\n' 'Hello' 'Bye' 'Goodbye everyone' 'Wow' )
+        numberArray=( 200 101 31 5 7 11 )
+        sparseArray=( [10]=$'   Hello\nworld\n' [3]='Bye' [5]='Ciao' )
+    \end{lstlisting}
+
     Once you feel comfortable with the array syntax, tackle the following problems.
     \begin{enumerate}[after=\vspace{-\baselineskip}]
         \item Write a Bash script to make a report of the files in the present folder, counting them by extension.

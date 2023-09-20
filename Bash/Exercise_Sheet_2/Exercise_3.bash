@@ -12,13 +12,13 @@ fi
 if [[ $1 = '-t w' ]]; then
 
     echo
-    stringArray=( $'Hello\nworld' 'Hello' 'Bye' 'Goodbye everyone' 'Wow' )
+    stringArray=( $'   Hello\nworld\n' 'Hello' 'Bye' 'Goodbye everyone' 'Wow' )
     numberArray=( 200 101 31 5 7 11 )
-    sparseArray=( [10]=$'Hello\nworld' [3]='Bye' [5]='Ciao' )
+    sparseArray=( [10]=$'   Hello\nworld\n' [3]='Bye' [5]='Ciao' )
     printf "%.0s-" {1..50}; echo
-    echo "stringArray=( \$'Hello\nworld' 'Hello' 'Bye' 'Goodbye everyone' 'Wow' )"
+    echo "stringArray=( \$'   Hello\nworld\n' 'Hello' 'Bye' 'Goodbye everyone' 'Wow' )"
     echo 'numberArray=( 200 101 31 5 7 11 )'
-    echo "sparseArray=( [10]=\$'Hello\nworld' [3]='Bye' [5]='Ciao' )"
+    echo "sparseArray=( [10]=\$'   Hello\nworld\n' [3]='Bye' [5]='Ciao' )"
 
     # Longest entry of array
     for entry in "${stringArray[@]}"; do
@@ -54,15 +54,26 @@ if [[ $1 = '-t w' ]]; then
     done
     echo    
 
-    # Sort (alphabetically!) an array before bash 4.4 coping with '\n' in entries (indeed before bash v4)
+    # Sort (alphabetically!) an array before bash 4.4 coping with '\n' in entries must be
+    # "manually" done, because readarray builtin gained the -d options only since bash v4.4.
+    # According to http://mywiki.wooledge.org/BashFAQ/061 arrays have been introduced in
+    # bash v2.0 and 'read -d' in bash v2.04 and the following implementation should work in
+    # reasonably (!) old bash versions. I did not test this in detail, though.
+    #
     # NOTE: Using -d $'\0' rather than -d '' makes no difference, but it makes it obvious
     #       what you're expecting the delimiter to be!
     #          https://transnum.blogspot.com/2008/11/bashs-read-built-in-supports-0-as.html
+    #
+    # ATTENTION: Changing the IFS to '' locally when running the read command is crucial to
+    #            avoid stripping spaces, tab and newlines at beginning and end of entries
+    #            when assigning them to the array (sorting works fine, but the 'element'
+    #            variable get potentially changed when initialized at every loop iteration).
+    #            Try to remove the IFS='' assignment and run the code to see what changes.
     sorted_A=()
-    while read -d $'\0' element; do
+    while IFS='' read -d $'\0' element; do
         sorted_A[${#sorted_A[@]}]="${element}"
     done < <(printf '%s\0' "${stringArray[@]}" | sort -z)
-    echo '---- Bash < v4 ----'
+    echo '---- Bash < v4.4 ----'
     for index in "${!sorted_A[@]}"; do
         echo "sorted_A[$index]=${sorted_A[index]}"
     done

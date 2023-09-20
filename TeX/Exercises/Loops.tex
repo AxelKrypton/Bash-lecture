@@ -5,7 +5,8 @@
 
 \begin{exercise}[Instructive]{Loops, loops everywhere}
     Consider the following tasks and write for each a short script.
-    \begin{enumerate}[after=\vspace{-0.6\baselineskip}]
+    Use the \bash|mv| command to rename files.
+    \begin{enumerate}[itemsep=-2pt, after=\vspace{-0.6\baselineskip}]
         \item Given two extensions, rename all files in the present folder having the first extension, changing it in the second provided one.
         \item Suppose to have files in a folder with spaces in the name.
               Create a script to rename them, replacing each space with an underscore.
@@ -16,9 +17,9 @@
                   touch conf.{,{1000..200000..5000},save} prng.{,{1000..180000..3000},save}
               \end{lstlisting}
               Implement a script that
-              \begin{enumerate}[after=\vspace{-0.6\baselineskip}]
+              \begin{enumerate}[nosep, after=\vspace{-0.6\baselineskip}]
                   \item deletes conf or prng files, if a prng or conf with the same number is not present;
-                  \item find the largest number for which both a conf and a prng file exits.
+                  \item find the largest number for which both a conf and a prng file exit.
               \end{enumerate}
     \end{enumerate}
     \bigskip
