@@ -2,7 +2,7 @@
 
 # Source the functions
 for index in {1..3}; do
-    source Exercise_3.${index}.bash
+    source Exercise_3.${index}.bash || exit 1
 done
 
 #--------------------------------------
@@ -34,8 +34,8 @@ echo
 
 #--------------------------------------
 # Task 2
-array=( "first element"  $'to be\nfound'  "something" )
-strings=( $'to be\nfound' "notExisting" )
+array=( "first element"  $'   to be\nfound\n'  "something" )
+strings=( $'   to be\nfound\n' "notExisting" )
 for index in "${!array[@]}"; do
     echo "array[${index}]=${array[index]}"
 done

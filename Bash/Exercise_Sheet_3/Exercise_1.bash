@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ $# -ne 1 || ! $1 =~ ^[0-9]+$ ]]; then
-    printf '\n\e[91m Call this script with a non negative integer a unique command line argument.\e[0m\n\n'
+    printf '\n\e[91m Call this script with a non negative integer as unique command line argument.\e[0m\n\n'
     exit 1
 fi
 
