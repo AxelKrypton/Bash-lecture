@@ -3,11 +3,11 @@
 %    Date: 21 Oct 2020          %
 %-------------------------------%
 
-\begin{exercise}[Instructive]{Some tasks for which Sed can provide good support}
+\begin{exercise}[Instructive]{Some tasks for which Awk can provide good support}
     Go through the few slides discussed in the lecture about \bash|awk|, focusing on the examples there.
     Once prepared an input file via
     \begin{lstlisting}[style=MyBash]
-        paste <(shuf -n 20 /usr/share/dict/ngerman) <(shuf -i 1-5000 -n 20)
+        paste <(shuf -n 20 /usr/share/dict/words) <(shuf -i 1-5000 -n 20)
     \end{lstlisting}
     achieve the following tasks using a \bash|awk| command.
     You can assume that the file contains a word in the first column and an integer number in the second one.
