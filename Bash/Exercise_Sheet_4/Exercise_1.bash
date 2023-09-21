@@ -21,7 +21,7 @@ function Monitor()
     while kill -0 "${simulationPid} " 2> /dev/null ; do
         echo "Simulation still running, sleeping ${sleepTime}s..."
         sleep "${sleepTime}"
-        return 2
+        #return 2
     done
 }
 
@@ -52,7 +52,7 @@ elif kill -0 "${pidMonitor}" 2>/dev/null; then
     errorCodeMonitor=${?}
     PrintInfo "\"Monitor\"  exit code: ${errorCodeMonitor}"\
               "\"Simulate\" exit code: ${errorCode}"
-    if [[ ${errorCodeFirst} -ne 0 ]] || [[ ${errorCodeSecond} -ne 0 ]]; then
+    if [[ ${errorCode} -ne 0 ]] || [[ ${errorCodeMonitor} -ne 0 ]]; then
         PrintFatal '\"Monitor\" and/or \"Simulate\" failed.'
     fi
 else
