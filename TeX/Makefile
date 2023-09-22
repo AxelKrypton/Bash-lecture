@@ -8,25 +8,25 @@ CLEANUP_FILES = .bbl .bcf .blg .out .synctex.gz .tex.backup '~' .log  .toc .aux 
 DAYS = 1 2 3 4 5
 LIVEDATE = `date +'on %y.%m.%d at %H:%M:%S'`
 
-.PHONY: slides
+.PHONY: slide
 
-default : all clean
+default: all clean
 
-help	:
-	# This Makefile provides :
-	# clean    - deletes all auxiliary files
-	# slides   - generates the slides of one day
-	# exercise - generates the exercise sheet of one day
-	# count    - counts number of words
-	# default  - compile all slides and exercises and clean
+help:
+	# This Makefile provides:
+	#   clean     ->  deletes all auxiliary files
+	#   slide     ->  generates the slides of one day
+	#   exercise  ->  generates the exercise sheet of one day
+	#   count     ->  counts number of words
+	#   default   ->  compile all slides and exercises and clean
 
-clean :
+clean:
 	@for f in $(CLEANUP_FILES); do \
 		find . -iname '*'$$f -exec echo "rm -rf {}" \; ; \
 		find . -iname '*'$$f -exec rm -rf {} \; ; \
 	done
 
-slides :
+slide:
 ifdef DAY
 	@printf '\n\e[92m==> Compiling \e[1m$(TEXSOURCESLIDES)$(DAY).tex\e[22;96m %s\e[0m\n\n' "$(LIVEDATE)"\
 	; timestamp_start=$$(date +%s)\
@@ -34,10 +34,10 @@ ifdef DAY
 	&& mv $(TEXSOURCESLIDES)$(DAY).pdf ..\
 	&& printf '\n\e[92m==> File \e[1m$(TEXSOURCESLIDES)$(DAY).pdf\e[22m sucessfully produced in \e[93m%d seconds.\e[0m\n\n' "$$(($$(date +%s)-timestamp_start))"
 else
-	@printf '\n\e[91m==> No day specified, use e.g. "make DAY=1 slides"\e[0m\n\n'
+	@printf '\n\e[91m==> No day specified, use e.g. "make DAY=1 slide"\e[0m\n\n'
 endif
 
-exercise :
+exercise:
 ifdef DAY
 	@printf '\n\e[92m==> Compiling \e[1m$(TEXSOURCEEXERCISE)$(DAY).tex\e[22;96m %s\e[0m\n\n' "$(LIVEDATE)"\
 	; timestamp_start=$$(date +%s)\
@@ -49,13 +49,13 @@ else
 endif
 
 all:
-	$(MAKE) DAY=0 slides
+	$(MAKE) DAY=0 slide
 	for day in $(DAYS) ; do \
-		$(MAKE) DAY=$$day slides; \
+		$(MAKE) DAY=$$day slide; \
 		$(MAKE) DAY=$$day exercise; \
     done
 
-count : clean
+count: clean
 	# Words : 
 	wc `find | grep "\.tex" | grep -v ".svn" | grep -v "def.tex"`
 
