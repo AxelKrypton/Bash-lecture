@@ -115,7 +115,7 @@
             \begin{lstlisting}[style=MyBash]
                 $ select file in *; do
                 >     echo "You picked \"${file}\" (${REPLY})"
-                >     break;
+                >     break
                 > done
                 |+1) Day_1.tex
                 2) Day_2.tex
@@ -136,7 +136,7 @@
                 $ select file in *; do
                 >     if [[ ${file} != '' ]]; then  # GOOD PRACTICE
                 >         echo "You picked \"${file}\" (${REPLY})"
-                >         break;
+                >         break
                 >     fi
                 > done; unset file
                 |+1) Day_1.tex
