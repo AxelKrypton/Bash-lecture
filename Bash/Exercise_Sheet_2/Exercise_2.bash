@@ -64,8 +64,24 @@ if [[ $1 = '-t 3' ]]; then
         fi
     done
 
-    lastConf=$(printf '%s\n' conf.+([0-9]) | sort -V | tail -n 1)
-    lastPrng=$(printf '%s\n' prng.+([0-9]) | sort -V | tail -n 1)
+    # After having discussed Day 3 material, one could use the
+    # following pipeline with the sort and tail commands. The
+    # if-clause is just to have the two solutions next to each
+    # other. Change false to true to enter the other branch.
+    if false; then
+        lastConf=$(printf '%s\n' conf.+([0-9]) | sort -V | tail -n 1)
+        lastPrng=$(printf '%s\n' prng.+([0-9]) | sort -V | tail -n 1)
+    else
+        largestNumber=0
+        for file in conf.+([0-9]); do
+            number=${file##*.*(0)} # strip leading zeroes if any
+            if [[ ${number} -gt ${largestNumber} ]]; then
+                largestNumber=${number}
+            fi
+        done
+        lastConf="conf.${largestNumber}"
+        lastPrng="prng.${largestNumber}"
+    fi
 
     if [[ ${lastConf} = '' ]] || [[ ${lastPrng} = '' ]]; then 
         printf '\n  No complete checkpoint found!\n\n'
