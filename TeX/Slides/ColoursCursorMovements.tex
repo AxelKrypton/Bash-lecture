@@ -165,7 +165,7 @@
              # Here a crazy progress bar:
              $ while true; do
              >     printf '\e[s'
-             >     printf '%0.s=' $(seq 1 $(bc -l <<< "$RANDOM/32767*100"))
+             >     printf '%.0s=' $(seq 1 $(bc -l <<< "$RANDOM/32767*100"))
              >     sleep 0.2
              >     printf '\e[u\e[K'  # Use \r instead of saving cursor
              > done

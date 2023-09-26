@@ -71,17 +71,17 @@
         \end{lstlisting}
     \end{onlyenv}
     \begin{onlyenv}<3>
-        \begin{lstlisting}[style=MyBash]
+        \begin{lstlisting}[style=MyBash, emph={[2]{i,j}}]
             $ i=0; \
             > while [[ ${i} -lt 5 ]]; do
             >   j=0
             >   while [[ ${j} -le 5 ]]; do
             >     if [[ ${j} -le ${i} ]]; then
             >       printf "$((i+j)) "
-            >       j=$((j+1))
+            >       j=$((j + 1))
             >     else
             >       printf '\n'
-            >       i=$((i+1))
+            >       i=$((i + 1))
             >       continue 2
             >     fi
             >   done
@@ -99,12 +99,12 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \,\bash|for|\, keywords}
     \begin{onlyenv}<1>
-        \begin{lstlisting}[style=MyBash, numbers=none]
+        \begin{lstlisting}[style=MyBash, numbers=none, xrightmargin=4mm, xleftmargin=4mm]
             for VARIABLE in WORDS; do
                 # Body of the loop: VARIABLE set to WORD
             done
 
-            for (( EXPR1; EXPR2; EXPR3 )) # Expressions can be empty
+            for (( EXPR1; EXPR2; EXPR3 )); do # Expressions can be empty
                 # Body of the loop
             done
         \end{lstlisting}
