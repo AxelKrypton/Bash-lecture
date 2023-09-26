@@ -209,7 +209,7 @@
             |+world hello+|
             $ sed 's/^\(.\)\(.\)\(.\)\(.\) /\3\2\1\4/' <<< 'nice star'
             |+cinestar+|
-            $ printf "=%0.s" {1..20} | sed 's/./&:/10'; echo
+            $ printf "=%.0s" {1..20} | sed 's/./&:/10'; echo
             |+==========:==========+|
             $ cd /usr/local/bin
             $ sed 's/\/usr\/local\/bin/\/common\/bin/' <<< "${PWD}/emacs"
