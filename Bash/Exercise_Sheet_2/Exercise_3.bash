@@ -52,7 +52,25 @@ if [[ $1 = '-t w' ]]; then
     for index in "${!commonEntries[@]}"; do
         echo "commonEntries[$index]=${commonEntries[index]}"
     done
+    printf "%.0s-" {1..50}; echo
     echo    
+
+    # Check if an array is sparse
+    printf "%.0s-" {1..50}; echo
+    indecesOfArray=( ${!sparseArray[@]} )
+    if [[ ${#sparseArray[@]} -ne $(( indecesOfArray[-1] +1 )) ]]; then
+        echo "Array \"sparseArray\" is sparse."
+    else
+        echo "Array \"sparseArray\" is NOT sparse."
+    fi
+    indecesOfArray=( ${!stringArray[@]} )
+    if [[ ${#stringArray[@]} -ne $(( indecesOfArray[-1] +1 )) ]]; then
+        echo "Array \"stringArray\" is sparse."
+    else
+        echo "Array \"stringArray\" is NOT sparse."
+    fi
+    printf "%.0s-" {1..50}; echo
+    echo
 
     # Sort (alphabetically!) an array before bash 4.4 coping with '\n' in entries must be
     # "manually" done, because readarray builtin gained the -d options only since bash v4.4.
@@ -77,6 +95,7 @@ if [[ $1 = '-t w' ]]; then
     for index in "${!sorted_A[@]}"; do
         echo "sorted_A[$index]=${sorted_A[index]}"
     done
+    printf "%.0s-" {1..50}; echo
     echo
 
     # Sort an array after bash 4.4
@@ -85,22 +104,7 @@ if [[ $1 = '-t w' ]]; then
     for index in "${!sorted_B[@]}"; do
         echo "sorted_B[$index]=${sorted_B[index]}"
     done
-    echo
-
-    # Check if an array is sparse
     printf "%.0s-" {1..50}; echo
-    indecesOfArray=( ${!sparseArray[@]} )
-    if [[ ${#sparseArray[@]} -ne $(( indecesOfArray[-1] +1 )) ]]; then
-        echo "Array \"sparseArray\" is sparse."
-    else
-        echo "Array \"sparseArray\" is NOT sparse."
-    fi
-    indecesOfArray=( ${!stringArray[@]} )
-    if [[ ${#stringArray[@]} -ne $(( indecesOfArray[-1] +1 )) ]]; then
-        echo "Array \"stringArray\" is sparse."
-    else
-        echo "Array \"stringArray\" is NOT sparse."
-    fi
     echo
 
 fi
