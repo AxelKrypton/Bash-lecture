@@ -25,6 +25,60 @@ If you wish to compile LaTeX source code, the `TeXnicalities` package and the us
 
 ---
 
+## Table of content
+
+Here you can find the list of the topics discussed in the various days, so that you can directly open the right file if you are looking for a specific argument.
+
+### Day 1
+
+1. Inception and philosophy
+1. Commands and arguments
+1. Strings and types of commands
+1. Quoting and special characters
+1. Variables and special parameters
+1. Shell expansion
+1. Globs and filename expansion
+
+### Day 2
+
+1. Conditional blocks
+1. Loops
+1. Choices
+1. Colours and cursor movements
+1. References and indirect expansion
+1. Arrays and associative arrays
+1. Input and output
+1. Shell options
+1. The GNU core utilities and util-linux
+1. Ready to script!?
+
+### Day 3
+
+1. File descriptors and redirection
+1. Compound commands
+1. Functions
+1. Built in VS external programs
+1. Script autocompletion
+1. GNU Readline
+
+### Day 4
+
+1. Asynchronous commands
+1. Traps
+1. Error handling
+1. Sed (and Awk)
+
+### Day 5
+
+1. Awk (and Sed)
+1. Good practices
+1. Additional useful tools
+1. Bash in real life
+1. Summary of the course
+1. What to do, now?
+
+---
+
 ### Material of the lecture
 
 - [X] Lecture slides
