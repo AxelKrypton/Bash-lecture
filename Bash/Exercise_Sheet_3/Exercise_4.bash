@@ -10,8 +10,7 @@ function PrintInfo()
     #  printf "\e[1;4;92m${label}\e[24m:\e[22m $1\n"
     #  shift
     #  for string; do
-    #      printf "${label//?/ }  $1\n"
-    #      shift
+    #      printf "${label//?/ }  ${string}\n"
     #  done
     #  printf '\e[0m'
     #
@@ -30,8 +29,7 @@ function PrintError()
     #  printf "\e[1;4;91m${label}\e[24m:\e[22m $1\n" 1>&2
     #  shift
     #  for string; do
-    #      printf "${label//?/ }  $1\n" 1>&2
-    #      shift
+    #      printf "${label//?/ }  ${string}\n" 1>&2
     #  done
     #  printf '\e[0m' 1>&2
     #
@@ -68,8 +66,7 @@ function Logger()
     printf "\e[1;4m${color}${label}\e[24m:\e[22m ${1//%/%%}\n"
     shift
     for string; do
-        printf "${label//?/ }  ${1//%/%%}\n"
-        shift
+        printf "${label//?/ }  ${string//%/%%}\n"
     done
     if [[ ${label} = 'INTERNAL' ]]; then
         printf "${label//?/ }  Please, contact developers.\n"
@@ -159,8 +156,11 @@ function IsLevelOn()
 #  PrintWarning 'A warning message' 'quite long'
 
 # TASK 5:
-#  PrintInternal 'Test an internal message'
-#  PrintDebug 'A debug message'
-#  PrintTrace 'A trace message' 'for example entering or' 'exiting any function'
-#  PrintFatal 'A fatal error occurred! Exiting...'
-#  echo 'This is not printed!'
+PrintInternal 'Test an internal message'
+PrintDebug 'A debug message'
+PrintTrace 'A trace message' 'for example entering or' 'exiting any function'
+PrintInfo 'An informational message'
+PrintWarning 'A warning'
+PrintError 'A non fatal error'
+PrintFatal 'A fatal error occurred! Exiting...'
+echo 'This is not printed!'
