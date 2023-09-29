@@ -6,7 +6,7 @@
 \begin{exercise}[Instructive]{The special parameters \bash{*} and \bash{\@} and their quoted versions}
     Consider the following script.
     \begin{lstlisting}[style=MyBash, numbers=left]
-        #!/bin/bash
+        #!/usr/bin/env bash
         printf '\nScript run with %d argument(s)\n' "$#"
         IFS=":${IFS}"
         printf 'Using "$@":'

@@ -8,7 +8,7 @@
     \vspace{-2mm}
     Consider the following script (\alert{not nice code}):
     \begin{lstlisting}[style=MyBash, aboveskip=3mm, belowskip=-5mm]
-        #!/bin/bash
+        #!/usr/bin/env bash
 
         function CreateAuxiliaryFiles(){
             # ...
@@ -100,14 +100,14 @@
         \normalsize\textnormal{Traps can be set up to intercept a fatal signal, perform cleanup, and then exit gracefully.}
     \end{varblock}
     \begin{lstlisting}[style=MyBash, emph={[7]temporaryFile}, belowskip=-5mm]
-        #!/bin/bash
+        #!/usr/bin/env bash
 
         temporaryFile=$(mktemp) || exit
         trap 'rm -f "${temporaryFile}"' EXIT
     \end{lstlisting}
     Use a function whenever you need to achieve a more complex task
     \begin{lstlisting}[style=MyBash, emph={[7]temporaryFile}, aboveskip=2mm, belowskip=-5mm, xleftmargin=2mm, xrightmargin=3mm, firstnumber=5]
-        #!/bin/bash
+        #!/usr/bin/env bash
 
         function CleanAuxiliaryFiles(){ # If you trap INT (CTRL-C)
             # ...                       # do not forget to exit unless
@@ -130,7 +130,7 @@
     \begin{overlayarea}{\textwidth}{0.28\textheight}
         \begin{onlyenv}<1>
             \begin{lstlisting}[style=MyBash]
-                #!/bin/bash
+                #!/usr/bin/env bash
 
                 echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
                 trap 'echo "Doing some cleaning before exiting!"' EXIT
@@ -140,7 +140,7 @@
         \end{onlyenv}
         \begin{onlyenv}<2>
             \begin{lstlisting}[style=MyBash, firstnumber=7]
-                #!/bin/bash
+                #!/usr/bin/env bash
 
                 echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
                 trap 'echo "Doing some cleaning before exiting!"' EXIT
@@ -151,7 +151,7 @@
         \end{onlyenv}
         \begin{onlyenv}<3>
             \begin{lstlisting}[style=MyBash, firstnumber=14]
-                #!/bin/bash
+                #!/usr/bin/env bash
 
                 echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
                 unset -v pid
@@ -175,7 +175,7 @@
     \vspace{-3mm}
     Let us consider again the previous example
     \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-4mm]
-        #!/bin/bash
+        #!/usr/bin/env bash
 
         echo "My PID is $$ and my PGID is $(ps -h -p $$ -o pgid)"
         trap 'echo "Doing some cleaning before exiting!"' EXIT
@@ -224,7 +224,7 @@
                 \small The \bash|ping| command returns with 0 when host is reachable (the ping has been answered) and non-zero otherwise when interrupted (which is the only way for ping to return in that case).
             \end{varblock}
             \begin{lstlisting}[style=MyBash, aboveskip=0mm, belowskip=-6mm]
-                #!/bin/bash
+                #!/usr/bin/env bash
                 for index in {1..254}; do
                     ping -c 2 "192.168.1.${index}"
                 done
@@ -238,7 +238,7 @@
                 Commands that don't have a SIGINT handler (like \bash|sleep|) or \textbf{do the right thing of killing themselves with SIGINT upon receiving SIGINT} (like \bash|bash| itself does) don't exhibit the problem!
             \end{varblock}
             \begin{lstlisting}[style=MyBash, firstnumber=5]
-                #!/bin/bash
+                #!/usr/bin/env bash
                 index=1
                 while [[ "${index}" -le 100 ]]; do
                   printf "%d " "$((index++))"

@@ -28,7 +28,7 @@
         \end{varblock}
         \begin{onlyenv}<1>
             \begin{lstlisting}[style=myBash, numbers=none, aboveskip=5mm]
-                #!/bin/bash
+                #!/usr/bin/env bash
 
                 # A test.bash script
                 echo "Before error"
@@ -67,7 +67,7 @@
         \end{onlyenv}
         \begin{onlyenv}<4>
             \begin{lstlisting}[style=myBash, numbers=none, aboveskip=3mm]
-                #!/bin/bash
+                #!/usr/bin/env bash
                 # About 2: And if you call this script without arguments!?
                 pathPrefix="$1"
                 rm -r "${pathPrefix}/bin"   # AAAAAAARGH!

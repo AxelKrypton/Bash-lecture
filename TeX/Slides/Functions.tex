@@ -65,7 +65,7 @@
         Whenever a block of code can be executed as standalone, without needing either input information nor variables, it is straightforward to include it in a dedicated function
     \end{varblock}
     \begin{lstlisting}[style=MyBash, xrightmargin=1mm, xleftmargin=1mm]
-        #!/bin/bash
+        #!/usr/bin/env bash
 
         function CreateListOfFiles()
         {
@@ -104,7 +104,7 @@
         \end{itemize}
         \begin{onlyenv}<2-3>
             \begin{lstlisting}[style=MyBash, aboveskip=2mm]
-                #!/bin/bash
+                #!/usr/bin/env bash
 
                 function LevelOne() {
                     LevelTwo
@@ -140,7 +140,7 @@
         \end{onlyenv}
         \begin{onlyenv}<6-7>
             \begin{lstlisting}[style=MyBash, aboveskip=2mm]
-                #!/bin/bash
+                #!/usr/bin/env bash
 
                 function LevelOne() {
                     local aVar='shadows global'
@@ -167,7 +167,7 @@
         \end{onlyenv}
         \begin{onlyenv}<8-9>
             \begin{lstlisting}[style=MyBash, aboveskip=2mm]
-                #!/bin/bash
+                #!/usr/bin/env bash
 
                 function LevelOne() {
                     local aVar='shadows global'
@@ -221,7 +221,7 @@
     \vspace{-2mm}
     \begin{onlyenv}<1>
         \begin{lstlisting}[style=MyBash]
-            #!/bin/bash
+            #!/usr/bin/env bash
 
             function SecondsToTimeStringWithDays()
             {
@@ -248,7 +248,7 @@
     \end{onlyenv}
     \begin{onlyenv}<2>
         \begin{lstlisting}[style=MyBash, firstnumber=22]
-            #!/bin/bash
+            #!/usr/bin/env bash
 
             function SecondsToTimeStringWithDays() # Better code!
             {
@@ -423,7 +423,7 @@
     \end{onlyenv}
     \begin{onlyenv}<2>
         \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-6mm]
-            #!/bin/bash
+            #!/usr/bin/env bash
 
             source /home/sciarra/Script/UtilityFunctions.bash
             source /home/sciarra/Script/UtilityFunctions_nice.bash
