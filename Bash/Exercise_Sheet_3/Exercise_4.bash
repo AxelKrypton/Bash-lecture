@@ -144,6 +144,13 @@ function IsLevelOn()
 
 #-----------------------------------------------
 
+# ATTENTION: Since this scritp is sourced in the solution
+#            of the exercises of the last days, this solution
+#            is meant to be sourced and not executed.
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    echo; PrintFatal 'The logger script is meant to be sourced and not executed.'
+fi
+
 # TASK 1:
 #  PrintInfo 'An informational message'
 #  PrintError 'An error message'
@@ -156,11 +163,11 @@ function IsLevelOn()
 #  PrintWarning 'A warning message' 'quite long'
 
 # TASK 5:
-PrintInternal 'Test an internal message'
-PrintDebug 'A debug message'
-PrintTrace 'A trace message' 'for example entering or' 'exiting any function'
-PrintInfo 'An informational message'
-PrintWarning 'A warning'
-PrintError 'A non fatal error'
-PrintFatal 'A fatal error occurred! Exiting...'
-echo 'This is not printed!'
+#  PrintInternal 'Test an internal message'
+#  PrintDebug 'A debug message'
+#  PrintTrace 'A trace message' 'for example entering or' 'exiting any function'
+#  PrintInfo 'An informational message'
+#  PrintWarning 'A warning'
+#  PrintError 'A non fatal error'
+#  PrintFatal 'A fatal error occurred! Exiting...'
+#  echo 'This is not printed!'
