@@ -109,4 +109,5 @@ for ((index=min_max[0]; index<=min_max[1]; index++)); do
     fi
 done
 
+exec 3>&-
 echo
