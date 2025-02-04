@@ -100,7 +100,8 @@
                     It introduced a \alert{comment} that extends to the end of the line. \\
                     Text after it is ignored by the shell. \Remark{In single and double quotes, \texttt{\#} is just a \texttt{\#}.}
                 \item<only@1>[\texttt{!}]
-                    The \alert{negate keyword} reverses a test or an exit status
+                    The \alert{negate keyword} reverses a test or an exit status\\[-1mm]
+                    \Remark{When history expansion is active, as by default in interactive shells, \PB{\texttt{!}} invokes \URL[PB]{https://www.gnu.org/software/bash/manual/html_node/History-Interaction.html\#History-Interaction}{history expansion}, not covered here.}
                 \item<only@2>[\texttt{=}]
                     The \alert{assignment} symbol is used to assign a value to a variable \\
                     Whitespace is not allowed on either side of the \texttt{=} character
@@ -146,13 +147,13 @@
     \end{varblock}
     \begin{tikzpicture}[remember picture, overlay]
         \begin{scope}[scope on=<1>]
-            \node[font=\ssmall, above = 4mm of whitespace, anchor=west, xshift=1cm] (ws) {\{a space, tab, newline, carriage return, vertical tab or form feed\}};
+            \node[font=\ssmall, above = 4mm of whitespace, anchor=west, xshift=1cm] (ws) {\{\,a space, tab, newline, carriage return, vertical tab or form feed\,\}};
             \path[to] (ws.west) edge[out=180, in=90] ([yshift=2mm]whitespace);
             \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (curlyStart -| curlyEnd) ++(5mm,1mm) -- ($(curlyEnd)+(5mm,-1mm)$)
                   node[midway, right=3mm, text width=25mm, align=center] {Already discussed on slide~\ref{Quotes}};
         \end{scope}
         \begin{scope}[scope on=<3-4>]
-            \node[font=\ssmall, above = 4mm of operators, anchor=west, xshift=1cm] (ops) {the 4 characters\,\,\fbox{\texttt{+~~~-~~~*~~~/}}};
+            \node[font=\ssmall, above = 4mm of operators, anchor=west, xshift=1cm] (ops) {e.g.\ the 4 characters\,\,\fbox{\texttt{+~~~-~~~*~~~/}}};
             \path[to] (ops.west) edge[out=180, in=90] ([yshift=2mm]operators);
         \end{scope}
     \end{tikzpicture}

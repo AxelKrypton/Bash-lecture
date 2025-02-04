@@ -18,7 +18,7 @@
     \begin{tikzpicture}[remember picture, overlay]
         \draw[very thick, decorate, decoration={brace,amplitude=3pt}] (curlyStart) ++(8mm,1mm) -- ($(curlyEnd -| curlyStart)+(8mm,-1mm)$)
               node[midway, right=3mm, text width=45mm, align=center, text=PB] (FE) {Pattern matching done in Filename expansion};
-        \node (RElabel) at (RE -| FE) {{\color{PT}\scriptsize\{~Cannot be used to select filenames!~\}}};
+        \node (RElabel) at (RE -| FE) {{\color{PT}\scriptsize\{~Cannot be used in Filename expansion!~\}}};
         \draw[from, shorter={1mm}{1mm}] (RE) -- (RElabel.west);
         \begin{scope}[scope on=<2>]
             \path[from, shorter={1mm}{1mm}] (REleft) edge[out=270, in=180] node[pos=1, anchor=west] {We will discuss this tomorrow with conditional blocks} ++(1cm, -15mm);
@@ -46,25 +46,25 @@
         \item When matching patterns, the \texttt{/} restriction is removed
     \end{itemize}
     \PrepareURLsymbol[PB]
-    \FrameRemark{Filename expansion can be deactivated: $\;$\URL*{https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html}{\texttt{set -f}}}
+    \FrameRemark{Filename expansion can be deactivated, see $\;$\URL*{https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html}{\texttt{set -f}}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \texttt{[\ldots]} pattern}
     \vspace{-1mm}
     \begin{itemize}
-        \item There are some special rules which might be interesting to know
+        \item There are some special rules which might be interesting to know.
         \item A pair of characters separated by a hyphen denotes a range expression\\
-              $\to\;$ any character that falls between those two characters, inclusive, is matched
-        \item If the first character following the \PB{\texttt{[}} is a \PP{\texttt{!}} or a \PP{\texttt{\^{}}} then any character not enclosed is matched
-        \item A \PP{\texttt{-}} may be matched by including it as the first or last character in the set
-        \item A \PP{\texttt{]}} may be matched by including it as the first character in the set
+              $\to\;$ any character that falls between those two characters, inclusive, is matched.
+        \item If the first character following the \PB{\texttt{[}} is either a \PP{\texttt{!}} or a \PP{\texttt{\^{}}} then any character not enclosed is matched.
+        \item A \PP{\texttt{-}} may be matched by including it as the first or last character in the set.
+        \item A \PP{\texttt{]}} may be matched by including it as the first character in the set.
         \item Within \PB{\texttt{[\ldots]}}, character classes can be specified using the syntax \PB{\texttt{[:class:]}},\\
               where \texttt{class} is one of the \URL[PB]{http://tldp.org/LDP/GNU-Linux-Tools-Summary/html/x11655.htm}{character classes} defined in the POSIX standard:
               \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=2mm, xrightmargin=15mm, aboveskip=3mm, belowskip=-5mm]
                   |+alnum   ascii   cntrl   graph   print   space   word+|
                   |+alpha   blank   digit   lower   punct   upper   xdigit+|
               \end{lstlisting}
-              For example, \PB{\texttt{[[:digit:]]}} or \PB{\texttt{[[:blank:]]}}
+              For example, \PB{\texttt{[[:digit:]]}} or \PB{\texttt{[[:blank:]]}}.
     \end{itemize}
     \FrameRemark{The sorting order of characters in range expressions is determined by the current locale and the values of the \bash|LC_COLLATE| and \bash|LC_ALL| shell variables, if set.}
 \end{frame}
@@ -85,7 +85,7 @@
             |+Day_1.tex Day_2.tex Day_3.tex+|
             $ echo *_[12]*
             |+Day_1.tex Day_2.tex+|
-            $  echo *_[0-9]*
+            $ echo *_[0-9]*
             |+Day_1.tex Day_2.tex Day_3.tex+|
             $ echo *_[[:digit:]]*
             |+Day_1.tex Day_2.tex Day_3.tex+|
@@ -135,7 +135,7 @@
         Globs will always expand safely and minimise the risk for bugs.
         You can sometimes end up with some very weird filenames.
         Most scripts aren't tested against all the odd cases that they may end up being used with.
-        Don't let your script be one of those!\\[-0.7em] ~
+        \alert{Don't let your script be one of those!}\\[-0.7em] ~
     \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -165,6 +165,7 @@
             |+names.txt+|
         \end{lstlisting}
     \end{onlyenv}
+    \FrameRemark{This option affects the parser behaviour. This aspect will be covered later in more detail.}
 \end{frame}
 
 

@@ -19,17 +19,17 @@
                     \node (A\n) at (0,-1.5*\n) {\includegraphics[width=10mm]{\f}};
                 \end{scope}
             }
-            \node[right = of A0] {\{25..29\} September 2023};
+            \node[right = of A0] {\{17..21\} February 2025};
             \node[right = of A1] {
                 \begin{tabular}{@{}r@{\;}l}
                     Morning:   & 09:15 to 12:30 \Remark{Lecture with slides}\\
-                    Afternoon: & 14:15 to 17:30 \Remark{Exercise sheet -- I am here to help, use me}\\
+                    Afternoon: & 14:15 to 17:30 \Remark{Live programming: Exercise sheet -- I am here to help, use me}\\
                 \end{tabular}
             };
             \node[right = of A2] {
                 \begin{tabular}{@{}r@{\;}l}
-                    Monday to Wednesday:   & FIAS, room 0.101 \\
-                    Thursday and Friday:   & FIAS, room 0.200
+                    Monday, Tuesday and Friday:   & FIAS, room 0|200 \\
+                    Wednesday and Thursday:       & ~GSC, room 0|08
                 \end{tabular}
             };
             \node[right = of A3] {Dr. Alessandro Sciarra};
@@ -93,7 +93,7 @@
     \begin{itemize}
         \item Scripting/command language
         \item Unix shell $\;\leftrightarrow\;$ command processor
-        \item First release in 1989, current version v5.2 (Sep 2022) $\quad\to\;$ \URL[PS]{http://ftp.gnu.org/gnu/bash/}{download Bash}
+        \item First release in 1989, current version v5.3-beta (Dec 2024) $\;\;\to\;$ \URL[PS]{http://ftp.gnu.org/gnu/bash/}{download Bash}
     \end{itemize}
     \begin{varblock}{quote}[0.9\textwidth]{GNU Bash}
         Bash is the GNU Project's shell.
@@ -115,7 +115,7 @@
 \begin{frame}{Why should I know Bash?}%{Why not a more intuitive scripting language, e.g.\ Python?}
     \vspace{-3mm}
     \begin{itemize}
-        \item It is probably the shell you use (Bash is everywhere)
+        \item It is probably the shell you use$^\star$ (Bash is everywhere)
         \item Knowing Bash a bit more allows for better problem handling \\
               \then e.g. delegate to Bash tasks that maybe you currently do in C/C++ or Python
         \item It is a scripting language very close to the (Unix) operative system
@@ -133,6 +133,11 @@
         \end{itemize}
         Knowing another scripting language (e.g.\ Python) helps!
     \end{varblock}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{
+        $^\star$On macOS from Catalina (10.15) on the default shell was changed from Bash to Zsh for licensing reasons.
+        Check out \URL*{https://www.cyberciti.biz/faq/change-default-shell-to-bash-on-macos-catalina/}{here} how to switch back to Bash.
+    }
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{What to expect from the lecture?}
@@ -178,12 +183,12 @@
         \item[] \URL{http://tldp.org/LDP/Bash-Beginners-Guide/html/}{Bash Beginners Guide}\PB{\Remark{A nice, from-zero tutorial}} \tikzmark{TutorialBegin}
         \item[] \URL{https://www.shellscript.sh/}{Shell scripting tutorial}\PB{\Remark{Nice tutorial, but not only Bash}}
         \item[] \URL[PS]{http://mywiki.wooledge.org/BashGuide}{Bash Guide}\PB{\Remark{Very precise guide, not completely from zero, though -- AKA Greg's Wiki}} \tikzmark{TutorialEnd}
-        \item[] \URL{https://github.com/AxelKrypton/Bash_lecture_2020}{All material \tikzmark{MeOnGitHub}of this lecture}
+        \item[] \URL{https://github.com/AxelKrypton/Bash-lecture}{All material \tikzmark{MeOnGitHub}of this lecture}
     \end{itemize}
     \begin{tikzpicture}[remember picture, overlay]
         \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (TutorialBegin -| TutorialEnd) ++(5mm,1mm) -- ($(TutorialEnd)+(5mm,-1mm)$)
               node[midway, right=3mm, text width=25mm, font=\small, align=center, text=PP] {Material used to prepare this lecture};
-        \path[to] (MeOnGitHub) ++(0,-2mm) edge[out=270, in=180] node[pos=1, anchor=west] {My GitHub page \hspace{1mm}\raisebox{-1.3mm}{\includegraphics[width=5mm]{AxelKrypton}}} ++(20mm, -4mm);
+        \path[to] (MeOnGitHub) ++(0,-2mm) edge[out=270, in=180] node[pos=1, anchor=west] {My GitHub profile \hspace{1mm}\raisebox{-1.3mm}{\href{https://github.com/AxelKrypton}{\includegraphics[width=5mm]{AxelKrypton}}}} ++(20mm, -4mm);
         \node[anchor=north, inner ysep=3mm] (book) at ($(current page.north)!0.5!(current page.north east)$) {\includegraphics[width=16mm]{Cookbook}};
         \node[right = 1mm of book, inner ysep=3mm] {\includegraphics[width=16mm]{LearningBash}};
         \path[from] (TutorialEnd) ++(-0mm,-1mm) edge[out=330, in=180] node[pos=1, right=2pt, font=\scriptsize, text=PS, text width=20mm, align=center] {Main reference for preparing this course} ++(12mm, -6mm);
@@ -228,7 +233,7 @@
         \end{enumerate}
     \end{multicols}
     \begin{tikzpicture}[remember picture, overlay, every label/.append style={label distance=-2pt, font=\tiny}, scope on=<2>]
-        \foreach \d/\n [count=\i] in {Monday/25, Tuesday/26, Wednesday/27, Thursday/28, Friday/29}{
+        \foreach \d/\n [count=\i] in {Monday/17, Tuesday/18, Wednesday/19, Thursday/20, Friday/21}{
             \node[anchor=north, draw, rounded corners=1pt, label={[\d]90:\d}, inner ysep=1mm, inner xsep=2mm, text=\d, draw=\d, fill=\d!5] (Mon) at ($(current page.north)+(\i cm,-5mm)$) {\n\vphantom{2367890}};
         }
     \end{tikzpicture}

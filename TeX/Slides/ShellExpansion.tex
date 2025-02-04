@@ -698,7 +698,7 @@
             The shell scans the results of parameter expansion, command substitution, and arithmetic expansion that did not occur within double quotes for word splitting!
         \end{varblock}
         \begin{itemize}
-            \item The shell treats each character of \bash|IFS| as a delimiter, and splits the results of the other expansions into words using these characters \textbf{as field \alert{\underline{terminators}}} (these are all dropped)
+            \item The shell treats each character of \bash|IFS| as a delimiter and splits the results of the other expansions into words using these characters \textbf{as field \alert{\underline{terminators}}} (these are all dropped)
             \item Whitespace characters $\;$\PP{\texttt{\textvisiblespace\textbackslash{}t\textbackslash{}n}}$\;$ contained in \bash|IFS| are called \PP{IFS whitespaces}
             \item \alert{IFS whitespaces at the beginning/end} of the results of previous expansions \alert{are ignored}
             \item \alert{Adjacent IFS whitespaces} are considered all together as \alert{single field terminator}
