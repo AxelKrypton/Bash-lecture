@@ -83,7 +83,7 @@
             \begin{itemize}
                 %\setlength{\itemsep}{0mm}
                 \item The list of words following \;\bash|in|\; is expanded, generating a list of items
-                \item The set of expanded words is printed on the \alert{standard error}, each preceded by a number
+                \item The set of expanded words is printed on the \alert{standard error}$^{\,\star}$, each preceded by a number
                 \item If the \;\bash|in WORDS|\; is omitted, the positional parameters are printed, as if \;\bash{in "$@"}
                 \item The \;\bash|PS3|\; prompt is then displayed and a line is read from the standard input:
                       \begin{itemize}
@@ -151,6 +151,7 @@
             \end{lstlisting}
         \end{onlyenv}
     \end{overlayarea}
+    \FrameRemark<1>{$^\star$We will discuss redirection including standard output and standard error in detail at a later point.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
