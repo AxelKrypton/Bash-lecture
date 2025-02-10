@@ -135,11 +135,11 @@
                 # BAD CODE (Abuse of the pipeline)
                 $ echo "2*5.3" | bc -l
                 |+10.6+|
-                # You should use the Herestrings syntax we'll discuss later
+                # You should use the Here strings syntax, instead
             \end{lstlisting}
         \end{onlyenv}
     \end{overlayarea}
-    \FrameRemark<3>{82000 in base 2, 3, 4 and 5 uses only 0 and 1 digits! Try to run e.g. \;\bash|bc <<< "obase=5; 82000"|\; (and change base 5 to different ones).}
+    \FrameRemark{Why is 82000 a super cool number? We'll come back to this in a moment when discussing Here strings syntax.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Input/Output Redirection: The theory}
@@ -165,7 +165,7 @@
               \end{itemize}
               \alert{If it expands to more than one word, Bash reports an error}
     \end{itemize}
-    \FrameRemark{$^\star$ For \PB{heredocs} and \PB{herestrings} a different rule applies: Refer to the Bash manual for more details.}
+    \FrameRemark{$^\star$ For \PB{here documents} and \PB{here strings} a different rule applies: Refer to the Bash manual for more details.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{I/O Redirection: The syntax}
@@ -656,9 +656,9 @@
     \end{lstlisting}
     \vspace{2mm}
     \begin{itemize}
-        \item Heredocs are useful to embed \textbf{short} blocks of multi-line data inside your script\\[-0.5ex]
+        \item Here documents are useful to embed \textbf{short} blocks of multi-line data inside your script\\[-0.5ex]
               \Remark[0pt]{Embedding larger blocks is bad practice!}
-        \item In a Heredoc, you need to choose a \texttt{WORD} to act as a sentinel
+        \item In a Here document you need to choose a \texttt{WORD} to act as a sentinel
         \item It can be any word: Choose one that won't appear in your data set
         \item All the lines that follow the first instance of the sentinel, up to the second instance, become the standard input for the command
         \item The second instance of the sentinel word has to be \alert{at the beginning of a line all by itself}
@@ -734,7 +734,7 @@
     \end{lstlisting}
     \vspace{3mm}
     \begin{itemize}[<only@1-2>]
-        \item Herestrings are shorter, less intrusive and overall more convenient than Heredocs\\[-0.5ex]
+        \item Here strings are shorter, less intrusive and overall more convenient than Heredocs\\[-0.5ex]
               \Remark[0pt]{However, they are not portable to the Bourne shell}
         \item The \texttt{STRING} undergoes:
               \begin{itemize}
@@ -748,7 +748,7 @@
         \item The result is supplied as a \alert{\textbf{single string with a newline appended}}, to the command on its standard input (or file descriptor \texttt{n} if specified)
     \end{itemize}
     \begin{varblock}{quote}[0.5\textwidth]{Good practice}<only@1-2>
-        \textnormal{Prefer Herestrings to pipes whenever possible!}
+        \textnormal{Prefer Here strings to pipes whenever possible!}
     \end{varblock}
     \begin{onlyenv}<3>
         \begin{lstlisting}[style=MyBash, aboveskip=0mm, style=oddnumbers]
@@ -771,6 +771,27 @@
             $ wc -c <<< *           # No filename expansion!
             |+2+|                       # Why 2 characters?
         \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<4-5>
+        \begin{varblock}{example}[0.65\textwidth]{Why is 82000 a super cool number?}
+            \uncover<5>{82000 in base 2, 3, 4 and 5 uses only 0 and 1 digits!}
+        \end{varblock}
+        \begin{lstlisting}[style=MyBash, aboveskip=0mm, numbers=left, aboveskip=4mm]
+            $ for base in {2..5}; do
+            >   printf "82000 in base %d is %s\n" \
+            >       ${base} \
+            >       $(bc <<< "obase=5; 82000")
+            > done &&
+            > unset base
+        \end{lstlisting}
+        \begin{uncoverenv}<5>
+            \begin{lstlisting}[style=MyBash, aboveskip=0mm, numbers=none]
+                |+82000 in base 2 is 10100000001010000
+                82000 in base 3 is 11011111001
+                82000 in base 4 is 110001100
+                82000 in base 5 is 10111000+|
+            \end{lstlisting}
+        \end{uncoverenv}
     \end{onlyenv}
     \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
         \path[from] (quotes) edge[out=0, in=270, looseness=0.5] node[pos=1, above, text=ALERT, draw=PQ, rounded corners=3mm, text width=30mm, align=center, font=\small] {Do not forget quotes, especially if the string contains spaces!} ++(5.2,1);
@@ -912,8 +933,8 @@
             $ echo < <(date)
             # Why do you get a blank output here?
             $ sdiff -s <(head Day_1.tex) <(head Day_2.tex)
-            |+\subtitle{Day 1}                | \subtitle{Day 2}
-            \date{25 September 2023}        | \date{26 September 2023}+|
+            |+\subtitle{Day 1}               | \subtitle{Day 2}
+            \date{17 February 2025}        | \date{18 February 2025}+|
         \end{lstlisting}
     \end{onlyenv}
     \PrepareURLsymbol[PB]
