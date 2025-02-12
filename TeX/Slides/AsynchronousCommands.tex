@@ -289,13 +289,18 @@
     \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-6mm]
-            wait |+[-fn] [jobspec or pid ...]+|
+            wait |+[-fn] [-p var] [jobspec or pid ...]+|
         \end{lstlisting}
         \begin{itemize}
             \item \alert<3>{\bash|wait| waits until the child process specified by each process ID \texttt{pid} or job specification \texttt{jobspec} exits and return the exit status of the last command waited for}
             \item \alert<2>{If no arguments are given, all currently active child processes are waited for, and the return status is zero}
             \item \alert<4>{\bash|wait -n|$\;$ waits for a single job to terminate and returns its exit status}
             \item \alert<5>{If not an active child process of the shell is passed to \bash|wait|, the return status is \textbf{127}}
+            \only<1>{
+            \item \bash|wait -p aVar|$\;$ (since \PB{Bash v5.1}) sets \;\bash|aVar|\; to the process or job ID of the job for which the exit status is returned.
+                  The variable will be unset before any assignment.\\
+                  \then\PS{This is useful only when the -n option is supplied!}
+            }
         \end{itemize}
         \vspace{-2mm}
         \begin{onlyenv}<1>

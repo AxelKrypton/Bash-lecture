@@ -27,7 +27,7 @@
             An error is printed and \alert{execution continues}.
         \end{varblock}
         \begin{onlyenv}<1>
-            \begin{lstlisting}[style=myBash, numbers=none, aboveskip=5mm]
+            \begin{lstlisting}[style=myBash, numberblanklines=true, countblanklines=true, aboveskip=5mm]
                 #!/usr/bin/env bash
 
                 # A test.bash script
@@ -329,7 +329,7 @@
         \begin{lstlisting}[style=myBash, aboveskip=2mm]
             #!/usr/bin/env bash
             set -E
-            trap '[ "$?" -ne 77 ] || exit 77' ERR
+            trap '[[ "$?" -ne 77 ]] || exit 77' ERR
             (
               echo 'Here'
               (
