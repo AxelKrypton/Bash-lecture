@@ -302,28 +302,41 @@
     \vspace{-3mm}
     \setbeamerfont{description item}{series=\bfseries}
     \setbeamercolor{description item}{fg=PP}
-    \begin{description}[Replace at start:]
-        \item[Replace first:] \PB{\small\texttt{\$\{parameter/pattern/string\}}}\\
-            {\small
-                Results in the expanded value of \texttt{parameter} with the first (unanchored) match\\
-                of \texttt{pattern} replaced by \texttt{string}\\[-0.5em]
-                \Remark[0pt]{Assume null string when the \texttt{/string} part is absent}
-            }
-        \item[Replace all:] \PB{\small\texttt{\$\{parameter//pattern/string\}}}\\
-            {\small
-                As the previous, but \textbf{every} match is replaced
-            }
-        \item[Replace at start:] \PB{\small\texttt{\$\{parameter/\#pattern/string\}}}\\
-            {\small
-                As the first, but matched against the \textbf{beginning}
-            }
-        \item[Replace at end:] \PB{\small\texttt{\$\{parameter/\%pattern/string\}}}\\
-            {\small
-                As the first, but matched against the \textbf{end}
-            }
-    \end{description}
-    \begin{uncoverenv}<2>
-        \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm]
+    \begin{onlyenv}<1>
+        \begin{description}[Replace at start:]
+            \item[Replace first:] \PB{\small\texttt{\$\{parameter/pattern/string\}}}\\
+                {\small
+                    Results in the expanded value of \texttt{parameter} with the first (unanchored) match\\
+                    of \texttt{pattern} replaced by \texttt{string}\\[-0.5em]
+                    \Remark[0pt]{Assume null string when the \texttt{/string} part is absent}
+                }
+            \item[Replace all:] \PB{\small\texttt{\$\{parameter//pattern/string\}}}\\
+                {\small
+                    As the previous, but \textbf{every} match is replaced
+                }
+            \item[Replace at start:] \PB{\small\texttt{\$\{parameter/\#pattern/string\}}}\\
+                {\small
+                    As the first, but matched against the \textbf{beginning}
+                }
+            \item[Replace at end:] \PB{\small\texttt{\$\{parameter/\%pattern/string\}}}\\
+                {\small
+                    As the first, but matched against the \textbf{end}
+                }
+        \end{description}
+        \vspace{-3mm}
+        \tikzmark{Opt}
+        \begin{varblock}{alert}[0.88\textwidth]{Introduced in Bash v5.2}
+            If the \;\texttt{patsub\_replacement}\; shell option is enabled using \;\bash{shopt}\,, any unquoted instances of \texttt{\&} in \;\texttt{string}\; are replaced with the matching portion of pattern.
+            This is intended to duplicate a common sed idiom.\\
+            \alert{However, this is a breaking change: Be aware!}
+        \end{varblock}
+    \end{onlyenv}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[visible on=<1>] at ($(Opt)+(2.6,-0.4)$) {\Remark{We will discuss shell options in detail at a later point}};
+    \end{tikzpicture}
+    \begin{onlyenv}<2-3>
+        \vspace{-4mm}
+        \begin{lstlisting}[style=MyBash, style=oddnumbers]
             $ aVar='123aa000aa321'
             # Let us demonstrate a bit
             $ echo "${aVar/aa/_} and ${aVar//aa/_}"
@@ -333,7 +346,24 @@
             $ echo "${aVar/#/prefix} and ${aVar/%/postfix}"
             |+prefix123aa000aa321 and 123aa000aa321postfix+|
         \end{lstlisting}
-    \end{uncoverenv}
+        \begin{uncoverenv}<3>
+            \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, firstnumber=8]
+                $ bVar=' & ';
+                # Assume to have Bash v5.2 or later
+                $ echo "${BASH_VERSION} -> $(shopt patsub_replacement)"
+                |+5.2.26(1)-release -> patsub_replacement on+|
+                $ echo "${aVar//aa/ & }   ${aVar/aa/${bVar}}"
+                |+123 aa 000 aa 321   123 aa 000aa321+|
+                $ echo "${aVar//aa/ \& }"
+                |+123 & 000 & 321+|
+                $ echo ${aVar//aa/" & "|+}+| ' ' ${aVar/aa/"${bVar}"|+}+|
+                |+123 & 000 & 321   123 & 000aa321+|
+                # Nested quotes are correctly handled by the shell
+                $ echo "${aVar//aa/"|- & -|"}   ${aVar/aa/"|-${bVar}-|"}"
+                |+123 & 000 & 321   123 & 000aa321+|
+            \end{lstlisting}
+        \end{uncoverenv}
+    \end{onlyenv}
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
