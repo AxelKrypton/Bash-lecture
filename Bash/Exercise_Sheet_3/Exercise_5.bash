@@ -1,4 +1,4 @@
-# You do not need a shebang here! This script will be sourced.
+# You do not need a shebang here! This script is meant to be sourced.
 
 if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
     printf "\n ERROR: File \"${BASH_SOURCE[0]}\" cannot be executed!\n\n"

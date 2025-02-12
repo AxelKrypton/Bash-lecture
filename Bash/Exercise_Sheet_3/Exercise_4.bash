@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Wanna checkout a nice project? ;)
+#  -> https://github.com/AxelKrypton/BashLogger
+
 function PrintInfo()
 {
     # TASK 1:
