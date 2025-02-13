@@ -140,7 +140,7 @@
         $ awk 'BEGIN{FS="[: ]"; OFS="|"}{print $1, $2}' <<< "A:B C::D"
         |+A|B+|
         $ awk 'BEGIN{ORS="|"}{print $1}' <<< $'A 1 \n B 2 \n C 3'
-        |+A|B|C+|  # without final new line
+        |+A|B|C|+|  # without final new line
     \end{lstlisting}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

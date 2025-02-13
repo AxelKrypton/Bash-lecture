@@ -4,6 +4,33 @@
 %-------------------------------%
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Medium to large Bash projects I worked on}
+    \large
+    \addtolength{\leftmargini}{2em}
+    \begin{columns}[T]
+        \begin{column}{0.45\textwidth}
+            \begin{uncoverenv}<2->
+                \begin{enumerate}
+                    \item \texttt{BaHaMAS}
+                    \item GitHooks
+                    \item BashLogger
+                    \item SMASH-vHLLE-hybrid
+                    \item \textcolor{bg!85!normal text.fg}{Coffee machine handler}
+                \end{enumerate}
+            \end{uncoverenv}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \centering
+            \uncover<3>{\includegraphics[width=0.6\textwidth]{Showoff}}
+        \end{column}
+    \end{columns}
+    \begin{tikzpicture}[remember picture, overlay]
+        \begin{DrawOnNode}{current page}
+            \node at (0.5, 0.26) {\includegraphics[width=0.5\textwidth]{Bash-is-enough}};
+        \end{DrawOnNode}
+    \end{tikzpicture}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begingroup
     \newcommand{\bahamas}{\texttt{BaHaMAS}}
     \usebackgroundtemplate{\includegraphics[height=\paperheight]{BHMAS_Frontpage}}
@@ -17,7 +44,7 @@
                     \begin{minipage}{0.85\textwidth}
                         \begin{itemize}
                             \item It is a \URL*{https://github.com/AG-Philipsen/BaHaMAS}{publicly available software} to support LQCD practitioners' work
-                            \item An example of huge bash project, $\mathcal{O}$(10$^\text{4}$) lines of code
+                            \item An example of huge Bash project, $\mathcal{O}$(10$^\text{4}$) lines of code
                             \item Actually, kind of many executables handled by the same main script
                             \item Everything achieved via handy git-inspired command line options
                             \item Interactive setup and command line autocompletion available
@@ -129,19 +156,25 @@
                 Print_Internal_And_Exit  '\n' 'Developer error '     --emph 'highlighted' ' VS normal'
             \end{lstlisting}
         \end{onlyenv}
-        \begin{onlyenv}<4>
-            \begin{center}
-                \includegraphics[width=\textwidth]{BashLogger_output_full}
-            \end{center}
-        \end{onlyenv}
-        \begin{onlyenv}<5-6>
+        \begin{onlyenv}<4-5>
             \vspace{-4mm}
             \begin{center}
                 \includegraphics[width=0.88\textwidth]{BashLogger_output}\\[-1pt]
-                \uncover<6>{\includegraphics[width=0.88\textwidth]{BashLogger_output_minimal}}
+                \uncover<5>{\includegraphics[width=0.88\textwidth]{BashLogger_output_minimal}}
             \end{center}
         \end{onlyenv}
     \end{overlayarea}
     \FrameRemark{For a detailed description of all functionality refer to the README file of the project.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Another remarkable handler: \URL[PB]{https://smash-transport.github.io/smash-vhlle-hybrid/develop/}{SMASH-vHLLE-Hybrid}}
+    \begin{center}
+        \includegraphics[width=\textwidth]{SMASH-vHLLE-Hybrid}
+    \end{center}
+    \begin{itemize}
+        \item Another example of large Bash project, $\mathcal{O}$(10$^\text{4}$) lines of code
+        \item Own test framework with unit and functional tests
+        \item Appealing documentation of the project
+    \end{itemize}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

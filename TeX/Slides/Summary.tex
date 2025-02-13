@@ -59,7 +59,7 @@
             }
         \end{lstlisting}
         \begin{quiz}[3]{What does the above function does? Is it good code?}
-            \wrongChoice{The function prints a underscore-separated list of its arguments. To change the \bash|IFS| globally should be avoided, though.}
+            \wrongChoice{The function prints an underscore-separated list of its arguments. To change the \bash|IFS| globally should be avoided, though.}
             \wrongChoice{This is a clever way to concatenate strings with a symbol as separator. Good code.}
             \correctChoice{The function prints its arguments and on top it changes the \bash|IFS| globally. Wrong code!}
         \end{quiz}
@@ -123,7 +123,7 @@
     \begin{quiz}[1]{What would you say about the for loop above?}
         \wrongChoice{Nothing, it uses the C-like for loop to iterate over an array.}
         \correctChoice{It is advisable to iterate over the indices via \tc{strings-color}{\texttt{"\$\{!array[@]\}"}}. If the array is sparse, the code above will fail.}
-        \wrongChoice{The code will fail. Spaces in assignments and in the index increment are wrong in bash.}
+        \wrongChoice{The code will fail. Spaces in assignments and in the index increment are wrong in Bash.}
     \end{quiz}
     \begin{uncoverenv}<3-4>
         \begin{lstlisting}[style=myBash, numbers=none]
@@ -140,7 +140,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Quiz time (VI) -- Day 2}
     \begin{quiz}[1]{Which of the following statements ist correct?}
-        \wrongChoice{A bash script can change the environment of the executing shell when executed.}
+        \wrongChoice{A Bash script can change the environment of the executing shell when executed.}
         \wrongChoice{Using \bash|export| builtin, environment variables of the parent process can be changed.}
         \correctChoice{Sourcing a script is a way to affect the environment where it is sourced.}
         \correctChoice{It is possible to specify a temporary environment change which only takes effect for the duration of a command.}
@@ -169,7 +169,7 @@
     \begin{quiz}[1]{Does the code above work?}
         \wrongChoice{Yes, provided that the file \bash|filename| exists.}
         \wrongChoice{No, the \bash|head| command must run in a subshell to access the file content before it gets overwritten.}
-        \correctChoice{No, because redirection is the first thing that bash does. The content of the file is lost before running \bash|head|!}
+        \correctChoice{No, because redirection is the first thing that Bash does. The content of the file is lost before running \bash|head|!}
     \end{quiz}
     \begin{uncoverenv}<3-4>
         \begin{lstlisting}[style=myBash, numbers=none]
@@ -211,7 +211,7 @@
     \begin{quiz}[1]{What does the command above do?}
         \wrongChoice{It runs three \bash|sleep| commands at the same time in background.}
         \wrongChoice{Using \texttt{\&;} instead of simply \texttt{\&}, the shell will queue the \bash|sleep| commands and execute them after each other in background.}
-        \correctChoice{The command above will fail. The \texttt{\&} is a command terminator as well as \texttt{;} is. Hence, bash will complain bacause an empty command is terminated (between \texttt{\&} and \texttt{;}).}
+        \correctChoice{The command above will fail. The \texttt{\&} is a command terminator as well as \texttt{;} is. Hence, Bash will complain bacause an empty command is terminated (between \texttt{\&} and \texttt{;}).}
     \end{quiz}
     \begin{uncoverenv}<3-4>
         \begin{quiz}[3]{Which of the following statements about \bash|kill| is correct?}
@@ -252,7 +252,7 @@
     \end{lstlisting}
     \begin{quiz}[1]{Does the code above work?}
         \wrongChoice{It always does. It extracts the permissions of \bash|file| storing them in a variable.}
-        \wrongChoice{It always does, because the filename does contains only letters. The output of \bash|ls| should not be parsed, though.}
+        \wrongChoice{It always does, because a filename contains only letters. The output of \bash|ls| should not be parsed, though.}
         \correctChoice{In general, it does not! \uncover<2->{The output format of \bash|ls -l| is not guaranteed consistent across platforms!}}
     \end{quiz}
     \begin{uncoverenv}<3-4>

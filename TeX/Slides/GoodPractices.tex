@@ -22,31 +22,39 @@
             \hfill
             \begin{column}{0.46\textwidth}
                 \centering
-                Bash \PQ{v2.0} $\;\longrightarrow\;$ Released in \PQ{12.1996}\\
-                Bash \PT{v3.0} $\;\longrightarrow\;$ Released in \PT{08.2004}\\
-                Bash \PT{v3.1} $\;\longrightarrow\;$ Released in \PT{12.2005}\\
-                Bash \PT{v3.2} $\;\longrightarrow\;$ Released in \PT{10.2006}\\
-                Bash \PP{v4.0} $\;\longrightarrow\;$ Released in \PP{02.2009}\\
-                Bash \PP{v4.1} $\;\longrightarrow\;$ Released in \PP{12.2009}\\
-                Bash \PP{v4.2} $\;\longrightarrow\;$ Released in \PP{02.2011}\\
-                Bash \PP{v4.3} $\;\longrightarrow\;$ Released in \PP{02.2014}
+                \begin{tabular}{l@{$\;\longrightarrow\;$}l}
+                    Bash \PQ{v2.0} & Released in \PQ{12.1996}\\
+                    Bash \PT{v3.0} & Released in \PT{08.2004}\\
+                    Bash \PT{v3.1} & Released in \PT{12.2005}\\
+                    Bash \PT{v3.2} & Released in \PT{10.2006}\\
+                    Bash \PP{v4.0} & Released in \PP{02.2009}\\
+                    Bash \PP{v4.1} & Released in \PP{12.2009}\\
+                    Bash \PP{v4.2} & Released in \PP{02.2011}\\
+                    Bash \PP{v4.3} & Released in \PP{02.2014}\\
+                \end{tabular}
             \end{column}
             \begin{column}{0.46\textwidth}
                 \centering
                 \PB{\scriptsize Best for empty arrays and \texttt{-u} shell option:\\[1mm]}
-                Bash \PS{v4.4} $\;\longrightarrow\;$ Released in \PS{09.2016}\\
-                Bash \PS{v5.0} $\;\longrightarrow\;$ Released in \PS{01.2019}\\
-                Bash \PS{v5.1} $\;\longrightarrow\;$ Released in \PS{12.2020}\\
-                Bash \PS{v5.2} $\;\longrightarrow\;$ Released in \PS{09.2022}
+                \begin{tabular}{l@{$\;\longrightarrow\;$}l}
+                    Bash \PS{v4.4} & Released in \PS{09.2016}\\
+                    Bash \PS{v5.0} & Released in \PS{01.2019}\\
+                    Bash \PS{v5.1} & Released in \PS{12.2020}\\
+                    Bash \PS{v5.2} & Released in \PS{09.2022}\\
+                    Bash \PS{v5.3} & To be released soon\\
+                \end{tabular}
+                \par\vspace{1mm}
+                \Remark{Bash \PS{v5.3\ss} was released in \PS{12.2024}}
             \end{column}
             \qquad
         \end{columns}
     \end{varblock*}
     \begin{lstlisting}[style=MyBash, numbers=none]
-        $ echo "${BASH_VERSINFO[@]}"
-        |+5 2 15 1 release aarch64-apple-darwin21.6.0+|
+        $ echo "${BASH_VERSINFO[@]}"; echo "${BASH_VERSION}"
+        |+5 2 26 1 release aarch64-apple-darwin21.6.0+|
+        |+5.2.26(1)-release+|
         $ tr ' ' '.' <<< "${BASH_VERSINFO[@]:0:3}"
-        |+5.2.15+|
+        |+5.2.26+|
         # You can use the 'hash' builtin to check command existence
     \end{lstlisting}
     \PrepareURLsymbol[PB]
@@ -120,7 +128,7 @@
         \item<only@0> % Here I cheat and I do a horrible work-around to avoid a vertical shift I have no clue why it occurs!
         \item<only@1>
             \alert{\large\textbf{Don't ever parse the output of the \bash|ls| command!}}
-            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=38mm]
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-6mm, xrightmargin=38mm]
                 ls -l | awk '{ print $8 }'  # BAD CODE!
             \end{lstlisting}
             \begin{itemize}
@@ -137,7 +145,7 @@
             {$\;$\small\URL[PB]{http://mywiki.wooledge.org/ParsingLs}{Instructive and very encouraged reading}}
         \item<only@2>
             \alert{\large\textbf{Don't ever test or filter filenames with the \bash|grep| command!}}
-            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=15mm]
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-6mm, xrightmargin=15mm]
                 if echo "${file}" | fgrep '.txt'; then  # BAD CODE!
 
                 ls *.txt | grep 'story'            # ALSO BAD CODE!
@@ -148,13 +156,13 @@
                 \item If you make \bash|grep| patterns that are smart enough, they'll probably be so ugly, massive and unreadable that you shouldn't use them anyway!
             \end{itemize}
             \PS{The alternative is called \textbf{globbing}.}\\
-            Bash has a feature called \textbf{Pathname Expansion}.
+            Bash has a feature called \textbf{Filename Expansion}.
             This will help you enumerate all files that match a certain pattern.
             Also, you can use globs to test whether a filename matches a certain glob pattern.
         \item<only@3>
             \alert{\large\textbf{Avoid unnecessary use of the \bash|cat| command!}}
-            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=35mm]
-                cat filename | grep 'pattern'  # BAD CODE!
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-6mm, xrightmargin=35mm]
+                cat |+filename+| | grep 'pattern'  # BAD CODE!
             \end{lstlisting}
             \begin{itemize}
                 \item Don't use \bash|cat| to feed a single file's content to a filter.
@@ -164,8 +172,8 @@
             If the manual of the program does not specify any way to do this,\\ $\to\;$\PS{you should use redirection!}
         \item<only@3>
             \alert{\large\textbf{Don't use a \bash|for| loop to read the lines of a file!}}
-            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=35mm]
-                for line in $(<file); do  # BAD CODE!
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-6mm, xrightmargin=35mm]
+                for line in $(<|+file+|); do  # BAD CODE!
             \end{lstlisting}
             \begin{itemize}
                 \item command substitutions remove any trailing newlines!
@@ -175,7 +183,7 @@
             \FrameRemark<3>{\guillemotleft The command substitution \;\PB{\texttt{\$(cat file)}}\; can be replaced by the equivalent but faster \;\PB{\texttt{\$(< file)}}\guillemotright. $\;\to\;$ \URL*{https://www.gnu.org/software/bash/manual/html\_node/Command-Substitution.html}{Bash manual section 3.5.4}}
         \item<only@4>
             \alert{\large\textbf{For the love of god and all that is holy, do not use \bash|seq| to count!}}
-            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=35mm]
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-6mm, xrightmargin=35mm]
                 for index in $(seq 1 10); do  # BAD CODE!
             \end{lstlisting}
             \begin{itemize}
@@ -197,7 +205,7 @@
             \end{itemize}
         \item<only@5>
             \alert{\large\textbf{\bash|expr| is a relic of ancient Rome. Do not wield it!}}
-            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, xrightmargin=48mm]
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-6mm, xrightmargin=48mm]
                 i=`expr $i + 1`  # VERY BAD CODE!
             \end{lstlisting}
             \begin{itemize}
