@@ -32,6 +32,10 @@ pidSimulation=$!
 Monitor "${pidSimulation}" 5 &
 pidMonitor=$!
 
+# NOTE: It would be easier to use here the Bash v5.1 new -p option of wait
+#       to store in a variable the PID of the process that terminated and
+#       simplify the following logic. This is left as exercise to the reader.
+
 wait -n # Wait for the first process to finish
 errorCode=$?
 echo
