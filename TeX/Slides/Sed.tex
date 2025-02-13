@@ -269,7 +269,7 @@
         $ sed '/b/,/f/ d' <<< $'a\nb\nc\nd\ne\nf\ng'
         |+a
         g+|
-        $ sed '/^#/ d' filename  # Remove bash comments
+        $ sed '/^#/ d' filename  # Remove Bash comments
         # ... <- look up option -i of sed to edit the file in place
         $ sed '/^$/ d' filename  # Remove empty lines
     \end{lstlisting}

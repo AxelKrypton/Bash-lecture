@@ -163,10 +163,10 @@
     \end{overlayarea}
     \vspace{-1.5mm}
     \begin{itemize}
-        \item If you kill the script using $\;$\bash|kill -s INT|$\;$ from another terminal (not with CTRL-C), bash will wait for \bash|sleep| to exit before calling the trap\\
+        \item If you kill the script using $\;$\bash|kill -s INT|$\;$ from another terminal (not with CTRL-C), Bash will wait for \bash|sleep| to exit before calling the trap\\
               $\;\to\;$\alert{\textbf{That's probably not what you expect!}}
         \item<2-> A work-around is to use a \PB{\textbf{builtin}} that will be interrupted, such as \bash|wait|
-        \item<2-> \PP{Any bash internal command will be interrupted by a (non-ignored) incoming signal!}
+        \item<2-> \PP{Any Bash internal command will be interrupted by a (non-ignored) incoming signal!}
         \item<3-> If you want the background job to be killed when the script is killed, add that to the trap!
     \end{itemize}
 \end{frame}
@@ -217,7 +217,7 @@
         \end{itemize}
         \begin{varblock}{alert}[0.9\textwidth]{What does it mean?}<only@1>
             Imagine you're writing a script and that script exits normally upon receiving SIGINT.
-            That means that if that script is invoked from another bash script, \\\alert{\textbf{CTRL-C will no longer interrupt that other script!}}
+            That means that if that script is invoked from another Bash script, \\\alert{\textbf{CTRL-C will no longer interrupt that other script!}}
         \end{varblock}
         \begin{onlyenv}<2>
             \begin{varblock}{}[0.95\textwidth]{}

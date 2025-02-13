@@ -30,7 +30,7 @@
     \begin{onlyenv}<2>
         \begin{varblock}{quote}[\textwidth]{Gilles says\ldots}
             \footnotesize
-            As far as I know, the \textnormal{\bash|set -o|} options are the ones that are inherited from other Bourne-style shells (mostly \textnormal{\texttt{ksh}}), and the \textnormal{\bash|shopt|} options are the ones that are specific to bash.
+            As far as I know, the \textnormal{\bash|set -o|} options are the ones that are inherited from other Bourne-style shells (mostly \textnormal{\texttt{ksh}}), and the \textnormal{\bash|shopt|} options are the ones that are specific to Bash.
             \alert{There's no logic that I know of.}
         \end{varblock}
         \vspace{-2mm}
@@ -38,7 +38,7 @@
             \footnotesize
             Well, there are \textnormal{\bash|set -o|}  options like \textnormal{\texttt{posix}}, \textnormal{\texttt{physical}}, \textnormal{\texttt{interactive-comments}} that are not in \textnormal{\texttt{ksh}}, and \textnormal{\bash|shopt|} ones that are in other shells including \textnormal{\texttt{ksh}} for some like \textnormal{\texttt{login\_shell}} or \textnormal{\texttt{nullglob}}.
             Like you say, there's no logic.
-            It was probably the idea at the start (that \textnormal{\bash|SHELLOPTS|} would be the standard ones, and \textnormal{\bash|BASHOPTS|} the bash specific ones), but that got lost along the way, and\\
+            It was probably the idea at the start (that \textnormal{\bash|SHELLOPTS|} would be the standard ones, and \textnormal{\bash|BASHOPTS|} the Bash specific ones), but that got lost along the way, and\\
             \alert{now it just ends up being annoying and a UI design fiasco.}\\[-0.7em] ~
         \end{varblock}
     \end{onlyenv}
@@ -169,7 +169,7 @@
                             If set, patterns which fail to match filenames during filename expansion result in an expansion error.
                         \item[\PB{\texttt{globstar}}]
                             If set, the pattern \texttt{**} used in a filename expansion context will match all files and zero or more directories and subdirectories.
-                            If the pattern is followed by a \texttt{/}, only directories and subdirectories match. \Remark{This option exists since bash v4.0.}
+                            If the pattern is followed by a \texttt{/}, only directories and subdirectories match. \Remark{This option exists since Bash v4.0.}
                         \item[\PB{\texttt{nullglob}}]
                             If set, Bash allows filename patterns which match no files to expand to a null string, rather than themselves.
                     \end{description}

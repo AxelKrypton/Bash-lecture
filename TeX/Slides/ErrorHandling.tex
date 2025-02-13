@@ -43,7 +43,7 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{varblock}{alert}[0.8\textwidth]{Do not forget it!}<2->
-            Things that we consider an error are not necessarily an error for bash!
+            Things that we consider an error are not necessarily an error for Bash!
         \end{varblock}
         \begin{onlyenv}<2>
             \begin{lstlisting}[style=myBash, numbers=none, aboveskip=5mm]
@@ -143,7 +143,7 @@
         So the shell implementers made a bunch of special rules, like ``commands that are part of an if test are immune'', and ``commands in a pipeline, other than the last one, are immune''.
     \end{varblock}
     \begin{varblock}{alert}[0.9\textwidth]{}<3>
-        \alert{The \,\PQ{\texttt{set -o errexit}}\, is probably the most controversial feature of bash!}
+        \alert{The \,\PQ{\texttt{set -o errexit}}\, is probably the most controversial feature of Bash!}
     \end{varblock}
     \begin{itemize}[<3>]
         \item Many articles are against using it, e.g. \URL[PQ]{http://mywiki.wooledge.org/BashFAQ/105}{Greg's Wiki}.
@@ -244,7 +244,7 @@
                 echo "End"         # This is NOT printed
             \end{lstlisting}
             \PrepareURLsymbol[PB]
-            \FrameRemark<4>{Assignments to \;\bash|aVar|\; are simple commands and the simple commands expansions rules apply, \URL*{https://www.gnu.org/software/bash/manual/}{bash manual v5.2 section 3.7.1}.}
+            \FrameRemark<4>{Assignments to \;\bash|aVar|\; are simple commands and the simple commands expansions rules apply, \URL*{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 3.7.1}.}
         \end{onlyenv}
         \begin{onlyenv}<5>
             \begin{lstlisting}[style=myBash]
@@ -314,7 +314,7 @@
     \vspace{-1mm}
     \begin{onlyenv}<1>
         \begin{varblock}{alert}[0.85\textwidth]{The ERR signal specification}
-            The trap on \texttt{ERR} is executed exactly when the bash would exit with the \texttt{errexit} option enabled.
+            The trap on \texttt{ERR} is executed exactly when Bash would exit with the \texttt{errexit} option enabled.
             Said differently, the same conditions obeyed by the \texttt{errexit} option apply to traps on \texttt{ERR}.
         \end{varblock}
         \begin{varblock}{quote}[0.9\textwidth]{The \;\texttt{errtrace}\; shell option}[Bash manual]
@@ -372,7 +372,7 @@
             \small
             \item Turning \PB{\texttt{nounset}} on in a correct existing script might still break it.
             \item If some code is not executed, \PB{\texttt{set -u}} will have no effect on it either.
-            \item Versions of bash \alert{prior to v4.4} \URL*{https://gist.github.com/dimo414/2fb052d230654cc0c25e9e41a9651ebe}{handle the \texttt{[@]}-expansion of empty arrays differently}.
+            \item Versions of Bash \alert{prior to v4.4} \URL*{https://gist.github.com/dimo414/2fb052d230654cc0c25e9e41a9651ebe}{handle the \texttt{[@]}-expansion of empty arrays differently}.
         \end{enumerate}
     \end{varblock}
     \PrepareURLsymbol[PB]
@@ -386,14 +386,14 @@
         I understood the behaviour of the shell when an error occurs and I can do error handling myself.
     \end{varblock}
     \begin{varblock}{quote}[0.8\textwidth]{Another reasonable person might say:}<2->
-        Yes, \texttt{errexit} is not a perfect feature of bash, but it has useful semantics, so I don't want to exclude it from the toolbox.
+        Yes, \texttt{errexit} is not a perfect feature of Bash, but it has useful semantics, so I don't want to exclude it from the toolbox.
         Still I have to work a bit to get acquainted with all corner cases, but I think it is worth the effort.
         Especially because I do not want to be bitten by mistakes in doing error handling by hand.
-        Hopefully, future versions of bash will improve this aspect.
+        Hopefully, future versions of Bash will improve this aspect.
     \end{varblock}
     \begin{varblock}{example}[0.94\textwidth]{Choose your way}<3>
         Probably consistency within a script is the most important aspect.
-        My recommendation is to \PS{explore this area of bash in all ways before taking your decision}.
+        My recommendation is to \PS{explore this area of Bash in all ways before taking your decision}.
     \end{varblock}
     \PrepareURLsymbol[PB]
     \FrameRemark{\PB{\texttt{set -o pipefail}} is also another interesting feature \URL*{http://mywiki.wooledge.org/BashPitfalls\#pipefail}{with minor drawbacks}.}
