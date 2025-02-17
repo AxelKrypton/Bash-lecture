@@ -32,10 +32,10 @@ printf '\n'
 rename -s ' ' '_' *\ *
 
 # Change the _bkp.png suffix into _backup.png
-rename -s '_bkp.png' '_backup.png' *_bkp.png
+rename -s '_bkp' '_backup' *_bkp.png
 
 # Add a leading 0 to numbers in files whose name contains a number smaller than 10
-rename -s 'file' 'file0' file[1-9].*
+rename -s 'file' 'file0' file[1-9][^0-9].*
 
 printf '\nBonus problem:\n\n'
 printf '%s\n' {0,1}{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}
