@@ -32,9 +32,11 @@
         \noindent\tikzmark{boxStart}\ifstrempty{#2}{}{%
             \textbf{#2}\\[0.3em]
         }%
-        \begin{tikzpicture}[remember picture, overlay]% https://tex.stackexchange.com/questions/299972/tikz-remember-picture-on-wrong-page#comment726359_299972
+        \begin{tikzpicture}[remember picture, overlay, every node/.style={align=right, text=#1, text width=3cm}]% https://tex.stackexchange.com/questions/299972/tikz-remember-picture-on-wrong-page#comment726359_299972
             %Adjust start-end coordinates
-            \node[align=right, font=\large, text=#1, text width=3cm, base left = 1em of boxStart] {Exercise~\theExercise};%
+            \node[font=\large, base left = 1em of boxStart] (name) {Exercise~\theExercise};%
+            \node[font=\scriptsize, below = 1pt of name]
+                {\parbox{\widthof{\large Exercise~\theExercise}}{\centering \{\,#1\,\}}};
         \end{tikzpicture}\ignorespaces
 }%
 {%
