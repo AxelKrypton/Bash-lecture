@@ -143,4 +143,8 @@ function ParseCommandLineOptions()
                 ;;
         esac
     done
+
+    # GOOD PRACTICE: Mark global variable to store UI input as constant
+    readonly filename beta verbose sizes aspectRatios\
+             rangeMin rangeMax walltime files
 }
