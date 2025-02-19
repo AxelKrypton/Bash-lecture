@@ -780,7 +780,7 @@
             $ for base in {2..5}; do
             >   printf "82000 in base %d is %s\n" \
             >       ${base} \
-            >       $(bc <<< "obase=5; 82000")
+            >       $(bc <<< "obase=${base}; 82000")
             > done &&
             > unset base
         \end{lstlisting}
