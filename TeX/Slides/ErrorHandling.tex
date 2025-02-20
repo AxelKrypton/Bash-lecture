@@ -208,10 +208,10 @@
                 set -e
                 i=0
                 ((i++)) || true
-                echo "i is $i"   # This is ALWASY printed
+                echo "i is $i"   # This is ALWAYS printed
 
                 i=$((i-1))       # Simple command without command subst.
-                echo "i is $i"   # This is ALWASY printed
+                echo "i is $i"   # This is ALWAYS printed
 
                 i=$(false)       # Simple command with failing $(...)
                 echo "i is $i"   # This is NOT printed
