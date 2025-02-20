@@ -119,7 +119,7 @@
             \item Fatal errors exit with a given exit code (customizable at source time)\\
                   \Then{Customization also possible on single usage, e.g.\\
                   \colorbox{background-color}{\scriptsize\bash|exit_code=42 Print_Fatal_And_Exit 'Houston, we have a problem!'|}}
-            \item Super cool automatic highlighting mechanism
+            \item \alert{Super cool automatic highlighting mechanism}
         \end{itemize}
         \begin{onlyenv}<2>
             \begin{lstlisting}[style=myBash, aboveskip=3mm, numbers=none]
@@ -129,38 +129,40 @@
             \end{lstlisting}
         \end{onlyenv}
         \begin{onlyenv}<3>
-            \begin{lstlisting}[style=myBash, aboveskip=0mm, numbers=none, style=smaller, xleftmargin=0mm, xrightmargin=0mm]
+            \begin{lstlisting}[style=myBash, aboveskip=0mm, numbers=none, style=smaller, xleftmargin=-1mm, xrightmargin=-1mm]
                 #!/usr/bin/env bash
                 #
-                #  Copyright (c) 2019 Alessandro Sciarra <sciarra@itp.uni-frankfurt.de>
-                #
-                #  This file is part of BashLogger.
+                #  Copyright (c) 2019,2023-2024
+                #    Alessandro Sciarra <sciarra@itp.uni-frankfurt.de>
                 #
                 #  [...]
-                #
 
                 trap 'printf "\n"' EXIT
                 source Logger.bash "$@" || exit 1
 
-                Print_Trace              '\nTrace message '       --emph 'highlighted' ' VS normal'
-                Print_Debug              '\nDebug message '       --emph 'highlighted' ' VS normal'
-                Print_Info               '\nInformation message ' --emph 'highlighted' ' VS normal'
-                Print_Info               '\nTrailing' '--emph'
-                Print_Info               --emph '--emph'
-                Print_Info               --emph
-                Print_Info               ''
-                Print_Attention          '\n' 'Attention message '   --emph 'highlighted' ' VS normal'
-                Print_Warning            '\n' 'Warning message '     --emph 'highlighted' ' VS normal'
-                Print_Error              '\n' 'Error '               --emph 'highlighted' ' VS normal'
-                ( Print_Fatal_And_Exit   '\n' 'Fatal error exit! '   --emph 'highlighted' ' VS normal' )
-                Print_Internal_And_Exit  '\n' 'Developer error '     --emph 'highlighted' ' VS normal'
+                Print_Trace                  '\nTrace message '         --emph 'highlighted' ' VS normal'
+                Print_Debug                  '\nDebug message '         --emph 'highlighted' ' VS normal'
+                Print_Info                   '\nInformation message '   --emph 'highlighted' ' VS normal'
+                Print_Attention              '\n' 'Attention message '  --emph 'highlighted' ' VS normal'
+                Print_Warning                '\n' 'Warning message '    --emph 'highlighted' ' VS normal'
+                Print_Error                  '\n' 'Error '              --emph 'highlighted' ' VS normal'
+                (
+                    Print_Fatal_And_Exit     '\n' 'Fatal error exit! '  --emph 'highlighted' ' VS normal'
+                    Print_Internal_And_Exit  '\n' 'Developer error '    --emph 'highlighted' ' VS normal'
+                )
+
+                if [[ "${TEST}" = '' ]]; then exit 0; fi
+
+                # [...] Test with 'set -o pipefail -o nounset -o errexit'
+                #             and  shopt -s extglob inherit_errexit
             \end{lstlisting}
         \end{onlyenv}
-        \begin{onlyenv}<4-5>
+        \begin{onlyenv}<4-6>
             \vspace{-4mm}
             \begin{center}
                 \includegraphics[width=0.88\textwidth]{BashLogger_output}\\[-1pt]
-                \uncover<5>{\includegraphics[width=0.88\textwidth]{BashLogger_output_minimal}}
+                \uncover<5->{\includegraphics[width=0.88\textwidth]{BashLogger_output_minimal}}\\[-1pt]
+                \uncover<6>{\includegraphics[width=0.88\textwidth]{BashLogger_output_errors}}
             \end{center}
         \end{onlyenv}
     \end{overlayarea}

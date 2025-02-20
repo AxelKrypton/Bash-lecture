@@ -68,8 +68,8 @@
     \end{varblock}
     \medskip
     \parbox[c][0.7\textheight][t]{\textwidth}{
-        \begin{onlyenv}<1>
-            \begin{enumerate}
+        \begin{onlyenv}<1-5>
+            \begin{enumerate}[<+->]
                 \item When writing Bash scripts, \alert{do not use the \bash{[} command.}\\
                       \PS{Bash has a far better keyword:} \bash{[[}
                 \item It's also time \alert{you forget about \texttt{`...`}}.
@@ -82,8 +82,8 @@
                 \item \PS{Use built-in arithmetic} instead of \bash|expr| to do simple calculations, especially when just incrementing a variable!
             \end{enumerate}
         \end{onlyenv}
-        \begin{onlyenv}<2>
-            \begin{enumerate}
+        \begin{onlyenv}<6->
+            \begin{enumerate}[<+->]
                 \setcounter{enumi}{5}
                 \item Always use the correct shebang and script extension.
                       If you're writing a Bash script, you need to put \bash|\#!/usr/bin/env bash|$\;$ at the top of your script.
@@ -95,7 +95,7 @@
                       Chances are that you aren't just going to write a script once and then forget about it.
             \end{enumerate}
             \vspace{3mm}
-            \begin{varblock}{quote}[0.85\textwidth]{}[Greg's Wiki]
+            \begin{varblock}{quote}[0.85\textwidth]{}[Greg's Wiki]<uncover@9>
                 Trust me when I say, no piece of code is ever 100\% finished, with the exception of some very short and useless chunks of nothingness.
             \end{varblock}
         \end{onlyenv}
@@ -123,6 +123,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Never do anything along these lines in your scripts!}
+    \vspace{-2mm}
     \begin{enumerate}
         \setcounter{enumi}{-1}
         \item<only@0> % Here I cheat and I do a horrible work-around to avoid a vertical shift I have no clue why it occurs!
