@@ -181,7 +181,7 @@
                       $ (( aVar=7*3**2 )); echo "${aVar}"
                       |+63+|
                       $ echo "aVar=$(( 7*3**2 ))"; unset aVar
-                      |+63+|
+                      |+aVar=63+|
                   \end{lstlisting}
             \item<only@1> Assignments in arithmetic substitution work but are confusing and should be avoided!
                   \begin{lstlisting}[style=MyBash, style=oddnumbers, aboveskip=2mm, belowskip=-6mm, firstnumber=8]
