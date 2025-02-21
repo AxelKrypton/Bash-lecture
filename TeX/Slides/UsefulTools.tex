@@ -66,3 +66,50 @@
         \end{itemize}
     \end{overlayarea}
 \end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Can I parse YAML and JSON from Bash?}
+    \vspace{-2mm}
+    \begin{enumerate}
+        \item<2-> YAML? $\quad\to\quad$ A wonderful tool: \URL[PB]{https://mikefarah.gitbook.io/yq}{yq}\\[1mm]
+              \begin{onlyenv}<2-3>
+                  \begin{center}
+                      \includegraphics[width=0.86\textwidth]{Yq}
+                  \end{center}
+              \end{onlyenv}
+        \item<3-> JSON? $\quad\to\quad$ Another wonderful tool: \URL[PB]{https://jqlang.org}{jq}\\[1mm]
+              \begin{onlyenv}<3>
+                  \begin{center}
+                      \includegraphics[width=0.86\textwidth]{Jq}
+                  \end{center}
+              \end{onlyenv}
+    \end{enumerate}
+    \vspace{2mm}
+    \begin{onlyenv}<4>
+        \begin{center}
+            \PS{A minimalistic example about \texttt{yq}}
+        \end{center}
+        \begin{lstlisting}[style=MyBash, numbers=none]
+            $ cat File.yaml
+            |+a:
+            b:
+            - one:
+            c: True
+            - two: 2
+            - three: 3+|
+            $ yq '.a.b[0].c' File.yaml
+            |+True+|
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<5>
+        \begin{center}
+            \PS{A minimalistic example about \texttt{jq}}
+        \end{center}
+        \begin{lstlisting}[style=MyBash, numbers=none]
+            $ jq '.[0] | {message: .commit.message, name: .commit.committer.name}' File.json
+            |+{
+                "message": "docs: Document repeat(exp)",
+                "name": "Nico Williams"
+            }+|
+        \end{lstlisting}
+    \end{onlyenv}
+\end{frame}
