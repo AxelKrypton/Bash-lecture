@@ -19,13 +19,13 @@ function ParseCommandLineArguments()
     while [[ $# -gt 0 ]]; do
         case $1 in
             --help )
-                printf '\n\n\e[92m Available options to the present script:\n\n'
+                printf '\e[92m Available options to the present script:\n\n'
                 printf '    \e[96m%-20s\e[0m  ->  \e[95m%s\e[0m\n'\
                        '-f | --dataFile' 'Existing input file name (default: "data.dat")'\
                        '-t | --texFile'  'Existing tex file name (default: "plot.tex")'\
                        '-x | --xColumn'  'Index of the column to be used as x-values'\
-                       '-y | --yColumn'  'Index of the column to be used as y-values'\
-                printf '\n \e[1;4;91mATTENTION\e[24m:\e[22m Columns indexes ranges from 0.\n\n\n\e[0m'
+                       '-y | --yColumn'  'Index of the column to be used as y-values'
+                printf '\n \e[1;4;91mATTENTION\e[24m:\e[22m Columns indexes ranges from 0.\n\n\e[0m'
                 exit 0 ;;
             -f | --dataFile )
                 if [[ $2 =~ ^(-|$) ]]; then
