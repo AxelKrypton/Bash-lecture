@@ -6,7 +6,7 @@
 \begin{exercise}[Inspirational]{Understanding the power of parameter expansion}
     Go through the following list of tasks and explore the parameter expansion syntax.
     Feel free to simply play in the terminal or write one or more scripts.
-    \begin{enumerate}
+    \begin{enumerate}[itemsep=0mm]
         \item The \bash|EDITOR| environment variable is used to specify the user preferred text editor.
               Suppose to have a variable \bash|filename| which store the name of a file.
               Then the command
@@ -24,12 +24,24 @@
               The characters \texttt{'b'} and \texttt{'s'} refer to a beta and a seed value.
               Such prefixes are alphabetic strings, whose length might vary.
               Assuming the beta and the seed values format are fixed, how would you extract
-              \begin{itemize}
-                  \item the beta value?
-                  \item the seed value?
-                  \item the postfix after the last \texttt{'\_'}?
-                  \item the beta and the seed prefixes?
-              \end{itemize}
+%              \begin{center}
+%                  \begin{minipage}{0.8\textwidth}
+%                      \begin{multicols}{2}
+%                          \begin{itemize}[nosep]
+%                              \item the beta value?
+%                              \item the seed value?
+%                              \item the postfix after the last \texttt{'\_'}?
+%                              \item the beta and the seed prefixes?
+%                          \end{itemize}
+%                      \end{multicols}
+%                  \end{minipage}
+%              \end{center}
+              \begin{center}
+                  \begin{tabular}{p{0.2\textwidth} p{0.6\textwidth}}
+                      \labelitemi\; the beta value? & \labelitemi\; the postfix after the last \texttt{'\_'}? \\
+                      \labelitemi\; the seed value? & \labelitemi\; the beta and the seed prefixes? \\
+                  \end{tabular}
+              \end{center}
               Test your code on different strings like \bash|"beta6.0000_seed1111_continueWithNewChain"| or \bash|"beta6.1234_s1234_thermalizeFromConf"|.
         \item The \bash|printf| builtin has the following interesting feature.
               \begin{quote}
