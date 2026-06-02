@@ -1,51 +1,56 @@
 #!/usr/bin/env bash
 
+msg='$ZKY@Dq_i7_BY@H4ND$iN$7QN@MiNU73S_ZKqN_YqU$C4N_4U7QM473_i7!iN_7QN!HqURS?%%%'
+printf '\n%-26s ->  %s\n\n' 'Begin' "${msg}"
+
 # TASK 1
 
-#filename='hello.txt'
-#${EDITOR:-$(which vim)} "${filename:?Variable filename unset or empty}"
+msg="${msg/%%%%/}"
+printf "%-26s ->  %s\n\n" 'msg="${msg/%%%%/}"' "${msg}"
 
 # TASK 2
 
-printf '%35s  %s\n'\
-       '' ''\
-       'PATH:' "${PATH}"\
-       'Highest priority in PATH:' "${PATH%%:*}"\
-       'Lowest priority in PATH:' "${PATH##*:}"\
-       'All but highest priority in PATH:' "${PATH#*:}"\
-       'All but lowest priority in PATH:' "${PATH%:*}"\
-       '' ''
-       
+msg="${msg/$/}"
+printf "%-26s ->  %s\n\n" 'msg="${msg/$/}"' "${msg}"
+
 # TASK 3
 
-#stringToParse="b5.6789_s9876_thermalizeFromHot"
-#stringToParse="beta6.0000_seed1111_continueWithNewChain"
-stringToParse="beta6.1234_s1234_thermalizeFromConf"
-
-#To avoid the temporary variable you need more knowledge, e.g. arrays
-# NOTE: Parameter expansion cannot be nested!
-temporaryString=${stringToParse%_*}
-firstField=${temporaryString%_*}
-secondField=${temporaryString#*_}
-postfix=${stringToParse##*_}
-
-betaValue=${firstField: -6}
-seedValue=${secondField: -4}
-betaPrefix=${firstField/${betaValue}}
-seedPrefix=${secondField/${seedValue}}
-
-printf '%35s  %s\n'\
-       'String:' "${stringToParse}"\
-       'Beta prefix:' "${betaPrefix}"\
-       'Beta value:' "${betaValue}"\
-       'Seed prefix:' "${seedPrefix}"\
-       'Seed value:' "${seedValue}"\
-       'Postfix:' "${postfix}"\
-       '' ''
+msg="${msg//ZK/WH}"
+printf "%-26s ->  %s\n\n" 'msg="${msg//ZK/WH}"' "${msg}"
 
 # TASK 4
 
-printf -v listOfWords '%s_' First Second Third
-printf '%35s  %s\n'\
-       "listOfWords:" "${listOfWords%?}"\
-       '' ''
+msg="${msg//[qQ]N/EN}"
+printf "%-26s ->  %s\n\n" 'msg="${msg//[qQ]N/EN}"' "${msg}"
+
+# TASK 5
+
+msg="${msg//4/A}"
+printf "%-26s ->  %s\n\n" 'msg="${msg//4/A}"' "${msg}"
+
+# TASK 6
+
+msg="${msg//73/7E}"
+printf "%-26s ->  %s\n\n" 'msg="${msg//73/7E}"' "${msg}"
+
+# TASK 7
+
+msg="${msg//[_\!@$]/ }"
+printf "%-26s ->  %s\n\n" 'msg="${msg//[_\!@$]/ }"' "${msg}"
+
+# TASK 8
+
+msg="${msg,,}"
+printf "%-26s ->  %s\n\n" 'msg="${msg,,}"' "${msg}"
+
+# TASK 9
+
+msg="${msg^}"
+printf "%-26s ->  %s\n\n" 'msg="${msg^}"' "${msg}"
+
+# TASK 10
+
+msg="${msg//7/t}"
+printf "%-26s ->  %s\n\n" 'msg="${msg//7/t}"' "${msg}"
+msg="${msg//q/o}"
+printf "%-26s ->  %s\n\n" 'msg="${msg//q/o}"' "${msg}"

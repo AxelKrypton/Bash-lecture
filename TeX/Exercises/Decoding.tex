@@ -1,0 +1,37 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 02 Jun 2026          %
+%-------------------------------%
+
+\begin{exercise}[Instructive]{Decrypting an ancient Bash scroll}
+    During the excavation of a long-forgotten server room, archaeologists discovered
+    the following encrypted message left by a system administrator:
+
+    \begin{lstlisting}[style=MyBash, basicstyle={\ttfamily\footnotesize\color{basic-color}}, aboveskip=3mm]
+        msg='$ZKY@Dq_i7_BY@H4ND$iN$7QN@MiNU73S_ZKqN_YqU$C4N_4U7QM473_i7!iN_7QN!HqURS?%%%'
+    \end{lstlisting}
+
+    The message was encrypted using a sequence of simple transformations.
+    Your task is to recover the original text using \emph{parameter expansion only}.
+    After each step, store the result back into \bash|msg|.
+
+    \begin{enumerate}
+        \item Remove \texttt{\%\%\%} at the end.
+        \item Remove the first occurrence of \texttt{\$}.
+        \item Replace all occurrences of \texttt{ZK} by \texttt{WH}.
+        \item Replace all occurrences of \texttt{QN} or \texttt{qN} by \texttt{EN}.
+        \item Replace all occurrences of \texttt{4} by \texttt{A}.
+        \item Replace all occurrences of \texttt{3} after a \texttt{7} by \texttt{E}.
+        \item Replace all occurrences of \texttt{\_} or \texttt{\$} or \texttt{!} or \texttt{@} by a space.
+        \item Convert the whole message to lower case.
+        \item Capitalize the first character.
+    \end{enumerate}
+
+    The message is still not completely correct.
+    Without using external commands, determine which additional parameter expansions are required to fully decrypt it.
+
+    \vspace{2mm}
+
+    \textbf{Question:}
+    Can you perform the entire decryption in a single expansion expression?
+\end{exercise}

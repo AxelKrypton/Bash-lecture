@@ -1,44 +1,51 @@
 #!/usr/bin/env bash
 
-shopt -s extglob
+# TASK 1
 
-#mkdir 'temporaryFolder'
-#cd 'temporaryFolder'
-#touch file{1..20}{.{dat,png,txt},\ backup.dat,_bkp.png}
+#filename='hello.txt'
+#${EDITOR:-$(which vim)} "${filename:?Variable filename unset or empty}"
 
-printf '\nList only files with the .dat extension:\n\n'
-ls *.dat
+# TASK 2
 
-printf '\nList only files with number 13 in the name:\n\n'
-ls *[^1-9]13[^[:digit:]]*
+printf '%35s  %s\n'\
+       '' ''\
+       'PATH:' "${PATH}"\
+       'Highest priority in PATH:' "${PATH%%:*}"\
+       'Lowest priority in PATH:' "${PATH##*:}"\
+       'All but highest priority in PATH:' "${PATH#*:}"\
+       'All but lowest priority in PATH:' "${PATH%:*}"\
+       '' ''
 
-printf '\nList only backup files:\n\n'
-ls *backup* *bkp*
+# TASK 3
 
-printf '\nList all but backup files:\n\n'
-ls !(*backup*|*bkp*)
+#stringToParse="b5.6789_s9876_thermalizeFromHot"
+#stringToParse="beta6.0000_seed1111_continueWithNewChain"
+stringToParse="beta6.1234_s1234_thermalizeFromConf"
 
-printf '\nList only files containing a space in the name:\n\n'
-ls *\ * # or: ls *' '*
+#To avoid the temporary variable you need more knowledge, e.g. arrays
+# NOTE: Parameter expansion cannot be nested!
+temporaryString=${stringToParse%_*}
+firstField=${temporaryString%_*}
+secondField=${temporaryString#*_}
+postfix=${stringToParse##*_}
 
-printf '\nList all but files containing a space in the name:\n\n'
-ls !(*' '*)
+betaValue=${firstField: -6}
+seedValue=${secondField: -4}
+betaPrefix=${firstField/${betaValue}}
+seedPrefix=${secondField/${seedValue}}
 
-printf '\nList files with a number that is multiple of 5 before the dot:\n\n'
-ls *[05].*
-printf '\n'
+printf '%35s  %s\n'\
+       'String:' "${stringToParse}"\
+       'Beta prefix:' "${betaPrefix}"\
+       'Beta value:' "${betaValue}"\
+       'Seed prefix:' "${seedPrefix}"\
+       'Seed value:' "${seedValue}"\
+       'Postfix:' "${postfix}"\
+       '' ''
 
-# Rename the files containing a space replacing it by an underscore:
-rename -s ' ' '_' *\ *
+# TASK 4
 
-# Change the _bkp.png suffix into _backup.png
-rename -s '_bkp' '_backup' *_bkp.png
-
-# Add a leading 0 to numbers in files whose name contains a number smaller than 10
-rename -s 'file' 'file0' file[1-9][^0-9].*
-
-printf '\nBonus problem:\n\n'
-printf '%s\n' {0,1}{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}
-printf '\n'
-
-#cd ..
+printf -v listOfWords '%s_' First Second Third
+printf '%35s  %s\n'\
+       "listOfWords:" "${listOfWords%?}"\
+       '' ''
