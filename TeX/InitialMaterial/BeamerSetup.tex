@@ -82,6 +82,8 @@
     \defbeamertemplate{footline}{Empty}{}
     \setbeamersize{text margin left=8mm,text margin right=8mm}
     %\setbeamerfont{section title}{size=\Huge}
+    \setbeamerfont{frametitle}{size=\LARGE}
+    %\setbeamerfont{framesubtitle}{size=\normalsize}
     \defbeamertemplate*{section page}{Iceland}[3][]
     {
         \begin{tikzpicture}[overlay,remember picture, every node/.style={inner sep=0pt}]
@@ -127,6 +129,30 @@
             \end{tikzpicture}%
         \fi%
     }%
+
+    \setbeamertemplate{frametitle}
+    {
+        \begin{beamercolorbox}[sep=0.3cm,wd=0.96\paperwidth]{frametitle}
+            \usebeamercolor{frametitle}%
+            \usebeamerfont{frametitle}%
+            \vbox{}\vskip-1ex%
+            \strut\insertframetitle\strut\par%
+            {%
+                \ifx\insertframesubtitle\empty%
+                \else%
+                {\vskip-.15ex\hskip.1ex\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
+                \fi
+            }%
+            \vskip-1ex%
+%            \vskip-\topskip%
+%            \ifx\insertframesubtitle\empty%
+%                X
+%                \vskip-1ex%
+%            \else%
+%                Y\vskip0.667\topskip%
+%            \fi%
+        \end{beamercolorbox}
+    }%
 }
 
 \makeatletter
@@ -151,7 +177,7 @@
 }
 
 %===============================================================%
-\title{Introduction to Bash scripting language}
+\title{Bash~--~From zero to working knowledge}
 \author{Alessandro Sciarra}
 \institute{Z02~--~Software Development Center}
 \titlegraphic{\includegraphics[width=24mm]{LogoCRC}}

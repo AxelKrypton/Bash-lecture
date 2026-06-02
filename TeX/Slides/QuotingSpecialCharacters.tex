@@ -67,10 +67,10 @@
             @|\renewcommand\thelstnumber{}|@World
         \end{lstlisting}
     \end{onlyenv}
-    \begin{varblock}{alerted}[0.9\textwidth]{I'm Too Lazy to Read, Just Tell Me What to Do}<2>
+    \begin{varblock}{alerted}[0.9\textwidth]{I'm too lazy to read, just tell me what to do}<2>
         \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-6mm,aboveskip=2mm]
-            $ cp $file $destination         # WRONG
-            $ cp -- "$file" "$destination"  # Right
+            $ cp ${file} ${destination}         # WRONG
+            $ cp -- "${file}" "${destination}"  # Right
         \end{lstlisting}
         When in doubt, \textbf{double-quote every expansion} in your shell commands.\\
         Generally use \textbf{double quotes} unless it makes more sense to use single quotes.

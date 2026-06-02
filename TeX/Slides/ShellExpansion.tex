@@ -40,7 +40,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Brace expansion}
-    \vspace{-3mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item It comes in two forms:
@@ -129,7 +128,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Parameter expansion: Checking variables state}
-    \vspace{-3mm}
+    \vspace{-2mm}
     \begin{onlyenv}<1>
         \begin{varblock}{alerted}[0.8\textwidth]{}
             \small\alert{In each of the cases below, word is subject to tilde expansion, parameter expansion, command substitution, and arithmetic expansion!}
@@ -225,7 +224,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Parameter expansion: String manipulation (I)}
-    \vspace{-3mm}
+    \vspace{-2mm}
     \setbeamerfont{description item}{series=\bfseries}
     \setbeamercolor{description item}{fg=PP}
     \begin{description}[Substring Expansion:]
@@ -260,7 +259,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Parameter expansion: String manipulation (II)}
-    \vspace{-3mm}
+    \vspace{-2mm}
     \setbeamerfont{description item}{series=\bfseries}
     \setbeamercolor{description item}{fg=PP}
     \begin{description}[Remove Smallest Suffix:]
@@ -299,7 +298,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Parameter expansion: String manipulation (III)}
-    \vspace{-3mm}
+    \vspace{-2mm}
     \setbeamerfont{description item}{series=\bfseries}
     \setbeamercolor{description item}{fg=PP}
     \begin{onlyenv}<1>
@@ -368,7 +367,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Parameter expansion: String manipulation (IV)}{Since Bash v4.0 (2009)}
-    \vspace{-3mm}
     \setbeamerfont{description item}{series=\bfseries}
     \setbeamercolor{description item}{fg=PP}
     \begin{description}[Replace at start:]
@@ -411,8 +409,7 @@
     \FrameRemark{These types of expansion apply also to arrays: We will come back to this!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Parameter expansion: String manipulation (V) and reflection (I)}{Since Bash v4.4 (2016)}
-    \vspace{-2mm}
+\begin{frame}[fragile]{Parameter expansion: String manipulation (V)~--~Reflection (I)}{Since Bash v4.4 (2016)}
     \setbeamerfont{description item}{series=\bfseries}
     \setbeamercolor{description item}{fg=PP}
     \begin{varblock*}{}[\textwidth]{}
@@ -469,7 +466,7 @@
     \end{overlayarea}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{Parameter expansion: String manipulation (VI) and reflection (II)}{Since Bash v5.1 (2020)}
+\begin{frame}[fragile]{Parameter expansion: String manipulation (VI)~--~Reflection (II)}{Since Bash v5.1 (2020)}
     \setbeamerfont{description item}{series=\bfseries}
     \setbeamercolor{description item}{fg=PP}
     \begin{overlayarea}{\textwidth}{0.5\textheight}
@@ -722,7 +719,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Word splitting}{\ldots{}the evil of Bash!}
-    \vspace{-4mm}
+    \vspace{-2mm}
     \begin{onlyenv}<1>
         \begin{varblock}{}[0.9\textwidth]{When does it occur?}
             The shell scans the results of parameter expansion, command substitution, and arithmetic expansion that did not occur within double quotes for word splitting!

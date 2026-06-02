@@ -13,27 +13,26 @@
 \begin{frame}[c]{Lecture format}
     \begin{center}
         \begin{tikzpicture}[every node/.style={inner xsep=0}]
-            \foreach \f [count=\n from 0] in {Calendar, Time, Placeholder, Person, Newsletter}{
+            \foreach \f [count=\n from 0] in {Calendar, Time, Placeholder, Person, Newsletter,Slides}{
                 \begin{scope}
-                    \clip (0,-1.5*\n) circle[radius=5mm];
-                    \node (A\n) at (0,-1.5*\n) {\includegraphics[width=10mm]{\f}};
+                    \clip (0,-1.36*\n) circle[radius=4.5mm];
+                    \node (A\n) at (0,-1.36*\n) {\includegraphics[width=8mm]{\f}};
                 \end{scope}
             }
-            \node[right = of A0] {\{17..21\} February 2025};
-            \node[right = of A1] {
+            \node[right = of A0] {\{22..26\} June 2026};
+            \node[right = of A1] (A1desc) {
                 \begin{tabular}{@{}r@{\;}l}
-                    Morning:   & 09:15 to 12:30 \Remark{Lecture with slides}\\
-                    Afternoon: & 14:15 to 17:30 \Remark{Live programming: Exercise sheet -- I am here to help, use me}\\
+                    Morning:   & 09:00 to 12:30 \\
+                    Afternoon: & 14:00 to 18:00 \\
                 \end{tabular}
             };
-            \node[right = of A2] {
-                \begin{tabular}{@{}r@{\;}l}
-                    Monday, Tuesday and Friday:   & FIAS, room 0|200 \\
-                    Wednesday and Thursday:       & ~GSC, room 0|08
-                \end{tabular}
-            };
+            \draw[thick, decorate, decoration={brace,amplitude=4pt}]
+                (A1desc.north east) ++(0mm,-2mm) -- ($(A1desc.south east)+(0mm,2mm)$)
+                node[midway, right=3mm, font=\small] {Interactive lectures and hands-on sessions};
+            \node[right = of A2] {Wonderful location in Laubach};
             \node[right = of A3] {Dr. Alessandro Sciarra};
             \node[right = of A4] {sciarra@itp.uni-frankfurt.de};
+            \node[right = of A5] {\alert{Slides are full of text for later reading!} \Remark{Try to listen to me rather than reading}};
         \end{tikzpicture}
     \end{center}
 \end{frame}
@@ -44,8 +43,9 @@
     \end{varblock}
     \vspace{5mm}
     \begin{itemize}
-        \item Member of the Software Development Center \\ $\to\;$ Z02 project of the CRC-TR211 collaboration
+        \item Member of the Software Development Center \\ $\to\;$ Z02 project of the CRC-TR\,211 collaboration
         \item A used-to-be ``lattice practitioner''
+        \item Now more \PS{a Research Software Engineer (RSE)}
         \item A dreamer who flatters himself that
               \begin{itemize}
                   \item physicists will one day \PB{properly} use the IT tools they use
@@ -68,7 +68,7 @@
     \begin{enumerate}
         \setcounter{enumi}{1}
         \item<3-> The amount of information given in this lecture is \textbf{huge}, I am aware of it
-        \item<3-> You will not receive all the details (I tried to pass on the important information, though)\\
+        \item<3-> You will not receive \underline{all} the details (I tried to pass on the important information, though)\\
                   \then be active, ask, use manuals, go beyond this lecture!
         \item<4-> Often it is hard (very hard) to clarify all details of and exceptions to rules \\
                   \then experience and practice will fill the gap
@@ -80,7 +80,8 @@
                   \PT{Interactive lecture: ask, ask, ask!}
     \end{enumerate}
     \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=south east, visible on=<2->] (fig) at ([xshift=-5mm]current page.south east) {\includegraphics[width=42mm]{Relax}};
+        \node[anchor=south east, visible on=<2->, inner ysep=3mm, inner xsep=5mm]
+            (fig) at (current page.south east) {\includegraphics[width=42mm]{Relax}};
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -93,7 +94,7 @@
     \begin{itemize}
         \item Scripting/command language
         \item Unix shell $\;\leftrightarrow\;$ command processor
-        \item First release in 1989, current version v5.3-beta (Dec 2024) $\;\;\to\;$ \URL[PS]{http://ftp.gnu.org/gnu/bash/}{download Bash}
+        \item First release in 1989, current version v5.3 (July 2025) $\;\;\to\;$ \URL[PS]{http://ftp.gnu.org/gnu/bash/}{download Bash}
     \end{itemize}
     \begin{varblock}{quote}[0.9\textwidth]{GNU Bash}
         Bash is the GNU Project's shell.
@@ -103,6 +104,7 @@
         It offers functional improvements over \textnormal{sh} for both programming and interactive use.
         In addition, most \textnormal{sh} scripts can be run by Bash without modification.
     \end{varblock}
+    \vspace{2mm}
     \uncover<2>{
         \begin{itemize}
             \item A scripting language which may get hard to read $\to$ you need some \PP{``code sense''}
@@ -220,7 +222,7 @@
             \item \tc<2>{Wednesday}{File descriptors and redirection}
             \item \tc<2>{Wednesday}{Compound commands}
             \item \tc<2>{Wednesday}{Functions}
-            \item \tc<2>{Wednesday}{Script autocompletion and GNU Redline}
+            \item \tc<2>{Wednesday}{Script autocompletion and GNU Readline}
             \item \tc<2>{Thursday}{Asynchronous commands}
             \item \tc<2>{Thursday}{Traps}
             \item \tc<2>{Thursday}{Error handling}
@@ -233,7 +235,7 @@
         \end{enumerate}
     \end{multicols}
     \begin{tikzpicture}[remember picture, overlay, every label/.append style={label distance=-2pt, font=\tiny}, scope on=<2>]
-        \foreach \d/\n [count=\i] in {Monday/17, Tuesday/18, Wednesday/19, Thursday/20, Friday/21}{
+        \foreach \d/\n [count=\i] in {Monday/22, Tuesday/23, Wednesday/24, Thursday/25, Friday/26}{
             \node[anchor=north, draw, rounded corners=1pt, label={[\d]90:\d}, inner ysep=1mm, inner xsep=2mm, text=\d, draw=\d, fill=\d!5] (Mon) at ($(current page.north)+(\i cm,-5mm)$) {\n\vphantom{2367890}};
         }
     \end{tikzpicture}
@@ -276,6 +278,37 @@
 \end{frame}
 \AddLinkToTOCfalse
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{A (first) slide about AI and LLMs}
+    \begin{overlayarea}{\textwidth}{0.8\textheight}
+        \begin{columns}[c]
+            \hfill
+            \begin{column}{0.6\textwidth}
+                \centering
+                \begin{varblock}{}[\textwidth]{A couple of questions?}
+                    \begin{enumerate}
+                        \item How often do you chat with an AI?
+                        \item How often do you use an AI in agent mode?
+                    \end{enumerate}
+                \end{varblock}
+                \begin{varblock}{alert}[0.95\textwidth]{Let's go back few years}<uncover@2>
+                    In the first two days (at least), let's avoid using any AI powered tool!
+                    Use your favourite search engine (not in AI-mode) and actively read sources.
+                \end{varblock}
+                \vspace{3mm}
+                \begin{uncoverenv}<2>
+                    \includegraphics[width=0.7\textwidth]{Fly}
+                \end{uncoverenv}
+            \end{column}
+            \hfill
+            \begin{column}{0.35\textwidth}
+                \vspace{5mm}
+                \includegraphics[width=\columnwidth]{Ai-biased}
+            \end{column}
+            \hfill
+        \end{columns}
+    \end{overlayarea}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Bonus track\uncover<2>{: Iceland}}{\uncover<2>{The magic of an incredible island}}
     \begin{tikzpicture}[remember picture, overlay, scope on=<2>]
         \node[inner sep=0pt] (plan) at ($(current page.center)-(0,6mm)$) {\includegraphics[width=0.8\textwidth, clip, trim=1mm 0 0 0]{Map2}};
@@ -311,11 +344,11 @@
         \item The more active you are the more information will stay in your memory for your daily work
     \end{itemize}
     \vspace{5mm}
-    {\large\PP{What do I expect?}}
+    {\large\PP{What do \alt<1>{you}{I} expect?}}
     \begin{itemize}[<2->]
         \item You will also learn general coding principles, which are independent of the language \\
               {\small\then Check out \URL[PP]{https://github.com/AxelKrypton/Clean-code-good-practices}{«Clean code» and «Clean testing»}  talks!}
-        \item You use the \textbf{Q\&A} functionality if you do not want to orally ask
+        \item \alert{You ask \textbf{many} questions!} \Remark{«There is no such thing as a dumb question.»~--~Carl Sagan}
         \item You enjoy the journey! \Remark{\ldots{}at least discovering Iceland\ldots}
         \item \PS{You give me feedback at the end of the lecture!}
     \end{itemize}
