@@ -1,0 +1,26 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 3 Jun 2026           %
+%-------------------------------%
+
+\begin{exercise}[Instructive]{Counting words}
+    Write a script that repeatedly reads a word from standard input and keeps track of how many times each word has been entered.
+
+    The following special commands should be recognised using a \bash|case| statement:
+    \begin{description}[labelwidth=2cm, leftmargin=!, align=right, font=\normalfont]
+        \item[\texttt{show} or \texttt{s}]  $\;\to\;$ Print all words together with their counts.
+        \item[\texttt{reset} or \texttt{r}] $\;\to\;$ Reset all counters.
+        \item[\texttt{quit} or \texttt{q}]  $\;\to\;$ Exit the script.
+    \end{description}
+
+    Any other input should be treated as a word whose counter must be increased.
+
+    \textbf{Optional:} If the user gives multiple words, split them on spaces and process them all.
+
+    \textbf{Hint:} Consider using a construct of the following form:
+    \begin{lstlisting}[style=MyBash, numbers=none]
+        while read -r -p " > " word; do
+          # ...
+        done
+    \end{lstlisting}
+\end{exercise}
