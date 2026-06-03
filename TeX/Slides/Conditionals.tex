@@ -5,7 +5,7 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Exit code}
-    \vspace{-3mm}
+    \vspace{-1mm}
     Every command in Bash terminates with an exit code:
     \begin{description}
         \item[\texttt{\$?}]
@@ -26,7 +26,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \bash|if| keyword}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{itemize}
         \item Since it is a keyword, it requires a precise syntax (not a surprise)
         \item It executes a command (or a set of commands) and checks that command's exit code to see whether it was successful
@@ -67,14 +67,14 @@
                 \end{tabular}
         \item Multiple commands can be concatenated using control operators \texttt{\&\&} and \texttt{||}
     \end{itemize}
-    \begin{varblock}{}[0.9\textwidth]{Which syntax should I prefer?}
+    \begin{varblock}{example}[0.9\textwidth]{Which syntax should I prefer?}
         Whenever you are making a \textbf{Bash} script, you should always use \texttt{\tc{keywords-color}{[[}} rather than \bash{[}.\\
         If portability is an issue, e.g.\ you are writing a \textbf{sh}ell script, \\ you should use \bash{[}, because it is far more portable.
     \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \bash|test| command and its friend \bash{[}}
-    \vspace{-4mm}
+    \vspace{-3mm}
     \begin{center}
         \begin{minipage}{0.85\textwidth}
             \begin{description}[<only@1>][\texttt{-v VARIABLE}]
@@ -158,7 +158,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \bash{[[} keyword}
-    \vspace{-2mm}
+    \vspace{-1mm}
     \begin{itemize}[<only@1>]
         \item It supports the tests supported by the \bash{test} and \bash{[} commands$^{\star}$
         \item String equality (\texttt{=} or \texttt{==}) and inequality (\texttt{!=}) comparison is changed to \alert{pattern matching} by default.

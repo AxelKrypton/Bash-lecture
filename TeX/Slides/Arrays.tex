@@ -5,7 +5,7 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Motivation}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{itemize}
         \item \textbf{Strings} are without any doubt the most used parameter ``type''
         \item They are also the most \textbf{misused} parameter ``type'', though!
@@ -92,7 +92,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Accessing array's content (I)}{Definition, single elements and length}
-    \vspace{-2mm}\centering
+    \vspace{-1mm}\centering
     \PB{\texttt{declare -p array}}\, It prints the definition of the variable \Remark{not so useful in scripts}
     \smallskip
     \begin{lstlisting}[style=MyBash, numbers=none]
@@ -124,7 +124,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Accessing array's content (II)}{All elements at once}
-    \vspace{-2mm}\centering
+    \vspace{-1mm}\centering
     \tc{strings-color}{\texttt{"\$\{array[@]\}"}}\, Bash replaces this syntax with each element properly quoted
     \smallskip
     \begin{lstlisting}[style=MyBash, numbers=none]
@@ -154,7 +154,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Accessing array's content (III)}{All indices}
-    \vspace{-2mm}\centering
+    \vspace{-1mm}\centering
     \tc{strings-color}{\texttt{"\$\{!array[@]\}"}}\, Bash replaces this syntax with the indices of the entries that are set
     \smallskip
     \begin{lstlisting}[style=MyBash, numbers=none]
@@ -204,7 +204,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Deleting arrays or array elements}
-    \vspace{-4mm}
+    \vspace{-3mm}
     \begin{itemize}
         \item To delete an element of an array, pass it to the \bash{unset} builtin
     \end{itemize}
@@ -235,7 +235,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Deleting arrays or array elements: A sneaky trap}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{varblock}{alerted}[0.8\textwidth]{}
         \large \PQ{Do not forget to \textbf{quote your variable} to avoid file pattern matching!}
     \end{varblock}
@@ -262,7 +262,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Sparse arrays}
-    \medskip
+    \bigskip
     \begin{columns}[c]
         \begin{column}{0.75\textwidth}
             \begin{varblock}{alerted}[0.5\textwidth]{}
@@ -285,12 +285,11 @@
         \end{lstlisting}
     \end{varblock}
     \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=north east] at ($(current page.north east)-(5mm,5mm)$) {\includegraphics[width=3cm, clip, trim=0 17mm 0 0]{Assumptions}};
+        \node[anchor=north east] at ($(current page.north east)-(5mm,6mm)$) {\includegraphics[width=3cm, clip, trim=0 17mm 0 0]{Assumptions}};
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Associative arrays}{Since Bash v4.0 (2009)}
-    \vspace{-2mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item An associative array is \PP{a map of strings to strings}
@@ -338,7 +337,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Associative arrays: Remarks}{Since Bash v4.0 (2009)}
-    \vspace{-2mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item \alert{The order of both keys and elements} of an associative array is \alert{unpredictable}\\
@@ -382,7 +380,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The power of parameter expansion on arrays (I)}
-    \vspace{-2mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
          \begin{itemize}
              \item Arrays are very flexible, because they are well integrated with the other shell expansions
@@ -429,7 +426,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The power of parameter expansion on arrays (II)}
-    \vspace{-3mm}
+    \vspace{-2mm}
     Since Bash v5.1 and v5.2 a couple of new expansions offer more flexibility with arrays:
     \begin{lstlisting}[style=MyBash, aboveskip=3mm, xrightmargin=2mm]
         # ${var@K} introduced in v5.1 -- ${var@k} introduced in v5.2

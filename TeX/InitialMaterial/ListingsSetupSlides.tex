@@ -78,7 +78,8 @@ emph=[1]{CreateListOfFiles, LevelOne, LevelTwo, LevelThree, Test, SecondsToTimeS
 emphstyle=[1]{\color{functions-color}}, %Functions
 emph=[2]{variableName, invisibleVariable, prefix, day, today, song, aVar, bVar, langRegex, deadline, now, base,
          index, file, fgbg, color, reference, files, array, message, entry, index, dict, key, flag, line, inputTime,
-         days, hours, minutes, seconds, globalVar, pid, extglobSet, counter, filename, extension, example, exit_code},
+         days, hours, minutes, seconds, globalVar, pid, extglobSet, counter, filename, extension, example,
+         exit_code, grid, gold},
 emphstyle=[2]{\color{variables-color}}, %Variables
 emph=[4]{PATH, SHELL, IFS, BASH_ALIASES, BASH_REMATCH, PS3, REPLY, HOME, LANGUAGE, EDITOR, PIPESTATUS, PWD, FUNCNEST,
          DIRSTACK, PWD, OLDPWD, SHELLOPTS, BASHOPTS, TIMEFORMAT, COMP_CWORD, COMP_LINE, COMP_POINT, COMP_TYPE, COMP_KEY,
@@ -108,6 +109,12 @@ autogobble=true, % lstautogobble needed!
 \lstnewenvironment{Bash}[1][] %I will rarely use this because putting a $ in it as prompt breaks down TeXclipse highlight syntax!
     {\lstset{style=MyBash, #1}}
     {}
+
+% Add some space before and after inline listings
+\makeatletter
+\lst@AddToHook{TextStyle}{\kern0.1em}
+\lst@AddToHook{DeInit}{\kern0.1em}
+\makeatother
 
 \def\bash{\lstinline[style=MyBash, basicstyle=\ttfamily\color{black}]}
 

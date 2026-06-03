@@ -5,7 +5,7 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Colours and formatting in the terminal}{\URL[PB]{https://misc.flogisoft.com/bash/tip\_colors\_and\_formatting}{A good reference}}
-    \vspace{-4mm}
+    \vspace{-1mm}
     \begin{itemize}
         \item Most terminals are able to display colours and formatted texts using \PP{escape sequences}
         \item Your script can benefit from using colours (e.g.\ \PQ{errors}, \alert{warnings}, \PS{info})
@@ -25,12 +25,13 @@
                   \item[$\circ$] \texttt{\textbackslash{}x1B}
               \end{itemize}
         \item The \texttt{\tc{red}{FormatCode}} is an integer and different ones can be combined using semi-colons
+        \item \alert{Prefer \bash|printf| over \bash|echo|!} \Remark{Read \URL[PB]{https://unix.stackexchange.com/a/65819/370049}{this gorgeous answer} to know more!}
     \end{itemize}
     \FrameRemark{The colors can vary depending of the terminal configuration!}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Colours and format codes}
-    \vspace{-4mm}
+    \vspace{-3mm}
     \begin{onlyenv}<1>
         \begin{description}
             \setlength{\itemsep}{1pt}
@@ -108,7 +109,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Defining variables for colour codes}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{lstlisting}[style=MyBash, numbers=none]
         # Reset
         Default='\033[0m'
@@ -135,7 +136,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Cursor movements}
-    \vspace{-1mm}
     \begin{onlyenv}<1>
         In the same spirit of colours, the terminal cursor position can be moved:
         \smallskip

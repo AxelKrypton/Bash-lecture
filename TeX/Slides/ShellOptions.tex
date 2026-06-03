@@ -5,7 +5,6 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Modifying the shell behaviour}
-    \vspace{-2mm}
     \begin{itemize}
         \item There are some shell features that can be activated, if needed
         \item There are two builtins that are responsible for that:
@@ -45,7 +44,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \bash|set| builtin}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 4.3.1}}
-    \vspace{-4mm}
+    \vspace{-2mm}
     \begin{itemize}
         \item Without arguments, \,\bash|set|\, displays the names and values of all shell variables/functions.
         \item When options are supplied, they set or unset shell attributes.
@@ -58,20 +57,17 @@
     \end{itemize}
     \begin{uncoverenv}<2>
         \begin{lstlisting}[style=myBash, aboveskip=2mm]
-            $ echo $-; set -u; echo $-; set +u; echo $-
-            |+himBHs+|
-            |+himuBHs+|
-            |+himBHs+|
-            $ echo $|+#+|; set -- -s --long; echo $|+#+|; echo "$@"
+            $ echo -n "$-"; set -u; echo -n "  $-"; set +u; echo "  $-"
+            |+himBHs  himuBHs  himBHs+|
+            $ echo $|+#+|; set -- -s --long; echo $|+#+| "<-> $@"
             |+0+|
-            |+2+|
-            |+-s --long+|
+            |+2 <-> -s --long+|
         \end{lstlisting}
     \end{uncoverenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Some among the many available options (I)}
-    \vspace{-8mm}
+    \vspace{-6mm}
     \begin{columns}
         \begin{column}{\dimexpr\paperwidth-10mm}
             \begin{onlyenv}<1>
@@ -124,7 +120,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \bash|shopt| builtin}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 4.3.2}}
-    \vspace{-2mm}
+    \vspace{-1mm}
     \begin{lstlisting}[style=myBash, numbers=none]
         |+shopt [-pqsu] [-o] [optname ...]+|
     \end{lstlisting}
@@ -154,7 +150,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Some among the many available options (II)}{Here focusing on those about globbing}
     \begin{onlyenv}<1>
-        \vspace{-6mm}
+        \vspace{-4mm}
         \begin{columns}
             \begin{column}{\dimexpr\paperwidth-10mm}
                 \begin{onlyenv}<1>
