@@ -1,4 +1,4 @@
-#!/usr/bin/env BASH
+#!/usr/bin/env bash
 
 printf '\nInsert words (s|show to show count, r|reset to reset count, q|quit to exit):\n'
 
