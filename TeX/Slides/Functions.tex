@@ -5,7 +5,7 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Functions, finally! Overview}
-    \vspace{-4mm}
+    \vspace{-2mm}
     \begin{itemize}
         \item Functions are the last basic Bash feature we'll learn
               \begin{itemize}
@@ -33,7 +33,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Basic syntax}
-    \vspace{-2mm}
     \begin{lstlisting}[style=MyBash, numbers=none]
         # POSIX compliant syntax
         NAME () |+COMPOUND-COMMAND [ REDIRECTIONS ]+|
@@ -60,7 +59,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Functions: The most basic example}
-    \vspace{-5mm}
+    \vspace{-3mm}
     \begin{varblock}{example}[0.95\textwidth]{Just accomplish a \textbf{detached} task}
         Whenever a block of code can be executed as standalone, without needing either input information nor variables, it is straightforward to include it in a dedicated function
     \end{varblock}
@@ -86,7 +85,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Variables in functions and their scopes}
-    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item<only@-5> Variable in Bash are by definition \alert{\textbf{global}}
@@ -303,18 +301,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{How do I return something from a function?}
-    \vspace{-15.2mm}
-    \begin{overlayarea}{\textwidth}{0.7\textheight}
-        \begin{columns}[c]
-            \begin{column}{0.55\textwidth}
-            \end{column}
-            \begin{column}{0.35\textwidth}
-                \begin{varblock}{alert}[\textwidth]{}<2->
-                    \Large It's simple: \alert{You don't!}
-                \end{varblock}
-            \end{column}
-        \end{columns}
-        \smallskip
+    \begin{overlayarea}{\textwidth}{0.85\textheight}
         \setbeamertemplate{itemize/enumerate subbody begin}{\scriptsize}
         \begin{enumerate}
             \item<only@3-> Capturing standard output
@@ -394,11 +381,15 @@
             Use the approach you prefer depending on the situation!
         \end{varblock}
     \end{overlayarea}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=north east, draw=ALERT, rounded corners, font=\Large]
+        at ($(current page.north east)-(5mm,2mm)$) {It's simple: \alert{You don't!}};
+    \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Splitting large scripts across multiple files}{A Bash script should not be \textbf{too} large, though}
-    \vspace{-3mm}
     \begin{onlyenv}<1>
+        \vspace{-3mm}
         \begin{varblock}{example}[0.9\textwidth]{Declaring a function does not mean to run it}
             You can collect functions in a separate file, which is meant to be sourced at need!
         \end{varblock}
@@ -450,7 +441,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Functions: Miscellaneous}
-    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{onlyenv}<1>
             \begin{itemize}
@@ -508,6 +498,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A last big warning: The \bash|eval| builtin}
+    \vspace{1mm}
     \begin{overlayarea}{\textwidth}{0.6\textheight}
         \begin{onlyenv}<1>
             \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=2mm, xrightmargin=2mm]

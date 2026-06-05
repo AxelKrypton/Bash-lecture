@@ -28,7 +28,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Subshells}
-    \vspace{-5mm}
+    \vspace{-3mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{varblock}{}[0.8\textwidth]{Definition}
             A subshell is \textbf{a child process} but it is one \textbf{that inherits more than a normal external command} does.
@@ -59,7 +59,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Subshells: Examples}
-    \begin{lstlisting}[style=MyBash, aboveskip=0mm]
+    \begin{lstlisting}[style=MyBash]
         # Changes in a subshell do not propagate back
         $ aVar="Hello"; pwd
         /home/sciarra/Documents
@@ -86,7 +86,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Command grouping}{We already said something about it, let us go through once again}
-    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.5\textheight}
         \begin{onlyenv}<1-4>
             \begin{itemize}
@@ -136,7 +135,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Arithmetic evaluation: The \bash|let| builtin}
-    \vspace{-4mm}
+    \vspace{-3mm}
     \begin{itemize}
         \item Sometimes we want to do arithmetic instead of string operations
         \item One way to do so is to use the \bash|let| builtin
@@ -164,7 +163,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Arithmetic evaluation: The command grouping \PB{\texttt{((\ldots))}}}
-    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item<only@1> \PB{\texttt{(( expression ))}} $\;$is  equivalent to$\;$ \bash|let "expression"|

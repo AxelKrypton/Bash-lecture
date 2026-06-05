@@ -143,7 +143,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Input/Output Redirection: The theory}
-    \vspace{-1mm}
     \begin{itemize}
         \item I/O redirection is done \alert{\textbf{before}} the command is executed
         \item Redirections are processed in the order they appear, \textbf{from left to right}
@@ -615,7 +614,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A kind of black hole in the operating system}
     \begin{tikzpicture}[overlay, remember picture]
-        \node[anchor=north east] (fig) at ($(current page.north east)-(3mm,3mm)$) {\includegraphics[width=3cm]{BlackHole}};
+        \node[anchor=north east] (fig) at ($(current page.north east)-(2.6mm,3.2mm)$) {\includegraphics[width=33mm]{BlackHole}};
         \node[text=bg, font=\ttfamily] at ($(fig.center)!0.7!(fig.south)$) {/dev/null};
     \end{tikzpicture}
     \vspace{-9mm}
@@ -636,8 +635,11 @@
         $ echo 'Now you do not see me!' >> /dev/null
         $ rm 'Who cares that this does not exists' 2>  /dev/null
         $ rm 'Who cares that this does not exists' 2>> /dev/null
+        $ aVar=0; while read _; do (( aVar++ )); done < /dev/null
+        $ echo "aVar = ${aVar}"
+        |+aVar = 0+|
     \end{lstlisting}
-    \bigskip
+    \medskip
     \begin{itemize}
         \item The file \texttt{/dev/null} is always empty, no matter what you write to it or read from it
         \item As such, when we write our (error) messages to it, they just disappear
@@ -648,7 +650,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Here Documents (I)}
-    \vspace{-1mm}
     \begin{lstlisting}[style=MyBash, numbers=none]
         a_command |+[n]<<[-]WORD+|
             # here document
@@ -669,7 +670,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Here Documents (II)}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{enumerate}
         \item Standard form
               \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-5mm]
@@ -696,7 +697,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Here Documents (III): Examples}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{lstlisting}[style=MyBash]
         # Standard form
         $ if [[ $(date +'%A') |+!=+| S* ]]; then
@@ -728,7 +729,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Here Strings}
-    \vspace{-1mm}
     \begin{lstlisting}[style=MyBash, numbers=none]
         a_command |+[n]<<< STRING+|
     \end{lstlisting}
@@ -897,7 +897,7 @@
         a_command >(list)   # No space between > and (
     \end{lstlisting}
     \vspace{3mm}
-    \begin{onlyenv}<1>
+    \begin{onlyenv}<1-2>
         \begin{enumerate}\small
             \item The process \texttt{list} is run asynchronously, and its input or output appears as a filename
             \item This filename is passed as an argument to the current command as the result of the expansion\\[0.3em]
@@ -909,13 +909,28 @@
                           \hspace{-1cm}the file passed as an argument should be read to obtain the output of \PB{\texttt{command\_list}}
                   \end{description}
         \end{enumerate}
-        \begin{varblock}{}[0.82\textwidth]{The power of process substitution}
+        \begin{varblock}{}[0.82\textwidth]{The power of process substitution}<only@1>
             Piping the stdout of a command into the stdin of another is a powerful technique.
             But, what if you need to pipe the stdout of multiple commands?\\
             \textbf{This is where process substitution comes in!}
         \end{varblock}
+        \begin{onlyenv}<2>
+            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
+                $ ./program > >@|\tikzmark{STDOUT}|@(tee stdout.log) 2> >@|\tikzmark{STDERR}|@(tee stderr.log >&2)
+            \end{lstlisting}
+            \begin{tikzpicture}[remember picture, overlay,
+                                every node/.style={text width=0.25\textwidth, pos=1, below, draw,
+                                                   align=center, rounded corners}]
+                \path[from, visible on=<2>] ($(STDOUT)-(0,1.5mm)$) edge[out=270, in=90]
+                    node[PS]
+                        {Standard output printed on screen and saved to \textbf{stdout.log}} ++(0mm,-8mm);
+                \path[from, visible on=<2>] ($(STDERR)-(0,1.5mm)$) edge[out=270, in=90]
+                    node[ALERT]
+                        {Standard error printed on screen and saved to \textbf{stderr.log}} ++(0mm,-8mm);
+            \end{tikzpicture}
+        \end{onlyenv}
     \end{onlyenv}
-    \begin{onlyenv}<2>
+    \begin{onlyenv}<3>
         \begin{lstlisting}[style=MyBash, aboveskip=0mm, xleftmargin=2mm, xrightmargin=0mm]
             $ cat <(date)   # Equivalent to a pipeline
             |+Wed 24 Jul 16:37:23 CEST 2019+|
@@ -938,6 +953,6 @@
         \end{lstlisting}
     \end{onlyenv}
     \PrepareURLsymbol[PB]
-    \FrameRemark<2>{$^\star$This is an incomplete statement, if taken as general rule: It is not \URL*{https://unix.stackexchange.com/questions/403783/the-process-substitution-output-is-out-of-the-order}{the full story}.}
+    \FrameRemark<3>{$^\star$This is an incomplete statement, if taken as general rule: It is not \URL*{https://unix.stackexchange.com/questions/403783/the-process-substitution-output-is-out-of-the-order}{the full story}.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

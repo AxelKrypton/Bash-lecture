@@ -61,3 +61,52 @@
     \end{enumerate}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}<0>[label=Redirection,fragile]{It's time to make it more real}{Dealing with real tests}
+    \vspace{-2mm}
+    \begin{enumerate}
+        \item So far tests file have been empty:\\
+              \then Fill them randomly reporting success or failure.
+        \item Before exiting the test, print a message either to standard output or error.
+        \item Refactor your previous code (or the sample solution):
+              \begin{itemize}
+                  \item Really run the tests instead of throwing the dice;
+                  \item All tests output should be appended to a \PB{tests.log} file;
+                  \item Add a separator and the \bash|date| to the log file.
+              \end{itemize}
+        \item Add a \bash|-v| option to your script to display tests output also in the terminal\\
+              \then Can you save the tests output in a variable?\\
+              \then Is it better to use an external tool like \bash|tee|? \Remark{You'll need \bash|PIPESTATUS| or \bash|set -o pipefail| then}\\
+              \then Or is it better reuse the logfile content? \Remark{Maybe handier having one log file per run?}
+    \end{enumerate}
+    \begin{varblock}{example}[0.7\textwidth]{}
+        In shell scripting there is rarely a unique approach.
+        Think about pros and cons of every idea you get.
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}<0>[label=Functions,fragile]{Refactor $\,\to\,$ Extract till drop \& IOSP}{Each function should be either an operation integration or an integration}
+    \vspace{-2mm}
+    \alert{It's time to refactor your previous code (or the last sample solution)!}
+    \begin{enumerate}
+        \item Add a function to discover the available tests of the chosen type.
+        \item Add a function to parse command line options.\\
+              \then On the way, drop the interaction with the user and add a first positional CL parameter
+        \item Add a function to run a single test and one to run a all tests.
+        \item Add a function to make the final report.
+        \item Add a \bash|Main| function and call it.
+    \end{enumerate}
+    \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
+        function Main()
+        {
+            Define_Global_Variables
+            Print_Helper_And_Exit_If_Requested "$@"
+            Parse_Command_Line_Parameters "$@"
+            Define_Available_Tests "${1-}"
+            Run_Tests
+            Print_Tests_Report
+            Exit_With_Tests_Outcome_Dependent_Exit_Code
+        }
+    \end{lstlisting}
+    \FrameRemark{Ideally, your main script should have only the call to \bash|Main| as line of code outside any function.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
