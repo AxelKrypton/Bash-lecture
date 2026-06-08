@@ -13,6 +13,8 @@
                   {unit,integration,system}_tests_"$(shuf -n1 /usr/share/dict/words)"_{1..3}.bash
               \end{lstlisting}
               to create some tests files on it.
+        % Leave an empty line to make the syntax highlight work again!
+
         \item Let the user choose a type among \bash|unit|, \bash|integration| and \bash|system|.
         \item For each file of the selected type
               \begin{itemize}
@@ -107,6 +109,109 @@
             Exit_With_Tests_Outcome_Dependent_Exit_Code
         }
     \end{lstlisting}
+
     \FrameRemark{Ideally, your main script should have only the call to \bash|Main| as line of code outside any function.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}<0>[label=Async,fragile]{Concurrency execution of tests}
+    \vspace{-1mm}
+    \alert{As always, start from your previous code (or the last sample solution):}
+    \begin{enumerate}
+        \item Modify your tests to \bash|sleep| a given amount of seconds.
+        \item Add a \texttt{-j} command line option with an integer as argument
+              \Remark{how many tests your runner will concurrently run}
+        \item Implement the logic to concurrently run tests in \bash|Run_Tests|.
+        \item Test your main script with different values of the \texttt{-j} option.
+        \item Duplicate your fake tests to have at least \bash|$(( $(nproc)*2 ))|.
+        \item Use \bash|time| to see what happens varying \texttt{-j} value.
+        \item \textbf{Optional:} Change \bash|sleep| to the following:
+              \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm, emph={[2]{i, x, iterations}}, alsoletter={0123456789![]/\{\}.:}]
+                  function Burn_Cpu()
+                  {
+                      local iterations=${1:-500000} x=0
+                      for ((i=0; i<iterations; i++)); do
+                          (( x += i ))
+                      done
+                  }
+              \end{lstlisting}
+              What do you observe?
+    \end{enumerate}
+
+    \FrameRemark{There is a dedicated exercise in the exercise sheet 4 to deeply understand the optional task.}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}<0>[label=Errors,fragile]{Error handling and final polish}
+    \vspace{-2mm}
+    \begin{varblock}{alert}[\textwidth]{Stop to think}<only@1>
+        It should be by now clear that we want to inspect exit codes in our test framework to determine success or failure.
+        Therefore \bash|set -e| is not an option in test code.
+        However, what about the codebase under test?
+        In test code you will usually use functionality from your codebase (typically calling functions).
+        A trivial statement is that you want to execute such a code as it is usually executed in your codebase.
+        So you might want to run code enabling exit on error from a script that does not want it.
+        \textbf{In this exercise we want to test code using:}\\
+        \bash|set -e; shopt -s inherit_errexit|
+    \end{varblock}
+    \begin{varblock*}{example}[0.88\textwidth]{As warm-up exercise}<only@1>
+        As always, start from your previous code (or the last sample solution):
+        \begin{enumerate}
+            \item Enable \bash|set -u| in your script and check if it still runs\\
+                  \then Investigate and fix possible failures
+        \end{enumerate}
+    \end{varblock*}
+    \begin{onlyenv}<2>
+        \begin{enumerate}
+            \setcounter{enumi}{1}
+            \item Pretend to have in your codebase a function \bash|Is_Odd| that you want to test as unit
+                  \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm, style=smaller, xleftmargin=2mm, xrightmargin=10mm]
+                      function Is_Odd() {
+                          if [[ ! $1 =~ ^[1-9][0-9]?$ ]]; then
+                            exit 42
+                          elif (( $1 % 2 == 0 )); then return 1; else return 0; fi
+                      }
+                  \end{lstlisting}
+
+            \item Write a test file that sources that unit of your codebase and tests it.
+                  \begin{itemize}
+                      \item How do you call the function?
+                      \item How do you avoid such a function exit your test?
+                      \item How do you guarantee to run with the codebase Bash behaviour?
+                      \item Can you use any of the following?
+                            \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm, style=smaller, xleftmargin=2mm, xrightmargin=30mm]
+                                Is_Odd 666 && exit 1
+                                if ! Is_Odd 17; then
+                                    exit 1
+                                fi
+                            \end{lstlisting}
+                  \end{itemize}
+            \item Encapsulate the codebase function call in a dedicated function.
+        \end{enumerate}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \begin{varblock}{example}[\textwidth]{Optional and advanced:}
+            Change your framework to treat functions with a given name in test files as tests.
+            Running a test does not mean any more running a script file, but rather executing a function.
+            Tests files are then made by functions only and can be sourced by your runner.
+            You have to decide on function prefixes and stick to them.
+            For example, use \bash|Unit_Test__| for unit tests and similar ones for the other types.
+        \end{varblock}
+        \begin{enumerate}
+            \setcounter{enumi}{3}
+            \item Implement a \bash|Define_Available_Tests| in order to\\
+                  \begin{itemize}
+                      \item locate the tests files;
+                      \item source them;
+                      \item parse them to extract function names.
+                  \end{itemize}
+        \textbf{Hint:} You need to be generic in extracting the function name:
+        \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm,
+                           style=smaller, emph={[2]{grep_regex}}, xleftmargin=2mm, xrightmargin=5mm]
+            # This assumes that the opening brace { of the function is on a new line
+            local -r \
+              grep_regex='^function[[:space:]]+'"${prefix}"'[-[:alnum:]_.:]+\(\)[[:space:]]*$'
+        \end{lstlisting}
+        \end{enumerate}
+    \end{onlyenv}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+
