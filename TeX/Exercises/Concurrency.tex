@@ -1,0 +1,78 @@
+%-------------------------------%
+%  Author: Alessandro Sciarra   %
+%    Date: 08 Jun 2026          %
+%-------------------------------%
+
+\begin{exercise}[Inspirational]{Concurrency vs parallelism: The CPU illusion}
+    In this exercise you will explore how Bash background execution interacts with the operating system scheduler and why ``starting many processes'' is not the same as ``running faster''.
+
+    You are given the following function:
+    \begin{lstlisting}[style=MyBash, numbers=none, emph={[2]{i, x, iterations}}]
+        function Burn_Cpu()
+        {
+            local iterations=${1:-500000} x=0
+            for ((i=0; i<iterations; i++)); do
+                (( x += i ))
+            done
+        }
+    \end{lstlisting}
+    This function performs CPU work only (no I/O, no sleep).
+
+    \begin{enumerate}
+        \item Run the function once and measure its execution time using \bash|time Burn_Cpu|.
+              Adjust the number of the function argument to make it run for a few seconds.
+              Repeat the measurement a few times.
+              Is the result stable?
+        \item Determine the number of available CPU cores using \bash|nproc| (or equivalent on your OS).
+        \item Define the following utility function:
+              \begin{lstlisting}[style=MyBash, numbers=none, emph={[2]{i, n_concurrent}}]
+                  function Time_Concurrent_Burn()
+                  {
+                      local n_concurrent=${1:-1}
+                      echo "Timing ${n_concurrent} concurrent process(es):"
+                      time {
+                          for ((i=0; i < n_concurrent; i++)); do
+                              Burn_Cpu &
+                          done
+                          wait
+                      }
+                  }
+              \end{lstlisting}
+              Run it with 2 processes and interpret the result.
+        \item Run \bash|Time_Concurrent_Burn $(nproc)|.
+              Compare the result with the single-process execution.
+
+        \item Repeat the previous run, but now use twice the number of CPU cores:
+              \begin{lstlisting}[style=MyBash]
+                  Time_Concurrent_Burn $(( $(nproc)*2 ))
+              \end{lstlisting}
+              Observe what happens to \texttt{real}, \texttt{user}, and \texttt{sys} time.
+
+        \item \textbf{Optional:}
+              Write a \bash|Scan_Times| function to create a summary table of times.
+              Remember that the Bash \bash|time| keyword prints its output to standard error.
+              \begin{lstlisting}[style=MyBash]
+                 |+ N           real           user            sys
+                  1
+                  2
+                  3
+                  4
+                  5
+                  6
+                  7
+                  8
+                  9
+                 10
+                 12
+                 16+|
+              \end{lstlisting}
+        \item Answer the following questions:
+              \begin{itemize}[nosep]
+                  \item Why can the total \texttt{user} time be larger than \texttt{real} time?
+                  \item Why does adding more background processes not always reduce execution time?
+                  \item Does \bash|&| guarantee parallel execution?
+                        If not, what does it guarantee?
+                  \item What role does the operating system scheduler play in these experiments?
+              \end{itemize}
+    \end{enumerate}
+\end{exercise}
