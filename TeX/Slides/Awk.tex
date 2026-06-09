@@ -40,7 +40,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The PDF manual is 611 pages long!! What should I learn here?}
-    \vspace{-4mm}
+    \vspace{-2mm}
     \begin{itemize}
         \item We will focus on the abstract idea of \textbf{how} \bash|awk| processes a file
         \item Some of the simplest aspects will be introduced
@@ -69,7 +69,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{The \bash|awk| spirit: A data driven processing}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{enumerate}
         \item Before starting processing the input file(s), the \texttt{BEGIN} block, if present, is processed.
               There is no default action for this block.
@@ -91,7 +91,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{8 powerful \bash|awk| builtin variables}
-    \vspace{-4mm}
+    \vspace{-3mm}
     \begin{varblock}{}[0.7\textwidth]{You can change this to a string or regular expression}
         \begin{description}[XXXXXX]
             \item[\textbf{FS}] \textbf{F}ield \textbf{S}eparator. \alert{White-space} by default.
@@ -117,7 +117,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The field placeholders}
-    \vspace{-4mm}
+    \vspace{-3mm}
     \begin{varblock}{example}[0.8\textwidth]{Field placeholders, automatically set}
         \begin{description}[XXXXXX]
             \item[\$n] The fields can be accessed via \$1, \ldots,\$9, \$10, \ldots
@@ -145,7 +145,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Variables in \bash|awk| and passing Bash variables to \bash|awk|}
-    \vspace{-3mm}
+    \vspace{-2mm}
     \begin{itemize}
         \item Strings that do not refer to keyword or to builtin variables/functions in \bash|awk| programs are treated as variables.
         \item \alert{Variables are either strings or numbers depending on what is assigned to them!}
@@ -170,7 +170,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A (very limited) taste of \bash|awk| by examples}
-    \vspace{-1mm}
     \begin{onlyenv}<1>
         \begin{lstlisting}[style=MyBash, numbers=none, xleftmargin=3mm, xrightmargin=3mm]
             $ printf '%d\n' {1..100} |\
@@ -213,8 +212,9 @@
                     printf "\n";
                  }' data
         \end{lstlisting}
-        \begin{varblock}{alert}[0.7\textwidth]{}
-            \Large \alert{As you can imagine, \bash|awk| has plenty of features!}
+        \begin{varblock}{alert}[0.8\textwidth]{}
+            \Large \alert{As you can imagine, \bash|awk| has plenty of features!}\\
+            You can even write full \texttt{.awk} scripts.
         \end{varblock}
     \end{onlyenv}
     \begin{onlyenv}<3>
@@ -244,7 +244,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{How do I modify files in place with awk?}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{onlyenv}<1>
         \begin{itemize}
             \item This feature has been missed by awk's users for a long time!
@@ -306,6 +306,5 @@
     \begin{center}
         \includegraphics[width=0.6\textwidth]{LearnByDoing}
     \end{center}
-
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

@@ -106,29 +106,23 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A wide-audience support script: \URL[PB]{https://github.com/AxelKrypton/BashLogger}{A Bash Logger}}
-    \vspace{-2mm}
     \begin{overlayarea}{\textwidth}{0.8\textheight}
-        \begin{itemize}[<only@1-2>]
-            \setlength{\itemsep}{4pt}
+        \only<1>{\vspace{1mm}}
+        \begin{itemize}[<only@1>]
+            \setlength{\itemsep}{2mm}
             \item Extremely simple to use and/or to include in your project
             \item It allows to unify the style of all your output messages
             \item Errors are redirected to the standard error as it should be
             \item Messages are classified in levels which can be easily switched on or off at run-time
-            \item Messages are printed to a given file descriptor (customizable at source time)\\
+            \item \PS{Messages are printed to a given file descriptor (customizable at source time)}\\
                   \Then{Logger still usable in functions whose ``return value'' is printed to standard output and meant to be captured by command substitution}
-            \item Fatal errors exit with a given exit code (customizable at source time)\\
+            \item \PS{Fatal errors exit with a given exit code (customizable at source time)}\\
                   \Then{Customization also possible on single usage, e.g.\\
                   \colorbox{background-color}{\scriptsize\bash|exit_code=42 Print_Fatal_And_Exit 'Houston, we have a problem!'|}}
+            \item Each printing function has a small interface to e.g.\ omit the label or the \bash|\n| at the end
             \item \alert{Super cool automatic highlighting mechanism}
         \end{itemize}
         \begin{onlyenv}<2>
-            \begin{lstlisting}[style=myBash, aboveskip=3mm, numbers=none]
-                $ git clone https://github.com/AxelKrypton/BashLogger
-                # ...
-                $ emacs -nw TestLogger.bash
-            \end{lstlisting}
-        \end{onlyenv}
-        \begin{onlyenv}<3>
             \begin{lstlisting}[style=myBash, aboveskip=0mm, numbers=none, style=smaller, xleftmargin=-1mm, xrightmargin=-1mm]
                 #!/usr/bin/env bash
                 #
@@ -157,12 +151,12 @@
                 #             and  shopt -s extglob inherit_errexit
             \end{lstlisting}
         \end{onlyenv}
-        \begin{onlyenv}<4-6>
-            \vspace{-4mm}
+        \begin{onlyenv}<3-5>
+            \vspace{-5mm}
             \begin{center}
                 \includegraphics[width=0.88\textwidth]{BashLogger_output}\\[-1pt]
-                \uncover<5->{\includegraphics[width=0.88\textwidth]{BashLogger_output_minimal}}\\[-1pt]
-                \uncover<6>{\includegraphics[width=0.88\textwidth]{BashLogger_output_errors}}
+                \uncover<4->{\includegraphics[width=0.88\textwidth]{BashLogger_output_minimal}}\\[-1pt]
+                \uncover<5>{\includegraphics[width=0.88\textwidth]{BashLogger_output_errors}}
             \end{center}
         \end{onlyenv}
     \end{overlayarea}
@@ -170,12 +164,14 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Another remarkable handler: \URL[PB]{https://smash-transport.github.io/smash-vhlle-hybrid/develop/}{SMASH-vHLLE-Hybrid}}
+    \vspace{-3mm}
     \begin{center}
-        \includegraphics[width=\textwidth]{SMASH-vHLLE-Hybrid}
+        \includegraphics[height=0.6\textheight, clip, trim=0 0 0 5mm]{SMASH-vHLLE-Hybrid}
     \end{center}
+    \vspace{-2mm}
     \begin{itemize}
         \item Another example of large Bash project, $\mathcal{O}$(10$^\text{4}$) lines of code
-        \item Own test framework with unit and functional tests
+        \item Own test framework \PS{with unit, integration and functional tests}
         \item Appealing documentation of the project
     \end{itemize}
 \end{frame}
