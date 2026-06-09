@@ -11,7 +11,7 @@
 \makeatother
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Sed: A marvellous utility}
-    \vspace{-3mm}
+    \vspace{-2mm}
     \begin{varblock}{quote}[\textwidth]{The awful truth about \bash|sed|}
         \textnormal{Sed is extremely powerful.
         Unfortunately, most people never learn its real power.
@@ -31,7 +31,7 @@
         \begin{minipage}{0.75\textwidth}
             \URL[PB]{https://www.gnu.org/software/sed/manual}{The official GNU manual} \Remark{The PDF of \PB{v4.8} is 85 pages long\ldots}\\
             \URL[PS]{http://www.grymoire.com/Unix/Sed.html}{A very nice tutorial} \Remark{Bash code there often uses deprecated features, but you should know it by now!}\\
-            \URL[PT]{http://sed.sourceforge.net/sed1line.txt}{One-liners, with some comments}\\
+            \URL[PT]{https://www.pement.org/sed/sed1line.txt}{One-liners, with some comments}\\
             \URL[PQ]{https://catonmat.net/sed-one-liners-explained-part-one}{More one-liners, explained but advanced!}
         \end{minipage}
     \end{lrbox}
@@ -41,7 +41,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The PDF manual is 85 pages long. What should I learn here?}
-    \vspace{-4mm}
+    \vspace{-3mm}
     \begin{itemize}
         \item We will focus on the abstract idea of \textbf{how} \bash|sed| processes a file
         \item Some of the simplest commands (acting on a single line) will be introduced
@@ -87,7 +87,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{A \bash|sed| cycle: Being line oriented}
-    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.26\textheight}
         \begin{enumerate}
             \setcounter{enumi}{-1}
@@ -154,7 +153,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The main commands: Substitute}
-    \vspace{-2mm}
+    \vspace{-1mm}
     \begin{onlyenv}<1>
         \begin{varblock}{quote}[0.9\textwidth]{\texttt{s/regexp/replacement/[flags]}}
             \textnormal{The \texttt{'s'} command attempts to match the pattern space against the supplied regular expression \texttt{regexp};
@@ -229,7 +228,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The main commands: Print}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{itemize}
         \item Print out the pattern space
         \item Note that \PP{the printing induced by the \texttt{p} command is unrelated to the printing done by \bash|sed| at the end of the cycle}
@@ -252,7 +251,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The main commands: Delete}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{itemize}
         \item Delete the pattern space and \PP{immediately start next cycle}
         \item It is used to delete lines from the input file(s)
@@ -272,11 +271,13 @@
         $ sed '/^#/ d' filename  # Remove Bash comments
         # ... <- look up option -i of sed to edit the file in place
         $ sed '/^$/ d' filename  # Remove empty lines
+        # Print only lines with less than 65 characters
+        $ sed '/^.\{65\}/d' filename
     \end{lstlisting}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The main commands: quit, line number and groups}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{itemize}
         \item The \texttt{'q'} command exits \bash|sed| without processing any more commands or input.
               This command exits at the end of the cycle, i.e. it prints the current pattern space.

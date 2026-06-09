@@ -5,7 +5,7 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Processes in the terminal}{\URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 7}}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{itemize}
         \item The \bash|ps| command displays information about (a selection of) the active processes
         \item A \alert{\textbf{process}} is \emph{\guillemotleft an instance of a computer program that is being executed\guillemotright} -- Wikipedia
@@ -25,7 +25,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Job control: A graphical overview}
-    \vspace{-4mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{center}
             \begin{tikzpicture}[every node/.append style={transform shape}]
@@ -193,7 +193,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Handling processes in a script\uncover<5->{: PIDs and parents}}
-    \vspace{-2mm}
+    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{onlyenv}<2>
             \vspace{-5mm}
@@ -286,7 +286,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A bit of syntax: The \bash|wait| builtin}
-    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-6mm]
             wait |+[-fn] [-p var] [jobspec or pid ...]+|
@@ -369,7 +368,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A bit of syntax: The \bash|kill| builtin}
-    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-6mm]
             kill |+[-s sigspec] [-n signum] [-sigspec] jobspec or pid+|
@@ -417,6 +415,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A potentially catastrophic hidden danger}
+    \vspace{1mm}
     \begin{overlayarea}{\textwidth}{0.5\textheight}
         \begin{onlyenv}<2-4>
             \begin{lstlisting}[style=MyBash]
@@ -462,7 +461,7 @@
     \end{varblock}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-\begin{frame}[fragile]{I absolutely need to know if the PID is the right one, what should I do?}
+\begin{frame}[fragile]{I absolutely need to know if the PID is the right one}{What should I do?}
     \vspace{-3mm}
     \large
     \begin{varblock}{example}[\textwidth]{\textbf{Do not use Bash!}}<2->
@@ -492,7 +491,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A work-around for exit codes}
-    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{\textheight}
         \begin{itemize}
             \item If you have several (maybe long) processes in background during the execution of a script and you are interested in their exit code, you can write them to a file
@@ -540,7 +538,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Process Management: Conclusions}
-    \vspace{-2mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}[<only@1-2>]
             \setlength{\itemsep}{0mm}

@@ -106,7 +106,7 @@
         trap 'rm -f "${temporaryFile}"' EXIT
     \end{lstlisting}
     Use a function whenever you need to achieve a more complex task
-    \begin{lstlisting}[style=MyBash, emph={[7]temporaryFile}, aboveskip=2mm, belowskip=-5mm, xleftmargin=2mm, xrightmargin=3mm, firstnumber=5]
+    \begin{lstlisting}[style=MyBash, emph={[7]temporaryFile}, aboveskip=2mm, belowskip=-6mm, xleftmargin=2mm, xrightmargin=3mm, firstnumber=5]
         #!/usr/bin/env bash
 
         function CleanAuxiliaryFiles(){ # If you trap INT (CTRL-C)
@@ -122,7 +122,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{When is the signal exactly handled?}
-    \vspace{-5mm}
+    \vspace{-4mm}
     \begin{varblock}{alert}[0.9\textwidth]{A subtle but important feature}
         When Bash is executing an external command in the foreground, it does not handle any signals received until the foreground process terminates.
     \end{varblock}
@@ -172,7 +172,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{What indeed is CTRL-C doing?}
-    \vspace{-3mm}
+    \vspace{-2mm}
     Let us consider again the previous example
     \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=2mm, belowskip=-4mm]
         #!/usr/bin/env bash
@@ -203,7 +203,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Trapping SIGINT and SIGQUIT: Be careful!}
-    \vspace{-1mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{itemize}
             \item Bash is among a few shells that implement a \textbf{wait and cooperative exit} approach at handling SIGINT/SIGQUIT delivery

@@ -5,7 +5,6 @@
 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Error handling in the shell}
-    \vspace{-2mm}
     \begin{varblock}{quote}[0.85\textwidth]{Naturally an extremely difficult task}[Greg's Wiki]
         The goal of automatic error detection is a noble one, but it requires the ability to tell when an error actually occurred.
         \PS{In modern high-level languages, most tasks are performed by using the language's builtin commands or features.}
@@ -131,7 +130,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Do I have to add \;\PB{\texttt{|| exit 1}}\; everywhere in my scripts?}
-    \vspace{-3mm}
+    \vspace{-2mm}
     \begin{varblock}{example}[0.75\textwidth]{Purist approach (again)}<2->
         Check and handle errors properly testing exit codes \textbf{when needed}.
     \end{varblock}
@@ -153,7 +152,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Enabling the \;\texttt{-e}\; shell option: Let's read the manual}
-    \vspace{-3mm}
+    \vspace{-1mm}
     \begin{itemize}[<1>]
         \item Exit immediately if a pipeline, which may consist of a single simple command, a list, or a compound command returns a non-zero status.
         \item The shell does not exit if the command that fails
@@ -311,7 +310,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Trap on ERR and the \PB{\texttt{errtrace}} shell option}
-    \vspace{-1mm}
     \begin{onlyenv}<1>
         \begin{varblock}{alert}[0.85\textwidth]{The ERR signal specification}
             The trap on \texttt{ERR} is executed exactly when Bash would exit with the \texttt{errexit} option enabled.
@@ -380,7 +378,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Is the glass half full or half empty?}
-    \vspace{-1mm}
+    \vspace{-2mm}
     \begin{varblock}{quote}[0.8\textwidth]{A reasonable person might say:}
         I don't want to rely on an unreliable feature.
         I understood the behaviour of the shell when an error occurs and I can do error handling myself.
