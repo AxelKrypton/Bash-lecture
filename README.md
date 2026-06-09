@@ -82,30 +82,32 @@ Here you can find the list of the topics discussed in the various days, so that 
 
 ### Material of the lecture
 
-- [ ] Lecture slides
+- [X] Lecture slides
   - [X] Overview
   - [X] Day 1
   - [X] Day 2
   - [X] Day 3
-  - [ ] Day 4
-  - [ ] Day 5
+  - [X] Day 4
+  - [X] Day 5
 
-- [ ] Exercises
+- [X] Exercises
   - [X] Day 1
   - [X] Day 2
   - [X] Day 3
-  - [ ] Day 4
-  - [ ] Day 5
+  - [X] Day 4
+  - [X] Day 5
 
 - [ ] Sample solutions
   - [X] Day 1
   - [X] Day 2
   - [X] Day 3
-  - [ ] Day 4
-  - [ ] Day 5
+  - [X] Day 4
+  - [X] Day 5
 
 - [ ] Practice sessions solutions
-  - [ ] Day 2
-  - [ ] Day 3
-  - [ ] Day 4
-  - [ ] Day 5
+  - [ ] Day 2 (I)
+  - [ ] Day 2 (II)
+  - [ ] Day 3 (I)
+  - [ ] Day 3 (II)
+  - [ ] Day 4 (I)
+  - [ ] Day 4 (II)
