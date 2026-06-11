@@ -23,13 +23,13 @@
               \end{itemize}
         \item Print a report which might look like the following.
               \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm, style=smaller, xleftmargin=2mm, xrightmargin=10mm]
-                  $ ./Practice-1.bash
+                  $ ./Session-1.bash
 
                   # Interaction with the user to pick the file type
 
-                  |+1/3   nonaristocratic ....................  passed
-                  2/3   retrojugular .......................  failed
-                  3/3   tendence ...........................  passed+|
+                  |+1/3   nonaristocratic_1 ....................  passed
+                  2/3   retrojugular_2 .......................  failed
+                  3/3   tendence_3 ...........................  passed+|
               \end{lstlisting}
     \end{enumerate}
     \FrameRemark{\alert{You will expand this script later in the course. Be kind to your future self!}}
@@ -39,9 +39,9 @@
     \vspace{-2mm}
     \begin{enumerate}
         \item Start back from the result of your last practice session or from its sample solution
-        \item Provide your script with a \bash|-t| option to display the list of available tests
-        \item Let the user be able to select which test to run as value of such an option
-        \item Store the tests to be run into an array and record each test outcome
+        \item \textbf{Optional:} Provide your script with a \bash|-t| option to display the list of available tests
+        \item \textbf{Optional:} Let the user be able to select which test to run as value of such an option
+        \item Store the tests to be run into an array, ``run'' them and record each test outcome
         \item Produce the final report after all tests ran and make it more complete:
               \begin{itemize}
                   \item Add colours to the \PS{\texttt{passed}} and \textcolor{red}{\texttt{failed}} strings;
@@ -49,14 +49,15 @@
                   \item Print how many tests passed and how many failed.
               \end{itemize}
               \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm, style=smaller, xleftmargin=2mm, xrightmargin=10mm, moredelim={[is][\color{comment-color}]{|=}{=|}}]
-                  $ ./Practice-1.bash -t 2 3
+                  $ ./Session-2.bash -t 2 3
 
                   # Interaction with the user to pick the file type
 
-                  |+1/2   retrojugular .......................  +||=failed=|
-                  |+2/2   tendence ...........................  +||-passed-|
+                  |+2 - retrojugular .......................  +||=failed=|
+                  |+3 - tendence ...........................  +||-passed-|
 
-                  |+Run 2 test(s):  1 passed  1 failed
+                  |+Run 2 test(s):+| |-1-| |+passed+|  |=1=| |+failed
+
                   The following tests failed:+|
                     |=retrojugular=|
               \end{lstlisting}
@@ -67,7 +68,7 @@
     \vspace{-2mm}
     \begin{enumerate}
         \item So far tests file have been empty:\\
-              \then Fill them randomly reporting success or failure.
+              \then Fill them randomly reporting success or failure$^\star$.
         \item Before exiting the test, print a message either to standard output or error.
         \item Refactor your previous code (or the sample solution):
               \begin{itemize}
@@ -77,13 +78,14 @@
               \end{itemize}
         \item Add a \bash|-v| option to your script to display tests output also in the terminal\\
               \then Can you save the tests output in a variable?\\
-              \then Is it better to use an external tool like \bash|tee|? \Remark{You'll need \bash|PIPESTATUS| or \bash|set -o pipefail| then}\\
+              \then Is it better to use an external tool like \bash|tee -a|? \Remark{You may need \bash|PIPESTATUS| or \bash|set -o pipefail| then}\\
               \then Or is it better reuse the logfile content? \Remark{Maybe handier having one log file per run?}
     \end{enumerate}
     \begin{varblock}{example}[0.7\textwidth]{}
         In shell scripting there is rarely a unique approach.
         Think about pros and cons of every idea you get.
     \end{varblock}
+    \FrameRemark{$^\star$From now on we work with real files in the \texttt{tests} folder. Remove the automatic creation of those from your script and abort if no tests are found.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}<0>[label=Functions,fragile]{Refactor $\,\to\,$ Extract till drop \& IOSP}{Each function should be either an operation integration or an integration}
@@ -93,17 +95,18 @@
         \item Add a function to discover the available tests of the chosen type.
         \item Add a function to parse command line options.\\
               \then On the way, drop the interaction with the user and add a first positional CL parameter
-        \item Add a function to run a single test and one to run a all tests.
-        \item Add a function to make the final report.
+        \item Add a function to run all tests and one to make the final report.
         \item Add a \bash|Main| function and call it.
     \end{enumerate}
     \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm]
         function Main()
         {
+            Enable_Desired_Shell_Behaviour
             Define_Global_Variables
             Print_Helper_And_Exit_If_Requested "$@"
-            Parse_Command_Line_Parameters "$@"
-            Define_Available_Tests "${1-}"
+            Parse_Type_Of_Tests "$1"
+            Define_Available_Tests
+            Parse_Command_Line_Parameters "${@:2}"
             Run_Tests
             Print_Tests_Report
             Exit_With_Tests_Outcome_Dependent_Exit_Code
@@ -120,11 +123,12 @@
         \item Modify your tests to \bash|sleep| a given amount of seconds.
         \item Add a \texttt{-j} command line option with an integer as argument
               \Remark{how many tests your runner will concurrently run}
-        \item Implement the logic to concurrently run tests in \bash|Run_Tests|.
+        \item Implement the logic to concurrently run tests in \bash|Run_Tests|$^\star$.
         \item Test your main script with different values of the \texttt{-j} option.
         \item Duplicate your fake tests to have at least \bash|$(( $(nproc)*2 ))|.
         \item Use \bash|time| to see what happens varying \texttt{-j} value.
         \item \textbf{Optional:} Change \bash|sleep| to the following:
+              \Remark{There is a dedicated exercise in the sheet 4 to deepen into this task.}
               \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm, emph={[2]{i, x, iterations}}, alsoletter={0123456789![]/\{\}.:}]
                   function Burn_Cpu()
                   {
@@ -137,12 +141,12 @@
               What do you observe?
     \end{enumerate}
 
-    \FrameRemark{There is a dedicated exercise in the exercise sheet 4 to deeply understand the optional task.}
+    \FrameRemark{$^\star$You'll need to store a pid-testname map and work with \bash|wait -n -p pid| to have a sound logic. \alert{Ask in case you are stuck for more than few minutes.}}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}<0>[label=Errors,fragile]{Error handling and final polish}
     \vspace{-2mm}
-    \begin{varblock}{alert}[\textwidth]{Stop to think}<only@1>
+    \begin{varblock}{alert}[\textwidth]{Pause to think}<only@1>
         It should be by now clear that we want to inspect exit codes in our test framework to determine success or failure.
         Therefore \bash|set -e| is not an option in test code.
         However, what about the codebase under test?
@@ -165,7 +169,7 @@
             \item Pretend to have in your codebase a function \bash|Is_Odd| that you want to test as unit
                   \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm, style=smaller, xleftmargin=2mm, xrightmargin=10mm]
                       function Is_Odd() {
-                          if [[ ! $1 =~ ^[1-9][0-9]?$ ]]; then
+                          if [[ ! $1 =~ ^(0|[+-]?[1-9][0-9]*)$ ]]; then
                             exit 42
                           elif (( $1 % 2 == 0 )); then return 1; else return 0; fi
                       }
