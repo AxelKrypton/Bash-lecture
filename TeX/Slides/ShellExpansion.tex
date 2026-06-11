@@ -40,18 +40,19 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Brace expansion}
-    \begin{overlayarea}{\textwidth}{0.7\textheight}
+    \vspace{-1mm}
+    \begin{overlayarea}{\textwidth}{0.87\textheight}
         \begin{itemize}
             \item It comes in two forms:
                 \begin{enumerate}
                     \item \bash|[prefix]{comma separated list}[postfix]|
                     \item \bash|[prefix]{X..Y[..increment]}[postfix]|
                 \end{enumerate}
-            \item<only@1> \bash|[prefix]| and \bash|[postfix]| are optional and might contain other brace expansions
+            \item<only@1> \bash|[prefix]| and \bash|[postfix]| are optional and \textbf{might contain other brace expansions}
             \item<only@1> Brace expansions can be nested and, if so, they work from the outside in
             \item<only@1> \bash|X| and \bash|Y| are either characters or numbers
             \item<only@1> \bash|increment| is an optional integer (if omitted, it is +1 or -1 as appropriate)
-            \item<only@1> If \bash|X| and \bash|Y| are numbers, leading 0 are respected to force each term to have the same width
+            \item<only@1> If \bash|X| and \bash|Y| are numbers, leading 0 are respected to make each term have the same width
             \item<only@1> If the brace expansion syntax is not respected, then brace expansion is not performed!
         \end{itemize}
         \begin{varblock}{}[\textwidth]{Result of the expansion}<only@1>
@@ -790,8 +791,8 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Word splitting: conclusion}
-    \vspace{-4  mm}
-        \begin{varblock*}{}[0.9\textwidth]{When does NOT it occur?}
+    \vspace{-2mm}
+        \begin{varblock*}{example}[0.9\textwidth]{When does NOT it occur?}
         Word splitting is not performed
         \begin{itemize}
             \item on expansions inside Bash keywords such as \bash|[[| \texttt{\ldots} \bash|]]| and \bash|case|;
@@ -800,14 +801,13 @@
                       aVar=${bVar}; aVar=$(date)
                       PATH=/usr/local/bin:${PATH}
                   \end{lstlisting}
-                  Quoting anyway will not break anything, so \PP{if in doubt, quote!}
+                  Quoting anyway will not break anything, so \PS{if in doubt, quote!}
         \end{itemize}
     \end{varblock*}
     \begin{varblock}{alerted}[0.98\textwidth]{Remember:}
         \alert{Word Splitting is performed \textbf{after} Parameter Expansion has been performed!} \\
         That means that it is absolutely vital that we quote our Parameter Expansions, in case they may expand values that contain syntactical whitespace which will then be word-split.
     \end{varblock}
-    \FrameRemark{It is almost never desirable to put syntactical whitespace in parameters.}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Other expansions}

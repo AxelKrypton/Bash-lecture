@@ -27,7 +27,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Filename expansion}{Glob patterns}
-    \vspace{-3mm}
     \begin{varblock}{}[0.9\textwidth]{How does it work?}
         If a character among \PB{\texttt{*}}, \PB{\texttt{?}}, \PB{\texttt{[}} appears, then the word is regarded as a pattern, and replaced with an alphabetically sorted list of filenames matching the pattern
     \end{varblock}
@@ -50,7 +49,6 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{The \texttt{[\ldots]} pattern}
-    \vspace{-1mm}
     \begin{itemize}
         \item There are some special rules which might be interesting to know.
         \item A pair of characters separated by a hyphen denotes a range expression\\
@@ -70,7 +68,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Globs examples}
-    \vspace{-2mm}
+    \vspace{-1mm}
     \begin{onlyenv}<1>
         \begin{lstlisting}[style=MyBash, style=oddnumbers, xleftmargin=3mm, xrightmargin=3mm]
             $ ls
@@ -129,7 +127,7 @@
             |+rm: cannot remove 'a b.txt'$'\n''c.txt': No such file or dir+|
         \end{lstlisting}
     \end{onlyenv}
-    \vspace{2mm}
+    \vspace{1mm}
     \begin{varblock}{quote}[0.9\textwidth]{Good practice:}[Greg's Wiki]<only@2-3>
         You should always use globs instead of \textnormal{\bash|ls|} (or similar) to enumerate files.
         Globs will always expand safely and minimise the risk for bugs.
@@ -140,7 +138,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Extended Globs}
-    \vspace{-5mm}
+    \vspace{-4mm}
     \begin{varblock}{}[0.92\textwidth]{This feature is turned off by default (in scripts)}
         You can turn it on with the \bash|shopt| command, which is used to toggle \textbf{sh}ell \textbf{op}tions:
         \begin{lstlisting}[style=MyBash, numbers=none, belowskip=-5mm, aboveskip=2mm]
@@ -157,23 +155,15 @@
         \item[\texttt{!(pattern-list)}] Matches anything except one of the given patterns
     \end{description}
     \medskip
-    \begin{onlyenv}<2>
+    \begin{uncoverenv}<2>
         \begin{lstlisting}[style=MyBash, style=oddnumbers]
             $ ls
             |+names.txt   tokyo.jpg   california.bmp+|
             $ echo |+!(*jpg|*bmp)+|
             |+names.txt+|
         \end{lstlisting}
-    \end{onlyenv}
+    \end{uncoverenv}
     \FrameRemark{This option affects the parser behaviour. This aspect will be covered later in more detail.}
 \end{frame}
-
-
-
-
-
-
-
-
 
 
