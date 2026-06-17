@@ -28,7 +28,7 @@
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}{Subshells}
-    \vspace{-3mm}
+    \vspace{-4mm}
     \begin{overlayarea}{\textwidth}{0.7\textheight}
         \begin{varblock}{}[0.8\textwidth]{Definition}
             A subshell is \textbf{a child process} but it is one \textbf{that inherits more than a normal external command} does.
@@ -47,7 +47,7 @@
             \item There are many instances in which a shell creates a subshell without parentheses being placed by the programmer
                   \begin{itemize}
                       \item \PP{In pipelines} $\;\longleftarrow\;$ \alert{\textbf{Every command in a pipeline is run in its own subshell!}}
-                      \item \PP{In command substitution}
+                      \item \PP{In command substitution \texttt{\$(\ldots)}}
                       \item Executing other programs or scripts
                       \item In any external command that executes new shells (e.g. \bash{awk}, \bash{sed}, \bash{perl})
                       \item In process substitution
@@ -83,6 +83,76 @@
     \end{lstlisting}
     \PrepareURLsymbol[PB]
     \FrameRemark{\URL*{http://mywiki.wooledge.org/BashFAQ/024}{Advanced reading} about pipelines and subshells: Why can't I pipe data to \;\bash|read|?}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}{Command substitution}
+    \vspace{-1mm}
+    \begin{varblock}{example}[0.9\textwidth]{The standard syntax: \texttt{\$(\ldots)}}
+        Bash performs command substitution by executing command in a subshell environment and replacing the command substitution with the standard output of the command, with any trailing newlines deleted.
+    \end{varblock}
+    \begin{varblock}{}[\textwidth]{New in Bash v5.3}
+        \begin{description}[\texttt{\$\{| command; \}}]
+            \item[\texttt{\$\{ command; \}}]
+                Bash executes \bash|command| in the current execution environment and captures its output, again with trailing newlines removed.\\
+                Any side effects of \bash|command| take effect immediately and persist in the current environment after the command completes.
+            \item[\texttt{\$\{| command; \}}]
+                This construct expands to the value of the \bash|REPLY| shell variable after command executes, \textbf{without removing any trailing newlines} and \PP{the standard output of \bash|command| is not captured!}
+        \end{description}
+    \end{varblock}
+\end{frame}
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+\begin{frame}[fragile]{Command substitution: Examples}
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[style=MyBash]
+            $ aVar=$(echo 'hello'); echo "${aVar}"
+            |+hello+|
+            $ aVar=$(echo $'hello\n\n'); echo "${aVar}"
+            |+hello+|
+            $ aVar=$(echo $'hello\n\nworld'); echo "${aVar}"
+            |+hello
+
+            world+|
+            $ aVar=$(echo $'hello\n\nworld'); echo ${aVar}
+            |+hello world+|
+            $ aVar=$(echo 'hello' >&2); echo "_${aVar}_"
+            |+hello+|  # Only standard output is captured!
+            |+__+|
+            $ aVar='AAA'; bVar=$(aVar=BBB && echo "${aVar}")
+            $ echo "${aVar} ${bVar}"
+            |+AAA BBB+|
+            $ echo 'hello' > file.txt
+            $ aVar=$(cat file.txt); echo "${aVar}"
+            |+hello+|
+            $ aVar=$(< file.txt); echo "${aVar}"
+            |+hello+| # This should be preferred: Bash faster idiom
+        \end{lstlisting}
+    \end{onlyenv}
+    \FrameRemark<1>{The command substitution \bash/$(cat |+file+|)/ can be replaced by the equivalent but faster \bash/$(< |+file+|)/.}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[style=MyBash, firstnumber=last]
+            $ echo "${BASH_VERSION}"
+            |+5.3.15(1)-release+|
+            $ aVar='AAA'; bVar=${ aVar=BBB && echo "${aVar+BBB}"; |+}+|
+            $ echo "${aVar} ${bVar}"
+            |+BBB BBB+|
+            $ unset -v 'aVar' 'bVar'
+            $ echo "_${REPLY}_"; aVar=${| REPLY=1234 && echo 'hello'; |+}+|
+            |+__+|
+            |+hello+|
+            $ echo "_${aVar}_ _${REPLY}_"
+            |+_1234_ __+|
+            # No trailing newline gets stripped!
+            $ aVar=${| REPLY=$'1234\n' && echo $'hello\n'; |+}+|
+            |+hello
+            +|
+            $ echo "_${aVar}_ _${REPLY}_"
+            |+_1234
+            _ __+|
+        \end{lstlisting}
+        \begin{varblock}{alert}[0.88\textwidth]{Possibly too early for it}
+            This is a very interesting new feature, but requires a very recent Bash version!
+        \end{varblock}
+    \end{onlyenv}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Command grouping}{We already said something about it, let us go through once again}

@@ -821,15 +821,21 @@
                 \setlength{\itemsep}{3mm}
                 \item[Command substitution:]
                     It occurs when a command is enclosed as \alert{\texttt{\$(\ldots)}}\\
+                    Bash v5.3 introduced a new type as \alert{\texttt{\$\{ \ldots; \}}} or \alert{\texttt{\$\{| \ldots; \}}}\\
                     Do not use the deprecated syntax \tc{Gray!30}{\texttt{\textasciigrave\ldots\textasciigrave}}\\
-                    Still to early to be discussed $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 3.5.4}\\
-                    \Remark[0pt]{\alert{\texttt{\$(\ldots)}} is substituted by the standard output of the command (executed in a subshell), with any trailing newlines deleted.}
+                    Still to early to be discussed $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 3.5.4}\\[1mm]
+                    {
+                        \tiny
+                        \alert{\texttt{\$(\ldots)}} is substituted by the standard output of the command (executed in a subshell), with any trailing newlines deleted.\\[1pt]
+                        \alert{\texttt{\$\{ \ldots; \}}} is like \texttt{\$(\ldots)} but any side effects of command take effect immediately in the current execution environment.
+                        \alert{\texttt{\$\{| \ldots; \}}} will be discussed later.
+                        \par
+                    }
                 \item[Process substitution:]
                     Useful, but not discussed here $\to$ \URL[PB]{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 3.5.6}\\
                     It takes the form \alert{\texttt{<(\ldots)}} or \alert{\texttt{>(\ldots)}}\\
                     It will discussed in the section about redirection
             \end{description}
-            \vspace{2mm}
             \begin{center}
                 \large\fbox{\PP{\textbf{After}} Word Splitting:}
             \end{center}
