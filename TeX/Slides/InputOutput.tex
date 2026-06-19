@@ -11,11 +11,11 @@
         \begin{itemize}
             \item They are accessible via \PB{\texttt{\$1}}, \PB{\texttt{\$2}}, etc.
             \item After the 9th one, you need curly braces: \PB{\texttt{\$\{10\}}}, \PB{\texttt{\$\{11\}}}, etc.
-            \item It is possible to refer to all of them via \PB{\texttt{\$@}} and \PB{\texttt{\$*}}
+            \item It is possible to refer to all of them via \PB{\texttt{\$@}} and \PB{\texttt{\$*}}.
             \item When you refer to all of them, especially to pass them over, use \PS{\texttt{"\$@"}}\\
                   $\to\,$ the double quotes are \alert{crucial} to preserve the parameters without splitting them!
             \item The \bash|shift| bulit-in is remarkably handy when parsing command-line parameters\\
-                  $\to\,$ it destroys \PB{\texttt{\$1}} and it maps \PB{\texttt{\$2}} into \PB{\texttt{\$1}}, \PB{\texttt{\$3}} into \PB{\texttt{\$2}} and so on
+                  $\to\,$ it destroys \PB{\texttt{\$1}} and it maps \PB{\texttt{\$2}} into \PB{\texttt{\$1}}, \PB{\texttt{\$3}} into \PB{\texttt{\$2}} and so on.
         \end{itemize}
         \begin{onlyenv}<1>
             \begin{lstlisting}[style=MyBash]
@@ -56,7 +56,7 @@
     \begin{itemize}
         \item Every program inherits certain information from its parent process \Remark{resources, privileges and restrictions}
         \item One of those resources is a set of variables called \PP{Environment Variables}
-        \item Traditionally, environment variables have names that are all capital letters, such as \bash|PATH|
+        \item Traditionally, these have names that are all capital letters, such as \bash|PATH|, \bash|SHELL|, \ldots
         \item When you run a command in Bash, you have the option of specifying a temporary environment change which only takes effect for the duration of that command
         \item This is done by putting \PB{\texttt{VAR=value}} in front of the command
     \end{itemize}
@@ -71,6 +71,8 @@
         Don't use all-capital variable names in your scripts, unless they are environment variables.
         Use lower-case or mixed-case variable names, to avoid accidents.
     \end{varblock}
+    \PrepareURLsymbol[PB]
+    \FrameRemark{Strictly speaking, bash variables (\URL*{https://www.gnu.org/software/bash/manual/}{Bash manual v5.2 section 5}) like \bash|BASH_VERSION| are not environment variables (e.g.\ they are not listed by \bash|env| command).}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{Environment variables (II)}

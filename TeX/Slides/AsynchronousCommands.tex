@@ -423,7 +423,7 @@
                                             #  EXAMPLE 1: wait
                 ( exit 12 ) &
                 pid=$!
-                while { sleep 0 & [[ "${pid}" |+!=+| "$!" ]]; }; do
+                while { sleep 0 & [[ "$!" |+!=+| "${pid}" ]]; }; do
                     :
                 done
                 wait "$pid"
@@ -516,7 +516,7 @@
                 #!/usr/bin/env bash
                 {
                     sleep_pid=$!
-                    while { ( exit 12 ) & [[ "${sleep_pid}" |+!=+| "$!" ]]; }; do
+                    while { ( exit 12 ) & [[ "$!" |+!=+| "${sleep_pid}" ]]; }; do
                         :
                     done
                     wait "${sleep_pid}"

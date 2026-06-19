@@ -146,6 +146,10 @@ function Run_Tests()
             Set_Test_Outcome "${test_name}" $?
         done
     else
+        if [[ $(sort -V <<< $'${BASH_VERSINFO[0]}.${BASH_VERSINFO[1]}\n5.0' | tail -n1) = '5.0' ]]; then
+            printf "\n \e[91mERROR: Bash version 5.1 or more recent needed to run concurrent jobs, Bash ${BASH_VERSION} in use.\e[0m\n\n"
+            exit 1
+        fi
         local background=0 finished=0 pid_to_test_name=()
         for index in "${!GBL_list_of_selected_tests[@]}"; do
             Run_Single_Test "${GBL_list_of_tests[index-1]}" &
@@ -248,5 +252,66 @@ function Exit_With_Tests_Outcome_Dependent_Exit_Code()
 }
 
 Main "$@"
+
+# --------------------------------------------------------
+# Proof of concept for pool of workers for Bash before 5.1
+# --------------------------------------------------------
+# #!/usr/bin/env bash
+# 
+# maxjobs=4
+# 
+# fifo=$(mktemp -u)
+# mkfifo "$fifo"
+# 
+# exec 3<>"$fifo"
+# rm "$fifo"
+# 
+# declare -A task_of
+# 
+# run_job() {
+#     local task=$1
+# 
+#     (
+#         sleep "$((RANDOM % 5 + 1))"    # simulate work
+# 
+#         # notify parent that this worker finished
+#         printf '%s\n' "$BASHPID" >&3
+#     ) &
+# 
+#     task_of[$!]=$task
+# }
+# 
+# reap_one() {
+#     local pid
+# 
+#     read -r pid <&3
+#     wait "$pid"
+# 
+#     printf 'Finished PID %s (task %s)\n' \
+#            "$pid" "${task_of[$pid]}"
+# 
+#     unset 'task_of[$pid]'
+#     ((running--))
+# }
+# 
+# tasks=(A B C D E F G H I J)
+# 
+# running=0
+# 
+# for task in "${tasks[@]}"; do
+#     while (( running >= maxjobs )); do
+#         reap_one
+#     done
+# 
+#     run_job "$task"
+#     ((running++))
+# done
+# 
+# while (( running > 0 )); do
+#     reap_one
+# done
+# 
+# exec 3>&-
+# exec 3<&-
 
 

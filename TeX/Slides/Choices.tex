@@ -27,17 +27,19 @@
             \vspace{-3mm}
             \begin{center}
                 \alert{\textbf{Before matching is attempted:}}\\[0.3em]
+                \small
                 \tikzmark{wordStart}tilde expansion\tikzmark{patternStart}\\
                 parameter expansion\\
                 command substitution\\
-                arithmetic expansion\tikzmark{patternEnd}\\
-                \tikzmark{wordEnd}quote removal
+                process substitution\\
+                arithmetic expansion\\
+                \tikzmark{wordEnd}quote removal\tikzmark{patternEnd}
             \end{center}
         \end{onlyenv}
         \begin{tikzpicture}[remember picture, overlay, PP]
             \begin{scope}[scope on=<1>]
-                \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (patternStart -| patternEnd) ++(5mm,1mm) -- ($(patternEnd)+(5mm,-1mm)$)
-                          node[midway, right=3mm, text width=18mm, align=center] {Pattern undergoes};
+                \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (patternStart -| patternEnd) ++(8mm,1mm) -- ($(patternEnd)+(8mm,-1mm)$)
+                          node[midway, right=3mm, text width=18mm, align=center] {\texttt{pattern} undergoes};
                 \draw[very thick, decorate, decoration={brace,amplitude=6pt}] (wordEnd  -| wordStart) ++(-8mm,-1mm) -- ($(wordStart)+(-8mm,1mm)$)
                           node[midway, left=3mm, text width=18mm, align=center] {\texttt{WORD} undergoes};
             \end{scope}

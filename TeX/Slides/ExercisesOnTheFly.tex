@@ -45,7 +45,7 @@
         \item Produce the final report after all tests ran and make it more complete:
               \begin{itemize}
                   \item Add colours to the \PS{\texttt{passed}} and \textcolor{red}{\texttt{failed}} strings;
-                  \item Record the filing tests and report about them;
+                  \item Record the failing tests and report about them;
                   \item Print how many tests passed and how many failed.
               \end{itemize}
               \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm, style=smaller, xleftmargin=2mm, xrightmargin=10mm, moredelim={[is][\color{comment-color}]{|=}{=|}}]
@@ -141,7 +141,7 @@
               What do you observe?
     \end{enumerate}
 
-    \FrameRemark{$^\star$You'll need to store a pid-testname map and work with \bash|wait -n -p pid| to have a sound logic. \alert{Ask in case you are stuck for more than few minutes.}}
+    \FrameRemark{$^\star$You'll need to store a pid-testname map and work with \bash|wait -n -p pid| (Bash v5.1) to have a sound logic. \alert{Ask in case you are stuck for more than few minutes.}}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}<0>[label=Errors,fragile]{Error handling and final polish}

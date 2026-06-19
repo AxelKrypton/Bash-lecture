@@ -9,7 +9,7 @@
         \pgfmathsetmacro{\cubex}{1}
         \pgfmathsetmacro{\cubey}{1}
         \pgfmathsetmacro{\cubez}{1}
-        \coordinate (O) at ($(current page.center)-(0.5,0.5)$);
+        \coordinate (O) at ($(current page.center)-(0.5,0)$);
         \draw[PP, fill=PP!40] (O) ++(\cubex,\cubey,0) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
         \draw[PP, fill=PP!10] (O) ++(\cubex,\cubey,0) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
         \draw[PP] (O) ++(0,\cubey,-\cubez) -- ++(0,-\cubey,0);
@@ -25,8 +25,15 @@
         \path[to] ($(O)+(\cubex,\cubey/24*7,-\cubez/2)$) edge[out=0, in=180] node[pos=1, anchor=west] {\alert<3>{File(s)}{\uncover<2>{$^{\star}$}}} ++(3.0,-0.5,0)
                                                          edge[out=0, in=180] node[pos=1, anchor=west] {\alert<3>{File descriptors}{\uncover<2>{$^{\star}$}}} ++(2.2,-1.5,0)
                                                          edge[out=0, in=180] node[pos=1, anchor=west] {\alert<2>{\tc<3>{Gray!50}{Environment variables}}} ++(1.4,-2.5,0);
+        \node[visible on=<1-2>, font=\scriptsize, draw=PP, rounded corners] at ($(current page.south)+(0,1.2)$)
+        {
+            \begin{tabular}{c}
+                Strictly speaking \bash|read| belongs to the discussion on file descriptors.\\
+                It is simple to get the idea before discussing them, though.
+            \end{tabular}
+        };
     \end{tikzpicture}
-    \vspace{35mm}
+    \vspace{32mm}
     \begin{columns}[c]
         \begin{column}{0.08\textwidth}
         \end{column}

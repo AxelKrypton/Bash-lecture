@@ -123,18 +123,30 @@
         \item It is a scripting language very close to the (Unix) operative system
         \item Opportunity to make your daily work-flow more comfortable
     \end{itemize}
-    \PrepareURLsymbol[ALERT]
-    \begin{varblock}{alerted}[0.64\textwidth]{}<2>
-        However, \URL*{http://mywiki.wooledge.org/BashWeaknesses}{Bash weaknesses} are known:\hfill
-        \begin{itemize}
-            \item Floating point math
-            \item Lack of data structures
-            \item Try/catch and Exception handling: forget them!
-            \item Functions: a tricky world!
-            \item \ldots
-        \end{itemize}
-        Knowing another scripting language (e.g.\ Python) helps!
-    \end{varblock}
+    \begin{overlayarea}{\textwidth}{0.5\textheight}
+        \PrepareURLsymbol[ALERT]
+        \begin{varblock}{alerted}[0.64\textwidth]{}<only@2>
+            However, \URL*{http://mywiki.wooledge.org/BashWeaknesses}{Bash weaknesses} are known:\hfill
+            \begin{itemize}
+                \item Floating point math
+                \item Lack of data structures
+                \item Try/catch and Exception handling: forget them!
+                \item Functions: a tricky world!
+                \item \ldots
+            \end{itemize}
+            Knowing another scripting language (e.g.\ Python) helps!
+        \end{varblock}
+        \begin{onlyenv}<3>
+            \begin{varblock}{example}[0.68\textwidth]{Python can do everything Bash can do!?}
+                Technically yes, just as e.g.\ C++ or Julia can do everything Python can do.
+                The real question is whether you're expressing the problem at the right level of abstraction.\\
+                \textbf{Bash does not compete with Python, it completes it.}
+            \end{varblock}
+            \begin{center}
+                \includegraphics[width=0.3\textwidth]{Opportunity}
+            \end{center}
+        \end{onlyenv}
+    \end{overlayarea}
     \PrepareURLsymbol[PB]
     \FrameRemark{
         $^\star$On macOS from Catalina (10.15) on the default shell was changed from Bash to Zsh for licensing reasons.

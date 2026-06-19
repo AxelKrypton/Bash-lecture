@@ -73,8 +73,8 @@
             |+Default+| @|\texttt{\tc{red}{\underline{Underlined}}}|@
             $ echo -e "Default \e[4;91mUnderlined\e[0m"
             |+Default+| @|\texttt{\tc{red}{\underline{Underlined}}}|@
-            $ printf "Default \e[4;91mUnderlined\e[24m still red\e[0m Default"
-            |+Default+| @|\texttt{\tc{red}{\underline{Underlined} still red}}|@ |+Default+|
+            $ printf "XXX \e[4;91mUnderlined\e[24m still red\e[0m XXX\n"
+            |+XXX+| @|\texttt{\tc{red}{\underline{Underlined} still red}}|@ |+XXX+|
             $ echo -e "\e[40;38;5;82m Hello \e[30;48;5;82m World \e[0m"
             @|\texttt{\colorbox{black}{\tc{green}{~Hello~}}\colorbox{green}{\tc{black}{~World~}}}|@
         \end{lstlisting}
@@ -148,9 +148,15 @@
             \item[\texttt{<Esc>[<N>D}] Move the cursor backward N columns
             \item[\texttt{<Esc>[2J}] Clear the screen, move to (0,0)
             \item[\texttt{<Esc>[K}] Erase to end of line
-            \item[\texttt{<Esc>[s}] Save cursor position
-            \item[\texttt{<Esc>[u}] Restore cursor position}
+            \item[\texttt{<Esc>[s} \textcolor{TEXT}{or} \texttt{<Esc>7}] Save cursor position
+            \item[\texttt{<Esc>[u} \textcolor{TEXT}{or} \texttt{<Esc>8}] Restore cursor position}
         \end{description}
+        \PrepareURLsymbol[PB]
+        \begin{varblock}{alert}[0.8\textwidth]{It's a tricky world!}
+            \scriptsize
+            \texttt{<Esc>7} and \texttt{<Esc>8} are historical DEC sequences, while the others are SCO/ANSI-style.\\
+            Not all terminal supports both (e.g.\ \URL*{https://stackoverflow.com/a/25879581}{Terminal.app on macOS} supports DEC only).
+        \end{varblock}
     \end{onlyenv}
     \begin{onlyenv}<2>
         Use your imagination to take advantage of this functionality:
@@ -162,12 +168,12 @@
              > done
              |+^C   Thu 11 Jul 18:07:26 CEST 2019+| # Stop it with CTRL-C
 
-             # Here a crazy progress bar:
+             # Here a crazy progress bar (use \r instead of saving cursor)
              $ while true; do
-             >     printf '\e[s'
-             >     printf '%.0s=' $(seq 1 $(bc -l <<< "$RANDOM/32767*100"))
+             >     printf '\e[s'      # or '\e7'
+             >     printf '%.0s=' $(seq 1 $((RANDOM%100)))
              >     sleep 0.2
-             >     printf '\e[u\e[K'  # Use \r instead of saving cursor
+             >     printf '\e[u\e[K'  # or '\e8\e[K'
              > done
              |+======================^C+| # Stop it with CTRL-C
 

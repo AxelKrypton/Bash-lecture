@@ -10,7 +10,7 @@
         \item Whenever you press \texttt{TAB} while typing in your terminal,\\ \PS{you trigger a series of operations that the shell executes underneath}.
         \item This mechanism is actually programmable and it is usually available system-wide.
         \item It is nothing but\ldots\ a Bash script to be sourced in your environment!
-        \item It is usually automatically sourced somewhere, at university in the shell configuration file.
+        \item It is usually automatically sourced somewhere, e.g.\ in the shell configuration file.
     \end{itemize}
     \begin{lstlisting}[style=myBash, numbers=none, aboveskip=2mm]
         # In a default ~/.bashrc file at some point:
@@ -80,7 +80,7 @@
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 \begin{frame}[fragile]{A basic example as starting point}
     \vspace{-1mm}
-    \begin{onlyenv}<1-2,9->
+    \begin{onlyenv}<1-2,8->
         Suppose to have a \,\PS{\texttt{measure}}\, script that accepts the following options on the command line:
         \begin{itemize}
             \item \PB{\texttt{-{}-inputfile}} followed by a filename;
@@ -108,7 +108,7 @@
             fi
         \end{lstlisting}
     \end{onlyenv}
-    \begin{onlyenv}<5-6>
+    \begin{onlyenv}<5>
         \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
             # You do not need a shebang here! This script will be sourced.
 
@@ -119,7 +119,7 @@
 
             function _measure_completion() @|\tikzmark{bad}|@
             {
-                case "$3" in
+                case "$3" in      # $3 is the word preceding the word being completed
                     --inputfile )
                         COMPREPLY=( $(compgen -f -- "$2") )
                         ;;
@@ -131,10 +131,10 @@
                 esac
             }
 
-            complete -F _measure_completion   measure
+            complete -F _measure_completion measure
         \end{lstlisting}
     \end{onlyenv}
-    \begin{onlyenv}<7-8>
+    \begin{onlyenv}<6-7>
             \begin{lstlisting}[style=myBash, numbers=none, style=smaller]
             # You do not need a shebang here! This script will be sourced.
 
@@ -145,7 +145,7 @@
 
             function _measure_completion() @|\tikzmark{stillbad}|@
             {
-                case "$3" in
+                case "$3" in      # $3 is the word preceding the word being completed
                     --inputfile )
                         COMPREPLY=( $(compgen -f -- "$2") )
                         ;;
@@ -157,37 +157,33 @@
                 esac
             }
 
-            #complete -F _measure_completion   measure
-            complete -o filenames -F _measure_completion   measure
+            #complete -F _measure_completion measure
+            complete -o filenames -F _measure_completion measure
             #            @|\tc{red}{\then}|@ handles directories as such and not as files
         \end{lstlisting}
     \end{onlyenv}
     \begin{tikzpicture}[remember picture, overlay]
-        \begin{scope}[every node/.style={anchor=north west, text=ALERT, font=\small}]
-            \node[visible on=<6>] at ($(bad)+(5mm,3mm)$) {
-                    What is bad in this implementation?
-            };
-            \node[visible on=<7>] (whystillbad) at ($(stillbad)+(5mm,3mm)$) {
-                What is still bad in this implementation?
-            };
-        \end{scope}
-        \node[visible on=<8>, font=\small, text=PB] at (whystillbad) {
+        \node[visible on=<6>, anchor=north west, text=ALERT, font=\small] (whystillbad) at ($(stillbad)+(5mm,3mm)$) {
+            What is sub-optimal in this implementation?
+        };
+        \node[visible on=<7>, font=\small, text=PB] at (whystillbad) {
             Valid options are proposed also if already given!
         };
     \end{tikzpicture}
-    \begin{onlyenv}<9>
+    \begin{onlyenv}<8>
         \begin{lstlisting}[style=myBash, numbers=none, aboveskip=4mm]
             $ emacs -nw ~/.measure-completion.bash
             $ . ~/.measure-completion.bash
             $ ls
             file01.dat   file02.dat   file03.dat   @|\tc{RoyalBlue}{backup}|@
-            $ ./measure <TAB>
-            $ ./measure --<TAB-TAB>
+            # Assume 'measure' executable is findable through PATH
+            $ measure <TAB>
+            $ measure --<TAB-TAB>
             --conservative  --inputfile     --verbose
-            $ ./measure --inputfile <TAB-TAB>
+            $ measure --inputfile <TAB-TAB>
             backup/   file01.dat   file02.dat   file03.dat
             # There is room for improvement --> See today's Exercise 5
-            $ ./measure --inputfile file02.dat <TAB-TAB>
+            $ measure --inputfile file02.dat <TAB-TAB>
             --conservative  --inputfile     --verbose
         \end{lstlisting}
     \end{onlyenv}

@@ -313,7 +313,7 @@
             \item<only@4-> Global variables
                            \begin{itemize}[<only@{4,7}>]
                                \item[\checkmark] the function is \textbf{not} executed in a subshell $\to$ potentially \PS{much faster}
-                               \item[\crossmark] if the function is executed in a subshell, the method fails!
+                               \item[\crossmark] if the function is executed in a subshell, the method fails! \Remark{Mitigated by new Bash v5.3 command expansion \PB{\texttt{\$\{ ...; \}}}}
                                \item[\crossmark] the function cannot be used in a pipeline (as in any implicit subshell)
                            \end{itemize}
             \item<only@5-> Writing to a file
@@ -382,8 +382,8 @@
         \end{varblock}
     \end{overlayarea}
     \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=north east, draw=ALERT, rounded corners, font=\Large]
-        at ($(current page.north east)-(5mm,2mm)$) {It's simple: \alert{You don't!}};
+        \node[anchor=north east, draw=ALERT, rounded corners, font=\Large, visible on=<2->]
+        at ($(current page.north east)-(5mm,2.5mm)$) {It's simple: \alert{You don't!}};
     \end{tikzpicture}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%

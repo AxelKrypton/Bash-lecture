@@ -117,7 +117,7 @@
             $ aVar=$(echo 'hello' >&2); echo "_${aVar}_"
             |+hello+|  # Only standard output is captured!
             |+__+|
-            $ aVar='AAA'; bVar=$(aVar=BBB && echo "${aVar}")
+            $ aVar='AAA'; bVar=$(aVar='BBB' && echo "${aVar}")
             $ echo "${aVar} ${bVar}"
             |+AAA BBB+|
             $ echo 'hello' > file.txt
@@ -132,7 +132,7 @@
         \begin{lstlisting}[style=MyBash, firstnumber=last]
             $ echo "${BASH_VERSION}"
             |+5.3.15(1)-release+|
-            $ aVar='AAA'; bVar=${ aVar=BBB && echo "${aVar+BBB}"; |+}+|
+            $ aVar='AAA'; bVar=${ aVar='BBB' && echo "${aVar+BBB}"; |+}+|
             $ echo "${aVar} ${bVar}"
             |+BBB BBB+|
             $ unset -v 'aVar' 'bVar'

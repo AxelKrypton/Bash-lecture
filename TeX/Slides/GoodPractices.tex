@@ -49,11 +49,11 @@
     \end{varblock*}
     \begin{lstlisting}[style=MyBash, numbers=none]
         $ echo "${BASH_VERSINFO[@]}"; echo "${BASH_VERSION}"
-        |+5 2 26 1 release aarch64-apple-darwin21.6.0+|
-        |+5.2.26(1)-release+|
+        |+5 3 15 1 release aarch64-apple-darwin21.6.0
+        5.3.15(1)-release+|
         $ tr ' ' '.' <<< "${BASH_VERSINFO[@]:0:3}"
-        |+5.2.26+|
-        # You can use the 'hash' builtin to check command existence
+        |+5.3.15+|
+        # You can use the 'type' builtin to check command existence
     \end{lstlisting}
     \PrepareURLsymbol[PB]
     \FrameRemark{Keep in mind that locally install a recent Bash version is pretty straightforward $\;\to\;$ \URL*{https://ftp.gnu.org/gnu/bash/}{Download Bash}.}
@@ -109,7 +109,7 @@
     \end{itemize}
     \begin{lrbox}{\tmpbox}
         \begin{minipage}{0.85\textwidth}
-            \URL[PT]{http://mywiki.wooledge.org/BashPitfalls}{Bash Pitfalls}\Remark[1em]{64 discussed items}\\
+            \URL[PT]{http://mywiki.wooledge.org/BashPitfalls}{Bash Pitfalls}\Remark[1em]{65 discussed items}\\
             \URL[PB]{https://bash-hackers.gabe565.com/scripting/obsolete/}{Obsolete and deprecated syntax}\\
             \URL[PP]{http://mywiki.wooledge.org/ShellHallOfShame}{Shell Hall of Shame}
         \end{minipage}
