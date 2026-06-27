@@ -105,6 +105,7 @@ function Parse_Command_Line_Parameters()
                 exit 1
         esac
     done
+    readonly GBL_verbose
     if [[ ${#GBL_list_of_selected_tests[@]} -eq 0 ]]; then
         GBL_list_of_selected_tests=(
             'fake-0th-entry-to-have-indeces-starting-at-one'

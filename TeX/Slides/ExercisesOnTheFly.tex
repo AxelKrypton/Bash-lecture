@@ -12,7 +12,7 @@
               \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm, style=smaller, xleftmargin=2mm, xrightmargin=10mm]
                   {unit,integration,system}_tests_"$(shuf -n1 /usr/share/dict/words)"_{1..3}.bash
               \end{lstlisting}
-              to create some tests files on it.
+              to create some tests files in it using e.g.\ \bash|touch|.
         % Leave an empty line to make the syntax highlight work again!
 
         \item Let the user choose a type among \bash|unit|, \bash|integration| and \bash|system|.
@@ -23,7 +23,7 @@
               \end{itemize}
         \item Print a report which might look like the following.
               \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm, style=smaller, xleftmargin=2mm, xrightmargin=10mm]
-                  $ ./Session-1.bash
+                  $ ./Session_1.bash
 
                   # Interaction with the user to pick the file type
 
@@ -32,6 +32,12 @@
                   3/3   tendence_3 ...........................  passed+|
               \end{lstlisting}
     \end{enumerate}
+    \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=north east, font=\scriptsize, text width=45mm, rounded corners,
+              draw, thin, inner ysep=2mm, inner xsep=1mm, align=center] (N) at ($(current page.north east)-(1.1,0.4)$)
+            {Simply use \bash|"$(whoami)"| if \bash|shuf| or the dictionary is not available on your machine};
+        \path[to] (N.south) edge[out=270, in=90] ++(-0.8,-1.0);
+    \end{tikzpicture}
     \FrameRemark{\alert{You will expand this script later in the course. Be kind to your future self!}}
 \end{frame}
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
@@ -49,7 +55,7 @@
                   \item Print how many tests passed and how many failed.
               \end{itemize}
               \begin{lstlisting}[style=MyBash, numbers=none, aboveskip=3mm, belowskip=-5mm, style=smaller, xleftmargin=2mm, xrightmargin=10mm, moredelim={[is][\color{comment-color}]{|=}{=|}}]
-                  $ ./Session-2.bash -t 2 3
+                  $ ./Session_2.bash -t 2 3
 
                   # Interaction with the user to pick the file type
 
