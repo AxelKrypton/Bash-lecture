@@ -1,7 +1,12 @@
 # Introduction to Bash scripting language
 
 Material relative to a 5-days lecture about `Bash` scripting language given several times at Goethe University in Frakfurt am Main in the context of the CRC-TR 211 collaboration as well as part of the PUNCH4NFDI young academy.
-Refer to the lecture [table of content](#table-of-content) to have an overview of the discussed topics.
+
+The same material has been completed and offered in a slighly more interactive format within the [HGS-HIRe school](https://hgs-hire.de/index.html).
+Refer to [the releases page](https://github.com/AxelKrypton/Bash-lecture/releases) to check out the different formats.
+Alternatively you can refer to the `Power-week-2026` branch.
+
+An overview of the discussed topics can be found in the [table of content](#table-of-content).
 
 #### Slides, exercises and sample solution:
 
